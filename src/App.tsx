@@ -1,27 +1,27 @@
 import * as React from 'react';
+import { Provider } from 'react-redux';
 import './App.css';
-import superagent from 'superagent';
-
+import appStore from './store/store';
+import StopsContainer from './view/stops/StopsContainer';
 const logo = require('./logo.svg');
 
-function add(a: number, b: number) {
-  return a * b;
-}
-
-add('foo', 3);
+const store = appStore();
 
 class App extends React.Component {
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+      <Provider store={store}>
+        <div className="App">
+            <div className="App-header">
+              <img src={logo} className="App-logo" alt="logo" />
+              <h2>Welcome to React</h2>
+            </div>
+            <p className="App-intro">
+              To get started, edit <code>src/App.tsx</code> and save to reload.
+            </p>
+            <StopsContainer />
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
-      </div>
+      </Provider>
     );
   }
 }
