@@ -15,7 +15,7 @@ function getCurrentPosition() {
     });
   }
 
-export const loadStopData = () => {
+export const loadStopData = (radiusInFeet: number) => {
     return function (dispatch: Function, getState: Function) {
         dispatch({
             type: constants.LOAD_STOPS
@@ -23,7 +23,7 @@ export const loadStopData = () => {
 
         getCurrentPosition()
             .then((location: Location) => {
-                getNearbyStops(location)
+                getNearbyStops(location, radiusInFeet)
                     .then((stopData: StopData) => {
                         dispatch({
                             type: constants.LOAD_STOP_COMPLETE,

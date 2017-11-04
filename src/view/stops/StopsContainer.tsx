@@ -16,8 +16,8 @@ const mapStateToProps = (state: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<StopActions>) => {
     return {
-        loadStopData(): void {
-            dispatch(loadStopData());
+        loadStopData(radiusInFeet: number): void {
+            dispatch(loadStopData(radiusInFeet));
         }
     };
 };
