@@ -1,6 +1,6 @@
 import { LOAD_STOPS, LOAD_STOP_COMPLETE } from '../constants';
-import { StopData, StopLocation } from '../../api/trimet';
 import { mapKeys } from 'lodash';
+import { StopLocation, StopData } from '../../api/trimet/types';
 
 interface Payload {
     stopData: StopData;

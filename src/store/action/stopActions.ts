@@ -1,5 +1,6 @@
-import { getNearbyStops, Location, StopData } from '../../api/trimet';
 import * as constants from '../constants';
+import { StopData, Location } from '../../api/trimet/types';
+import { getNearbyStops } from '../../api/trimet/trimet';
 
 export interface LoadAction {
     type: 'LOAD_STOPS';
