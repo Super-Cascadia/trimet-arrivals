@@ -1,11 +1,17 @@
 import * as React from 'react';
 import { LocationArrivals } from '../../../store/reducers/arrivalsReducer';
-import { map } from 'lodash';
+import { map, sortBy } from 'lodash';
 import { Arrival } from '../../../api/trimet/types';
 import * as moment from 'moment';
 
 export interface Props {
     arrivals: LocationArrivals;
+}
+
+function sortArrivalsByEstimatedTime(arrivals: LocationArrivals): Arrival[] {
+    return sortBy(arrivals, (arrival: Arrival) => {
+        return arrival.estimated;
+    });
 }
 
 class ArrivalsTable extends React.Component<Props> {
@@ -27,7 +33,9 @@ class ArrivalsTable extends React.Component<Props> {
     }
 
     getRows(arrivals: LocationArrivals) {
-        return map(arrivals, (arrival: Arrival) => {
+        const sortedArrivals = sortArrivalsByEstimatedTime(arrivals);
+
+        return map(sortedArrivals, (arrival: Arrival) => {
             return this.getRow(arrival);
         });
     }
