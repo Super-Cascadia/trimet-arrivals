@@ -2,6 +2,11 @@ import { LOAD_STOPS, LOAD_STOP_COMPLETE } from '../constants';
 import { mapKeys } from 'lodash';
 import { StopLocation, StopData } from '../../api/trimet/types';
 
+export interface StopsReducerState {
+    loading: Boolean;
+    stopLocations: StopLocationsDictionary;
+}
+
 interface Payload {
     stopData: StopData;
 }
@@ -11,19 +16,19 @@ interface Action {
     type: string;
 }
 
-export interface StopLocationState {
+export interface StopLocationsDictionary {
     [index: number]: StopLocation;
+}
+
+function getStopLocations(stopData: StopData): StopLocationsDictionary {
+    return mapKeys(stopData.location, (location: StopLocation) => {
+        return location.locid;
+    });
 }
 
 const initialState = {
     loading: false
 };
-
-function getStopLocations(stopData: StopData): StopLocationState {
-    return mapKeys(stopData.location, (location: StopLocation) => {
-        return location.locid;
-    });
-}
 
 const stopsReducer = (state = initialState, action: Action) => {
     switch (action.type) {

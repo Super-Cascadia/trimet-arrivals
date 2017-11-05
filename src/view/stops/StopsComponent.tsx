@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { StopLocationState } from '../../store/reducers/stopsReducer';
+import { StopLocationsDictionary } from '../../store/reducers/stopsReducer';
 import StopsTable from './components/StopsTable';
 
 export interface Props {
     loadStopData: (radiusInFeet: number) => void;
     loading: Boolean;
-    stopLocations: StopLocationState;
+    stopLocations: StopLocationsDictionary;
 }
 
 class StopsComponent extends React.Component<Props> {
@@ -21,7 +21,7 @@ class StopsComponent extends React.Component<Props> {
                 {loading && 
                     <div>Loading</div>
                 }
-                {!loading &&
+                {!loading && stopLocations &&
                     <div>
                         <h1>Nearby Stops</h1>
                         <StopsTable stopLocations={stopLocations} />
