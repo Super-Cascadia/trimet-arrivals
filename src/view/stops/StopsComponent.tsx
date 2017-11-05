@@ -11,7 +11,7 @@ export interface Props {
 class StopsComponent extends React.Component<Props> {
     componentDidMount() {
         const { loadStopData } = this.props;
-        loadStopData(500);        
+        loadStopData(1000);        
     }
     render() {
         const { loading, stopLocations } = this.props;
@@ -19,7 +19,7 @@ class StopsComponent extends React.Component<Props> {
         return (
             <div>
                 {loading && 
-                    <div>Loading</div>
+                    <div>Loading...</div>
                 }
                 {!loading && stopLocations &&
                     <div>

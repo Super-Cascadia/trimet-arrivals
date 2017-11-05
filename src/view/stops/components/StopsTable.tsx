@@ -39,7 +39,7 @@ class StopsTable extends React.Component<Props> {
     getLocationInfo(stopLocations: StopLocationsDictionary) {
         return map(stopLocations, (stopLocation: StopLocation, key: number) => {
             return (
-                <article>
+                <article className="stops">
                     {this.getStopInfoTable(stopLocation)}
                     <ArrivalsContainer locationId={key} />
                 </article>

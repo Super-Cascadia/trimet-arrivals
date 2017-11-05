@@ -10,6 +10,12 @@
   version "4.14.80"
   resolved "https://artifact.jamasoftware.net:443/repository/api/npm/npm/@types/lodash/-/lodash-4.14.80.tgz#a6b8b7900e6a7dcbc2e90d9b6dfbe3f6a7f69951"
 
+"@types/moment@^2.13.0":
+  version "2.13.0"
+  resolved "https://artifact.jamasoftware.net:443/repository/api/npm/npm/@types/moment/-/moment-2.13.0.tgz#604ebd189bc3bc34a1548689404e61a2a4aac896"
+  dependencies:
+    moment "*"
+
 "@types/node@*", "@types/node@^8.0.47":
   version "8.0.47"
   resolved "https://artifact.jamasoftware.net:443/repository/api/npm/npm/@types/node/-/node-8.0.47.tgz#968e596f91acd59069054558a00708c445ca30c2"
@@ -3392,6 +3398,10 @@ mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkd
   resolved "https://artifact.jamasoftware.net:443/repository/api/npm/npm/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
   dependencies:
     minimist "0.0.8"
+
+moment@*, moment@^2.19.1:
+  version "2.19.1"
+  resolved "https://artifact.jamasoftware.net:443/repository/api/npm/npm/moment/-/moment-2.19.1.tgz#56da1a2d1cbf01d38b7e1afc31c10bcfa1929167"
 
 ms@2.0.0:
   version "2.0.0"

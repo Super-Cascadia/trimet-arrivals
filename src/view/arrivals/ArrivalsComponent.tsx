@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { LocationArrivals } from '../../store/reducers/arrivalsReducer';
-import { map } from 'lodash';
-import { Arrival } from '../../api/trimet/types';
+import ArrivalsTable from './components/ArrivalsTable';
 
 export interface Props {
     loading: Boolean;
@@ -9,53 +8,22 @@ export interface Props {
     arrivals: LocationArrivals;
 }
 
-class ArrivalsComponent extends React.Component<Props> {
-    getRow(arrival: Arrival) {
-        return (
-            <tr>
-                <td>{arrival.shortSign}</td>
-                <td>{arrival.feet}</td>
-                <td>{arrival.scheduled}</td>    
-                <td>{arrival.estimated}</td>                    
-            </tr>
-        );
-    }
-
-    getRows(arrivals: LocationArrivals) {
-        return map(arrivals, (arrival: Arrival) => {
-            return this.getRow(arrival);
-        });
-    }
-
-    getArrivalsTable(arrivals: LocationArrivals) {
-        return (
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name:</th>
-                        <th>Distance:</th>
-                        <th>Scheduled:</th>
-                        <th>Estimated:</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.getRows(arrivals)}
-                </tbody>
-            </table>
-        );
-    }
-    
+class ArrivalsComponent extends React.Component<Props> {    
     render() {
-        const { arrivals } = this.props;
-
-        if (!arrivals) {
-            return null;
-        }
+        const { arrivals, loading } = this.props;
         
         return (
             <section>
                 <h2>Arrivals</h2>
-                {this.getArrivalsTable(arrivals)}
+                {loading &&
+                    <p>Loading...</p>
+                }
+                {!loading &&
+                    <p>No arrivals available.</p>
+                }
+                {!loading && arrivals &&
+                    <ArrivalsTable arrivals={arrivals} />  
+                }
             </section>
             
         );
