@@ -3,11 +3,11 @@ import { RootState } from '../../store/reducers';
 import { StopActions } from '../../store/action/stopActions';
 import ArrivalsComponent from '../arrivals/ArrivalsComponent';
 
-interface ArrivalContainerProps {
+interface Props {
     locationId: number;
 }
 
-const mapStateToProps = (state: RootState, ownProps: ArrivalContainerProps) => {
+const mapStateToProps = (state: RootState, ownProps: Props) => {
     const { arrivalsReducer } = state;
     const loading = arrivalsReducer.loading;
     const locationId = ownProps.locationId;

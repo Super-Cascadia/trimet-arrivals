@@ -1,10 +1,10 @@
 import { ArrivalData, Arrival } from '../../api/trimet/types';
 import { LOAD_ARRIVALS_COMPLETE, LOAD_ARRIVALS } from '../constants/index';
-import { mapKeys } from 'lodash';
+import { groupBy } from 'lodash';
 
 export interface ArrivalsReducerState {
     loading: Boolean;
-    arrivals: ArrivalState;
+    arrivals: LocationArrivals;
 }
 
 interface Payload {
@@ -17,23 +17,15 @@ interface Action {
 }
 
 export interface LocationArrivals {
-    [index: string]: Arrival;
+    [index: string]: Arrival[];
 }
 
-export interface ArrivalState {
-    [index: number]: LocationArrivals;
-}
-
-function getArrivals (arrivalData: ArrivalData): ArrivalState {
-    const arrivals = mapKeys(arrivalData.arrival, (arrival: Arrival) => {
-        return arrival.tripID;
+function getArrivals (arrivalData: ArrivalData): LocationArrivals {
+    const arrivals = groupBy(arrivalData.arrival, (arrival: Arrival) => {
+        return arrival.locid;
     });
 
-    const locationId = arrivalData.location[0].id;
-
-    return {
-        [locationId]: arrivals
-    };
+    return arrivals;
 }
 
 const initialState = {

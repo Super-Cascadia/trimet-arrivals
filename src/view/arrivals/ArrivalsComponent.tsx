@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { LocationArrivals } from '../../store/reducers/arrivalsReducer';
+import { Arrival } from '../../api/trimet/types';
 import ArrivalsTable from './components/ArrivalsTable';
 
 export interface Props {
     loading: Boolean;
     locationId: number;
-    arrivals: LocationArrivals;
+    arrivals: Arrival[];
 }
 
 class ArrivalsComponent extends React.Component<Props> {    
@@ -18,7 +18,7 @@ class ArrivalsComponent extends React.Component<Props> {
                 {loading &&
                     <p>Loading...</p>
                 }
-                {!loading &&
+                {!loading && !arrivals &&
                     <p>No arrivals available.</p>
                 }
                 {!loading && arrivals &&
