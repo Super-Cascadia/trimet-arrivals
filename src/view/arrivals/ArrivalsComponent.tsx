@@ -14,7 +14,6 @@ class ArrivalsComponent extends React.Component<Props> {
         
         return (
             <section>
-                <h2>Arrivals</h2>
                 {loading &&
                     <p>Loading...</p>
                 }
@@ -25,7 +24,6 @@ class ArrivalsComponent extends React.Component<Props> {
                     <ArrivalsTable arrivals={arrivals} />  
                 }
             </section>
-            
         );
     }
 }

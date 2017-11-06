@@ -9,38 +9,13 @@ export interface Props {
 }
 
 class StopsTable extends React.Component<Props> {
-    getRow(location: StopLocation) {
-        return (
-            <tr>
-                <td>{location.locid}</td>
-                <td>{location.desc}</td>
-                <td>{location.dir}</td>            
-            </tr>
-        );
-    }
-
-    getStopInfoTable(stopLocation: StopLocation) {
-        return (
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID:</th>
-                        <th>Name:</th>
-                        <th>Direction</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.getRow(stopLocation)}
-                </tbody>
-            </table>
-        );
-    }
-
     getLocationInfo(stopLocations: StopLocationsDictionary) {
         return map(stopLocations, (stopLocation: StopLocation, key: number) => {
             return (
                 <article className="stops">
-                    {this.getStopInfoTable(stopLocation)}
+                    <div className="stops-header">
+                        <h2>{stopLocation.locid} - {stopLocation.desc} - {stopLocation.dir}</h2>
+                    </div>
                     <ArrivalsContainer locationId={key} />
                 </article>
                                 
