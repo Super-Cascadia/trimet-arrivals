@@ -13,9 +13,9 @@ class StopsTable extends React.Component<Props> {
         return map(stopLocations, (stopLocation: StopLocation, key: number) => {
             return (
                 <article className="stops">
-                    <div className="stops-header">
+                    <header className="stops-header">
                         <h2>{stopLocation.locid} - {stopLocation.desc} - {stopLocation.dir}</h2>
-                    </div>
+                    </header>
                     <ArrivalsContainer locationId={key} />
                 </article>
                                 
