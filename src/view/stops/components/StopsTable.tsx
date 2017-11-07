@@ -3,6 +3,7 @@ import { StopLocationsDictionary } from '../../../store/reducers/stopsReducer';
 import { map } from 'lodash';
 import { StopLocation } from '../../../api/trimet/types';
 import ArrivalsContainer from '../../arrivals/ArrivalsContainer';
+import '../Stops.css';
 
 export interface Props {
     stopLocations: StopLocationsDictionary;

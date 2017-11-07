@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StopLocationsDictionary } from '../../store/reducers/stopsReducer';
 import StopsTable from './components/StopsTable';
+import './Stops.css';
 
 export interface Props {
     loadStopData: (radiusInFeet: number) => void;

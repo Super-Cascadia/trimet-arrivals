@@ -1,0 +1,22 @@
+.stops {
+    background: #F7F9F9;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+  
+.stops-header {
+    border-radius: 5px 5px 0px 0px;
+    background: #E0D0C1;
+    line-height: 45px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+table {
+    width: 100%;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+}
