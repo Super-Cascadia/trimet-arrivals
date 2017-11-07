@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Arrival } from '../../../api/trimet/types';
 import * as moment from 'moment';
+import RouteIndicator from '../../../component/route/RouteIndicator';
 import './Arrivals.css';
 
 export interface Props {
@@ -13,13 +14,7 @@ function getDistanceUntilArrival(feet: number): number {
     return feet && feet < MILE ? MILE / feet : feet && feet / MILE;
 }
 
-class ArrivalRow extends React.Component<Props> {
-    getArrivalIndicator(arrival: Arrival) {
-        return (
-            <div className="route-indicator">{arrival.route}</div>
-        );
-    }
-    
+class ArrivalRow extends React.Component<Props> {    
     render() {
         const { arrival } = this.props;
         const scheduled = moment(arrival.scheduled);
@@ -33,7 +28,7 @@ class ArrivalRow extends React.Component<Props> {
         return (
             <tr>
                 <td className="route-indicator-column">
-                    {this.getArrivalIndicator(arrival)}
+                    <RouteIndicator route={arrival.route} />
                 </td>
                 <td>{arrival.shortSign}</td>
                 <td>{Math.round(distance)} miles</td>

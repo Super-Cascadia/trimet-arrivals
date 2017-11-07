@@ -15,22 +15,14 @@ function sortArrivalsByEstimatedTime(arrivals: Arrival[]): Arrival[] {
 }
 
 class ArrivalsTable extends React.Component<Props> {
-    getArrivalIndicator(arrival: Arrival) {
-        return (
-            <div className="route-indicator">{arrival.route}</div>
-        );
-    }
-    getRow(arrival: Arrival) {
-        return (
-            <ArrivalRow arrival={arrival} />
-        );
-    }
 
     getRows(arrivals: Arrival[]) {
         const sortedArrivals = sortArrivalsByEstimatedTime(arrivals);
 
         return map(sortedArrivals, (arrival: Arrival) => {
-            return this.getRow(arrival);
+            return (
+                <ArrivalRow arrival={arrival} />
+            );
         });
     }
     
