@@ -3,6 +3,7 @@ import { Arrival } from '../../../api/trimet/types';
 import * as moment from 'moment';
 import RouteIndicator from '../../../component/route/RouteIndicator';
 import './Arrivals.css';
+import {Moment} from "moment";
 
 export interface Props {
     arrival: Arrival;
@@ -15,7 +16,9 @@ function getDistanceUntilArrival(feet: number): number {
 }
 
 class ArrivalRow extends React.Component<Props> {
-    timeToArrivalIndicator(seconds: number) {
+    static timeToArrivalIndicator(scheduled: Moment, estimated: Moment) {
+        const seconds = moment(scheduled.diff(estimated)).seconds();
+
         if (seconds === 0) {
             return <span className="arrival-on-time"> On time</span>;
         } else {
@@ -27,7 +30,6 @@ class ArrivalRow extends React.Component<Props> {
         const { arrival } = this.props;
         const scheduled = moment(arrival.scheduled);
         const estimated = moment(arrival.estimated);
-        const seconds = moment(scheduled.diff(estimated)).seconds();
         const untilArrival = moment(estimated.diff(moment.now())).seconds();
 
         const scheduledTime = scheduled.format('ddd, h:mm:ss a');
@@ -40,7 +42,7 @@ class ArrivalRow extends React.Component<Props> {
                     <RouteIndicator route={arrival.route} />
                 </td>
                 <td>{arrival.shortSign}</td>
-                <td>{this.timeToArrivalIndicator(seconds)}</td>
+                <td>{ArrivalRow.timeToArrivalIndicator(scheduled, estimated)}</td>
                 <td>{untilArrival}s away</td>
                 <td>{Math.round(distance)} miles</td>
                 <td>{estimatedTime}</td>   
