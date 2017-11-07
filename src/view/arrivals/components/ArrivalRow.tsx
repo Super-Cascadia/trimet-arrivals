@@ -19,7 +19,7 @@ class ArrivalRow extends React.Component<Props> {
         if (seconds === 0) {
             return <span className="arrival-on-time"> On time</span>;
         } else {
-            return <span className="arrival-estimated-late">{seconds}s late</span>
+            return <span className="arrival-estimated-late">{seconds}s late</span>;
         }
     }
 

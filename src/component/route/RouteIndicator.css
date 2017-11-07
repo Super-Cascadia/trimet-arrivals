@@ -1,5 +1,5 @@
 .route-indicator {
-    background: black;
+    background: black;    
     height: 25px;
     width: 25px;
     vertical-align: middle;
@@ -7,4 +7,29 @@
     color: white;
     font-size: 14px;
     line-height: 25px;
+}
+
+.route-indicator-green {
+    color: black;
+    background: green;
+}
+
+.route-indicator-yellow {
+    color: black;    
+    background: yellow;
+}
+
+.route-indicator-red {
+    color: black;    
+    background: red;
+}
+
+.route-indicator-blue {
+    color: white;    
+    background: blue;
+}
+
+.route-indicator-orange {
+    color: black;    
+    background: orange;
 }
