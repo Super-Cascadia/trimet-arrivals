@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as cx from 'classnames';
 import './RouteIndicator.css';
+import * as FontAwesome from 'react-fontawesome';
 
 export interface Props {
     route: number;
@@ -21,7 +22,9 @@ function getRouteDisplay(route: number) {
         return route;
     }
 
-    return display;
+    return (
+        <FontAwesome name="train" />
+    );
 }
 
 function getRouteIndicatorClassName(route: number) {
