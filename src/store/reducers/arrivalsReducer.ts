@@ -52,6 +52,13 @@ function setLatestStopLoadingState(state: StopLoadingState, locationId: number, 
     return stopLoadingState;
 }
 
+function updateArrivalsState(state: LocationArrivals, locationId: number, newArrivals: LocationArrivals) {
+    return {
+        ...state,
+        ...newArrivals
+    };
+}
+
 const arrivalsReducer = (state = initialState, action: Action) => {
     switch (action.type) {
         case LOAD_ARRIVALS:
@@ -64,9 +71,8 @@ const arrivalsReducer = (state = initialState, action: Action) => {
 
             return {
                 ...state,
-                arrivals,
+                arrivals: updateArrivalsState(state.arrivals, action.payload.locationId, arrivals),
                 stopLoadingState: setLatestStopLoadingState(state.stopLoadingState, action.payload.locationId, false)
-
             };
         default:
             return { 
