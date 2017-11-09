@@ -10,7 +10,7 @@ export interface Props {
 }
 
 class StopsTable extends React.Component<Props> {
-    getLocationInfo(stopLocations: StopLocationsDictionary) {
+    static getLocationInfo(stopLocations: StopLocationsDictionary) {
         return map(stopLocations, (stopLocation: StopLocation, key: number) => {
             return (
                 <article className="stops">
@@ -33,7 +33,7 @@ class StopsTable extends React.Component<Props> {
 
         return (
             <section>
-                {this.getLocationInfo(stopLocations)}
+                {StopsTable.getLocationInfo(stopLocations)}
             </section>
         );
     }

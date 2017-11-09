@@ -1,14 +1,24 @@
 import { ArrivalData, Arrival } from '../../api/trimet/types';
-import { LOAD_ARRIVALS_COMPLETE, LOAD_ARRIVALS } from '../constants/index';
+import { LOAD_ARRIVALS_COMPLETE, LOAD_ARRIVALS } from '../constants';
 import { groupBy } from 'lodash';
+
+export interface Stoploading {
+    loading: boolean;
+}
+
+export interface StopLoadingState {
+    [index: number]: Stoploading;
+}
 
 export interface ArrivalsReducerState {
     loading: Boolean;
     arrivals: LocationArrivals;
+    stopLoadingState: StopLoadingState;
 }
 
 interface Payload {
     arrivalData: ArrivalData;
+    locationId: number;
 }
 
 interface Action {
@@ -21,24 +31,33 @@ export interface LocationArrivals {
 }
 
 function getArrivals (arrivalData: ArrivalData): LocationArrivals {
-    const arrivals = groupBy(arrivalData.arrival, (arrival: Arrival) => {
+    return groupBy(arrivalData.arrival, (arrival: Arrival) => {
         return arrival.locid;
     });
-
-    return arrivals;
 }
 
 const initialState = {
     loading: false,
-    arrivals: {}
+    arrivals: {},
+    stopLoadingState: {}
 };
+
+function setLatestStopLoadingState(state: StopLoadingState, locationId: number, newState: boolean) {
+    const stopLoadingState = { ...state };
+
+    stopLoadingState[locationId] = {
+        loading: newState
+    };
+
+    return stopLoadingState;
+}
 
 const arrivalsReducer = (state = initialState, action: Action) => {
     switch (action.type) {
         case LOAD_ARRIVALS:
             return {
                 ...state,
-                loading: true
+                stopLoadingState: setLatestStopLoadingState(state.stopLoadingState, action.payload.locationId, true)
             };
         case LOAD_ARRIVALS_COMPLETE:
             const arrivals = getArrivals(action.payload.arrivalData);
@@ -46,7 +65,8 @@ const arrivalsReducer = (state = initialState, action: Action) => {
             return {
                 ...state,
                 arrivals,
-                loading: false
+                stopLoadingState: setLatestStopLoadingState(state.stopLoadingState, action.payload.locationId, false)
+
             };
         default:
             return { 
