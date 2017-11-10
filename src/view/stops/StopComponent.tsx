@@ -10,17 +10,19 @@ interface Props {
     stopLocation: StopLocation;
     loadArrivalData: LoadArrivalData;
     locationId: number;
+    loading: boolean;
 }
 
 class StopComponent extends React.Component<Props> {
     render() {
-        const { stopLocation, loadArrivalData, locationId } = this.props;
+        const { stopLocation, loadArrivalData, locationId, loading } = this.props;
 
         return (
             <div className="stops">
                 <StopsTableHeader
                     stopLocation={stopLocation}
                     loadArrivalData={loadArrivalData}
+                    loading={loading}
                 />
                 <ArrivalsContainer locationId={locationId} />
             </div>

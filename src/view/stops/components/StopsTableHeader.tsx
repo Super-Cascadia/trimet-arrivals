@@ -9,6 +9,7 @@ import { LoadArrivalData } from './StopsTable';
 interface Props {
     stopLocation: StopLocation;
     loadArrivalData: LoadArrivalData;
+    loading: boolean;
 }
 
 class StopsTableHeader extends React.Component<Props> {
@@ -25,7 +26,7 @@ class StopsTableHeader extends React.Component<Props> {
         loadArrivalData(stopLocation.locid);
     }
     render() {
-        const { stopLocation } = this.props;
+        const { stopLocation, loading } = this.props;
 
         if (!stopLocation) {
             return null;
@@ -38,7 +39,10 @@ class StopsTableHeader extends React.Component<Props> {
                     {stopLocation.locid} - {stopLocation.desc} - {stopLocation.dir}
                 </h2>
                 <div className="stops-reload-button">
-                    <ReloadButton onClick={(e) => this.loadArrivalData(e)}/>
+                    <ReloadButton
+                        onClick={(e: Event) => this.loadArrivalData(e)}
+                        disabled={loading}
+                    />
                 </div>
             </div>
         );
