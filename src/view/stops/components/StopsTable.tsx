@@ -2,35 +2,26 @@ import * as React from 'react';
 import { StopLocationsDictionary } from '../../../store/reducers/stopsReducer';
 import { map } from 'lodash';
 import { StopLocation } from '../../../api/trimet/types';
-import ArrivalsContainer from '../../arrivals/ArrivalsContainer';
 import '../Stops.css';
-import StopsTableHeader from './StopsTableHeader';
+import StopContainer from '../StopContainer';
 
 export type LoadArrivalData = (locationId: number) => void;
 
 interface Props {
     stopLocations: StopLocationsDictionary;
-    loadArrivalData: LoadArrivalData;
 }
 
 class StopsTable extends React.Component<Props> {
-    static getLocationInfo(stopLocations: StopLocationsDictionary, loadArrivalData: LoadArrivalData) {
+    static getLocationInfo(stopLocations: StopLocationsDictionary) {
         return map(stopLocations, (stopLocation: StopLocation, key: number) => {
             return (
-                <div className="stops">
-                    <StopsTableHeader
-                        stopLocation={stopLocation}
-                        loadArrivalData={loadArrivalData}
-                    />
-                    <ArrivalsContainer locationId={key} />
-                </div>
-                                
+                <StopContainer locationId={key} />
             );
         });
     }
 
     render() {
-        const { stopLocations, loadArrivalData } = this.props;
+        const { stopLocations } = this.props;
 
         if (!stopLocations) {
             return null;
@@ -38,7 +29,7 @@ class StopsTable extends React.Component<Props> {
 
         return (
             <div>
-                {StopsTable.getLocationInfo(stopLocations, loadArrivalData)}
+                {StopsTable.getLocationInfo(stopLocations)}
             </div>
         );
     }

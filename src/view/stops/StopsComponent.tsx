@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StopLocationsDictionary } from '../../store/reducers/stopsReducer';
-import StopsTable, { LoadArrivalData } from './components/StopsTable';
+import StopsTable from './components/StopsTable';
 import './Stops.css';
 
 export type LoadStopData = (radiusInFeet: number) => void;
@@ -9,7 +9,6 @@ export interface Props {
     loadStopData: LoadStopData;
     loading: Boolean;
     stopLocations: StopLocationsDictionary;
-    loadArrivalData: LoadArrivalData;
 }
 
 class StopsComponent extends React.Component<Props> {
@@ -18,7 +17,7 @@ class StopsComponent extends React.Component<Props> {
         loadStopData(500);
     }
     render() {
-        const { loading, stopLocations, loadArrivalData } = this.props;
+        const { loading, stopLocations } = this.props;
 
         return (
             <div>
@@ -28,7 +27,7 @@ class StopsComponent extends React.Component<Props> {
                 {!loading && stopLocations &&
                     <div>
                         <h1>Nearby Stops</h1>
-                        <StopsTable stopLocations={stopLocations} loadArrivalData={loadArrivalData} />
+                        <StopsTable stopLocations={stopLocations} />
                     </div>
                 }
             </div>
