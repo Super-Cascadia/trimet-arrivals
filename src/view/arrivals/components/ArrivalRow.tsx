@@ -3,7 +3,7 @@ import { Arrival } from '../../../api/trimet/types';
 import * as moment from 'moment';
 import RouteIndicator from '../../../component/route/RouteIndicator';
 import './Arrivals.css';
-import {Moment} from "moment";
+import { Moment } from 'moment';
 
 export interface Props {
     arrival: Arrival;

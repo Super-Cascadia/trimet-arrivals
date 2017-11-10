@@ -1,5 +1,5 @@
-import { loadStopData } from './stopActions';
+import { loadStopData, loadArrivalData } from './stopActions';
 
 export {
-    loadStopData
+    loadStopData, loadArrivalData
 };

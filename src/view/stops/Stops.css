@@ -12,6 +12,10 @@
     padding-right: 10px;
 }
 
+.stops-header h2 {
+    margin: 0px;
+}
+
 table {
     width: 100%;
 }

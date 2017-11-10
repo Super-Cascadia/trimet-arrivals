@@ -1,13 +1,17 @@
 import * as constants from '../constants';
-import { StopData, Location, StopLocation, ArrivalData } from '../../api/trimet/types';
+import { StopData, Location, ArrivalData } from '../../api/trimet/types';
 import { getNearbyStops, getArrivals } from '../../api/trimet';
-import { map } from 'lodash';
 
 export interface LoadAction {
     type: 'LOAD_STOPS';
 }
 
+export interface ArrivalAction {
+    type: 'LOAD_ARRIVALS';
+}
+
 export type StopActions = LoadAction;
+export type ArrivalActions = ArrivalAction;
 
 function getCurrentPosition() {
     return new Promise((resolve: Function, reject: Function) => {
@@ -17,16 +21,33 @@ function getCurrentPosition() {
     });
 }
 
-function getLocationIds(stopData: StopData): string {
-    const locationIdList = map(stopData.location, (location: StopLocation) => {
-        return location.locid;
-    });
+export const loadArrivalData = (locationId: number) => {
+    const minutes = 45;
+    return function (dispatch: Function, getState: Function) {
+        dispatch({
+            type: constants.LOAD_ARRIVALS,
+            payload: {
+                locationId
+            }
+        });
 
-    return locationIdList.join(',');
-}
+        const stringNumberLocationId = locationId.toString(10);
+
+        getArrivals(stringNumberLocationId, minutes)
+            .then((arrivalData: ArrivalData) => {
+                dispatch({
+                    type: constants.LOAD_ARRIVALS_COMPLETE,
+                    payload: {
+                        arrivalData,
+                        locationId
+                    }
+                });
+            });
+    };
+};
 
 export const loadStopData = (radiusInFeet: number) => {
-    return function (dispatch: Function, getState: Function) {
+    return function (dispatch: Function) {
         dispatch({
             type: constants.LOAD_STOPS
         });
@@ -41,26 +62,7 @@ export const loadStopData = (radiusInFeet: number) => {
                                 stopData
                             }
                         });
-
                         return stopData;
-                    })
-                    .then((stopData: StopData) => {
-                        const locIDs = getLocationIds(stopData);
-                        const minutes = 45;
-
-                        dispatch({
-                            type: constants.LOAD_ARRIVALS
-                        });
-
-                        getArrivals(locIDs, minutes)
-                            .then((arrivalData: ArrivalData) => {
-                                dispatch({
-                                    type: constants.LOAD_ARRIVALS_COMPLETE,
-                                    payload: {
-                                        arrivalData
-                                    }
-                                });
-                            });
                     });
             });
     };

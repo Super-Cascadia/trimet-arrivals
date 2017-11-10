@@ -1,0 +1,17 @@
+.arrival-load-spinner {
+    text-align: center;
+    line-height: 50px;
+    width: 100%;
+}
+
+.no-arrivals {
+    text-align: center;
+    margin: 0px;
+    line-height: 50px;
+}
+
+.spin-icon-wrapper {
+    width: 100%;
+    display: inline-block;
+    padding: 20px;
+}

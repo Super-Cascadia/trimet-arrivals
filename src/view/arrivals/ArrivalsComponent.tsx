@@ -1,29 +1,44 @@
 import * as React from 'react';
 import { Arrival } from '../../api/trimet/types';
 import ArrivalsTable from './components/ArrivalsTable';
+import * as FontAwesome from 'react-fontawesome';
+import './Arrivals.css';
 
 export interface Props {
-    loading: Boolean;
+    loading: boolean;
     locationId: number;
     arrivals: Arrival[];
+    loadArrivalData: (locationId: number) => void;
 }
 
-class ArrivalsComponent extends React.Component<Props> {    
+class ArrivalsComponent extends React.Component<Props> {
+    componentDidMount() {
+        const { loadArrivalData, locationId } = this.props;
+
+        loadArrivalData(locationId);
+    }
     render() {
-        const { arrivals, loading } = this.props;
+        const { arrivals, loading = true } = this.props;
         
         return (
-            <section>
+            <div>
                 {loading &&
-                    <p>Loading...</p>
+                    <div className="spin-icon-wrapper">
+                        <FontAwesome
+                            className="arrival-load-spinner"
+                            name="spinner"
+                            spin
+                            size="3x"
+                        />
+                    </div>
                 }
                 {!loading && !arrivals &&
-                    <p>No arrivals available.</p>
+                    <p className="no-arrivals">No arrivals available.</p>
                 }
                 {!loading && arrivals &&
                     <ArrivalsTable arrivals={arrivals} />  
                 }
-            </section>
+            </div>
         );
     }
 }
