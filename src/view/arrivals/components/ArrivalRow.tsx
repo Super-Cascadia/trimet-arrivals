@@ -5,7 +5,7 @@ import RouteIndicator from '../../../component/route/RouteIndicator';
 import './Arrivals.css';
 import { Moment } from 'moment';
 
-export interface Props {
+interface Props {
     arrival: Arrival;
 }
 
@@ -39,7 +39,7 @@ class ArrivalRow extends React.Component<Props> {
         return (
             <tr>
                 <td className="route-indicator-column">
-                    <RouteIndicator route={arrival.route} />
+                    <RouteIndicator routeId={arrival.route} />
                 </td>
                 <td>{arrival.shortSign}</td>
                 <td>{ArrivalRow.timeToArrivalIndicator(scheduled, estimated)}</td>

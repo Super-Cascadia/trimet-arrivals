@@ -24,3 +24,7 @@ table th, table td {
     padding: 10px;
     text-align: left;
 }
+
+.header-router-indicator {
+    margin-right: 10px;
+}
