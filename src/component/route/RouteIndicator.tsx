@@ -37,7 +37,7 @@ function getRouteIndicatorClassName(route: number, className: string) {
     });
 }
 
-class RouteIndicator extends React.PureComponent<Props, {}> {
+class RouteIndicator extends React.PureComponent<Props> {
     static defaultProps: DefaultProps = {
         className: ''
     };
