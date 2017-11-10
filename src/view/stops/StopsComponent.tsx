@@ -3,8 +3,10 @@ import { StopLocationsDictionary } from '../../store/reducers/stopsReducer';
 import StopsTable from './components/StopsTable';
 import './Stops.css';
 
+export type LoadStopData = (radiusInFeet: number) => void;
+
 export interface Props {
-    loadStopData: (radiusInFeet: number) => void;
+    loadStopData: LoadStopData;
     loading: Boolean;
     stopLocations: StopLocationsDictionary;
 }

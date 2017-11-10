@@ -8,6 +8,7 @@
     font-size: 14px;
     line-height: 25px;
     border-radius: 5px;
+    display: inline-block;
 }
 
 .route-indicator-green {

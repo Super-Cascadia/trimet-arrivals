@@ -10,6 +10,7 @@
     line-height: 45px;
     padding-left: 10px;
     padding-right: 10px;
+    position: relative;
 }
 
 .stops-header h2 {
@@ -23,4 +24,30 @@ table {
 table th, table td {
     padding: 10px;
     text-align: left;
+}
+
+.header-router-indicator {
+    margin-right: 10px;
+}
+
+.stops-reload-button {
+    position: absolute;
+    right: 7px;
+    top: -2px;
+}
+
+.reload-button {
+    background: darkgrey;
+    display: inline-block;
+    padding-top: 3px;
+    padding-bottom: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    cursor: pointer;
+}
+
+.reload-button span {
+    vertical-align: middle;
+    line-height: 25px;
+    text-align: center;
 }
