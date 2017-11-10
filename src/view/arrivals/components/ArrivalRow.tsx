@@ -6,6 +6,7 @@ import './Arrivals.css';
 import { Moment } from 'moment';
 import LateIndicator from './LateIndicator';
 import EarlyIndicator from './EarlyIndicator';
+import TimeToArrivalIndicator from './TimeToArrivalIndicator';
 
 interface Props {
     arrival: Arrival;
@@ -26,14 +27,6 @@ function estimatedToArriveAtSameTime (scheduled: moment.Moment, estimated: momen
 }
 
 class ArrivalRow extends React.Component<Props> {
-    static timeToArrivalIndicator(estimated: Moment) {
-        const now = moment();
-        const diff = estimated.diff(now);
-        const secondsUntil = moment(diff).seconds();
-        const minutesUntil = moment(diff).minutes();
-
-        return `${minutesUntil}m ${secondsUntil}s away`;
-    }
     static onTimeIndicator(scheduled: Moment, estimated: Moment) {
         if (estimatedToArriveAtSameTime(scheduled, estimated)) {
             return <span className="arrival-on-time"> On time</span>;
@@ -61,7 +54,9 @@ class ArrivalRow extends React.Component<Props> {
                 </td>
                 <td>{arrival.shortSign}</td>
                 <td>{ArrivalRow.onTimeIndicator(scheduled, estimated)}</td>
-                <td>{ArrivalRow.timeToArrivalIndicator(estimated)}</td>
+                <td>
+                    <TimeToArrivalIndicator estimated={estimated} />
+                </td>
                 <td>{Math.round(distance)} miles</td>
                 <td>{estimatedTime}</td>
                 <td>{scheduledTime}</td>

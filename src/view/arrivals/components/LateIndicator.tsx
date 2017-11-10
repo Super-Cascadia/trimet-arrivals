@@ -8,14 +8,20 @@ interface Props {
     estimated: Moment;
 }
 
-class LateIndicator extends React.Component<Props> {
+class LateIndicator extends React.PureComponent<Props> {
     render() {
         const { scheduled, estimated } = this.props;
         const diff = scheduled.diff(estimated);
         const seconds = moment(diff).seconds();
         const minutes = moment(diff).minutes();
+        const minutesDiff = 59 - minutes;
+        const secondsDiff = 60 - seconds;
 
-        return <span className="arrival-estimated-late">{59 - minutes}m {60 - seconds}s late</span>;
+        if (minutesDiff === 0) {
+            return <span className="arrival-estimated-late">{secondsDiff}s late</span>;
+        }
+
+        return <span className="arrival-estimated-late">{minutesDiff}m {secondsDiff}s late</span>;
     }
 }
 
