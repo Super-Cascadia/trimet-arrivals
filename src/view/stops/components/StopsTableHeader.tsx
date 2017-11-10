@@ -16,7 +16,10 @@ class StopsTableHeader extends React.Component<Props> {
     static getStopRoutes(stopLocation: StopLocation) {
         return map(stopLocation.route, (route: Route) => {
             return (
-                <RouteIndicator routeId={route.route} className="header-router-indicator"/>
+                <RouteIndicator
+                    routeId={route.route}
+                    className="header-router-indicator"
+                />
             );
         });
     }

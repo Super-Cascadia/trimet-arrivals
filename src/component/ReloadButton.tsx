@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as FontAwesome from 'react-fontawesome';
 
 export type Event = React.MouseEvent<HTMLElement>;
 
@@ -14,10 +15,16 @@ class ReloadButton extends React.PureComponent<Props> {
         return (
             <button
                 disabled={disabled}
+                title="Reload arrivals for stop"
                 className="reload-button"
                 onClick={(e: Event) => onClick(e)}
             >
-                Reload
+                { disabled &&
+                    <FontAwesome name="refresh" spin />
+                }
+                { !disabled &&
+                    <FontAwesome name="refresh"/>
+                }
             </button>
         );
     }

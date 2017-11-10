@@ -26,7 +26,7 @@ class ArrivalsComponent extends React.Component<Props> {
                     <div className="spin-icon-wrapper">
                         <FontAwesome
                             className="arrival-load-spinner"
-                            name="spinner"
+                            name="refresh"
                             spin
                             size="3x"
                         />
