@@ -1,17 +1,17 @@
 import * as React from 'react';
 
-type onClick = React.MouseEvent<HTMLElement>;
+export type Event = React.MouseEvent<HTMLElement>;
 
 interface Props {
-    onClick: (e: onClick) => void;
+    onClick: (e: Event) => void;
 }
 
-class ReloadButton extends React.Component<Props> {
+class ReloadButton extends React.PureComponent<Props> {
     render() {
         return (
             <button
                 className="reload-button"
-                onClick={(e: onClick) => this.props.onClick(e)}
+                onClick={(e: Event) => this.props.onClick(e)}
             >
                 Reload
             </button>
