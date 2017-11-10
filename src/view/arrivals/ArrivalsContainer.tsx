@@ -10,8 +10,8 @@ interface Props {
 
 const mapStateToProps = (state: RootState, ownProps: Props) => {
     const { arrivalsReducer } = state;
-    const loading = arrivalsReducer.loading;
     const locationId = ownProps.locationId;
+    const loading = arrivalsReducer.loading[locationId];
     const arrivals = arrivalsReducer.arrivals[locationId];
 
     return {

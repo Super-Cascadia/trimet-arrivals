@@ -13,12 +13,12 @@ class StopsTable extends React.Component<Props> {
     static getLocationInfo(stopLocations: StopLocationsDictionary) {
         return map(stopLocations, (stopLocation: StopLocation, key: number) => {
             return (
-                <article className="stops">
-                    <header className="stops-header">
+                <div className="stops">
+                    <div className="stops-header">
                         <h2>{stopLocation.locid} - {stopLocation.desc} - {stopLocation.dir}</h2>
-                    </header>
+                    </div>
                     <ArrivalsContainer locationId={key} />
-                </article>
+                </div>
                                 
             );
         });
@@ -32,9 +32,9 @@ class StopsTable extends React.Component<Props> {
         }
 
         return (
-            <section>
+            <div>
                 {StopsTable.getLocationInfo(stopLocations)}
-            </section>
+            </div>
         );
     }
 }

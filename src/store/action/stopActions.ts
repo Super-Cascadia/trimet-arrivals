@@ -11,7 +11,6 @@ export interface ArrivalAction {
 }
 
 export type StopActions = LoadAction;
-
 export type ArrivalActions = ArrivalAction;
 
 function getCurrentPosition() {
@@ -63,7 +62,6 @@ export const loadStopData = (radiusInFeet: number) => {
                                 stopData
                             }
                         });
-
                         return stopData;
                     });
             });

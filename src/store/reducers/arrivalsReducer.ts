@@ -2,16 +2,12 @@ import { ArrivalData, Arrival } from '../../api/trimet/types';
 import { LOAD_ARRIVALS_COMPLETE, LOAD_ARRIVALS } from '../constants';
 import { groupBy } from 'lodash';
 
-export interface Stoploading {
-    loading: boolean;
-}
-
 export interface StopLoadingState {
-    [index: number]: Stoploading;
+    [locationId: number]: boolean;
 }
 
 export interface ArrivalsReducerState {
-    loading: Boolean;
+    loading: boolean;
     arrivals: LocationArrivals;
     stopLoadingState: StopLoadingState;
 }
@@ -37,22 +33,18 @@ function getArrivals (arrivalData: ArrivalData): LocationArrivals {
 }
 
 const initialState = {
-    loading: false,
     arrivals: {},
-    stopLoadingState: {}
+    loading: {}
 };
 
-function setLatestStopLoadingState(state: StopLoadingState, locationId: number, newState: boolean) {
-    const stopLoadingState = { ...state };
-
-    stopLoadingState[locationId] = {
-        loading: newState
+function setLatestStopLoadingState(state: StopLoadingState, locationId: number, newState: boolean): StopLoadingState {
+    return {
+        ...state,
+        [locationId]: newState
     };
-
-    return stopLoadingState;
 }
 
-function updateArrivalsState(state: LocationArrivals, locationId: number, newArrivals: LocationArrivals) {
+function updateArrivalsState(state: LocationArrivals, locationId: number, newArrivals: LocationArrivals): LocationArrivals {
     return {
         ...state,
         ...newArrivals
@@ -64,7 +56,7 @@ const arrivalsReducer = (state = initialState, action: Action) => {
         case LOAD_ARRIVALS:
             return {
                 ...state,
-                stopLoadingState: setLatestStopLoadingState(state.stopLoadingState, action.payload.locationId, true)
+                loading: setLatestStopLoadingState(state.loading, action.payload.locationId, true)
             };
         case LOAD_ARRIVALS_COMPLETE:
             const arrivals = getArrivals(action.payload.arrivalData);
@@ -72,7 +64,7 @@ const arrivalsReducer = (state = initialState, action: Action) => {
             return {
                 ...state,
                 arrivals: updateArrivalsState(state.arrivals, action.payload.locationId, arrivals),
-                stopLoadingState: setLatestStopLoadingState(state.stopLoadingState, action.payload.locationId, false)
+                loading: setLatestStopLoadingState(state.loading, action.payload.locationId, false)
             };
         default:
             return { 
