@@ -4,6 +4,7 @@ import { map } from 'lodash';
 import { StopLocation } from '../../../api/trimet/types';
 import ArrivalsContainer from '../../arrivals/ArrivalsContainer';
 import '../Stops.css';
+import StopsTableHeader from './StopsTableHeader';
 
 export interface Props {
     stopLocations: StopLocationsDictionary;
@@ -14,9 +15,7 @@ class StopsTable extends React.Component<Props> {
         return map(stopLocations, (stopLocation: StopLocation, key: number) => {
             return (
                 <div className="stops">
-                    <div className="stops-header">
-                        <h2>{stopLocation.locid} - {stopLocation.desc} - {stopLocation.dir}</h2>
-                    </div>
+                    <StopsTableHeader stopLocation={stopLocation}/>
                     <ArrivalsContainer locationId={key} />
                 </div>
                                 
