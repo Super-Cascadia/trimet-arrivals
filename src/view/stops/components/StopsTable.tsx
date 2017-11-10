@@ -15,7 +15,7 @@ class StopsTable extends React.Component<Props> {
     static getLocationInfo(stopLocations: StopLocationsDictionary) {
         return map(stopLocations, (stopLocation: StopLocation, key: number) => {
             return (
-                <StopContainer locationId={key} />
+                <StopContainer locationId={key} key={key} />
             );
         });
     }

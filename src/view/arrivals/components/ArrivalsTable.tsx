@@ -15,13 +15,12 @@ function sortArrivalsByEstimatedTime(arrivals: Arrival[]): Arrival[] {
 }
 
 class ArrivalsTable extends React.Component<Props> {
-
-    getRows(arrivals: Arrival[]) {
+    static getRows(arrivals: Arrival[]) {
         const sortedArrivals = sortArrivalsByEstimatedTime(arrivals);
 
         return map(sortedArrivals, (arrival: Arrival) => {
             return (
-                <ArrivalRow arrival={arrival} />
+                <ArrivalRow arrival={arrival} key={arrival.id} />
             );
         });
     }
@@ -35,8 +34,15 @@ class ArrivalsTable extends React.Component<Props> {
         
         return (
             <table className="arrivals-table">
+                <th/>
+                <th>Name</th>
+                <th>On Time</th>
+                <th>Time to arrival</th>
+                <th>Distance</th>
+                <th>Estimated</th>
+                <th>Scheduled</th>
                 <tbody>
-                    {this.getRows(arrivals)}
+                    {ArrivalsTable.getRows(arrivals)}
                 </tbody>
             </table>
         );

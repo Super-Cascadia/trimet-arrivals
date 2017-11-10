@@ -17,6 +17,7 @@ class StopsTableHeader extends React.Component<Props> {
         return map(stopLocation.route, (route: Route) => {
             return (
                 <RouteIndicator
+                    key={route.route}
                     routeId={route.route}
                     className="header-router-indicator"
                 />

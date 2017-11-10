@@ -16,3 +16,7 @@
 .arrival-estimated-late {
     color: red;
 }
+
+.arrival-estimated-early {
+    color: yellowgreen;
+}

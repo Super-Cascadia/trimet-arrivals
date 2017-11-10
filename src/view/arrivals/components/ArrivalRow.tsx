@@ -4,6 +4,8 @@ import * as moment from 'moment';
 import RouteIndicator from '../../../component/route/RouteIndicator';
 import './Arrivals.css';
 import { Moment } from 'moment';
+import LateIndicator from './LateIndicator';
+import EarlyIndicator from './EarlyIndicator';
 
 interface Props {
     arrival: Arrival;
@@ -15,14 +17,32 @@ function getDistanceUntilArrival(feet: number): number {
     return feet && feet < MILE ? MILE / feet : feet && feet / MILE;
 }
 
-class ArrivalRow extends React.Component<Props> {
-    static timeToArrivalIndicator(scheduled: Moment, estimated: Moment) {
-        const seconds = moment(scheduled.diff(estimated)).seconds();
+function isEstimatedEarly(estimated: Moment, scheduled: Moment) {
+    return estimated.isBefore(scheduled);
+}
 
-        if (seconds === 0) {
+function estimatedToArriveAtSameTime (scheduled: moment.Moment, estimated: moment.Moment) {
+    return scheduled.isSame(estimated);
+}
+
+class ArrivalRow extends React.Component<Props> {
+    static timeToArrivalIndicator(estimated: Moment) {
+        const now = moment();
+        const diff = estimated.diff(now);
+        const secondsUntil = moment(diff).seconds();
+        const minutesUntil = moment(diff).minutes();
+
+        return `${minutesUntil}m ${secondsUntil}s away`;
+    }
+    static onTimeIndicator(scheduled: Moment, estimated: Moment) {
+        if (estimatedToArriveAtSameTime(scheduled, estimated)) {
             return <span className="arrival-on-time"> On time</span>;
         } else {
-            return <span className="arrival-estimated-late">{seconds}s late</span>;
+            if (isEstimatedEarly(estimated, scheduled)) {
+                return <EarlyIndicator scheduled={scheduled} estimated={estimated}/>;
+            } else {
+                return <LateIndicator scheduled={scheduled} estimated={estimated}/>;
+            }
         }
     }
 
@@ -30,10 +50,8 @@ class ArrivalRow extends React.Component<Props> {
         const { arrival } = this.props;
         const scheduled = moment(arrival.scheduled);
         const estimated = moment(arrival.estimated);
-        const untilArrival = moment(estimated.diff(moment.now())).seconds();
-
         const scheduledTime = scheduled.format('ddd, h:mm:ss a');
-        const estimatedTime = estimated.format('ddd, h:mm:ss a');         
+        const estimatedTime = estimated.format('ddd, h:mm:ss a');
         const distance = getDistanceUntilArrival(arrival.feet);
 
         return (
@@ -42,11 +60,11 @@ class ArrivalRow extends React.Component<Props> {
                     <RouteIndicator routeId={arrival.route} />
                 </td>
                 <td>{arrival.shortSign}</td>
-                <td>{ArrivalRow.timeToArrivalIndicator(scheduled, estimated)}</td>
-                <td>{untilArrival}s away</td>
+                <td>{ArrivalRow.onTimeIndicator(scheduled, estimated)}</td>
+                <td>{ArrivalRow.timeToArrivalIndicator(estimated)}</td>
                 <td>{Math.round(distance)} miles</td>
-                <td>{estimatedTime}</td>   
-                <td>{scheduledTime}</td>                     
+                <td>{estimatedTime}</td>
+                <td>{scheduledTime}</td>
             </tr>
         );
     }
