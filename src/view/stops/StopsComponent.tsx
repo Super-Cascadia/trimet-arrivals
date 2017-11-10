@@ -2,7 +2,6 @@ import * as React from 'react';
 import { StopLocationsDictionary } from '../../store/reducers/stopsReducer';
 import StopsTable from './components/StopsTable';
 import './Stops.css';
-import * as moment from 'moment';
 
 export type LoadStopData = (radiusInFeet: number) => void;
 
@@ -10,6 +9,7 @@ export interface Props {
     loadStopData: LoadStopData;
     loading: Boolean;
     stopLocations: StopLocationsDictionary;
+    timeOfLastLoad: string;
 }
 
 class StopsComponent extends React.Component<Props> {
@@ -18,8 +18,7 @@ class StopsComponent extends React.Component<Props> {
         loadStopData(200);
     }
     render() {
-        const { loading, stopLocations } = this.props;
-        const currentTime = moment().format('ddd, h:mm:ss a');
+        const { loading, stopLocations, timeOfLastLoad } = this.props;
 
         return (
             <div>
@@ -28,7 +27,7 @@ class StopsComponent extends React.Component<Props> {
                 }
                 {!loading && stopLocations &&
                     <div>
-                        <h1>Nearby Stops | {currentTime}</h1>
+                        <h1>Nearby Stops | <i>{timeOfLastLoad}</i></h1>
                         <StopsTable stopLocations={stopLocations} />
                     </div>
                 }

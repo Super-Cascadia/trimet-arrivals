@@ -1,10 +1,12 @@
-import { LOAD_STOPS, LOAD_STOP_COMPLETE } from '../constants';
+import { LOAD_STOPS, LOAD_STOP_COMPLETE, LOAD_ARRIVALS_COMPLETE } from '../constants';
 import { mapKeys } from 'lodash';
 import { StopLocation, StopData } from '../../api/trimet/types';
+import * as moment from 'moment';
 
 export interface StopsReducerState {
     loading: Boolean;
     stopLocations: StopLocationsDictionary;
+    timeOfLastLoad: string;
 }
 
 interface Payload {
@@ -27,7 +29,8 @@ function getStopLocations(stopData: StopData): StopLocationsDictionary {
 }
 
 const initialState = {
-    loading: false
+    loading: false,
+    timeOfLastLoad: ''
 };
 
 const stopsReducer = (state = initialState, action: Action) => {
@@ -43,7 +46,13 @@ const stopsReducer = (state = initialState, action: Action) => {
             return {
                 ...state,
                 stopLocations,
-                loading: false
+                loading: false,
+                timeOfLastLoad: moment().format('ddd, h:mm:ss a')
+            };
+        case LOAD_ARRIVALS_COMPLETE:
+            return {
+                ...state,
+                timeOfLastLoad: moment().format('ddd, h:mm:ss a')
             };
         default:
             return { 

@@ -5,12 +5,15 @@ import { RootState } from '../../store/reducers';
 import { StopActions } from '../../store/action/stopActions';
 
 const mapStateToProps = (state: RootState) => {
-    const loading = state.stopsReducer.loading;
-    const stopLocations = state.stopsReducer.stopLocations;
+    const { stopsReducer } = state;
+    const loading = stopsReducer.loading;
+    const stopLocations = stopsReducer.stopLocations;
+    const timeOfLastLoad = stopsReducer.timeOfLastLoad;
 
     return {
         loading,
-        stopLocations
+        stopLocations,
+        timeOfLastLoad
     };
 };
 
