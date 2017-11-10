@@ -22,4 +22,4 @@ class StopsTableHeader extends React.Component<Props> {
     }
 }
 
-export default <StopsTableHeade></StopsTableHeade>r;
+export default StopsTableHeader;
