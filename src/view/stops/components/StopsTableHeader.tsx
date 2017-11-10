@@ -3,9 +3,12 @@ import { Route, StopLocation } from '../../../api/trimet/types';
 import '../Stops.css';
 import { map } from 'lodash';
 import RouteIndicator from '../../../component/route/RouteIndicator';
+import ReloadButton from '../../../component/ReloadButton';
+import { LoadArrivalData } from './StopsTable';
 
-export interface Props {
+interface Props {
     stopLocation: StopLocation;
+    loadArrivalData: LoadArrivalData;
 }
 
 class StopsTableHeader extends React.Component<Props> {
@@ -15,6 +18,10 @@ class StopsTableHeader extends React.Component<Props> {
                 <RouteIndicator routeId={route.route} className="header-router-indicator"/>
             );
         });
+    }
+    loadArrivalData(e: React.MouseEvent<HTMLElement>) {
+        e.preventDefault();
+        this.props.loadArrivalData(this.props.stopLocation.locid);
     }
     render() {
         const { stopLocation } = this.props;
@@ -29,6 +36,9 @@ class StopsTableHeader extends React.Component<Props> {
                     {StopsTableHeader.getStopRoutes(stopLocation)}
                     {stopLocation.locid} - {stopLocation.desc} - {stopLocation.dir}
                 </h2>
+                <div className="stops-reload-button">
+                    <ReloadButton onClick={(e) => this.loadArrivalData(e)}/>
+                </div>
             </div>
         );
     }

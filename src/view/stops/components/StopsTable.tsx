@@ -6,16 +6,22 @@ import ArrivalsContainer from '../../arrivals/ArrivalsContainer';
 import '../Stops.css';
 import StopsTableHeader from './StopsTableHeader';
 
-export interface Props {
+export type LoadArrivalData = (locationId: number) => void;
+
+interface Props {
     stopLocations: StopLocationsDictionary;
+    loadArrivalData: LoadArrivalData;
 }
 
 class StopsTable extends React.Component<Props> {
-    static getLocationInfo(stopLocations: StopLocationsDictionary) {
+    static getLocationInfo(stopLocations: StopLocationsDictionary, loadArrivalData: LoadArrivalData) {
         return map(stopLocations, (stopLocation: StopLocation, key: number) => {
             return (
                 <div className="stops">
-                    <StopsTableHeader stopLocation={stopLocation}/>
+                    <StopsTableHeader
+                        stopLocation={stopLocation}
+                        loadArrivalData={loadArrivalData}
+                    />
                     <ArrivalsContainer locationId={key} />
                 </div>
                                 
@@ -24,7 +30,7 @@ class StopsTable extends React.Component<Props> {
     }
 
     render() {
-        const { stopLocations } = this.props;
+        const { stopLocations, loadArrivalData } = this.props;
 
         if (!stopLocations) {
             return null;
@@ -32,7 +38,7 @@ class StopsTable extends React.Component<Props> {
 
         return (
             <div>
-                {StopsTable.getLocationInfo(stopLocations)}
+                {StopsTable.getLocationInfo(stopLocations, loadArrivalData)}
             </div>
         );
     }

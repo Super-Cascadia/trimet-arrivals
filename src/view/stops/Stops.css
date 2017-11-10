@@ -10,6 +10,7 @@
     line-height: 45px;
     padding-left: 10px;
     padding-right: 10px;
+    position: relative;
 }
 
 .stops-header h2 {
@@ -27,4 +28,10 @@ table th, table td {
 
 .header-router-indicator {
     margin-right: 10px;
+}
+
+.stops-reload-button {
+    position: absolute;
+    right: 10px;
+    top: 0px;
 }
