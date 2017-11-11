@@ -29,7 +29,7 @@ class ReloadButton extends React.PureComponent<Props> {
                 onClick={(e: Event) => onClick(e)}
             >
                 { disabled &&
-                    <FontAwesome name="refresh" spin size="2x" />
+                    <FontAwesome name="refresh" spin={true} size="2x" />
                 }
                 { !disabled &&
                     <FontAwesome name="refresh" size="2x"/>

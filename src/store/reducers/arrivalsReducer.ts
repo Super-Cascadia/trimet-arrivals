@@ -44,7 +44,7 @@ function setLatestStopLoadingState(state: StopLoadingState, locationId: number, 
     };
 }
 
-function updateArrivalsState(state: LocationArrivals, locationId: number, newArrivals: LocationArrivals): LocationArrivals {
+function updateArrivalsState(state: LocationArrivals, newArrivals: LocationArrivals): LocationArrivals {
     return {
         ...state,
         ...newArrivals
@@ -63,7 +63,7 @@ const arrivalsReducer = (state = initialState, action: Action) => {
 
             return {
                 ...state,
-                arrivals: updateArrivalsState(state.arrivals, action.payload.locationId, arrivals),
+                arrivals: updateArrivalsState(state.arrivals, arrivals),
                 loading: setLatestStopLoadingState(state.loading, action.payload.locationId, false)
             };
         default:

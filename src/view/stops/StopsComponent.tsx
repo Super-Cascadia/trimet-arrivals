@@ -15,7 +15,7 @@ export interface Props {
 class StopsComponent extends React.Component<Props> {
     componentDidMount() {
         const { loadStopData } = this.props;
-        loadStopData(200);
+        loadStopData(500);
     }
     render() {
         const { loading, stopLocations, timeOfLastLoad } = this.props;
