@@ -13,24 +13,21 @@ interface Props {
     showArrivals: boolean;
 }
 
+const interval = 30000;
+
 class StopComponent extends React.Component<Props> {
     refreshInterval: {};
-
-    loadAndSetInterval(locationId: number, load: LoadArrivalData) {
-        load(locationId);
-
-        const interval = 30000;
-
-        this.refreshInterval = setInterval(load(locationId), interval);
+    loadAndSetInterval(locationId: number) {
+        const { loadArrivalData } = this.props;
+        loadArrivalData(locationId);
+        this.refreshInterval = setInterval(loadArrivalData(locationId), interval);
     }
     loadArrivals(locationId: number) {
-        const { loadArrivalData } = this.props;
-
         if (this.refreshInterval) {
             clearInterval(this.refreshInterval as number);
-            this.loadAndSetInterval(locationId, loadArrivalData);
+            this.loadAndSetInterval(locationId);
         } else {
-            this.loadAndSetInterval(locationId, loadArrivalData);
+            this.loadAndSetInterval(locationId);
         }
     }
     render() {
