@@ -13,6 +13,9 @@ export interface ArrivalAction {
 export type StopActions = LoadAction;
 export type ArrivalActions = ArrivalAction;
 
+export type LoadStopData = (radiusInFeet: number) => void;
+export type LoadArrivalData = (locationId: number) => void;
+
 function getCurrentPosition() {
     return new Promise((resolve: Function, reject: Function) => {
       navigator.geolocation.getCurrentPosition((location: Location) => {

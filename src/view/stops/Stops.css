@@ -51,3 +51,8 @@ table th, table td {
     line-height: 25px;
     text-align: center;
 }
+
+.count-down-label {
+    margin-left: 5px;
+    font-size: 16px;
+}

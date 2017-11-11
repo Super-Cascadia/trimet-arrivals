@@ -5,8 +5,6 @@ import { StopLocation } from '../../../api/trimet/types';
 import '../Stops.css';
 import StopContainer from '../StopContainer';
 
-export type LoadArrivalData = (locationId: number) => void;
-
 interface Props {
     stopLocations: StopLocationsDictionary;
     showArrivals: boolean;

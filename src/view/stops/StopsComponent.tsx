@@ -2,10 +2,9 @@ import * as React from 'react';
 import { StopLocationsDictionary } from '../../store/reducers/stopsReducer';
 import Stops from './components/Stops';
 import './Stops.css';
+import { LoadStopData } from '../../store/action/stopActions';
 
-export type LoadStopData = (radiusInFeet: number) => void;
-
-export interface Props {
+interface Props {
     loadStopData: LoadStopData;
     loading: Boolean;
     stopLocations: StopLocationsDictionary;
@@ -15,7 +14,7 @@ export interface Props {
 class StopsComponent extends React.Component<Props> {
     componentDidMount() {
         const { loadStopData } = this.props;
-        loadStopData(500);
+        loadStopData(750);
     }
     render() {
         const { loading, stopLocations, timeOfLastLoad } = this.props;
