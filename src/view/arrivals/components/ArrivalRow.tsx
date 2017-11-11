@@ -43,8 +43,8 @@ class ArrivalRow extends React.Component<Props> {
         const { arrival } = this.props;
         const scheduled = moment(arrival.scheduled);
         const estimated = moment(arrival.estimated);
-        const scheduledTime = scheduled.format('ddd, h:mm:ss a');
-        const estimatedTime = estimated.format('ddd, h:mm:ss a');
+        const scheduledTime = scheduled.format('h:mm:ss a');
+        const estimatedTime = estimated.format('h:mm:ss a');
         const distance = getDistanceUntilArrival(arrival.feet);
 
         return (
@@ -53,13 +53,12 @@ class ArrivalRow extends React.Component<Props> {
                     <RouteIndicator routeId={arrival.route} />
                 </td>
                 <td>{arrival.shortSign}</td>
-                <td>{ArrivalRow.onTimeIndicator(scheduled, estimated)}</td>
                 <td>
                     <TimeToArrivalIndicator estimated={estimated} />
                 </td>
+                <td>{ArrivalRow.onTimeIndicator(scheduled, estimated)}</td>
+                <td>{estimatedTime} / {scheduledTime}</td>
                 <td>{Math.round(distance)} miles</td>
-                <td>{estimatedTime}</td>
-                <td>{scheduledTime}</td>
             </tr>
         );
     }

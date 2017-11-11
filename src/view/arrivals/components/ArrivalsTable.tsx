@@ -31,16 +31,15 @@ class ArrivalsTable extends React.Component<Props> {
         if (!arrivals) {
             return null;
         }
-        
+
         return (
             <table className="arrivals-table">
                 <th/>
                 <th>Name</th>
+                <th>Arrival</th>
                 <th>On Time</th>
-                <th>Time to arrival</th>
+                <th>Estimated / Scheduled</th>
                 <th>Distance</th>
-                <th>Estimated</th>
-                <th>Scheduled</th>
                 <tbody>
                     {ArrivalsTable.getRows(arrivals)}
                 </tbody>
