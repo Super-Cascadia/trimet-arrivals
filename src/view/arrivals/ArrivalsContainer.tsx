@@ -1,8 +1,7 @@
 import { connect, Dispatch } from 'react-redux';
 import { RootState } from '../../store/reducers';
-import { StopActions } from '../../store/action/stopActions';
+import { LoadArrivalData, StopActions } from '../../store/action/stopActions';
 import ArrivalsComponent from '../arrivals/ArrivalsComponent';
-import { LoadArrivalData } from '../stops/components/Stops';
 
 interface Props {
     locationId: number;

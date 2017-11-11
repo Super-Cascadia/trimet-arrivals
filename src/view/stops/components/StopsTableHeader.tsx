@@ -4,7 +4,7 @@ import '../Stops.css';
 import { map } from 'lodash';
 import RouteIndicator from '../../../component/route/RouteIndicator';
 import ReloadButton, { Event } from '../../../component/ReloadButton';
-import { LoadArrivalData } from './Stops';
+import { LoadArrivalData } from '../../../store/action/stopActions';
 
 interface Props {
     stopLocation: StopLocation;

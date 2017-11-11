@@ -3,9 +3,9 @@ import { Arrival } from '../../api/trimet/types';
 import ArrivalsTable from './components/ArrivalsTable';
 import * as FontAwesome from 'react-fontawesome';
 import './Arrivals.css';
-import { LoadArrivalData } from '../stops/components/Stops';
+import { LoadArrivalData } from '../../store/action/stopActions';
 
-export interface Props {
+interface Props {
     loading: boolean;
     locationId: number;
     arrivals: Arrival[];

@@ -3,7 +3,7 @@ import './Stops.css';
 import StopsTableHeader from './components/StopsTableHeader';
 import ArrivalsContainer from '../arrivals/ArrivalsContainer';
 import { StopLocation } from '../../api/trimet/types';
-import { LoadArrivalData } from './components/Stops';
+import { LoadArrivalData } from '../../store/action/stopActions';
 
 interface Props {
     stopLocation: StopLocation;
@@ -27,7 +27,7 @@ class StopComponent extends React.Component<Props> {
         const { loadArrivalData } = this.props;
 
         if (this.refreshInterval) {
-            clearInterval(this.refreshInterval);
+            clearInterval(this.refreshInterval as number);
             this.loadAndSetInterval(locationId, loadArrivalData);
         } else {
             this.loadAndSetInterval(locationId, loadArrivalData);
