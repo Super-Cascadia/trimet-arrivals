@@ -25,7 +25,7 @@ class StopsTableHeader extends React.Component<Props> {
             );
         });
     }
-    loadArrivalData(e: Event) {
+    loadArrivalData(e: Event): void {
         e.preventDefault();
         const { loadArrivalData, stopLocation } = this.props;
         loadArrivalData(stopLocation.locid);

@@ -3,12 +3,13 @@ import { Arrival } from '../../api/trimet/types';
 import ArrivalsTable from './components/ArrivalsTable';
 import * as FontAwesome from 'react-fontawesome';
 import './Arrivals.css';
+import { LoadArrivalData } from '../stops/components/Stops';
 
 export interface Props {
     loading: boolean;
     locationId: number;
     arrivals: Arrival[];
-    loadArrivalData: (locationId: number) => void;
+    loadArrivalData: LoadArrivalData;
     showArrivals: boolean;
 }
 
