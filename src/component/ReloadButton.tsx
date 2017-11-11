@@ -8,6 +8,7 @@ interface Props {
     onClick: (e: Event) => void;
     disabled: boolean;
     className?: string;
+    children: any;
 }
 
 interface DefaultProps {
@@ -18,7 +19,7 @@ type PropsWithDefaults = Props & DefaultProps;
 
 class ReloadButton extends React.PureComponent<Props> {
     render() {
-        const { onClick, disabled, className } = this.props as PropsWithDefaults;
+        const { onClick, disabled, className, children } = this.props as PropsWithDefaults;
         const classes = cx('reload-button', className);
 
         return (
@@ -34,6 +35,7 @@ class ReloadButton extends React.PureComponent<Props> {
                 { !disabled &&
                     <FontAwesome name="refresh" size="2x"/>
                 }
+                {children}
             </button>
         );
     }

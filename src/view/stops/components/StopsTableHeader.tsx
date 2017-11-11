@@ -100,12 +100,13 @@ class StopsTableHeader extends React.Component<Props, State> {
                     {stopLocation.locid} - {stopLocation.desc} - {stopLocation.dir}
                 </h2>
                 <div className="stops-reload-button">
-                    <span>{this.state.interval}</span>
                     { showArrivals &&
                         <ReloadButton
                             onClick={(e: Event) => this.onReloadClick(e)}
                             disabled={loading}
-                        />
+                        >
+                            <span className="count-down-label">{this.state.interval}</span>
+                        </ReloadButton>
                     }
                 </div>
             </div>
