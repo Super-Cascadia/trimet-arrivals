@@ -9,20 +9,23 @@ export interface Props {
     locationId: number;
     arrivals: Arrival[];
     loadArrivalData: (locationId: number) => void;
+    showArrivals: boolean;
 }
 
 class ArrivalsComponent extends React.Component<Props> {
     componentDidMount() {
-        const { loadArrivalData, locationId } = this.props;
+        const { loadArrivalData, locationId, showArrivals } = this.props;
 
-        loadArrivalData(locationId);
+        if (showArrivals) {
+            loadArrivalData(locationId);
+        }
     }
     render() {
-        const { arrivals, loading = true } = this.props;
+        const { arrivals, loading = true, showArrivals = true } = this.props;
         
         return (
             <div>
-                {loading &&
+                {loading && showArrivals &&
                     <div className="spin-icon-wrapper">
                         <FontAwesome
                             className="arrival-load-spinner"
@@ -32,10 +35,10 @@ class ArrivalsComponent extends React.Component<Props> {
                         />
                     </div>
                 }
-                {!loading && !arrivals &&
+                {!loading && showArrivals && !arrivals &&
                     <p className="no-arrivals">No arrivals available.</p>
                 }
-                {!loading && arrivals &&
+                {!loading && showArrivals && arrivals &&
                     <ArrivalsTable arrivals={arrivals} />  
                 }
             </div>

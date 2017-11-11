@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StopLocationsDictionary } from '../../store/reducers/stopsReducer';
-import StopsTable from './components/StopsTable';
+import Stops from './components/Stops';
 import './Stops.css';
 
 export type LoadStopData = (radiusInFeet: number) => void;
@@ -28,7 +28,7 @@ class StopsComponent extends React.Component<Props> {
                 {!loading && stopLocations &&
                     <div>
                         <h1>Nearby Stops | <i>{timeOfLastLoad}</i></h1>
-                        <StopsTable stopLocations={stopLocations} />
+                        <Stops stopLocations={stopLocations} showArrivals={true} />
                     </div>
                 }
             </div>

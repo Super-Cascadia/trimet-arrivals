@@ -4,12 +4,13 @@ import '../Stops.css';
 import { map } from 'lodash';
 import RouteIndicator from '../../../component/route/RouteIndicator';
 import ReloadButton, { Event } from '../../../component/ReloadButton';
-import { LoadArrivalData } from './StopsTable';
+import { LoadArrivalData } from './Stops';
 
 interface Props {
     stopLocation: StopLocation;
     loadArrivalData: LoadArrivalData;
     loading: boolean;
+    showArrivals: boolean;
 }
 
 class StopsTableHeader extends React.Component<Props> {
@@ -30,7 +31,7 @@ class StopsTableHeader extends React.Component<Props> {
         loadArrivalData(stopLocation.locid);
     }
     render() {
-        const { stopLocation, loading } = this.props;
+        const { stopLocation, loading, showArrivals = true } = this.props;
 
         if (!stopLocation) {
             return null;
@@ -43,10 +44,12 @@ class StopsTableHeader extends React.Component<Props> {
                     {stopLocation.locid} - {stopLocation.desc} - {stopLocation.dir}
                 </h2>
                 <div className="stops-reload-button">
-                    <ReloadButton
-                        onClick={(e: Event) => this.loadArrivalData(e)}
-                        disabled={loading}
-                    />
+                    { showArrivals &&
+                        <ReloadButton
+                            onClick={(e: Event) => this.loadArrivalData(e)}
+                            disabled={loading}
+                        />
+                    }
                 </div>
             </div>
         );

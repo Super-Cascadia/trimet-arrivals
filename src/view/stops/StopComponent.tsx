@@ -11,11 +11,12 @@ interface Props {
     loadArrivalData: LoadArrivalData;
     locationId: number;
     loading: boolean;
+    showArrivals: boolean;
 }
 
 class StopComponent extends React.Component<Props> {
     render() {
-        const { stopLocation, loadArrivalData, locationId, loading } = this.props;
+        const { stopLocation, loadArrivalData, locationId, loading, showArrivals } = this.props;
 
         return (
             <div className="stops">
@@ -23,8 +24,9 @@ class StopComponent extends React.Component<Props> {
                     stopLocation={stopLocation}
                     loadArrivalData={loadArrivalData}
                     loading={loading}
+                    showArrivals={showArrivals}
                 />
-                <ArrivalsContainer locationId={locationId} />
+                <ArrivalsContainer locationId={locationId} showArrivals={showArrivals} />
             </div>
 
         );

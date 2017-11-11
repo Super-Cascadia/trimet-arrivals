@@ -9,19 +9,20 @@ export type LoadArrivalData = (locationId: number) => void;
 
 interface Props {
     stopLocations: StopLocationsDictionary;
+    showArrivals: boolean;
 }
 
-class StopsTable extends React.Component<Props> {
-    static getLocationInfo(stopLocations: StopLocationsDictionary) {
+class Stops extends React.Component<Props> {
+    static getLocationInfo(stopLocations: StopLocationsDictionary, showArrivals: boolean) {
         return map(stopLocations, (stopLocation: StopLocation, key: number) => {
             return (
-                <StopContainer locationId={key} key={key} />
+                <StopContainer locationId={key} key={key} showArrivals={showArrivals} />
             );
         });
     }
 
     render() {
-        const { stopLocations } = this.props;
+        const { stopLocations, showArrivals } = this.props;
 
         if (!stopLocations) {
             return null;
@@ -29,10 +30,10 @@ class StopsTable extends React.Component<Props> {
 
         return (
             <div>
-                {StopsTable.getLocationInfo(stopLocations)}
+                {Stops.getLocationInfo(stopLocations, showArrivals)}
             </div>
         );
     }
 }
 
-export default StopsTable;
+export default Stops;

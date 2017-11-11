@@ -6,6 +6,7 @@ import { loadArrivalData } from '../../store/action';
 
 interface Props {
     locationId: number;
+    showArrivals: boolean;
 }
 
 const mapStateToProps = (state: RootState, ownProps: Props) => {
