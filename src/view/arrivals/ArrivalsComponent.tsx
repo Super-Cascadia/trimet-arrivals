@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Arrival } from '../../api/trimet/types';
 import ArrivalsTable from './components/ArrivalsTable';
-import * as FontAwesome from 'react-fontawesome';
 import './Arrivals.css';
 import { LoadArrivalData } from '../../store/action/stopActions';
 
@@ -25,22 +24,22 @@ class ArrivalsComponent extends React.Component<Props> {
         const { arrivals, loading = true, showArrivals = true } = this.props;
         
         return (
-            <div>
-                {loading && showArrivals &&
-                    <div className="spin-icon-wrapper">
-                        <FontAwesome
-                            className="arrival-load-spinner"
-                            name="refresh"
-                            spin={true}
-                            size="3x"
-                        />
-                    </div>
-                }
+            <div className="arrivals-wrapper">
+                {/*{loading && showArrivals &&*/}
+                    {/*<div className="spin-icon-wrapper">*/}
+                        {/*<FontAwesome*/}
+                            {/*className="arrival-load-spinner"*/}
+                            {/*name="refresh"*/}
+                            {/*spin={true}*/}
+                            {/*size="3x"*/}
+                        {/*/>*/}
+                    {/*</div>*/}
+                {/*}*/}
                 {!loading && showArrivals && !arrivals &&
                     <p className="no-arrivals">No arrivals available.</p>
                 }
-                {!loading && showArrivals && arrivals &&
-                    <ArrivalsTable arrivals={arrivals} />  
+                {showArrivals && arrivals &&
+                    <ArrivalsTable arrivals={arrivals} loading={loading} />
                 }
             </div>
         );
