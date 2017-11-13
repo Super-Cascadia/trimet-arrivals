@@ -8,7 +8,7 @@ interface Props {
     onClick: (e: Event) => void;
     disabled: boolean;
     className?: string;
-    children: any;
+    children?: any;
 }
 
 interface DefaultProps {
@@ -17,7 +17,7 @@ interface DefaultProps {
 
 type PropsWithDefaults = Props & DefaultProps;
 
-class ReloadButton extends React.PureComponent<Props> {
+class ReloadButton extends React.PureComponent<Props, {}> {
     render() {
         const { onClick, disabled, className, children } = this.props as PropsWithDefaults;
         const classes = cx('reload-button', className);

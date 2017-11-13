@@ -20,3 +20,11 @@
 .arrival-estimated-early {
     color: yellowgreen;
 }
+
+.arrivals-loading {
+    opacity: 0.3;
+}
+
+.arrivals-wrapper {
+    position: relative;
+}

@@ -3,9 +3,11 @@ import { map, sortBy } from 'lodash';
 import { Arrival } from '../../../api/trimet/types';
 import ArrivalRow from './ArrivalRow';
 import './Arrivals.css';
+import * as classNames from 'classnames';
 
 export interface Props {
     arrivals: Arrival[];
+    loading: boolean;
 }
 
 function sortArrivalsByEstimatedTime(arrivals: Arrival[]): Arrival[] {
@@ -26,14 +28,18 @@ class ArrivalsTable extends React.Component<Props> {
     }
     
     render() {
-        const { arrivals } = this.props;
+        const { arrivals, loading } = this.props;
 
         if (!arrivals) {
             return null;
         }
 
+        const classes = classNames('arrivals-table', {
+            'arrivals-loading': loading
+        });
+
         return (
-            <table className="arrivals-table">
+            <table className={classes}>
                 <th/>
                 <th>Name</th>
                 <th>Arrival</th>
