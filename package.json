@@ -27,15 +27,22 @@
     "react-dom": "^16.1.0",
     "react-fontawesome": "^1.6.1",
     "react-redux": "^5.0.6",
-    "react-scripts-ts": "^2.8.0",
+    "react-scripts": "^2.1.5",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
-    "superagent": "^3.8.1"
+    "superagent": "^3.8.1",
+    "typescript": "^3.3.3"
   },
   "scripts": {
-    "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
-  }
+    "watch": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

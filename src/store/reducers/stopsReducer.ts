@@ -1,10 +1,10 @@
 import { LOAD_STOPS, LOAD_STOP_COMPLETE, LOAD_ARRIVALS_COMPLETE } from '../constants';
 import { mapKeys } from 'lodash';
 import { StopLocation, StopData } from '../../api/trimet/types';
-import * as moment from 'moment';
+import moment from 'moment';
 
 export interface StopsReducerState {
-    loading: Boolean;
+    loading: boolean;
     stopLocations: StopLocationsDictionary;
     timeOfLastLoad: string;
 }

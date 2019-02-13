@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Route, StopLocation } from '../../../api/trimet/types';
 import '../Stops.css';
 import { map } from 'lodash';

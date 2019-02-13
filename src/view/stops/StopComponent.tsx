@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import './Stops.css';
 import StopsTableHeader from './components/StopsTableHeader';
 import ArrivalsContainer from '../arrivals/ArrivalsContainer';
@@ -7,7 +7,7 @@ import { LoadArrivalData } from '../../store/action/stopActions';
 
 interface Props {
     stopLocation: StopLocation;
-    loadArrivalData: LoadArrivalData;
+    loadArrivalData: (locationId: number) => TimerHandler;
     locationId: number;
     loading: boolean;
     showArrivals: boolean;

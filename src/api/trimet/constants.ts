@@ -8,4 +8,9 @@ export const BLUE_LINE_NUMBER = 100;
 export const ROUTE_DISPLAY = {
     90: 'Red',
     100: 'Blue'
-};
+} as Routes;
+
+interface Routes {
+    [routeNumber: number]: string
+}
+

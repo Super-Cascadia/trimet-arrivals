@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { map, sortBy } from 'lodash';
 import { Arrival } from '../../../api/trimet/types';
 import ArrivalRow from './ArrivalRow';
 import './Arrivals.css';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 
 export interface Props {
     arrivals: Arrival[];

@@ -1,6 +1,6 @@
-import * as React from 'react';
-import * as FontAwesome from 'react-fontawesome';
-import * as cx from 'classnames';
+import React from 'react';
+import FontAwesome from 'react-fontawesome';
+import cx from 'classnames';
 
 export type Event = React.MouseEvent<HTMLElement>;
 

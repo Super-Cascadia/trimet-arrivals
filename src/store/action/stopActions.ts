@@ -1,6 +1,6 @@
-import * as constants from '../constants';
 import { StopData, Location, ArrivalData } from '../../api/trimet/types';
 import { getNearbyStops, getArrivals } from '../../api/trimet';
+import { LOAD_ARRIVALS, LOAD_ARRIVALS_COMPLETE, LOAD_STOPS, LOAD_STOP_COMPLETE } from '../constants';
 
 export interface LoadAction {
     type: 'LOAD_STOPS';
@@ -28,7 +28,7 @@ export const loadArrivalData = (locationId: number) => {
     const minutes = 45;
     return function (dispatch: Function, getState: Function) {
         dispatch({
-            type: constants.LOAD_ARRIVALS,
+            type: LOAD_ARRIVALS,
             payload: {
                 locationId
             }
@@ -39,7 +39,7 @@ export const loadArrivalData = (locationId: number) => {
         getArrivals(stringNumberLocationId, minutes)
             .then((arrivalData: ArrivalData) => {
                 dispatch({
-                    type: constants.LOAD_ARRIVALS_COMPLETE,
+                    type: LOAD_ARRIVALS_COMPLETE,
                     payload: {
                         arrivalData,
                         locationId
@@ -52,15 +52,16 @@ export const loadArrivalData = (locationId: number) => {
 export const loadStopData = (radiusInFeet: number) => {
     return function (dispatch: Function) {
         dispatch({
-            type: constants.LOAD_STOPS
+            type: LOAD_STOPS
         });
 
         getCurrentPosition()
+            // @ts-ignore
             .then((location: Location) => {
                 getNearbyStops(location, radiusInFeet)
                     .then((stopData: StopData) => {
                         dispatch({
-                            type: constants.LOAD_STOP_COMPLETE,
+                            type: LOAD_STOP_COMPLETE,
                             payload: {
                                 stopData
                             }
