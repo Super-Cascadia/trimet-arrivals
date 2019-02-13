@@ -45,10 +45,6 @@
     "eject": "react-scripts eject",
     "codecov": "codecov"
   },
-  "jest": {
-    "coverageDirectory": "./coverage/",
-    "collectCoverage": true
-  },
   "browserslist": [
     ">0.2%",
     "not dead",
