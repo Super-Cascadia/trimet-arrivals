@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { StopLocationsDictionary } from '../../store/reducers/stopsReducer';
 import Stops from './components/Stops';
 import './Stops.css';
@@ -6,7 +6,7 @@ import { LoadStopData } from '../../store/action/stopActions';
 
 interface Props {
     loadStopData: LoadStopData;
-    loading: Boolean;
+    loading: boolean;
     stopLocations: StopLocationsDictionary;
     timeOfLastLoad: string;
 }

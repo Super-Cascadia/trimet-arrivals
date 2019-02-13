@@ -1,7 +1,7 @@
-import * as React from 'react';
-import * as cx from 'classnames';
+import React from 'react';
+import cx from 'classnames';
 import './RouteIndicator.css';
-import * as FontAwesome from 'react-fontawesome';
+import FontAwesome from 'react-fontawesome';
 import { BLUE_LINE_NUMBER, RED_LINE_NUMBER, ROUTE_DISPLAY } from '../../api/trimet/constants';
 
 interface Props {
@@ -16,7 +16,7 @@ interface DefaultProps {
 type PropsWithDefaults = Props & DefaultProps;
 
 function getRouteDisplay(route: number) {
-    const display = ROUTE_DISPLAY[route];
+    const display : string = ROUTE_DISPLAY[route];
 
     if (!display) {
         return route;

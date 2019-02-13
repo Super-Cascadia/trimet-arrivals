@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { Arrival } from '../../../api/trimet/types';
-import * as moment from 'moment';
+import moment from 'moment';
 import RouteIndicator from '../../../component/route/RouteIndicator';
 import './Arrivals.css';
 import { Moment } from 'moment';

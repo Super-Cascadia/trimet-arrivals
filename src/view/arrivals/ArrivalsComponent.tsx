@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Arrival } from '../../api/trimet/types';
 import ArrivalsTable from './components/ArrivalsTable';
 import './Arrivals.css';

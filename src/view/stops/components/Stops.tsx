@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { StopLocationsDictionary } from '../../../store/reducers/stopsReducer';
 import { map } from 'lodash';
 import { StopLocation } from '../../../api/trimet/types';

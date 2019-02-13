@@ -10,6 +10,6 @@ export interface RootState {
 const app = combineReducers<RootState>({
     stopsReducer,
     arrivalsReducer
-});
+} as any);
 
 export default app;
