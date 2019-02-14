@@ -11,15 +11,9 @@ interface Props {
     children?: any;
 }
 
-interface DefaultProps {
-    className: string;
-}
-
-type PropsWithDefaults = Props & DefaultProps;
-
-class ReloadButton extends React.PureComponent<Props, {}> {
+export default class ReloadButton extends React.PureComponent<Props> {
     render() {
-        const { onClick, disabled, className, children } = this.props as PropsWithDefaults;
+        const { onClick, disabled, className, children } = this.props;
         const classes = cx('reload-button', className);
 
         return (
@@ -40,5 +34,3 @@ class ReloadButton extends React.PureComponent<Props, {}> {
         );
     }
 }
-
-export default ReloadButton;
