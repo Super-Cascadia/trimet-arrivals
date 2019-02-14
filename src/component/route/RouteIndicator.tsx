@@ -9,12 +9,6 @@ interface Props {
     className?: string;
 }
 
-interface DefaultProps {
-    className: string;
-}
-
-type PropsWithDefaults = Props & DefaultProps;
-
 function getRouteDisplay(route: number) {
     const display : string = ROUTE_DISPLAY[route];
 
@@ -38,15 +32,12 @@ function getRouteIndicatorClassName(route: number, className: string) {
 }
 
 class RouteIndicator extends React.PureComponent<Props> {
-    static defaultProps: DefaultProps = {
+    static defaultProps = {
         className: ''
     };
 
-    constructor(props: Props) {
-        super(props);
-    }
     render() {
-        const { routeId, className } = this.props as PropsWithDefaults;
+        const { routeId, className } = this.props;
 
         const classNames = getRouteIndicatorClassName(routeId, className);
         const routeDisplay = getRouteDisplay(routeId);
