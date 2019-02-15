@@ -46,6 +46,7 @@ class ArrivalRow extends React.Component<Props> {
         const scheduledTime = scheduled.format('h:mm:ss a');
         const estimatedTime = estimated.format('h:mm:ss a');
         const distance = getDistanceUntilArrival(arrival.feet);
+        const now = moment();
 
         return (
             <tr>
@@ -54,7 +55,7 @@ class ArrivalRow extends React.Component<Props> {
                 </td>
                 <td>{arrival.shortSign}</td>
                 <td>
-                    <TimeToArrivalIndicator estimated={estimated} />
+                    <TimeToArrivalIndicator estimated={estimated} now={now} />
                 </td>
                 <td>{ArrivalRow.onTimeIndicator(scheduled, estimated)}</td>
                 <td>{estimatedTime} / {scheduledTime}</td>
