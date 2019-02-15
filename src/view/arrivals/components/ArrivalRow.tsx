@@ -34,15 +34,17 @@ class ArrivalRow extends React.Component<Props> {
                 <td className="route-indicator-column">
                     <RouteIndicator routeId={route} />
                 </td>
-                <td>{shortSign}</td>
+                <td className="short-sign">{shortSign}</td>
                 <td>
                     <TimeToArrivalIndicator estimated={estimatedMoment} now={now} />
                 </td>
                 <td>
                     <OnTimeIndicator scheduled={scheduledMoment} estimated={estimatedMoment} />
                 </td>
-                <td>{ArrivalRow.getEstimatedScheduledTime(scheduledMoment, estimatedMoment)}</td>
-                <td>{Math.round(distance)} miles</td>
+                <td className="estimated-scheduled-time">
+                    {ArrivalRow.getEstimatedScheduledTime(scheduledMoment, estimatedMoment)}
+                </td>
+                <td className="distance-in-miles">{Math.round(distance)} miles</td>
             </tr>
         );
     }
