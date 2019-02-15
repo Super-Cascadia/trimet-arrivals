@@ -6,12 +6,12 @@ import moment from 'moment';
 describe('TimeToArrivalIndicator', () => {
     describe('by default', function () {
         it('renders without crashing', () => {
-            shallow(
+            expect(() => shallow(
                 <TimeToArrivalIndicator
                     estimated={undefined}
                     now={undefined}
                 />
-            );
+            )).not.toThrow();
         });
 
         it('returns a dash', function () {
