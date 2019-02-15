@@ -17,13 +17,17 @@ export function estimatedToArriveAtSameTime (scheduled: Moment, estimated: Momen
 }
 
 export default function OnTimeIndicator({ scheduled, estimated } : Props) {
-    if (estimatedToArriveAtSameTime(scheduled, estimated)) {
-        return <span className="arrival-on-time"> On time</span>;
-    } else {
-        if (isEstimatedEarly(estimated, scheduled)) {
-            return <EarlyIndicator scheduled={scheduled} estimated={estimated}/>;
+    if (scheduled && estimated) {
+        if (estimatedToArriveAtSameTime(scheduled, estimated)) {
+            return <span className="arrival-on-time"> On time</span>;
         } else {
-            return <LateIndicator scheduled={scheduled} estimated={estimated}/>;
+            if (isEstimatedEarly(estimated, scheduled)) {
+                return <EarlyIndicator scheduled={scheduled} estimated={estimated}/>;
+            } else {
+                return <LateIndicator scheduled={scheduled} estimated={estimated}/>;
+            }
         }
     }
+
+    return null;
 }
