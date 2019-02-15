@@ -10,7 +10,13 @@ interface Props {
 }
 
 function getRouteDisplay(route: number) {
-    return !ROUTE_DISPLAY[route] ? route : <FontAwesome name="train"/>;
+    let routeFound = ROUTE_DISPLAY[route];
+
+    if (!routeFound) {
+        return route || '-';
+    } else {
+        return <FontAwesome name="train"/>;
+    }
 }
 
 function getRouteIndicatorClassName(route: number, className: string) {
@@ -31,10 +37,9 @@ export default class RouteIndicator extends React.PureComponent<Props> {
     render() {
         const { routeId, className } = this.props;
         const classNames = getRouteIndicatorClassName(routeId, className);
-        const routeDisplay = getRouteDisplay(routeId);
 
         return (
-            <span className={classNames}>{routeDisplay}</span>
+            <span className={classNames}>{getRouteDisplay(routeId)}</span>
         );
     }
 }
