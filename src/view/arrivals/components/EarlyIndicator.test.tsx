@@ -31,12 +31,12 @@ describe('EarlyIndicator', () => {
             it('returns a string indicating how many seconds late it is', () => {
                 const subject = shallow(
                     <EarlyIndicator
-                        scheduled={moment(1000)}
-                        estimated={moment(50000)}
+                        scheduled={moment(3000)}
+                        estimated={moment(1000)}
                     />
                 );
 
-                expect(subject.text()).toBe('59m 11s early');
+                expect(subject.text()).toBe('2s early');
             });
         });
 
