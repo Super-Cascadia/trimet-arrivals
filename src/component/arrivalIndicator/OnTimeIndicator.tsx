@@ -1,5 +1,4 @@
 import { Moment } from 'moment';
-import { estimatedToArriveAtSameTime, isEstimatedEarly } from '../../view/arrivals/util';
 import React from 'react';
 import LateIndicator from './LateIndicator';
 import EarlyIndicator from './EarlyIndicator';
@@ -7,6 +6,14 @@ import EarlyIndicator from './EarlyIndicator';
 interface Props {
     scheduled: Moment
     estimated: Moment
+}
+
+export function isEstimatedEarly(estimated: Moment, scheduled: Moment) {
+    return estimated.isBefore(scheduled);
+}
+
+export function estimatedToArriveAtSameTime (scheduled: Moment, estimated: Moment) {
+    return scheduled.isSame(estimated);
 }
 
 export default function OnTimeIndicator({ scheduled, estimated } : Props) {
