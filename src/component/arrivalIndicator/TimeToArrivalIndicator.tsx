@@ -1,7 +1,7 @@
 import React from 'react';
 import './Indicator.css'
 import { Moment } from 'moment';
-import { secondMinutesDiff } from './util';
+import { timeDiff } from './util';
 
 interface Props {
     estimated: Moment;
@@ -13,7 +13,7 @@ export default class TimeToArrivalIndicator extends React.PureComponent<Props> {
         const { estimated, now } = this.props;
 
         if (estimated && now) {
-            const { seconds, minutes } = secondMinutesDiff(estimated, now);
+            const { seconds, minutes } = timeDiff(estimated, now);
 
             if (minutes === 0) {
                 return `${seconds}s`;
