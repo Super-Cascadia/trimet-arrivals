@@ -1,6 +1,7 @@
 import React from 'react';
-import moment, { Moment } from 'moment';
-import '../../view/arrivals/components/Arrivals.css';
+import { Moment } from 'moment';
+import './Indicator.css'
+import { remainingMinutes, secondMinutesDiff } from './util';
 
 interface Props {
     scheduled: Moment;
@@ -12,11 +13,8 @@ export default class LateIndicator extends React.PureComponent<Props> {
         const { scheduled, estimated } = this.props;
 
         if (scheduled && estimated) {
-            const diff = scheduled.diff(estimated);
-            const seconds = moment(diff).seconds();
-            const minutes = moment(diff).minutes();
-            const minutesDiff = 59 - minutes;
-            const secondsDiff = 60 - seconds;
+            const { seconds, minutes } = secondMinutesDiff(scheduled, estimated);
+            const { secondsDiff, minutesDiff } = remainingMinutes(minutes, seconds);
 
             if (minutesDiff === 0) {
                 return <span className="arrival-estimated-late">{secondsDiff}s late</span>;
