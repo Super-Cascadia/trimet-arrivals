@@ -15,7 +15,6 @@ describe('TimeToArrivalIndicator', () => {
         });
 
         it('returns a dash', function () {
-            const estimated = moment(8000);
             const subject = shallow(
                 <TimeToArrivalIndicator
                     estimated={undefined}

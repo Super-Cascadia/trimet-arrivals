@@ -11,18 +11,18 @@ export default class TimeToArrivalIndicator extends React.PureComponent<Props> {
     render() {
         const { estimated, now } = this.props;
 
-        if (!estimated) {
-            return '-';
+        if (estimated && now) {
+            const diff = estimated.diff(now);
+            const secondsUntil = moment(diff).seconds();
+            const minutesUntil = moment(diff).minutes();
+
+            if (minutesUntil === 0) {
+                return `${secondsUntil}s`;
+            }
+
+            return `${minutesUntil}m ${secondsUntil}s`;
         }
 
-        const diff = estimated.diff(now);
-        const secondsUntil = moment(diff).seconds();
-        const minutesUntil = moment(diff).minutes();
-
-        if (minutesUntil === 0) {
-            return `${secondsUntil}s`;
-        }
-
-        return `${minutesUntil}m ${secondsUntil}s`;
+        return '-';
     }
 }
