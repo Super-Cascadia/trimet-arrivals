@@ -8,7 +8,7 @@ interface Props {
     estimated: Moment
 }
 
-export function isEstimatedEarly(estimated: Moment, scheduled: Moment) {
+export function isEstimatedEarly(scheduled: Moment, estimated: Moment) {
     return estimated.isBefore(scheduled);
 }
 
@@ -21,7 +21,7 @@ export default function OnTimeIndicator({ scheduled, estimated } : Props) {
         if (estimatedToArriveAtSameTime(scheduled, estimated)) {
             return <span className="arrival-on-time"> On time</span>;
         } else {
-            if (isEstimatedEarly(estimated, scheduled)) {
+            if (isEstimatedEarly(scheduled, estimated)) {
                 return <EarlyIndicator scheduled={scheduled} estimated={estimated}/>;
             } else {
                 return <LateIndicator scheduled={scheduled} estimated={estimated}/>;
