@@ -21,8 +21,17 @@ class ArrivalsTable extends React.Component<Props> {
         const sortedArrivals = sortArrivalsByEstimatedTime(arrivals);
 
         return map(sortedArrivals, (arrival: Arrival) => {
+            const { scheduled, estimated, feet, route, shortSign, id } = arrival;
+
             return (
-                <ArrivalRow arrival={arrival} key={arrival.id} />
+                <ArrivalRow
+                    key={id}
+                    estimated={estimated}
+                    feet={feet}
+                    scheduled={scheduled}
+                    route={route}
+                    shortSign={shortSign}
+                />
             );
         });
     }

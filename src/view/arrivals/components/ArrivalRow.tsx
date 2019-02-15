@@ -9,7 +9,11 @@ import TimeToArrivalIndicator from '../../../component/arrivalIndicator/TimeToAr
 import { estimatedToArriveAtSameTime, isEstimatedEarly, getDistanceUntilArrival } from '../util';
 
 interface Props {
-    arrival: Arrival;
+    scheduled: number
+    estimated: number
+    feet: number
+    route: number
+    shortSign: string
 }
 
 class ArrivalRow extends React.Component<Props> {
@@ -25,7 +29,7 @@ class ArrivalRow extends React.Component<Props> {
         }
     }
 
-    static getEstimatedScheduledTime(scheduled, estimated) {
+    static getEstimatedScheduledTime(scheduled: Moment, estimated: Moment) {
         const scheduledTime = scheduled.format('h:mm:ss a');
         const estimatedTime = estimated.format('h:mm:ss a');
 
@@ -33,23 +37,23 @@ class ArrivalRow extends React.Component<Props> {
     }
 
     render() {
-        const { arrival } = this.props;
-        const scheduled = moment(arrival.scheduled);
-        const estimated = moment(arrival.estimated);
-        const distance = getDistanceUntilArrival(arrival.feet);
+        const { scheduled, estimated, feet, route, shortSign } = this.props;
+        const scheduledMoment = moment(scheduled);
+        const estimatedMoment = moment(estimated);
+        const distance = getDistanceUntilArrival(feet);
         const now = moment();
 
         return (
             <tr>
                 <td className="route-indicator-column">
-                    <RouteIndicator routeId={arrival.route} />
+                    <RouteIndicator routeId={route} />
                 </td>
-                <td>{arrival.shortSign}</td>
+                <td>{shortSign}</td>
                 <td>
-                    <TimeToArrivalIndicator estimated={estimated} now={now} />
+                    <TimeToArrivalIndicator estimated={estimatedMoment} now={now} />
                 </td>
-                <td>{ArrivalRow.onTimeIndicator(scheduled, estimated)}</td>
-                <td>{ArrivalRow.getEstimatedScheduledTime(scheduled, estimated)}</td>
+                <td>{ArrivalRow.onTimeIndicator(scheduledMoment, estimatedMoment)}</td>
+                <td>{ArrivalRow.getEstimatedScheduledTime(scheduledMoment, estimatedMoment)}</td>
                 <td>{Math.round(distance)} miles</td>
             </tr>
         );
