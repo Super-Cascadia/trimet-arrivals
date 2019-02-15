@@ -4,7 +4,7 @@ import RouteIndicator from '../../../component/route/RouteIndicator';
 import './Arrivals.css';
 import TimeToArrivalIndicator from '../../../component/arrivalIndicator/TimeToArrivalIndicator';
 import { getDistanceUntilArrival } from '../util';
-import OnTimeIndicator from './OnTimeIndicator';
+import OnTimeIndicator from '../../../component/arrivalIndicator/OnTimeIndicator';
 
 interface Props {
     scheduled: number

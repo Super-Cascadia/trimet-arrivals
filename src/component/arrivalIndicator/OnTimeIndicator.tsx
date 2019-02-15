@@ -1,8 +1,8 @@
 import { Moment } from 'moment';
-import { estimatedToArriveAtSameTime, isEstimatedEarly } from '../util';
+import { estimatedToArriveAtSameTime, isEstimatedEarly } from '../../view/arrivals/util';
 import React from 'react';
-import LateIndicator from '../../../component/arrivalIndicator/LateIndicator';
-import EarlyIndicator from '../../../component/arrivalIndicator/EarlyIndicator';
+import LateIndicator from './LateIndicator';
+import EarlyIndicator from './EarlyIndicator';
 
 interface Props {
     scheduled: Moment
