@@ -25,16 +25,6 @@ class ArrivalsComponent extends React.Component<Props> {
         
         return (
             <div className="arrivals-wrapper">
-                {/*{loading && showArrivals &&*/}
-                    {/*<div className="spin-icon-wrapper">*/}
-                        {/*<FontAwesome*/}
-                            {/*className="arrival-load-spinner"*/}
-                            {/*name="refresh"*/}
-                            {/*spin={true}*/}
-                            {/*size="3x"*/}
-                        {/*/>*/}
-                    {/*</div>*/}
-                {/*}*/}
                 {!loading && showArrivals && !arrivals &&
                     <p className="no-arrivals">No arrivals available.</p>
                 }
