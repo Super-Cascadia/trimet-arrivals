@@ -24,8 +24,8 @@ export default class LateIndicator extends React.PureComponent<Props> {
             }
 
             return <span className="arrival-estimated-late">{minutesDiff}m {secondsDiff}s late</span>;
-        } else {
-            return <span className="arrival-estimated-late">-</span>
         }
+
+        return "-"
     }
 }
