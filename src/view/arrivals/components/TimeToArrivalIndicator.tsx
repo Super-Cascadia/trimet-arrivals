@@ -10,6 +10,11 @@ interface Props {
 class TimeToArrivalIndicator extends React.PureComponent<Props> {
     render() {
         const { estimated } = this.props;
+
+        if (!estimated) {
+            return '-';
+        }
+
         const now = moment();
         const diff = estimated.diff(now);
         const secondsUntil = moment(diff).seconds();
