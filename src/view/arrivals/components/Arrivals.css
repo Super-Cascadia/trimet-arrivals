@@ -12,15 +12,6 @@
 .arrival-on-time {
     color: green;
 }
-
-.arrival-estimated-late {
-    color: red;
-}
-
-.arrival-estimated-early {
-    color: yellowgreen;
-}
-
 .arrivals-loading {
     opacity: 0.3;
 }

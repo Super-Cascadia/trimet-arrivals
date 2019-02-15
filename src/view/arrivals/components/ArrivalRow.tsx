@@ -4,9 +4,9 @@ import moment from 'moment';
 import RouteIndicator from '../../../component/route/RouteIndicator';
 import './Arrivals.css';
 import { Moment } from 'moment';
-import LateIndicator from './LateIndicator';
-import EarlyIndicator from './EarlyIndicator';
-import TimeToArrivalIndicator from './TimeToArrivalIndicator';
+import LateIndicator from '../../../component/arrivalIndicator/LateIndicator';
+import EarlyIndicator from '../../../component/arrivalIndicator/EarlyIndicator';
+import TimeToArrivalIndicator from '../../../component/arrivalIndicator/TimeToArrivalIndicator';
 
 interface Props {
     arrival: Arrival;

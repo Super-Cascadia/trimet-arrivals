@@ -1,7 +1,6 @@
 import React from 'react';
-import moment from 'moment';
-import './Arrivals.css';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
+import '../../view/arrivals/components/Arrivals.css';
 
 interface Props {
     scheduled: Moment;

@@ -1,5 +1,5 @@
 import React from 'react';
-import './Arrivals.css';
+import './Indicator.css'
 import moment, { Moment } from 'moment';
 
 interface Props {
