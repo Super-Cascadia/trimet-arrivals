@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 import ArrivalRow from './ArrivalRow';
-import moment from 'moment'
+import moment from 'moment';
 
 describe('ArrivalRow', () => {
     describe('by default', () => {
@@ -95,16 +95,16 @@ describe('ArrivalRow', () => {
                 <ArrivalRow
                     route={undefined}
                     shortSign={undefined}
-                    scheduled={1318781896406}
-                    estimated={1318781816406}
+                    scheduled={parseInt(moment(1360002924000).utc().format().valueOf())}
+                    estimated={parseInt(moment(2799002424600).utc().format().valueOf())}
                     feet={undefined}
-                    now={moment(1318781876406)}
+                    now={undefined}
                 />
             );
 
             const estimatedTime = subject.find('.estimated-scheduled-time');
 
-            expect(estimatedTime.text()).toBe('9:16:56 am / 9:18:16 am');
+            expect(estimatedTime.text()).toBe('4:00:02 pm / 4:00:02 pm');
         });
     });
 
