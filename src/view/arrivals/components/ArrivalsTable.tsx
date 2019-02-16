@@ -52,12 +52,14 @@ class ArrivalsTable extends React.Component<Props> {
 
         return (
             <table className={classes}>
-                <th/>
-                <th>Name</th>
-                <th>Arrival</th>
-                <th>On Time</th>
-                <th>Estimated / Scheduled</th>
-                <th>Distance</th>
+                <thead>
+                    <th/>
+                    <th>Name</th>
+                    <th>Arrival</th>
+                    <th>On Time</th>
+                    <th>Estimated / Scheduled</th>
+                    <th>Distance</th>
+                </thead>
                 <tbody>
                     {ArrivalsTable.getRows(arrivals, now)}
                 </tbody>
