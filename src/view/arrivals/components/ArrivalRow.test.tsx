@@ -94,9 +94,6 @@ describe('ArrivalRow', () => {
             let scheduled = moment("2017-09-15 09:30:00").utc().valueOf();
             let estimated = moment("2017-09-15 09:30:00").utc().valueOf();
 
-            console.log('scheduled', scheduled)
-            console.log('estimated', estimated)
-
             const subject = shallow(
                 <ArrivalRow
                     route={undefined}
