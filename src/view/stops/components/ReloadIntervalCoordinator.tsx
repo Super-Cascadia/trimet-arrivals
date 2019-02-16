@@ -18,7 +18,7 @@ interface State {
 const ONE_SECOND = 1000;
 const THIRTY = 30;
 
-export default class ReloadButtonCoordinator extends React.Component<Props, State> {
+export default class ReloadIntervalCoordinator extends React.Component<Props, State> {
     refreshInterval: {};
 
     constructor(props: Props) {

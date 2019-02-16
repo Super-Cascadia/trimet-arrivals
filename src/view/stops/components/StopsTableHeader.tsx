@@ -3,7 +3,7 @@ import { StopLocation } from '../../../api/trimet/types';
 import '../Stops.css';
 import { LoadArrivalData } from '../../../store/action/stopActions';
 import StopInfo from './StopInfo';
-import ReloadButtonCoordinator from './ReloadButtonCoordinator';
+import ReloadIntervalCoordinator from './ReloadIntervalCoordinator';
 
 interface Props {
     stopLocation: StopLocation;
@@ -23,7 +23,7 @@ export default class StopsTableHeader extends React.Component<Props> {
         return (
             <div className="stops-header">
                 <StopInfo stopLocation={stopLocation}/>
-                <ReloadButtonCoordinator
+                <ReloadIntervalCoordinator
                     stopLocation={stopLocation}
                     loadArrivalData={loadArrivalData}
                     loading={loading}
