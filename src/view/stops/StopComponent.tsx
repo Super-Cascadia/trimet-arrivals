@@ -25,10 +25,8 @@ class StopComponent extends React.Component<Props> {
     loadArrivals(locationId: number) {
         if (this.refreshInterval) {
             clearInterval(this.refreshInterval as number);
-            this.loadAndSetInterval(locationId);
-        } else {
-            this.loadAndSetInterval(locationId);
         }
+        this.loadAndSetInterval(locationId);
     }
     render() {
         const { stopLocation, locationId, loading, showArrivals } = this.props;
