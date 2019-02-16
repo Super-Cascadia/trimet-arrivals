@@ -10,15 +10,15 @@ interface Props {
     loadArrivalData: LoadArrivalData;
 }
 
-const mapStateToProps = (state: RootState, ownProps: Props) => {
+const mapStateToProps = (state: RootState, props: Props) => {
     const { arrivalsReducer } = state;
-    const locationId = ownProps.locationId;
+    const locationId = props.locationId;
     const loading = arrivalsReducer.loading[locationId];
     const arrivals = arrivalsReducer.arrivals[locationId];
     const now = moment();
 
     return {
-        ...ownProps,
+        ...props,
         loading,
         locationId,
         arrivals,
