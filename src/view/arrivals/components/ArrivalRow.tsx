@@ -15,7 +15,7 @@ interface Props {
     now: Moment
 }
 
-class ArrivalRow extends React.Component<Props> {
+export default class ArrivalRow extends React.Component<Props> {
     static getEstimatedScheduledTime(scheduled: Moment, estimated: Moment) {
         const scheduledTime = scheduled.format('h:mm:ss a');
         const estimatedTime = estimated.format('h:mm:ss a');
@@ -49,5 +49,3 @@ class ArrivalRow extends React.Component<Props> {
         );
     }
 }
-
-export default ArrivalRow;
