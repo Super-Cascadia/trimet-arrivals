@@ -34,7 +34,7 @@ class StopComponent extends React.Component<Props> {
         const { stopLocation, locationId, loading, showArrivals } = this.props;
 
         return (
-            <div className="stops">
+            <div className="stop">
                 <StopsTableHeader
                     stopLocation={stopLocation}
                     loadArrivalData={(locId: number) => this.loadArrivals(locId)}
