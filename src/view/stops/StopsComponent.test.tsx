@@ -3,7 +3,7 @@ import React from 'react';
 import StopsComponent from './StopsComponent';
 import { StopLocation } from '../../api/trimet/types';
 
-describe('ArrivalsContainer', () => {
+describe('StopsComponent', () => {
     describe('by default', () => {
         it('renders without crashing', () => {
             expect(() => shallow(
