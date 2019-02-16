@@ -3,7 +3,7 @@ import ArrivalsTable from './ArrivalsTable';
 import React from 'react';
 import { Arrival } from '../../../api/trimet/types';
 
-describe('ArrivalRow', () => {
+describe('ArrivalsTable', () => {
     describe('by default', () => {
         it('renders without crashing', () => {
             expect(() => shallow(
