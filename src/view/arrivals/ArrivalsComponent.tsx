@@ -14,7 +14,7 @@ interface Props {
     now: Moment
 }
 
-class ArrivalsComponent extends React.Component<Props> {
+export default class ArrivalsComponent extends React.Component<Props> {
     componentDidMount() {
         const { loadArrivalData, locationId, showArrivals } = this.props;
 
@@ -37,5 +37,3 @@ class ArrivalsComponent extends React.Component<Props> {
         );
     }
 }
-
-export default ArrivalsComponent;
