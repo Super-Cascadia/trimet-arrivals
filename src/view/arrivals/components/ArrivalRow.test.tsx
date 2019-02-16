@@ -13,6 +13,7 @@ describe('ArrivalRow', () => {
                     scheduled={undefined}
                     estimated={undefined}
                     feet={undefined}
+                    now={undefined}
                 />
             )).not.toThrow();
         });
@@ -25,6 +26,7 @@ describe('ArrivalRow', () => {
                     scheduled={undefined}
                     estimated={undefined}
                     feet={undefined}
+                    now={undefined}
                 />
             );
 
@@ -41,6 +43,7 @@ describe('ArrivalRow', () => {
                     scheduled={undefined}
                     estimated={undefined}
                     feet={undefined}
+                    now={undefined}
                 />
             );
 
@@ -57,6 +60,7 @@ describe('ArrivalRow', () => {
                     scheduled={undefined}
                     estimated={undefined}
                     feet={undefined}
+                    now={undefined}
                 />
             );
 
@@ -75,6 +79,7 @@ describe('ArrivalRow', () => {
                     scheduled={undefined}
                     estimated={undefined}
                     feet={undefined}
+                    now={undefined}
                 />
             );
 
@@ -112,6 +117,7 @@ describe('ArrivalRow', () => {
                     scheduled={undefined}
                     estimated={undefined}
                     feet={100000}
+                    now={undefined}
                 />
             );
 
