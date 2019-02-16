@@ -95,16 +95,16 @@ describe('ArrivalRow', () => {
                 <ArrivalRow
                     route={undefined}
                     shortSign={undefined}
-                    scheduled={100000}
+                    scheduled={2999999}
                     estimated={3000399}
                     feet={undefined}
-                    now={moment()}
+                    now={moment(100000)}
                 />
             );
 
             const estimatedTime = subject.find('.estimated-scheduled-time');
 
-            expect(estimatedTime.text()).toBe('4:50:00 pm / 4:01:40 pm');
+            expect(estimatedTime.text()).toBe('4:50:00 pm / 4:49:59 pm');
         });
     });
 
