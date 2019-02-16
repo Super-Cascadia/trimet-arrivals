@@ -95,8 +95,8 @@ describe('ArrivalRow', () => {
                 <ArrivalRow
                     route={undefined}
                     shortSign={undefined}
-                    scheduled={parseInt(moment(1360002924000).utc().format().valueOf())}
-                    estimated={parseInt(moment(2799002424600).utc().format().valueOf())}
+                    scheduled={parseInt(moment(new Date('December 17, 1995 03:24:00')).utc().format().valueOf())}
+                    estimated={parseInt(moment(new Date('December 17, 1995 03:24:00')).utc().format().valueOf())}
                     feet={undefined}
                     now={undefined}
                 />
@@ -104,7 +104,7 @@ describe('ArrivalRow', () => {
 
             const estimatedTime = subject.find('.estimated-scheduled-time');
 
-            expect(estimatedTime.text()).toBe('4:00:02 pm / 4:00:02 pm');
+            expect(estimatedTime.text()).toBe('4:00:01 pm / 4:00:01 pm');
         });
     });
 
