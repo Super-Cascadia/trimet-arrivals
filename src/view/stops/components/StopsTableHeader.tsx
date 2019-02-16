@@ -1,10 +1,9 @@
 import React from 'react';
-import { Route, StopLocation } from '../../../api/trimet/types';
+import { StopLocation } from '../../../api/trimet/types';
 import '../Stops.css';
-import { map } from 'lodash';
-import RouteIndicator from '../../../component/route/RouteIndicator';
 import ReloadButton, { Event } from '../../../component/ReloadButton';
 import { LoadArrivalData } from '../../../store/action/stopActions';
+import StopInfo from './StopInfo';
 
 interface Props {
     stopLocation: StopLocation;
@@ -22,17 +21,7 @@ const THIRTY = 30;
 
 class StopsTableHeader extends React.Component<Props, State> {
     refreshInterval: {};
-    static getStopRoutes(stopLocation: StopLocation) {
-        return map(stopLocation.route, (route: Route) => {
-            return (
-                <RouteIndicator
-                    key={route.route}
-                    routeId={route.route}
-                    className="header-router-indicator"
-                />
-            );
-        });
-    }
+
     constructor(props: Props) {
         super(props);
 
@@ -40,6 +29,23 @@ class StopsTableHeader extends React.Component<Props, State> {
             interval: 30
         };
     }
+
+    componentDidMount() {
+        const { showArrivals } = this.props;
+
+        if (showArrivals) {
+            this.setNewInterval();
+        }
+    }
+
+    componentWillUnmount() {
+        const { showArrivals } = this.props;
+
+        if (showArrivals) {
+            this.clearIntervalListener();
+        }
+    }
+
     onInterval() {
         const { interval } = this.state;
 
@@ -49,32 +55,22 @@ class StopsTableHeader extends React.Component<Props, State> {
             this.setState({ interval: interval - 1 });
         }
     }
+
     setNewInterval() {
         this.refreshInterval = setInterval(() => this.onInterval(), ONE_SECOND);
     }
-    componentDidMount() {
-        const { showArrivals } = this.props;
 
-        if (showArrivals) {
-            this.setNewInterval();
-        }
-    }
     clearIntervalListener() {
         if (this.refreshInterval) {
             clearInterval(this.refreshInterval as number);
         }
     }
-    componentWillUnmount() {
-        const { showArrivals } = this.props;
 
-        if (showArrivals) {
-            this.clearIntervalListener();
-        }
-    }
     resetLoadCounter() {
         this.clearIntervalListener();
         this.setState({ interval: THIRTY });
     }
+
     loadData() {
         const { loadArrivalData, stopLocation } = this.props;
 
@@ -82,10 +78,12 @@ class StopsTableHeader extends React.Component<Props, State> {
         this.setNewInterval();
         loadArrivalData(stopLocation.locid);
     }
+
     onReloadClick(e: Event): void {
         e.preventDefault();
         this.loadData();
     }
+
     render() {
         const { stopLocation, loading, showArrivals = true } = this.props;
 
@@ -95,10 +93,7 @@ class StopsTableHeader extends React.Component<Props, State> {
 
         return (
             <div className="stops-header">
-                <h2>
-                    {StopsTableHeader.getStopRoutes(stopLocation)}
-                    {stopLocation.locid} - {stopLocation.desc} - {stopLocation.dir}
-                </h2>
+                <StopInfo stopLocation={stopLocation}/>
                 <div className="stops-reload-button">
                     { showArrivals &&
                         <ReloadButton
