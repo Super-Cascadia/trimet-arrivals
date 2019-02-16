@@ -91,12 +91,18 @@ describe('ArrivalRow', () => {
 
     describe('when provided the estimated arrival and departure times', () => {
         it('displays the estimated schedule time', () => {
+            let scheduled = moment("2017-09-15 09:30:00").utc().valueOf();
+            let estimated = moment("2017-09-15 09:30:00").utc().valueOf();
+
+            console.log('scheduled', scheduled)
+            console.log('estimated', estimated)
+
             const subject = shallow(
                 <ArrivalRow
                     route={undefined}
                     shortSign={undefined}
-                    scheduled={parseInt(moment(new Date('December 17, 1995 03:24:00')).utc().format().valueOf())}
-                    estimated={parseInt(moment(new Date('December 17, 1995 03:24:00')).utc().format().valueOf())}
+                    scheduled={scheduled}
+                    estimated={estimated}
                     feet={undefined}
                     now={undefined}
                 />
@@ -104,7 +110,7 @@ describe('ArrivalRow', () => {
 
             const estimatedTime = subject.find('.estimated-scheduled-time');
 
-            expect(estimatedTime.text()).toBe('4:00:01 pm / 4:00:01 pm');
+            expect(estimatedTime.text()).toBe('9:30:00 am / 9:30:00 am');
         });
     });
 
