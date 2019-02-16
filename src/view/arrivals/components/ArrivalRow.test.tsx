@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import React from 'react';
 import ArrivalRow from './ArrivalRow';
+import moment from 'moment'
 
 describe('ArrivalRow', () => {
     describe('by default', () => {
@@ -70,7 +71,7 @@ describe('ArrivalRow', () => {
             const subject = shallow(
                 <ArrivalRow
                     route={undefined}
-                    shortSign={"123"}
+                    shortSign={'123'}
                     scheduled={undefined}
                     estimated={undefined}
                     feet={undefined}
@@ -92,12 +93,13 @@ describe('ArrivalRow', () => {
                     scheduled={100000}
                     estimated={3000399}
                     feet={undefined}
+                    now={moment()}
                 />
             );
 
             const estimatedTime = subject.find('.estimated-scheduled-time');
 
-            expect(estimatedTime.text()).toBe('4:50:00 pm / 4:01:40 pm')
+            expect(estimatedTime.text()).toBe('4:50:00 pm / 4:01:40 pm');
         });
     });
 
@@ -115,7 +117,7 @@ describe('ArrivalRow', () => {
 
             const distance = subject.find('.distance-in-miles');
 
-            expect(distance.text()).toBe('19 miles')
+            expect(distance.text()).toBe('19 miles');
         });
     });
 

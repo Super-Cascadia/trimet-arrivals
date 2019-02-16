@@ -12,6 +12,7 @@ interface Props {
     feet: number
     route: number
     shortSign: string
+    now: Moment
 }
 
 class ArrivalRow extends React.Component<Props> {
@@ -23,11 +24,10 @@ class ArrivalRow extends React.Component<Props> {
     }
 
     render() {
-        const { scheduled, estimated, feet, route, shortSign } = this.props;
+        const { scheduled, estimated, feet, route, shortSign, now } = this.props;
         const scheduledMoment = moment(scheduled);
         const estimatedMoment = moment(estimated);
         const distance = getDistanceUntilArrival(feet);
-        const now = moment();
 
         return (
             <tr>
