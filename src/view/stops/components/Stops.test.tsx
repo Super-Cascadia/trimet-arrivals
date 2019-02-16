@@ -29,7 +29,7 @@ describe('Stops', () => {
                 />
             );
 
-            const stops = subject.find('.stops');
+            const stops = subject.find('.stops-wrapper');
             expect(stops).toExist();
             expect(stops.children().length).toBe(2)
             expect(stops.childAt(0).name()).toBe('Connect(StopComponent)')
