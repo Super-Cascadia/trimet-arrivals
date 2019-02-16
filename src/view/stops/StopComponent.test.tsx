@@ -102,27 +102,12 @@ describe('StopComponent', () => {
                 expect(stopComponent.instance().refreshInterval).toBe(2)
             });
 
-            describe('and the refresh interval expires', function () {
+            xdescribe('and the refresh interval expires', function () {
+                jest.useFakeTimers();
+
                 it('calls loadArrivalData delegate again', function () {
-
-                });
-            });
-        });
-    });
-
-    describe('when mounted', function () {
-        describe('and a reload is triggered by user interaction', function () {
-
-        });
-
-        describe('when loadArrivals is called', function () {
-            describe('and a refresh interval exists', function () {
-                it('clears the interval', function () {
-
-                });
-
-                it('resets the refresh interval', function () {
-
+                    jest.runOnlyPendingTimers();
+                    expect(setInterval).toHaveBeenCalledTimes(1)
                 });
             });
         });
