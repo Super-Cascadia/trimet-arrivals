@@ -14,7 +14,10 @@ interface Props {
 class StopsComponent extends React.Component<Props> {
     componentDidMount() {
         const { loadStopData } = this.props;
-        loadStopData(750);
+
+        if (loadStopData) {
+            loadStopData(750);
+        }
     }
     render() {
         const { loading, stopLocations, timeOfLastLoad } = this.props;
@@ -22,10 +25,10 @@ class StopsComponent extends React.Component<Props> {
         return (
             <div>
                 {loading && 
-                    <div>Loading...</div>
+                    <div className="loading-message">Loading...</div>
                 }
                 {!loading && stopLocations &&
-                    <div>
+                    <div className="nearby-stops">
                         <h1>Nearby Stops | <i>{timeOfLastLoad}</i></h1>
                         <Stops stopLocations={stopLocations} showArrivals={true} />
                     </div>
