@@ -50,6 +50,16 @@
     "eject": "react-scripts eject",
     "codecov": "codecov"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/api/**/*.{ts,tsx}",
+      "src/component/**/*.{ts,tsx}",
+      "src/store/**/*.{ts,tsx}",
+      "src/view/**/*.{ts,tsx}",
+      "!<rootDir>/src/registerServiceWorker.ts",
+      "<rootDir>/src/App.tsx"
+    ]
+  },
   "browserslist": [
     ">0.2%",
     "not dead",
