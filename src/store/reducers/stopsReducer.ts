@@ -14,7 +14,7 @@ interface Payload {
 }
 
 interface Action {
-    payload: Payload;
+    payload?: Payload;
     type: string;
 }
 
@@ -22,8 +22,8 @@ export interface StopLocationsDictionary {
     [index: number]: StopLocation;
 }
 
-function getStopLocations(stopData: StopData): StopLocationsDictionary {
-    return mapKeys(stopData.location, (location: StopLocation) => {
+function getStopLocations(stopLocation: StopLocation[]): StopLocationsDictionary {
+    return mapKeys(stopLocation, (location: StopLocation) => {
         return location.locid;
     });
 }
@@ -41,7 +41,7 @@ const stopsReducer = (state = initialState, action: Action) => {
                 loading: true
             };
         case LOAD_STOP_COMPLETE:
-            const stopLocations = getStopLocations(action.payload.stopData);
+            const stopLocations = getStopLocations(action.payload.stopData.location);
 
             return {
                 ...state,

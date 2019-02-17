@@ -11,14 +11,10 @@ function getURL(lat: number, long: number, radiusInFeet: number): string {
   return `${STOPS_BASE_URL}json/true/showRoutes/true/showRouteDirs/true/ll/${latLng}/${feet}/${API}`;  
 }
 
-function getNearbyStops(location: Location, radiusInFeet: number): Promise<StopData> {
+export function getNearbyStops(location: Location, radiusInFeet: number): Promise<StopData> {
     const { coords } = location;
     const { latitude, longitude } = coords;
     const request = getURL(latitude, longitude, radiusInFeet);
 
     return getTrimetData(request);
 }
-
-export {
-    getNearbyStops
-};

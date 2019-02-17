@@ -18,7 +18,7 @@ interface Payload {
 }
 
 interface Action {
-    payload: Payload;
+    payload?: Payload;
     type: string;
 }
 
@@ -26,8 +26,8 @@ export interface LocationArrivals {
     [index: string]: Arrival[];
 }
 
-function getArrivals (arrivalData: ArrivalData): LocationArrivals {
-    return groupBy(arrivalData.arrival, (arrival: Arrival) => {
+function getArrivals (arrivals: Arrival[]): LocationArrivals {
+    return groupBy(arrivals, (arrival: Arrival) => {
         return arrival.locid;
     });
 }
@@ -59,7 +59,7 @@ const arrivalsReducer = (state = initialState, action: Action) => {
                 loading: setLatestStopLoadingState(state.loading, action.payload.locationId, true)
             };
         case LOAD_ARRIVALS_COMPLETE:
-            const arrivals = getArrivals(action.payload.arrivalData);
+            const arrivals = getArrivals(action.payload.arrivalData.arrival);
 
             return {
                 ...state,
