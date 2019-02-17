@@ -1,6 +1,6 @@
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { RootState } from '../../store/reducers';
-import { LoadArrivalData, StopActions } from '../../store/action/stopActions';
+import { LoadArrivalData } from '../../store/action/stopActions';
 import ArrivalsComponent from '../arrivals/ArrivalsComponent';
 import moment from 'moment'
 
@@ -26,7 +26,7 @@ const mapStateToProps = (state: RootState, props: Props) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<StopActions>) => {
+const mapDispatchToProps = () => {
     return {};
 };
 

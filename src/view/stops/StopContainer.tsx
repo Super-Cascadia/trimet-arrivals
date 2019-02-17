@@ -1,6 +1,6 @@
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { RootState } from '../../store/reducers';
-import { loadArrivalData, StopActions } from '../../store/action/stopActions';
+import { loadArrivalData} from '../../store/action/stopActions';
 import StopComponent from './StopComponent';
 import { StopLocation } from '../../api/trimet/types';
 
@@ -23,7 +23,7 @@ const mapStateToProps = (state: RootState, props: Props) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<StopActions>) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         loadArrivalData(locationId: number): void {
             dispatch(loadArrivalData(locationId));
