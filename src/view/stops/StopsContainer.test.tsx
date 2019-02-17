@@ -68,11 +68,13 @@ describe('StopsContainer', () => {
 
         it('hands off props to the StopComponent', function () {
             const stopComponent = subject.find('StopsComponent');
-
+            //@ts-ignore
             expect(stopComponent).toExist()
-
+            //@ts-ignore
             expect(stopComponent.props().stopLocations).toEqual({ 123: { locid: 123 }});
+            //@ts-ignore
             expect(stopComponent.props().timeOfLastLoad).toEqual("some time");
+            //@ts-ignore
             expect(stopComponent.props().loading).toBe(false);
         });
     });
