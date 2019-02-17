@@ -1,32 +1,21 @@
 import { StopData, Location, ArrivalData } from '../../api/trimet/types';
-import { getNearbyStops, getArrivals } from '../../api/trimet';
+import { getArrivals } from '../../api/trimet/arrivals';
+import { getNearbyStops } from '../../api/trimet/stops';
 import { LOAD_ARRIVALS, LOAD_ARRIVALS_COMPLETE, LOAD_STOPS, LOAD_STOP_COMPLETE } from '../constants';
+import { getCurrentPosition } from '../../api/geolocation';
 
 export interface LoadAction {
     type: 'LOAD_STOPS';
 }
 
-export interface ArrivalAction {
-    type: 'LOAD_ARRIVALS';
-}
-
 export type StopActions = LoadAction;
-export type ArrivalActions = ArrivalAction;
-
 export type LoadStopData = (radiusInFeet: number) => void;
 export type LoadArrivalData = (locationId: number) => void;
 
-function getCurrentPosition() {
-    return new Promise((resolve: Function, reject: Function) => {
-      navigator.geolocation.getCurrentPosition((location: Location) => {
-        resolve(location);
-      });
-    });
-}
-
 export const loadArrivalData = (locationId: number) => {
     const minutes = 45;
-    return function (dispatch: Function, getState: Function) {
+
+    return function (dispatch: Function) {
         dispatch({
             type: LOAD_ARRIVALS,
             payload: {

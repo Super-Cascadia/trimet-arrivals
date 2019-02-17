@@ -1,8 +1,7 @@
 import { connect, Dispatch } from 'react-redux';
 import { RootState } from '../../store/reducers';
-import { StopActions } from '../../store/action/stopActions';
+import { loadArrivalData, StopActions } from '../../store/action/stopActions';
 import StopComponent from './StopComponent';
-import { loadArrivalData } from '../../store/action';
 import { StopLocation } from '../../api/trimet/types';
 
 interface Props {
