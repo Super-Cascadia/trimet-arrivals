@@ -5,7 +5,19 @@ import { StopData, StopLocation } from '../../api/trimet/types';
 describe('stopsReducer', () => {
     describe('default behavior', () => {
         it('returns the present state', () => {
+            const initialState = {
+                loading: true,
+                timeOfLastLoad: ''
+            };
 
+            const action = {
+                type: "FOO"
+            };
+
+            const result = stopsReducer(initialState, action);
+
+            expect(result.loading).toBe(true)
+            expect(result.timeOfLastLoad).toBe("")
         });
     });
 
