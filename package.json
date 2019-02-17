@@ -13,7 +13,7 @@
     "@types/jest": "24.0.5",
     "@types/lodash": "4.14.121",
     "@types/moment": "^2.13.0",
-    "@types/node": "^8.0.51",
+    "@types/node": "11.9.4",
     "@types/prop-types": "15.5.9",
     "@types/react": "16.8.3",
     "@types/react-dom": "16.8.2",
