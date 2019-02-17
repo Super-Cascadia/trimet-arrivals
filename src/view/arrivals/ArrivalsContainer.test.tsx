@@ -8,8 +8,8 @@ import { ProviderMock } from '../../test/util';
 
 function mockStore() {
     const initialState = {
-        loading: false,
-        timeOfLastLoad: ''
+        loading: {},
+        timeOfLastLoad: {}
     };
 
     const arrivalsReducer = (state = initialState) => {
