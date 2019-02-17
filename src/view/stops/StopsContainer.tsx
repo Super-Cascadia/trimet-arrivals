@@ -1,6 +1,6 @@
-import { connect, Dispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import StopsComponent from './StopsComponent';
-import { loadStopData, StopActions } from '../../store/action/stopActions';
+import { loadStopData } from '../../store/action/stopActions';
 import { RootState } from '../../store/reducers';
 
 const mapStateToProps = (state: RootState) => {
@@ -16,7 +16,7 @@ const mapStateToProps = (state: RootState) => {
     };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<StopActions>) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         loadStopData(radiusInFeet: number): void {
             dispatch(loadStopData(radiusInFeet));
