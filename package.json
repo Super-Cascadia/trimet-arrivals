@@ -39,7 +39,7 @@
     "react-test-renderer": "^16.8.1",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
-    "superagent": "^3.8.1",
+    "superagent": "^4.1.0",
     "typescript": "^3.3.3"
   },
   "scripts": {
