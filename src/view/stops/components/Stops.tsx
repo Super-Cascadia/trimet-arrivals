@@ -27,7 +27,7 @@ class Stops extends React.Component<Props> {
         }
 
         return (
-            <div>
+            <div className="stops-wrapper">
                 {Stops.getLocationInfo(stopLocations, showArrivals)}
             </div>
         );

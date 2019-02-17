@@ -3,21 +3,22 @@ import { RootState } from '../../store/reducers';
 import { StopActions } from '../../store/action/stopActions';
 import StopComponent from './StopComponent';
 import { loadArrivalData } from '../../store/action';
+import { StopLocation } from '../../api/trimet/types';
 
 interface Props {
     locationId: number;
     showArrivals: boolean;
 }
 
-const mapStateToProps = (state: RootState, ownProps: Props) => {
+const mapStateToProps = (state: RootState, props: Props) => {
     const { stopsReducer, arrivalsReducer } = state;
-    const { locationId } = ownProps;
+    const { locationId } = props;
 
-    const stopLocation = stopsReducer.stopLocations[locationId];
-    const loading = arrivalsReducer.loading[locationId];
+    const stopLocation: StopLocation = stopsReducer.stopLocations[locationId];
+    const loading: boolean = arrivalsReducer.loading[locationId];
 
     return {
-        ...ownProps,
+        ...props,
         stopLocation,
         loading
     };
