@@ -32,6 +32,22 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+  unit_test:
+    steps:
+      - run: yarn test --coverage
+  codecov:
+    steps:
+      - run: yarn codecov
+  prettier_lint:
+    steps:
+      - run: yarn prettier
+  tslint:
+    steps:
+      - run: yarn tslint
+  semantic_release:
+    steps:
+      - run: yarn semantic-release
+
 workflows:
   version: 2
   build_accept_deploy:
