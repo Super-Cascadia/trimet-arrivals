@@ -1,82 +1,82 @@
-import { mount, shallow } from 'enzyme';
-import React from 'react';
-import StopContainer from './StopContainer';
-import { Arrival } from '../../api/trimet/types';
-import { applyMiddleware, combineReducers, createStore } from 'redux';
-import thunk from 'redux-thunk';
-import { ProviderMock } from '../../test/util';
+import { mount, shallow } from "enzyme";
+import React from "react";
+import StopContainer from "./StopContainer";
+import { Arrival } from "../../api/trimet/types";
+import { applyMiddleware, combineReducers, createStore } from "redux";
+import thunk from "redux-thunk";
+import { ProviderMock } from "../../test/util";
 
 function mockStore() {
-    const arrivalsInitialState = {
-        arrivals: {},
-        loading: {}
-    };
+  const arrivalsInitialState = {
+    arrivals: {},
+    loading: {}
+  };
 
-    const arrivalsReducer = (state = arrivalsInitialState) => {
-        return state;
-    };
+  const arrivalsReducer = (state = arrivalsInitialState) => {
+    return state;
+  };
 
-    const stopsInitialState = {
-        loading: false,
-        timeOfLastLoad: ''
-    };
+  const stopsInitialState = {
+    loading: false,
+    timeOfLastLoad: ""
+  };
 
-    const stopsReducer = (state = stopsInitialState) => {
-        return state;
-    };
+  const stopsReducer = (state = stopsInitialState) => {
+    return state;
+  };
 
-    const baseState = {
-        arrivalsReducer: {
-            loading: {
-                123: false
-            },
-            arrivals: {
-                123: {} as Arrival
-            }
-        },
-        stopsReducer: {
-            stopLocations: {
-                123: {}
-            }
-        }
-    };
+  const baseState = {
+    arrivalsReducer: {
+      loading: {
+        123: false
+      },
+      arrivals: {
+        123: {} as Arrival
+      }
+    },
+    stopsReducer: {
+      stopLocations: {
+        123: {}
+      }
+    }
+  };
 
-    return createStore(combineReducers({ arrivalsReducer, stopsReducer }), baseState, applyMiddleware(thunk));
+  return createStore(
+    combineReducers({ arrivalsReducer, stopsReducer }),
+    baseState,
+    applyMiddleware(thunk)
+  );
 }
 
-describe('StopContainer', () => {
-    describe('by default', () => {
-        it('renders without crashing', () => {
-            expect(() => shallow(
-                <ProviderMock>
-                    <StopContainer
-                        locationId={undefined}
-                        showArrivals={undefined}
-                    />
-                </ProviderMock>
-            )).not.toThrow();
-        });
+describe("StopContainer", () => {
+  describe("by default", () => {
+    it("renders without crashing", () => {
+      expect(() =>
+        shallow(
+          <ProviderMock>
+            <StopContainer locationId={undefined} showArrivals={undefined} />
+          </ProviderMock>
+        )
+      ).not.toThrow();
     });
+  });
 
-    describe('when provided a valid stopsReducer and arrivalsReducer', function () {
-        const subject = mount(
-            <ProviderMock store={mockStore()}>
-                <StopContainer
-                    locationId={123}
-                    showArrivals={true}
-                />
-            </ProviderMock>
-        );
+  describe("when provided a valid stopsReducer and arrivalsReducer", function() {
+    const subject = mount(
+      <ProviderMock store={mockStore()}>
+        <StopContainer locationId={123} showArrivals={true} />
+      </ProviderMock>
+    );
 
-        it('hands off props to the StopComponent', function () {
-            const stopComponent = subject.find('StopComponent');
+    it("hands off props to the StopComponent", function() {
+      const stopComponent = subject.find("StopComponent");
 
-            expect(stopComponent).toExist()
+      expect(stopComponent).toExist();
 
-            expect(stopComponent.props().stopLocation).toEqual({});
-            expect(stopComponent.props().locationId).toBe(123);
-            expect(stopComponent.props().loading).toBe(false);
-            expect(stopComponent.props().showArrivals).toEqual(true);
-        });
+      expect(stopComponent.props().stopLocation).toEqual({});
+      expect(stopComponent.props().locationId).toBe(123);
+      expect(stopComponent.props().loading).toBe(false);
+      expect(stopComponent.props().showArrivals).toEqual(true);
     });
+  });
 });

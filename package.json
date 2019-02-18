@@ -48,7 +48,9 @@
     "test": "react-scripts test",
     "test:coverage": "react-scripts test --coverage",
     "eject": "react-scripts eject",
-    "codecov": "codecov"
+    "codecov": "codecov",
+    "prettier": "prettier --check 'src/**/*.ts*'",
+    "prettier:fix": "prettier --write 'src/**/*.ts*'"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -65,5 +67,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "prettier": "1.16.4"
+  }
 }
