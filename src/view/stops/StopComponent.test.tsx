@@ -50,7 +50,7 @@ describe("StopComponent", () => {
       ).not.toThrow();
     });
 
-    it("shows a StopsTableHeader", function() {
+    it("shows a StopsTableHeader", () => {
       const subject = shallow(
         <StopComponent
           stopLocation={undefined}
@@ -64,7 +64,7 @@ describe("StopComponent", () => {
       expect(subject.find("StopsTableHeader")).toExist();
     });
 
-    it("shows an ArrivalsContainer", function() {
+    it("shows an ArrivalsContainer", () => {
       const subject = mount(
         <ProviderMock store={mockStore()}>
           <StopComponent
@@ -82,7 +82,7 @@ describe("StopComponent", () => {
       expect(stop.childAt(1).name()).toBe("Connect(ArrivalsComponent)");
     });
 
-    describe("when mounted", function() {
+    describe("when mounted", () => {
       const loadArrivalDataSpy = jasmine.createSpy("loadArrivalDataSpy");
       const stopLocation = {} as StopLocation;
 
@@ -98,21 +98,21 @@ describe("StopComponent", () => {
         </ProviderMock>
       );
 
-      it("calls the load arrival data delegate", function() {
+      it("calls the load arrival data delegate", () => {
         expect(loadArrivalDataSpy).toHaveBeenCalled();
       });
 
-      it("sets a refresh interval", function() {
+      it("sets a refresh interval", () => {
         const stopComponent = subject.find("StopComponent");
 
         expect(stopComponent).toExist();
         expect(stopComponent.instance().refreshInterval).toBe(2);
       });
 
-      xdescribe("and the refresh interval expires", function() {
+      xdescribe("and the refresh interval expires", () => {
         jest.useFakeTimers();
 
-        it("calls loadArrivalData delegate again", function() {
+        it("calls loadArrivalData delegate again", () => {
           jest.runOnlyPendingTimers();
           expect(setInterval).toHaveBeenCalledTimes(1);
         });

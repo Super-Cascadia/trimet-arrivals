@@ -41,11 +41,11 @@ jest.mock("../../api/trimet/stops", () => {
 });
 
 describe("stopActions", () => {
-  describe("loadArrivalData", function() {
+  describe("loadArrivalData", () => {
     const dispatchMock = jasmine.createSpy("dispatchMock");
     loadArrivalData(123)(dispatchMock);
 
-    it("dispatchses the LOAD_ARRIVAL action", function() {
+    it("dispatchses the LOAD_ARRIVAL action", () => {
       expect(dispatchMock).toHaveBeenCalled();
       expect(dispatchMock).toHaveBeenCalledWith({
         type: LOAD_ARRIVALS,
@@ -55,7 +55,7 @@ describe("stopActions", () => {
       });
     });
 
-    it("dispatchses the LOAD_ARRIVAL_COMPLETE action", function(done) {
+    it("dispatchses the LOAD_ARRIVAL_COMPLETE action", done => {
       getArrivals().then(() => {
         expect(dispatchMock).toHaveBeenCalledWith({
           type: LOAD_ARRIVALS_COMPLETE,
@@ -72,18 +72,18 @@ describe("stopActions", () => {
     });
   });
 
-  describe("loadStopData", function() {
+  describe("loadStopData", () => {
     const dispatchMock = jasmine.createSpy("dispatchMock");
     loadStopData(123)(dispatchMock);
 
-    it("dispatches the LOAD_ARRIVAL action", function() {
+    it("dispatches the LOAD_ARRIVAL action", () => {
       expect(dispatchMock).toHaveBeenCalled();
       expect(dispatchMock).toHaveBeenCalledWith({
         type: LOAD_STOPS
       });
     });
 
-    it("dispatchses the LOAD_ARRIVAL_COMPLETE action", function(done) {
+    it("dispatchses the LOAD_ARRIVAL_COMPLETE action", done => {
       const location = { coords: { longitude: 123, latitude: 123 } };
 
       getNearbyStops(location, 123).then(() => {

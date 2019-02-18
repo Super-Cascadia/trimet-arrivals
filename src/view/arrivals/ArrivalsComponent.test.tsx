@@ -20,7 +20,7 @@ describe("ArrivalsComponent", () => {
       ).not.toThrow();
     });
 
-    describe("when mounting", function() {
+    describe("when mounting", () => {
       const loadArrivalData = jasmine.createSpy("loadArrivalDataSpy");
 
       shallow(
@@ -34,7 +34,7 @@ describe("ArrivalsComponent", () => {
         />
       );
 
-      it("calls the load data delegate to fetch info", function() {
+      it("calls the load data delegate to fetch info", () => {
         expect(loadArrivalData).toHaveBeenCalled();
         expect(loadArrivalData).toHaveBeenCalledWith(123);
       });
@@ -81,7 +81,7 @@ describe("ArrivalsComponent", () => {
         expect(noArrivals).not.toExist();
       });
 
-      it("shows a table", function() {
+      it("shows a table", () => {
         expect(subject.find("ArrivalsTable")).toExist();
       });
     });

@@ -19,9 +19,9 @@ describe("StopsComponent", () => {
     });
   });
 
-  describe("when mounted", function() {
-    describe("and loadStopData is provided", function() {
-      it("the loadStopData delegate is called", function() {
+  describe("when mounted", () => {
+    describe("and loadStopData is provided", () => {
+      it("the loadStopData delegate is called", () => {
         const loadStopData = jasmine.createSpy("loadStopDataSpy");
 
         const subject = shallow(
@@ -39,8 +39,8 @@ describe("StopsComponent", () => {
     });
   });
 
-  describe("when loading", function() {
-    it("shows a loading message", function() {
+  describe("when loading", () => {
+    it("shows a loading message", () => {
       const subject = shallow(
         <StopsComponent
           loadStopData={undefined}
@@ -54,8 +54,8 @@ describe("StopsComponent", () => {
     });
   });
 
-  describe("when not loading", function() {
-    describe("and stop locations are provided", function() {
+  describe("when not loading", () => {
+    describe("and stop locations are provided", () => {
       const stopLocations = {
         123: {} as StopLocation
       };
@@ -69,16 +69,16 @@ describe("StopsComponent", () => {
       );
       const nearbyStops = subject.find(".nearby-stops");
 
-      it("shows nearby stops", function() {
+      it("shows nearby stops", () => {
         expect(nearbyStops).toExist();
       });
 
-      describe("the nearby stops list", function() {
-        it("has a heading and the time of last load", function() {
+      describe("the nearby stops list", () => {
+        it("has a heading and the time of last load", () => {
           expect(nearbyStops.find("h1").text()).toBe("Nearby Stops | 12:01pm");
         });
 
-        it("shows Stops", function() {
+        it("shows Stops", () => {
           expect(nearbyStops.find("Stops")).toExist();
         });
       });

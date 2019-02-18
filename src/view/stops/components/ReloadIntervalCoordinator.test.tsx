@@ -19,8 +19,8 @@ describe("ReloadIntervalCoordinator", () => {
     });
   });
 
-  describe("when a stop location is provided", function() {
-    describe("default behavior", function() {
+  describe("when a stop location is provided", () => {
+    describe("default behavior", () => {
       const stopLocation = {} as StopLocation;
 
       const subject = shallow(
@@ -34,16 +34,16 @@ describe("ReloadIntervalCoordinator", () => {
 
       const reloadButton = subject.find("ReloadButton");
 
-      it("has a reload button", function() {
+      it("has a reload button", () => {
         expect(reloadButton).toExist();
       });
 
-      it("the reload button shows the current coutdown interval", function() {
+      it("the reload button shows the current coutdown interval", () => {
         expect(reloadButton.find(".count-down-label").text()).toBe("30");
       });
     });
 
-    describe("when the reload button is clicked", function() {
+    describe("when the reload button is clicked", () => {
       const stopLocation = {} as StopLocation;
 
       const loadArrivalDataSpy = jasmine.createSpy("loadArrivalSpy");
@@ -59,7 +59,7 @@ describe("ReloadIntervalCoordinator", () => {
 
       subject.find("button").simulate("click");
 
-      it("the load arrival data delegate is called", function() {
+      it("the load arrival data delegate is called", () => {
         expect(loadArrivalDataSpy).toHaveBeenCalled();
       });
     });

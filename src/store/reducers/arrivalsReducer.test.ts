@@ -21,7 +21,7 @@ describe("arrivalsReducer", () => {
     });
   });
 
-  describe("LOAD_ARRIVALS", function() {
+  describe("LOAD_ARRIVALS", () => {
     const initialState = {
       arrivals: {},
       loading: {}
@@ -39,16 +39,16 @@ describe("arrivalsReducer", () => {
 
     const result = arrivalsReducer(initialState, action);
 
-    it("updates loading state ", function() {
+    it("updates loading state ", () => {
       expect(result.loading).toEqual({ 123: true });
     });
 
-    it("loading remains un populated", function() {
+    it("loading remains un populated", () => {
       expect(result.arrivals).toEqual({});
     });
   });
 
-  describe("LOAD_ARRIVALS_COMPLETE", function() {
+  describe("LOAD_ARRIVALS_COMPLETE", () => {
     const initialState = {
       arrivals: {},
       loading: {}
@@ -73,11 +73,11 @@ describe("arrivalsReducer", () => {
 
     const result = arrivalsReducer(initialState, action);
 
-    it("updates loading state ", function() {
+    it("updates loading state ", () => {
       expect(result.loading).toEqual({ 123: false });
     });
 
-    it("loading remains un populated", function() {
+    it("loading remains un populated", () => {
       expect(result.arrivals).toEqual({
         123: [{ locid: 123 }],
         456: [{ locid: 456 }]

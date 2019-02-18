@@ -4,7 +4,7 @@ import React from "react";
 import TimeToArrivalIndicator from "./TimeToArrivalIndicator";
 
 describe("TimeToArrivalIndicator", () => {
-  describe("by default", function() {
+  describe("by default", () => {
     it("renders without crashing", () => {
       expect(() =>
         shallow(
@@ -13,7 +13,7 @@ describe("TimeToArrivalIndicator", () => {
       ).not.toThrow();
     });
 
-    it("returns a dash", function() {
+    it("returns a dash", () => {
       const subject = shallow(
         <TimeToArrivalIndicator estimated={undefined} now={undefined} />
       );
@@ -22,8 +22,8 @@ describe("TimeToArrivalIndicator", () => {
     });
   });
 
-  describe("when the difference is less than a minute", function() {
-    it("shows the date in second format", function() {
+  describe("when the difference is less than a minute", () => {
+    it("shows the date in second format", () => {
       const estimated = moment(8000);
       const subject = shallow(
         <TimeToArrivalIndicator estimated={estimated} now={moment(1000)} />
@@ -33,8 +33,8 @@ describe("TimeToArrivalIndicator", () => {
     });
   });
 
-  describe("when the difference is more than a minute", function() {
-    it("shows the date in second format", function() {
+  describe("when the difference is more than a minute", () => {
+    it("shows the date in second format", () => {
       const estimated = moment(100000);
       const subject = shallow(
         <TimeToArrivalIndicator estimated={estimated} now={moment(1000)} />

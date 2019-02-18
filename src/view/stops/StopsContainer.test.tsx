@@ -65,14 +65,14 @@ describe("StopsContainer", () => {
     });
   });
 
-  describe("when provided a valid stopsReducer", function() {
+  describe("when provided a valid stopsReducer", () => {
     const subject = mount(
       <ProviderMock store={mockStore()}>
         <StopsContainer />
       </ProviderMock>
     );
 
-    it("hands off props to the StopComponent", function() {
+    it("hands off props to the StopComponent", () => {
       const stopComponent = subject.find("StopsComponent");
       // @ts-ignore
       expect(stopComponent).toExist();

@@ -12,8 +12,8 @@ describe("Stops", () => {
     });
   });
 
-  describe("when provided stop location data", function() {
-    it("shows a StopContainer for reach stop ", function() {
+  describe("when provided stop location data", () => {
+    it("shows a StopContainer for reach stop ", () => {
       const stopLocations = {
         123: {} as StopLocation,
         456: {} as StopLocation

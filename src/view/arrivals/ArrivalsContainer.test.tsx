@@ -51,7 +51,7 @@ describe("ArrivalsContainer", () => {
     });
   });
 
-  describe("when provided a valid arrivalsReducer", function() {
+  describe("when provided a valid arrivalsReducer", () => {
     const subject = mount(
       <ProviderMock store={mockStore()}>
         <ArrivalsContainer
@@ -62,7 +62,7 @@ describe("ArrivalsContainer", () => {
       </ProviderMock>
     );
 
-    it("hands off props to the ArrivalsComponent", function() {
+    it("hands off props to the ArrivalsComponent", () => {
       const arrivalsComponent = subject.find("ArrivalsComponent");
 
       expect(arrivalsComponent).toExist();

@@ -20,7 +20,7 @@ describe("OnTimeIndicator", () => {
 
       const onTime = subject.find(".arrival-on-time");
 
-      it("should show an indication that it is on time", function() {
+      it("should show an indication that it is on time", () => {
         expect(onTime).toExist();
         expect(onTime.text()).toBe(" On time");
       });
@@ -33,7 +33,7 @@ describe("OnTimeIndicator", () => {
 
       const earlyIndicator = subject.find("EarlyIndicator");
 
-      it("should show an indication that it is on time", function() {
+      it("should show an indication that it is on time", () => {
         expect(earlyIndicator).toExist();
       });
     });
@@ -45,7 +45,7 @@ describe("OnTimeIndicator", () => {
 
       const onTime = subject.find("LateIndicator");
 
-      it("should show an indication that it is on time", function() {
+      it("should show an indication that it is on time", () => {
         expect(onTime).toExist();
       });
     });
