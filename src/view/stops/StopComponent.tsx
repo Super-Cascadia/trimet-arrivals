@@ -38,6 +38,7 @@ class StopComponent extends React.Component<Props> {
   }
 
   public render() {
+    // foo
     const { stopLocation, locationId, loading, showArrivals } = this.props;
 
     return (
