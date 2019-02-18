@@ -1,10 +1,8 @@
 import { get } from "superagent";
-import { TrimetResponse, StopData, ArrivalData } from "./types";
+import { TrimetResponse } from "./types";
 
-export function getTrimetData(
-  requestURI: string
-): Promise<StopData & ArrivalData> {
-  return new Promise((resolve: Function, reject: Function) => {
+export function getTrimetData(requestURI: string) {
+  return new Promise(resolve => {
     get(requestURI).end((err: {}, res: TrimetResponse) => {
       resolve(res.body.resultSet);
     });

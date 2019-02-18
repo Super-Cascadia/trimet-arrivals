@@ -1,7 +1,6 @@
 import { mount, shallow } from "enzyme";
 import React from "react";
 import ReloadIntervalCoordinator from "./ReloadIntervalCoordinator";
-import { StopLocation } from "../../../api/trimet/types";
 
 describe("ReloadIntervalCoordinator", () => {
   describe("by default", () => {
@@ -19,9 +18,9 @@ describe("ReloadIntervalCoordinator", () => {
     });
   });
 
-  describe("when a stop location is provided", function() {
-    describe("default behavior", function() {
-      const stopLocation = {} as StopLocation;
+  describe("when a stop location is provided", () => {
+    describe("default behavior", () => {
+      const stopLocation = {};
 
       const subject = shallow(
         <ReloadIntervalCoordinator
@@ -34,17 +33,17 @@ describe("ReloadIntervalCoordinator", () => {
 
       const reloadButton = subject.find("ReloadButton");
 
-      it("has a reload button", function() {
+      it("has a reload button", () => {
         expect(reloadButton).toExist();
       });
 
-      it("the reload button shows the current coutdown interval", function() {
+      it("the reload button shows the current coutdown interval", () => {
         expect(reloadButton.find(".count-down-label").text()).toBe("30");
       });
     });
 
-    describe("when the reload button is clicked", function() {
-      const stopLocation = {} as StopLocation;
+    describe("when the reload button is clicked", () => {
+      const stopLocation = {};
 
       const loadArrivalDataSpy = jasmine.createSpy("loadArrivalSpy");
 
@@ -59,7 +58,7 @@ describe("ReloadIntervalCoordinator", () => {
 
       subject.find("button").simulate("click");
 
-      it("the load arrival data delegate is called", function() {
+      it("the load arrival data delegate is called", () => {
         expect(loadArrivalDataSpy).toHaveBeenCalled();
       });
     });

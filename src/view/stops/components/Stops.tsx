@@ -1,9 +1,9 @@
-import React from "react";
-import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import { map } from "lodash";
+import React from "react";
 import { StopLocation } from "../../../api/trimet/types";
-import "../Stops.css";
+import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import StopContainer from "../StopContainer";
+import "../Stops.css";
 
 interface Props {
   stopLocations: StopLocationsDictionary;
@@ -11,7 +11,7 @@ interface Props {
 }
 
 class Stops extends React.Component<Props> {
-  static getLocationInfo(
+  public static getLocationInfo(
     stopLocations: StopLocationsDictionary,
     showArrivals: boolean
   ) {
@@ -22,7 +22,7 @@ class Stops extends React.Component<Props> {
     });
   }
 
-  render() {
+  public render() {
     const { stopLocations, showArrivals } = this.props;
 
     if (!stopLocations) {

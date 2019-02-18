@@ -1,8 +1,8 @@
 import React from "react";
+import { LoadStopData } from "../../store/action/stopActions";
 import { StopLocationsDictionary } from "../../store/reducers/stopsReducer";
 import Stops from "./components/Stops";
 import "./Stops.css";
-import { LoadStopData } from "../../store/action/stopActions";
 
 interface Props {
   loadStopData: LoadStopData;
@@ -12,14 +12,14 @@ interface Props {
 }
 
 class StopsComponent extends React.Component<Props> {
-  componentDidMount() {
+  public componentDidMount() {
     const { loadStopData } = this.props;
 
     if (loadStopData) {
       loadStopData(750);
     }
   }
-  render() {
+  public render() {
     const { loading, stopLocations, timeOfLastLoad } = this.props;
 
     return (

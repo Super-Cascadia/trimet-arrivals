@@ -1,5 +1,5 @@
-import React from "react";
 import { Moment } from "moment";
+import React from "react";
 import "./Indicator.css";
 import { remainingTime, timeDiff } from "./util";
 
@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default class LateIndicator extends React.PureComponent<Props> {
-  render() {
+  public render() {
     const { scheduled, estimated } = this.props;
 
     if (scheduled && estimated) {

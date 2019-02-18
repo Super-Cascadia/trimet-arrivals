@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
-import ArrivalsTable from "./ArrivalsTable";
 import React from "react";
 import { Arrival } from "../../../api/trimet/types";
+import ArrivalsTable from "./ArrivalsTable";
 
 describe("ArrivalsTable", () => {
   describe("by default", () => {
@@ -32,7 +32,7 @@ describe("ArrivalsTable", () => {
 
   describe("when arrivals are defined", () => {
     it("shows an arrivals table", () => {
-      const arrivals = [{} as Arrival];
+      const arrivals = [{}];
       const subject = shallow(
         <ArrivalsTable
           arrivals={arrivals}
@@ -46,7 +46,7 @@ describe("ArrivalsTable", () => {
 
     describe("the arrivals table", () => {
       describe("header", () => {
-        const arrivals = [{} as Arrival];
+        const arrivals = [{}];
         const subject = shallow(
           <ArrivalsTable
             arrivals={arrivals}
@@ -76,13 +76,13 @@ describe("ArrivalsTable", () => {
       describe("table", () => {
         const arrivals = [
           {
-            route: 1,
-            estimated: 5000
-          } as Arrival,
+            estimated: 5000,
+            route: 1
+          },
           {
-            route: 2,
-            estimated: 2000
-          } as Arrival
+            estimated: 2000,
+            route: 2
+          }
         ];
         const subject = shallow(
           <ArrivalsTable
@@ -110,7 +110,7 @@ describe("ArrivalsTable", () => {
     });
 
     describe("when loading", () => {
-      const arrivals = [{} as Arrival];
+      const arrivals = [{}];
       const subject = shallow(
         <ArrivalsTable arrivals={arrivals} loading={true} now={undefined} />
       );

@@ -1,6 +1,5 @@
-import arrivalsReducer from "./arrivalsReducer";
 import { LOAD_ARRIVALS, LOAD_ARRIVALS_COMPLETE } from "../constants";
-import { ArrivalData } from "../../api/trimet/types";
+import arrivalsReducer from "./arrivalsReducer";
 
 describe("arrivalsReducer", () => {
   describe("default behavior", () => {
@@ -21,41 +20,40 @@ describe("arrivalsReducer", () => {
     });
   });
 
-  describe("LOAD_ARRIVALS", function() {
+  describe("LOAD_ARRIVALS", () => {
     const initialState = {
       arrivals: {},
       loading: {}
     };
 
     const action = {
-      type: LOAD_ARRIVALS,
       payload: {
         arrivalData: {
           arrival: {}
-        } as ArrivalData,
+        },
         locationId: 123
-      }
+      },
+      type: LOAD_ARRIVALS
     };
 
     const result = arrivalsReducer(initialState, action);
 
-    it("updates loading state ", function() {
+    it("updates loading state ", () => {
       expect(result.loading).toEqual({ 123: true });
     });
 
-    it("loading remains un populated", function() {
+    it("loading remains un populated", () => {
       expect(result.arrivals).toEqual({});
     });
   });
 
-  describe("LOAD_ARRIVALS_COMPLETE", function() {
+  describe("LOAD_ARRIVALS_COMPLETE", () => {
     const initialState = {
       arrivals: {},
       loading: {}
     };
 
     const action = {
-      type: LOAD_ARRIVALS_COMPLETE,
       payload: {
         arrivalData: {
           arrival: [
@@ -66,18 +64,19 @@ describe("arrivalsReducer", () => {
               locid: 456
             }
           ]
-        } as ArrivalData,
+        },
         locationId: 123
-      }
+      },
+      type: LOAD_ARRIVALS_COMPLETE
     };
 
     const result = arrivalsReducer(initialState, action);
 
-    it("updates loading state ", function() {
+    it("updates loading state ", () => {
       expect(result.loading).toEqual({ 123: false });
     });
 
-    it("loading remains un populated", function() {
+    it("loading remains un populated", () => {
       expect(result.arrivals).toEqual({
         123: [{ locid: 123 }],
         456: [{ locid: 456 }]

@@ -5,10 +5,10 @@ export const API = `appID/${API_ID}`;
 export const RED_LINE_NUMBER = 90;
 export const BLUE_LINE_NUMBER = 100;
 
-export const ROUTE_DISPLAY = {
+export const ROUTE_DISPLAY: Routes = {
   90: "Red",
   100: "Blue"
-} as Routes;
+};
 
 interface Routes {
   [routeNumber: number]: string;

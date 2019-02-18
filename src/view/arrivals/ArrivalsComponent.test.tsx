@@ -1,7 +1,6 @@
 import { shallow } from "enzyme";
 import React from "react";
 import ArrivalsComponent from "./ArrivalsComponent";
-import { Arrival } from "../../api/trimet/types";
 
 describe("ArrivalsComponent", () => {
   describe("by default", () => {
@@ -20,7 +19,7 @@ describe("ArrivalsComponent", () => {
       ).not.toThrow();
     });
 
-    describe("when mounting", function() {
+    describe("when mounting", () => {
       const loadArrivalData = jasmine.createSpy("loadArrivalDataSpy");
 
       shallow(
@@ -34,7 +33,7 @@ describe("ArrivalsComponent", () => {
         />
       );
 
-      it("calls the load data delegate to fetch info", function() {
+      it("calls the load data delegate to fetch info", () => {
         expect(loadArrivalData).toHaveBeenCalled();
         expect(loadArrivalData).toHaveBeenCalledWith(123);
       });
@@ -64,7 +63,7 @@ describe("ArrivalsComponent", () => {
     });
 
     describe("and arrivals are available", () => {
-      const arrivals = [{} as Arrival];
+      const arrivals = [{}];
       const subject = shallow(
         <ArrivalsComponent
           arrivals={arrivals}
@@ -81,7 +80,7 @@ describe("ArrivalsComponent", () => {
         expect(noArrivals).not.toExist();
       });
 
-      it("shows a table", function() {
+      it("shows a table", () => {
         expect(subject.find("ArrivalsTable")).toExist();
       });
     });

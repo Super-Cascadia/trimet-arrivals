@@ -1,7 +1,6 @@
 import { shallow } from "enzyme";
 import React from "react";
 import Stops from "./Stops";
-import { StopLocation } from "../../../api/trimet/types";
 
 describe("Stops", () => {
   describe("by default", () => {
@@ -12,11 +11,11 @@ describe("Stops", () => {
     });
   });
 
-  describe("when provided stop location data", function() {
-    it("shows a StopContainer for reach stop ", function() {
+  describe("when provided stop location data", () => {
+    it("shows a StopContainer for reach stop ", () => {
       const stopLocations = {
-        123: {} as StopLocation,
-        456: {} as StopLocation
+        123: {},
+        456: {}
       };
 
       const subject = shallow(

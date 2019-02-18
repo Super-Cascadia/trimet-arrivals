@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
-import stopsReducer, { StopsReducerState } from "./stopsReducer";
 import arrivalsReducer, { ArrivalsReducerState } from "./arrivalsReducer";
+import stopsReducer, { StopsReducerState } from "./stopsReducer";
 
 export interface RootState {
   stopsReducer: StopsReducerState;
@@ -8,8 +8,8 @@ export interface RootState {
 }
 
 const app = combineReducers<RootState>({
-  stopsReducer,
-  arrivalsReducer
+  arrivalsReducer,
+  stopsReducer
 } as any);
 
 export default app;

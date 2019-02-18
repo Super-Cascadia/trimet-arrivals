@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
-import StopsComponent from "./StopsComponent";
 import { loadStopData } from "../../store/action/stopActions";
 import { RootState } from "../../store/reducers";
+import StopsComponent from "./StopsComponent";
 
 const mapStateToProps = (state: RootState) => {
   const { stopsReducer } = state;

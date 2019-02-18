@@ -1,19 +1,24 @@
+import cx from "classnames";
 import React from "react";
 import FontAwesome from "react-fontawesome";
-import cx from "classnames";
-
-export type Event = React.MouseEvent<HTMLElement>;
 
 interface Props {
-  onClick: (e: Event) => void;
+  onClick: (e) => void;
   disabled: boolean;
   className?: string;
   children?: any;
 }
 
 export default class ReloadButton extends React.PureComponent<Props> {
-  render() {
-    const { onClick, disabled, className, children } = this.props;
+  private onClick: (e) => void;
+
+  constructor(props) {
+    super(props);
+
+    this.onClick = e => props.onClick(e);
+  }
+  public render() {
+    const { disabled, className, children } = this.props;
     const classes = cx("reload-button", className);
 
     return (
@@ -21,7 +26,7 @@ export default class ReloadButton extends React.PureComponent<Props> {
         disabled={disabled}
         title="Reload arrivals for stop"
         className={classes}
-        onClick={(e: Event) => onClick(e)}
+        onClick={this.onClick}
       >
         {disabled && <FontAwesome name="refresh" spin={true} size="2x" />}
         {!disabled && <FontAwesome name="refresh" size="2x" />}

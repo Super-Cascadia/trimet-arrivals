@@ -1,10 +1,10 @@
-import React from "react";
 import moment, { Moment } from "moment";
-import RouteIndicator from "../../../component/route/RouteIndicator";
-import "./Arrivals.css";
-import TimeToArrivalIndicator from "../../../component/arrivalIndicator/TimeToArrivalIndicator";
-import { getDistanceUntilArrival } from "../util";
+import React from "react";
 import OnTimeIndicator from "../../../component/arrivalIndicator/OnTimeIndicator";
+import TimeToArrivalIndicator from "../../../component/arrivalIndicator/TimeToArrivalIndicator";
+import RouteIndicator from "../../../component/route/RouteIndicator";
+import { getDistanceUntilArrival } from "../util";
+import "./Arrivals.css";
 
 interface Props {
   scheduled: number;
@@ -16,14 +16,17 @@ interface Props {
 }
 
 export default class ArrivalRow extends React.Component<Props> {
-  static getEstimatedScheduledTime(scheduled: Moment, estimated: Moment) {
+  public static getEstimatedScheduledTime(
+    scheduled: Moment,
+    estimated: Moment
+  ) {
     const scheduledTime = scheduled.format("h:mm:ss a");
     const estimatedTime = estimated.format("h:mm:ss a");
 
     return `${estimatedTime} / ${scheduledTime}`;
   }
 
-  render() {
+  public render() {
     const { scheduled, estimated, feet, route, shortSign, now } = this.props;
     const scheduledMoment = moment(scheduled);
     const estimatedMoment = moment(estimated);

@@ -1,10 +1,9 @@
 import { mount, shallow } from "enzyme";
-import { ProviderMock } from "../../test/util";
-import StopsContainer from "./StopsContainer";
 import React from "react";
-import { Arrival, StopLocation } from "../../api/trimet/types";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import thunk from "redux-thunk";
+import { ProviderMock } from "../../test/util";
+import StopsContainer from "./StopsContainer";
 
 function mockStore() {
   const arrivalsInitialState = {
@@ -27,11 +26,11 @@ function mockStore() {
 
   const baseState = {
     arrivalsReducer: {
+      arrivals: {
+        123: {}
+      },
       loading: {
         123: false
-      },
-      arrivals: {
-        123: {} as Arrival
       }
     },
     stopsReducer: {
@@ -39,7 +38,7 @@ function mockStore() {
       stopLocations: {
         123: {
           locid: 123
-        } as StopLocation
+        }
       },
       timeOfLastLoad: "some time"
     }
@@ -65,24 +64,24 @@ describe("StopsContainer", () => {
     });
   });
 
-  describe("when provided a valid stopsReducer", function() {
+  describe("when provided a valid stopsReducer", () => {
     const subject = mount(
       <ProviderMock store={mockStore()}>
         <StopsContainer />
       </ProviderMock>
     );
 
-    it("hands off props to the StopComponent", function() {
+    it("hands off props to the StopComponent", () => {
       const stopComponent = subject.find("StopsComponent");
-      //@ts-ignore
+      // @ts-ignore
       expect(stopComponent).toExist();
-      //@ts-ignore
+      // @ts-ignore
       expect(stopComponent.props().stopLocations).toEqual({
         123: { locid: 123 }
       });
-      //@ts-ignore
+      // @ts-ignore
       expect(stopComponent.props().timeOfLastLoad).toEqual("some time");
-      //@ts-ignore
+      // @ts-ignore
       expect(stopComponent.props().loading).toBe(false);
     });
   });

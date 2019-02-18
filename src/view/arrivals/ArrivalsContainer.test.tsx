@@ -1,10 +1,9 @@
 import { mount, shallow } from "enzyme";
 import React from "react";
-import ArrivalsContainer from "./ArrivalsContainer";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import thunk from "redux-thunk";
-import { Arrival } from "../../api/trimet/types";
 import { ProviderMock } from "../../test/util";
+import ArrivalsContainer from "./ArrivalsContainer";
 
 function mockStore() {
   const initialState = {
@@ -18,11 +17,11 @@ function mockStore() {
 
   const baseState = {
     arrivalsReducer: {
+      arrivals: {
+        123: {}
+      },
       loading: {
         123: false
-      },
-      arrivals: {
-        123: {} as Arrival
       }
     }
   };
@@ -51,7 +50,7 @@ describe("ArrivalsContainer", () => {
     });
   });
 
-  describe("when provided a valid arrivalsReducer", function() {
+  describe("when provided a valid arrivalsReducer", () => {
     const subject = mount(
       <ProviderMock store={mockStore()}>
         <ArrivalsContainer
@@ -62,7 +61,7 @@ describe("ArrivalsContainer", () => {
       </ProviderMock>
     );
 
-    it("hands off props to the ArrivalsComponent", function() {
+    it("hands off props to the ArrivalsComponent", () => {
       const arrivalsComponent = subject.find("ArrivalsComponent");
 
       expect(arrivalsComponent).toExist();

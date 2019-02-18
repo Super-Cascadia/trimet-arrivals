@@ -1,10 +1,9 @@
 import { mount, shallow } from "enzyme";
 import React from "react";
-import StopContainer from "./StopContainer";
-import { Arrival } from "../../api/trimet/types";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import thunk from "redux-thunk";
 import { ProviderMock } from "../../test/util";
+import StopContainer from "./StopContainer";
 
 function mockStore() {
   const arrivalsInitialState = {
@@ -27,11 +26,11 @@ function mockStore() {
 
   const baseState = {
     arrivalsReducer: {
+      arrivals: {
+        123: {}
+      },
       loading: {
         123: false
-      },
-      arrivals: {
-        123: {} as Arrival
       }
     },
     stopsReducer: {
@@ -61,14 +60,14 @@ describe("StopContainer", () => {
     });
   });
 
-  describe("when provided a valid stopsReducer and arrivalsReducer", function() {
+  describe("when provided a valid stopsReducer and arrivalsReducer", () => {
     const subject = mount(
       <ProviderMock store={mockStore()}>
         <StopContainer locationId={123} showArrivals={true} />
       </ProviderMock>
     );
 
-    it("hands off props to the StopComponent", function() {
+    it("hands off props to the StopComponent", () => {
       const stopComponent = subject.find("StopComponent");
 
       expect(stopComponent).toExist();

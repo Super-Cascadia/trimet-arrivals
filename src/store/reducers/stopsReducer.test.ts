@@ -1,10 +1,9 @@
-import stopsReducer from "./stopsReducer";
 import {
   LOAD_ARRIVALS_COMPLETE,
   LOAD_STOP_COMPLETE,
   LOAD_STOPS
 } from "../constants";
-import { StopData, StopLocation } from "../../api/trimet/types";
+import stopsReducer from "./stopsReducer";
 
 describe("stopsReducer", () => {
   describe("default behavior", () => {
@@ -49,19 +48,19 @@ describe("stopsReducer", () => {
     };
 
     const action = {
-      type: LOAD_STOP_COMPLETE,
       payload: {
         stopData: {
           location: [
             {
               locid: 123
-            } as StopLocation,
+            },
             {
               locid: 456
-            } as StopLocation
+            }
           ]
-        } as StopData
-      }
+        }
+      },
+      type: LOAD_STOP_COMPLETE
     };
 
     const result = stopsReducer(initialState, action);
@@ -86,7 +85,7 @@ describe("stopsReducer", () => {
     });
   });
 
-  describe("LOAD_ARRIVALS_COMPLETE", function() {
+  describe("LOAD_ARRIVALS_COMPLETE", () => {
     const initialState = {
       loading: true,
       timeOfLastLoad: ""

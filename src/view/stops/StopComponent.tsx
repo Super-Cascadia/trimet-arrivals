@@ -1,9 +1,8 @@
 import React from "react";
-import "./Stops.css";
-import StopsTableHeader from "./components/StopsTableHeader";
-import ArrivalsContainer from "../arrivals/ArrivalsContainer";
 import { StopLocation } from "../../api/trimet/types";
-import { LoadArrivalData } from "../../store/action/stopActions";
+import ArrivalsContainer from "../arrivals/ArrivalsContainer";
+import StopsTableHeader from "./components/StopsTableHeader";
+import "./Stops.css";
 
 interface Props {
   stopLocation: StopLocation;
@@ -16,33 +15,43 @@ interface Props {
 const interval = 30000;
 
 class StopComponent extends React.Component<Props> {
-  refreshInterval: {};
-  loadAndSetInterval(locationId: number) {
+  public refreshInterval: {};
+  private loadArrivalData: (locId: number) => void;
+
+  constructor(props) {
+    super(props);
+
+    this.loadArrivalData = (locId: number) => this.loadArrivals(locId);
+  }
+
+  public loadAndSetInterval(locationId: number) {
     const { loadArrivalData } = this.props;
     loadArrivalData(locationId);
     this.refreshInterval = setInterval(loadArrivalData(locationId), interval);
   }
-  loadArrivals(locationId: number) {
+
+  public loadArrivals(locationId: number) {
     if (this.refreshInterval) {
       clearInterval(this.refreshInterval as number);
     }
     this.loadAndSetInterval(locationId);
   }
-  render() {
+
+  public render() {
     const { stopLocation, locationId, loading, showArrivals } = this.props;
 
     return (
       <div className="stop">
         <StopsTableHeader
           stopLocation={stopLocation}
-          loadArrivalData={(locId: number) => this.loadArrivals(locId)}
+          loadArrivalData={this.loadArrivalData}
           loading={loading}
           showArrivals={showArrivals}
         />
         <ArrivalsContainer
           locationId={locationId}
           showArrivals={showArrivals}
-          loadArrivalData={(locId: number) => this.loadArrivals(locId)}
+          loadArrivalData={this.loadArrivalData}
         />
       </div>
     );

@@ -1,6 +1,6 @@
-import { ArrivalData, Arrival } from "../../api/trimet/types";
-import { LOAD_ARRIVALS_COMPLETE, LOAD_ARRIVALS } from "../constants";
 import { groupBy } from "lodash";
+import { Arrival, ArrivalData } from "../../api/trimet/types";
+import { LOAD_ARRIVALS, LOAD_ARRIVALS_COMPLETE } from "../constants";
 
 export interface StopLoadingState {
   [locationId: number]: boolean;

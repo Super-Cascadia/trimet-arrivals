@@ -1,5 +1,5 @@
-import { getTrimetData } from "./util";
 import { getNearbyStops } from "./stops";
+import { getTrimetData } from "./util";
 
 jest.mock("./util", () => {
   return {
@@ -12,14 +12,14 @@ jest.mock("./util", () => {
 describe("stops", () => {
   const location = {
     coords: {
-      longitude: 123,
-      latitude: 123
+      latitude: 123,
+      longitude: 123
     }
   };
 
   getNearbyStops(location, 123);
 
-  it("foo", function(done) {
+  it("foo", done => {
     getTrimetData().then(result => {
       expect(result).toEqual({ foo: "bar" });
       done();

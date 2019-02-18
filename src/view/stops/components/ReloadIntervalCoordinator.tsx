@@ -1,8 +1,10 @@
 import React from "react";
 import { StopLocation } from "../../../api/trimet/types";
-import "../Stops.css";
-import ReloadButton, { Event } from "../../../component/ReloadButton";
+import ReloadButton from "../../../component/ReloadButton";
 import { LoadArrivalData } from "../../../store/action/stopActions";
+import "../Stops.css";
+
+type Event = React.MouseEvent<HTMLElement>;
 
 interface Props {
   stopLocation: StopLocation;
@@ -22,7 +24,8 @@ export default class ReloadIntervalCoordinator extends React.Component<
   Props,
   State
 > {
-  refreshInterval: {};
+  public refreshInterval: {};
+  private onClick: (e: Event) => void;
 
   constructor(props: Props) {
     super(props);
@@ -30,9 +33,11 @@ export default class ReloadIntervalCoordinator extends React.Component<
     this.state = {
       interval: 30
     };
+
+    this.onClick = (e: Event) => this.onReloadClick(e);
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     const { showArrivals } = this.props;
 
     if (showArrivals) {
@@ -40,7 +45,7 @@ export default class ReloadIntervalCoordinator extends React.Component<
     }
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     const { showArrivals } = this.props;
 
     if (showArrivals) {
@@ -48,7 +53,7 @@ export default class ReloadIntervalCoordinator extends React.Component<
     }
   }
 
-  onInterval() {
+  public onInterval() {
     const { interval } = this.state;
 
     if (interval === 0) {
@@ -58,22 +63,22 @@ export default class ReloadIntervalCoordinator extends React.Component<
     }
   }
 
-  setNewInterval() {
+  public setNewInterval() {
     this.refreshInterval = setInterval(() => this.onInterval(), ONE_SECOND);
   }
 
-  clearIntervalListener() {
+  public clearIntervalListener() {
     if (this.refreshInterval) {
       clearInterval(this.refreshInterval as number);
     }
   }
 
-  resetLoadCounter() {
+  public resetLoadCounter() {
     this.clearIntervalListener();
     this.setState({ interval: THIRTY });
   }
 
-  loadData() {
+  public loadData() {
     const { loadArrivalData, stopLocation } = this.props;
 
     this.resetLoadCounter();
@@ -81,12 +86,12 @@ export default class ReloadIntervalCoordinator extends React.Component<
     loadArrivalData(stopLocation.locid);
   }
 
-  onReloadClick(e: Event): void {
+  public onReloadClick(e: Event): void {
     e.preventDefault();
     this.loadData();
   }
 
-  render() {
+  public render() {
     const { stopLocation, loading, showArrivals = true } = this.props;
 
     if (!stopLocation) {
@@ -96,10 +101,7 @@ export default class ReloadIntervalCoordinator extends React.Component<
     return (
       <div className="stops-reload-button">
         {showArrivals && (
-          <ReloadButton
-            onClick={(e: Event) => this.onReloadClick(e)}
-            disabled={loading}
-          >
+          <ReloadButton onClick={this.onClick} disabled={loading}>
             <span className="count-down-label">{this.state.interval}</span>
           </ReloadButton>
         )}
