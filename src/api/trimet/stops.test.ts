@@ -12,8 +12,8 @@ jest.mock("./util", () => {
 describe("stops", () => {
   const location = {
     coords: {
+      latitude: 123,
       longitude: 123,
-      latitude: 123
     }
   };
 

@@ -28,13 +28,13 @@ describe("arrivalsReducer", () => {
     };
 
     const action = {
-      type: LOAD_ARRIVALS,
       payload: {
         arrivalData: {
           arrival: {}
         } as ArrivalData,
         locationId: 123
-      }
+      },
+      type: LOAD_ARRIVALS,
     };
 
     const result = arrivalsReducer(initialState, action);
@@ -55,7 +55,6 @@ describe("arrivalsReducer", () => {
     };
 
     const action = {
-      type: LOAD_ARRIVALS_COMPLETE,
       payload: {
         arrivalData: {
           arrival: [
@@ -68,7 +67,8 @@ describe("arrivalsReducer", () => {
           ]
         } as ArrivalData,
         locationId: 123
-      }
+      },
+      type: LOAD_ARRIVALS_COMPLETE,
     };
 
     const result = arrivalsReducer(initialState, action);

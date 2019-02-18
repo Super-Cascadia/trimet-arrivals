@@ -18,8 +18,8 @@ const mapStateToProps = (state: RootState, props: Props) => {
 
   return {
     ...props,
+    loading,
     stopLocation,
-    loading
   };
 };
 

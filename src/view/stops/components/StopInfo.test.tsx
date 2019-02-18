@@ -14,9 +14,9 @@ describe("StopInfo", () => {
 
   describe("when provided a stop location", () => {
     const stopLocation = {
-      locid: 123456,
       desc: "hello",
       dir: "NW",
+      locid: 123456,
       route: [
         {
           route: 123

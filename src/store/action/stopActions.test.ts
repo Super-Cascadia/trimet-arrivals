@@ -48,23 +48,23 @@ describe("stopActions", () => {
     it("dispatchses the LOAD_ARRIVAL action", () => {
       expect(dispatchMock).toHaveBeenCalled();
       expect(dispatchMock).toHaveBeenCalledWith({
-        type: LOAD_ARRIVALS,
         payload: {
           locationId: 123
-        }
+        },
+        type: LOAD_ARRIVALS,
       });
     });
 
     it("dispatchses the LOAD_ARRIVAL_COMPLETE action", done => {
       getArrivals().then(() => {
         expect(dispatchMock).toHaveBeenCalledWith({
-          type: LOAD_ARRIVALS_COMPLETE,
           payload: {
-            locationId: 123,
             arrivalData: {
               foo: "bar"
-            }
-          }
+            },
+            locationId: 123,
+          },
+          type: LOAD_ARRIVALS_COMPLETE,
         });
 
         done();
@@ -88,12 +88,12 @@ describe("stopActions", () => {
 
       getNearbyStops(location, 123).then(() => {
         expect(dispatchMock).toHaveBeenCalledWith({
-          type: LOAD_STOP_COMPLETE,
           payload: {
             stopData: {
               foo: "bar"
             }
-          }
+          },
+          type: LOAD_STOP_COMPLETE,
         });
 
         done();

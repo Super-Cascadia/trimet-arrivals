@@ -22,10 +22,10 @@ export const loadArrivalData = (locationId: number) => {
 
   return function(dispatch: Function) {
     dispatch({
-      type: LOAD_ARRIVALS,
       payload: {
         locationId
-      }
+      },
+      type: LOAD_ARRIVALS,
     });
 
     const stringNumberLocationId = locationId.toString(10);
@@ -33,11 +33,11 @@ export const loadArrivalData = (locationId: number) => {
     getArrivals(stringNumberLocationId, minutes).then(
       (arrivalData: ArrivalData) => {
         dispatch({
-          type: LOAD_ARRIVALS_COMPLETE,
           payload: {
             arrivalData,
             locationId
-          }
+          },
+          type: LOAD_ARRIVALS_COMPLETE,
         });
       }
     );
@@ -55,10 +55,10 @@ export const loadStopData = (radiusInFeet: number) => {
       .then((location: Location) => {
         getNearbyStops(location, radiusInFeet).then((stopData: StopData) => {
           dispatch({
-            type: LOAD_STOP_COMPLETE,
             payload: {
               stopData
-            }
+            },
+            type: LOAD_STOP_COMPLETE,
           });
           return stopData;
         });

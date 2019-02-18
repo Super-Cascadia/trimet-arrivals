@@ -49,7 +49,6 @@ describe("stopsReducer", () => {
     };
 
     const action = {
-      type: LOAD_STOP_COMPLETE,
       payload: {
         stopData: {
           location: [
@@ -61,7 +60,8 @@ describe("stopsReducer", () => {
             } as StopLocation
           ]
         } as StopData
-      }
+      },
+      type: LOAD_STOP_COMPLETE,
     };
 
     const result = stopsReducer(initialState, action);

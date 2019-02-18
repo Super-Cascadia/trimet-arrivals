@@ -25,11 +25,11 @@ function getRouteDisplay(route: number) {
 
 function getRouteIndicatorClassName(route: number, className: string) {
   return cx("route-indicator", className, {
-    "route-indicator-green": route === 123,
-    "route-indicator-yellow": route === 123,
-    "route-indicator-red": route === RED_LINE_NUMBER,
     "route-indicator-blue": route === BLUE_LINE_NUMBER,
-    "route-indicator-orange": route === 123
+    "route-indicator-green": route === 123,
+    "route-indicator-orange": route === 123,
+    "route-indicator-red": route === RED_LINE_NUMBER,
+    "route-indicator-yellow": route === 123,
   });
 }
 

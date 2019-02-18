@@ -51,8 +51,8 @@ const stopsReducer = (state = initialState, action: Action) => {
 
       return {
         ...state,
-        stopLocations,
         loading: false,
+        stopLocations,
         timeOfLastLoad: moment().format("ddd, h:mm:ss a")
       };
     case LOAD_ARRIVALS_COMPLETE:

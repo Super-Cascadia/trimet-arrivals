@@ -18,12 +18,12 @@ function mockStore() {
 
   const baseState = {
     arrivalsReducer: {
+      arrivals: {
+        123: {} as Arrival
+      },
       loading: {
         123: false
       },
-      arrivals: {
-        123: {} as Arrival
-      }
     }
   };
 

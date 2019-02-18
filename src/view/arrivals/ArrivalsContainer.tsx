@@ -19,9 +19,9 @@ const mapStateToProps = (state: RootState, props: Props) => {
 
   return {
     ...props,
+    arrivals,
     loading,
     locationId,
-    arrivals,
     now
   };
 };

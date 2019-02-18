@@ -76,12 +76,12 @@ describe("ArrivalsTable", () => {
       describe("table", () => {
         const arrivals = [
           {
+            estimated: 5000,
             route: 1,
-            estimated: 5000
           } as Arrival,
           {
+            estimated: 2000,
             route: 2,
-            estimated: 2000
           } as Arrival
         ];
         const subject = shallow(
