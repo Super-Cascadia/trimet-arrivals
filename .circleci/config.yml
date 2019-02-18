@@ -32,16 +32,30 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-
-      # lint the app
-      - run: yarn prettier
-      - run: yarn tslint
-
+workflows:
+  version: 2
+  build_accept_deploy:
+    jobs:
+      - build
       # run tests!
-      - run: yarn test --coverage
-
+      - unit_test:
+          requires:
+            - build
       # send coverage
-      - run: yarn codecov
-
-      # semantic release
-      - run: yarn semantic-release
+      - codecov:
+          requires:
+            - build
+            - unit_test
+      # lint the app
+      - prettier_lint:
+          requires:
+            - build
+      - tslint:
+          requires:
+            - build
+      # publish release
+      - semantic-release:
+          requires:
+            - unit_test
+            - tslint
+            - prettier_lint
