@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
-import EarlyIndicator from "./EarlyIndicator";
-import React from "react";
 import moment from "moment";
+import React from "react";
+import EarlyIndicator from "./EarlyIndicator";
 
 describe("EarlyIndicator", () => {
   describe("by default", () => {

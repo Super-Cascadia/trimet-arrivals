@@ -1,5 +1,5 @@
-import { StopData, Location } from "./types";
 import { API, BASE_URL } from "./constants";
+import { Location, StopData } from "./types";
 import { getTrimetData } from "./util";
 
 const STOPS_BASE_URL = `${BASE_URL}V1/stops/`;

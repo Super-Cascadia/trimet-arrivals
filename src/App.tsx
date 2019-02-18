@@ -7,7 +7,7 @@ import StopsContainer from "./view/stops/StopsContainer";
 const store = appStore();
 
 class App extends React.Component {
-  render() {
+  public render() {
     return (
       <Provider store={store}>
         <div>

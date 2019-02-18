@@ -1,13 +1,13 @@
-import { StopData, Location, ArrivalData } from "../../api/trimet/types";
+import { getCurrentPosition } from "../../api/geolocation";
 import { getArrivals } from "../../api/trimet/arrivals";
 import { getNearbyStops } from "../../api/trimet/stops";
+import { ArrivalData, Location, StopData } from "../../api/trimet/types";
 import {
   LOAD_ARRIVALS,
   LOAD_ARRIVALS_COMPLETE,
-  LOAD_STOPS,
-  LOAD_STOP_COMPLETE
+  LOAD_STOP_COMPLETE,
+  LOAD_STOPS
 } from "../constants";
-import { getCurrentPosition } from "../../api/geolocation";
 
 export interface LoadAction {
   type: "LOAD_STOPS";

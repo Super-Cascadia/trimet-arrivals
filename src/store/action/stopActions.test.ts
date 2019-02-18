@@ -1,12 +1,12 @@
-import { loadArrivalData, loadStopData } from "./stopActions";
-import {
-  LOAD_ARRIVALS_COMPLETE,
-  LOAD_ARRIVALS,
-  LOAD_STOPS,
-  LOAD_STOP_COMPLETE
-} from "../constants";
 import { getArrivals } from "../../api/trimet/arrivals";
 import { getNearbyStops } from "../../api/trimet/stops";
+import {
+  LOAD_ARRIVALS,
+  LOAD_ARRIVALS_COMPLETE,
+  LOAD_STOP_COMPLETE,
+  LOAD_STOPS
+} from "../constants";
+import { loadArrivalData, loadStopData } from "./stopActions";
 
 jest.mock("../../api/trimet/util", () => {
   return {

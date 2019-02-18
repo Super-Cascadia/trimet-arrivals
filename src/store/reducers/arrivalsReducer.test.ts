@@ -1,6 +1,6 @@
-import arrivalsReducer from "./arrivalsReducer";
-import { LOAD_ARRIVALS, LOAD_ARRIVALS_COMPLETE } from "../constants";
 import { ArrivalData } from "../../api/trimet/types";
+import { LOAD_ARRIVALS, LOAD_ARRIVALS_COMPLETE } from "../constants";
+import arrivalsReducer from "./arrivalsReducer";
 
 describe("arrivalsReducer", () => {
   describe("default behavior", () => {

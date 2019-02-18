@@ -1,6 +1,6 @@
 import { API, BASE_URL } from "./constants";
-import { getTrimetData } from "./util";
 import { ArrivalData } from "./types";
+import { getTrimetData } from "./util";
 
 const ARRIVALS_BASE_URL = `${BASE_URL}V2/arrivals/`;
 

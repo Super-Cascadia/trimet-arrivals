@@ -1,9 +1,9 @@
 import React from "react";
 import { StopLocation } from "../../../api/trimet/types";
-import "../Stops.css";
 import { LoadArrivalData } from "../../../store/action/stopActions";
-import StopInfo from "./StopInfo";
+import "../Stops.css";
 import ReloadIntervalCoordinator from "./ReloadIntervalCoordinator";
+import StopInfo from "./StopInfo";
 
 interface Props {
   stopLocation: StopLocation;
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default class StopsTableHeader extends React.Component<Props> {
-  render() {
+  public render() {
     const { stopLocation, loading, showArrivals, loadArrivalData } = this.props;
 
     if (!stopLocation) {

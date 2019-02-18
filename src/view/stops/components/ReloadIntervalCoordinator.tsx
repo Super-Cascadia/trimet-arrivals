@@ -1,8 +1,8 @@
 import React from "react";
 import { StopLocation } from "../../../api/trimet/types";
-import "../Stops.css";
 import ReloadButton, { Event } from "../../../component/ReloadButton";
 import { LoadArrivalData } from "../../../store/action/stopActions";
+import "../Stops.css";
 
 interface Props {
   stopLocation: StopLocation;
@@ -22,7 +22,7 @@ export default class ReloadIntervalCoordinator extends React.Component<
   Props,
   State
 > {
-  refreshInterval: {};
+  public refreshInterval: {};
 
   constructor(props: Props) {
     super(props);
@@ -32,7 +32,7 @@ export default class ReloadIntervalCoordinator extends React.Component<
     };
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     const { showArrivals } = this.props;
 
     if (showArrivals) {
@@ -40,7 +40,7 @@ export default class ReloadIntervalCoordinator extends React.Component<
     }
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     const { showArrivals } = this.props;
 
     if (showArrivals) {
@@ -48,7 +48,7 @@ export default class ReloadIntervalCoordinator extends React.Component<
     }
   }
 
-  onInterval() {
+  public onInterval() {
     const { interval } = this.state;
 
     if (interval === 0) {
@@ -58,22 +58,22 @@ export default class ReloadIntervalCoordinator extends React.Component<
     }
   }
 
-  setNewInterval() {
+  public setNewInterval() {
     this.refreshInterval = setInterval(() => this.onInterval(), ONE_SECOND);
   }
 
-  clearIntervalListener() {
+  public clearIntervalListener() {
     if (this.refreshInterval) {
       clearInterval(this.refreshInterval as number);
     }
   }
 
-  resetLoadCounter() {
+  public resetLoadCounter() {
     this.clearIntervalListener();
     this.setState({ interval: THIRTY });
   }
 
-  loadData() {
+  public loadData() {
     const { loadArrivalData, stopLocation } = this.props;
 
     this.resetLoadCounter();
@@ -81,12 +81,12 @@ export default class ReloadIntervalCoordinator extends React.Component<
     loadArrivalData(stopLocation.locid);
   }
 
-  onReloadClick(e: Event): void {
+  public onReloadClick(e: Event): void {
     e.preventDefault();
     this.loadData();
   }
 
-  render() {
+  public render() {
     const { stopLocation, loading, showArrivals = true } = this.props;
 
     if (!stopLocation) {

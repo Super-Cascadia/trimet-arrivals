@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
+import moment from "moment";
 import React from "react";
 import ArrivalRow from "./ArrivalRow";
-import moment from "moment";
 
 describe("ArrivalRow", () => {
   describe("by default", () => {
@@ -93,10 +93,10 @@ describe("ArrivalRow", () => {
 
   describe("when provided the estimated arrival and departure times", () => {
     it("displays the estimated schedule time", () => {
-      let scheduled = moment("2017-09-15 09:30:00")
+      const scheduled = moment("2017-09-15 09:30:00")
         .utc()
         .valueOf();
-      let estimated = moment("2017-09-15 09:30:00")
+      const estimated = moment("2017-09-15 09:30:00")
         .utc()
         .valueOf();
 

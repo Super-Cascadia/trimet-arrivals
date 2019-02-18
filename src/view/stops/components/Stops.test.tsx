@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
 import React from "react";
-import Stops from "./Stops";
 import { StopLocation } from "../../../api/trimet/types";
+import Stops from "./Stops";
 
 describe("Stops", () => {
   describe("by default", () => {

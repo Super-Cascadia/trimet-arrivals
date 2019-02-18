@@ -1,7 +1,7 @@
 import { Moment } from "moment";
 import React from "react";
-import LateIndicator from "./LateIndicator";
 import EarlyIndicator from "./EarlyIndicator";
+import LateIndicator from "./LateIndicator";
 
 interface Props {
   scheduled: Moment;

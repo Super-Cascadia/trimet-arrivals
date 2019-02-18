@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
+import moment from "moment";
 import React from "react";
 import OnTimeIndicator from "./OnTimeIndicator";
-import moment from "moment";
 
 describe("OnTimeIndicator", () => {
   describe("by default", () => {

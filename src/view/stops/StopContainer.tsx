@@ -1,8 +1,8 @@
 import { connect } from "react-redux";
-import { RootState } from "../../store/reducers";
-import { loadArrivalData } from "../../store/action/stopActions";
-import StopComponent from "./StopComponent";
 import { StopLocation } from "../../api/trimet/types";
+import { loadArrivalData } from "../../store/action/stopActions";
+import { RootState } from "../../store/reducers";
+import StopComponent from "./StopComponent";
 
 interface Props {
   locationId: number;

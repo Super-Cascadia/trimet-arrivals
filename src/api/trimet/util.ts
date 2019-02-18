@@ -1,5 +1,5 @@
 import { get } from "superagent";
-import { TrimetResponse, StopData, ArrivalData } from "./types";
+import { ArrivalData, StopData, TrimetResponse } from "./types";
 
 export function getTrimetData(
   requestURI: string

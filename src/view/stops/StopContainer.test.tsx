@@ -1,10 +1,10 @@
 import { mount, shallow } from "enzyme";
 import React from "react";
-import StopContainer from "./StopContainer";
-import { Arrival } from "../../api/trimet/types";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import thunk from "redux-thunk";
+import { Arrival } from "../../api/trimet/types";
 import { ProviderMock } from "../../test/util";
+import StopContainer from "./StopContainer";
 
 function mockStore() {
   const arrivalsInitialState = {

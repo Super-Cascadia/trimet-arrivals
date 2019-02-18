@@ -1,12 +1,12 @@
-import React from "react";
 import cx from "classnames";
-import "./RouteIndicator.css";
+import React from "react";
 import FontAwesome from "react-fontawesome";
 import {
   BLUE_LINE_NUMBER,
   RED_LINE_NUMBER,
   ROUTE_DISPLAY
 } from "../../api/trimet/constants";
+import "./RouteIndicator.css";
 
 interface Props {
   routeId: number;
@@ -14,7 +14,7 @@ interface Props {
 }
 
 function getRouteDisplay(route: number) {
-  let routeFound = ROUTE_DISPLAY[route];
+  const routeFound = ROUTE_DISPLAY[route];
 
   if (!routeFound) {
     return route || "-";
@@ -34,11 +34,11 @@ function getRouteIndicatorClassName(route: number, className: string) {
 }
 
 export default class RouteIndicator extends React.PureComponent<Props> {
-  static defaultProps = {
+  public static defaultProps = {
     className: ""
   };
 
-  render() {
+  public render() {
     const { routeId, className } = this.props;
     const classNames = getRouteIndicatorClassName(routeId, className);
 

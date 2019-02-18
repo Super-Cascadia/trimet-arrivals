@@ -1,10 +1,10 @@
-import stopsReducer from "./stopsReducer";
+import { StopData, StopLocation } from "../../api/trimet/types";
 import {
   LOAD_ARRIVALS_COMPLETE,
   LOAD_STOP_COMPLETE,
   LOAD_STOPS
 } from "../constants";
-import { StopData, StopLocation } from "../../api/trimet/types";
+import stopsReducer from "./stopsReducer";
 
 describe("stopsReducer", () => {
   describe("default behavior", () => {

@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
 import React from "react";
-import ArrivalsComponent from "./ArrivalsComponent";
 import { Arrival } from "../../api/trimet/types";
+import ArrivalsComponent from "./ArrivalsComponent";
 
 describe("ArrivalsComponent", () => {
   describe("by default", () => {

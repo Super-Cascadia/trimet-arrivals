@@ -1,6 +1,6 @@
+import cx from "classnames";
 import React from "react";
 import FontAwesome from "react-fontawesome";
-import cx from "classnames";
 
 export type Event = React.MouseEvent<HTMLElement>;
 
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default class ReloadButton extends React.PureComponent<Props> {
-  render() {
+  public render() {
     const { onClick, disabled, className, children } = this.props;
     const classes = cx("reload-button", className);
 

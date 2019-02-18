@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
-import ArrivalsTable from "./ArrivalsTable";
 import React from "react";
 import { Arrival } from "../../../api/trimet/types";
+import ArrivalsTable from "./ArrivalsTable";
 
 describe("ArrivalsTable", () => {
   describe("by default", () => {

@@ -1,9 +1,9 @@
+import { Moment } from "moment";
 import React from "react";
 import { Arrival } from "../../api/trimet/types";
-import ArrivalsTable from "./components/ArrivalsTable";
-import "./Arrivals.css";
 import { LoadArrivalData } from "../../store/action/stopActions";
-import { Moment } from "moment";
+import "./Arrivals.css";
+import ArrivalsTable from "./components/ArrivalsTable";
 
 interface Props {
   loading: boolean;
@@ -15,14 +15,14 @@ interface Props {
 }
 
 export default class ArrivalsComponent extends React.Component<Props> {
-  componentDidMount() {
+  public componentDidMount() {
     const { loadArrivalData, locationId, showArrivals } = this.props;
 
     if (showArrivals) {
       loadArrivalData(locationId);
     }
   }
-  render() {
+  public render() {
     const { arrivals, loading = true, showArrivals = true, now } = this.props;
 
     return (

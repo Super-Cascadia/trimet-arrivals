@@ -1,8 +1,8 @@
-import { connect } from "react-redux";
-import { RootState } from "../../store/reducers";
-import { LoadArrivalData } from "../../store/action/stopActions";
-import ArrivalsComponent from "../arrivals/ArrivalsComponent";
 import moment from "moment";
+import { connect } from "react-redux";
+import { LoadArrivalData } from "../../store/action/stopActions";
+import { RootState } from "../../store/reducers";
+import ArrivalsComponent from "../arrivals/ArrivalsComponent";
 
 interface Props {
   locationId: number;

@@ -1,10 +1,10 @@
-import React from "react";
+import classNames from "classnames";
 import { map, sortBy } from "lodash";
+import { Moment } from "moment";
+import React from "react";
 import { Arrival } from "../../../api/trimet/types";
 import ArrivalRow from "./ArrivalRow";
 import "./Arrivals.css";
-import classNames from "classnames";
-import { Moment } from "moment";
 
 export interface Props {
   arrivals: Arrival[];
@@ -19,7 +19,7 @@ function sortArrivalsByEstimatedTime(arrivals: Arrival[]): Arrival[] {
 }
 
 class ArrivalsTable extends React.Component<Props> {
-  static getRows(arrivals: Arrival[], now) {
+  public static getRows(arrivals: Arrival[], now) {
     const sortedArrivals = sortArrivalsByEstimatedTime(arrivals);
 
     return map(sortedArrivals, (arrival: Arrival) => {
@@ -39,7 +39,7 @@ class ArrivalsTable extends React.Component<Props> {
     });
   }
 
-  render() {
+  public render() {
     const { arrivals, loading, now } = this.props;
 
     if (!arrivals) {

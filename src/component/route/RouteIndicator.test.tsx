@@ -1,6 +1,6 @@
 import { shallow } from "enzyme";
-import RouteIndicator from "./RouteIndicator";
 import React from "react";
+import RouteIndicator from "./RouteIndicator";
 
 describe("RouteIndicator", () => {
   describe("by default", () => {

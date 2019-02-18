@@ -1,7 +1,7 @@
 import { mount, shallow } from "enzyme";
 import React from "react";
-import ReloadIntervalCoordinator from "./ReloadIntervalCoordinator";
 import { StopLocation } from "../../../api/trimet/types";
+import ReloadIntervalCoordinator from "./ReloadIntervalCoordinator";
 
 describe("ReloadIntervalCoordinator", () => {
   describe("by default", () => {

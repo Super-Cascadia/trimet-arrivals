@@ -1,5 +1,5 @@
-import { getTrimetData } from "./util";
 import { getNearbyStops } from "./stops";
+import { getTrimetData } from "./util";
 
 jest.mock("./util", () => {
   return {

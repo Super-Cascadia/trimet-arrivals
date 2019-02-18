@@ -1,7 +1,7 @@
 import { shallow } from "enzyme";
+import moment from "moment";
 import React from "react";
 import TimeToArrivalIndicator from "./TimeToArrivalIndicator";
-import moment from "moment";
 
 describe("TimeToArrivalIndicator", () => {
   describe("by default", function() {

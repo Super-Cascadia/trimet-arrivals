@@ -1,6 +1,6 @@
+import { map } from "lodash";
 import React from "react";
 import { Route, StopLocation } from "../../../api/trimet/types";
-import { map } from "lodash";
 import RouteIndicator from "../../../component/route/RouteIndicator";
 
 function getStopRoutes(routes: Route[]) {
