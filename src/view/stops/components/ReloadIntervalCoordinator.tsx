@@ -1,8 +1,10 @@
 import React from "react";
 import { StopLocation } from "../../../api/trimet/types";
-import ReloadButton, { Event } from "../../../component/ReloadButton";
+import ReloadButton from "../../../component/ReloadButton";
 import { LoadArrivalData } from "../../../store/action/stopActions";
 import "../Stops.css";
+
+type Event = React.MouseEvent<HTMLElement>;
 
 interface Props {
   stopLocation: StopLocation;
