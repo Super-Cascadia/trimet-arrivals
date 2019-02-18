@@ -1,6 +1,5 @@
 import { shallow } from "enzyme";
 import React from "react";
-import { Arrival } from "../../api/trimet/types";
 import ArrivalsComponent from "./ArrivalsComponent";
 
 describe("ArrivalsComponent", () => {

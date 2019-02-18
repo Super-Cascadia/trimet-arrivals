@@ -1,4 +1,3 @@
-import { StopData, StopLocation } from "../../api/trimet/types";
 import {
   LOAD_ARRIVALS_COMPLETE,
   LOAD_STOP_COMPLETE,

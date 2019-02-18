@@ -1,6 +1,5 @@
 import React from "react";
 import { StopLocation } from "../../api/trimet/types";
-import { LoadArrivalData } from "../../store/action/stopActions";
 import ArrivalsContainer from "../arrivals/ArrivalsContainer";
 import StopsTableHeader from "./components/StopsTableHeader";
 import "./Stops.css";
