@@ -1,28 +1,34 @@
-import React from 'react';
-import { Moment } from 'moment';
-import './Indicator.css'
-import { remainingTime, timeDiff } from './util';
+import React from "react";
+import { Moment } from "moment";
+import "./Indicator.css";
+import { remainingTime, timeDiff } from "./util";
 
 interface Props {
-    scheduled: Moment;
-    estimated: Moment;
+  scheduled: Moment;
+  estimated: Moment;
 }
 
 export default class EarlyIndicator extends React.PureComponent<Props> {
-    render() {
-        const { scheduled, estimated } = this.props;
+  render() {
+    const { scheduled, estimated } = this.props;
 
-        if (scheduled && estimated) {
-            const { seconds, minutes } = timeDiff(estimated, scheduled);
-            const { secondsDiff, minutesDiff } = remainingTime(minutes, seconds);
+    if (scheduled && estimated) {
+      const { seconds, minutes } = timeDiff(estimated, scheduled);
+      const { secondsDiff, minutesDiff } = remainingTime(minutes, seconds);
 
-            if (minutesDiff === 0) {
-                return <span className="arrival-estimated-early">{secondsDiff}s early</span>;
-            }
+      if (minutesDiff === 0) {
+        return (
+          <span className="arrival-estimated-early">{secondsDiff}s early</span>
+        );
+      }
 
-            return <span className="arrival-estimated-early">{59 - minutes}m {60 - seconds}s early</span>;
-        }
-
-        return "-"
+      return (
+        <span className="arrival-estimated-early">
+          {59 - minutes}m {60 - seconds}s early
+        </span>
+      );
     }
+
+    return "-";
+  }
 }
