@@ -8,10 +8,7 @@ function getURL(locIDs: string, minutes: number): string {
   return `${ARRIVALS_BASE_URL}json/true/locIDs/${locIDs}/showPosition/true/minutes/${minutes}/${API}`;
 }
 
-export function getArrivals(
-  locIDs: string,
-  minutes: number
-) {
+export function getArrivals(locIDs: string, minutes: number) {
   const request = getURL(locIDs, minutes);
 
   return getTrimetData(request);

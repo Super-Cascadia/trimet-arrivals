@@ -33,7 +33,7 @@ describe("arrivalsReducer", () => {
         },
         locationId: 123
       },
-      type: LOAD_ARRIVALS,
+      type: LOAD_ARRIVALS
     };
 
     const result = arrivalsReducer(initialState, action);
@@ -67,7 +67,7 @@ describe("arrivalsReducer", () => {
         },
         locationId: 123
       },
-      type: LOAD_ARRIVALS_COMPLETE,
+      type: LOAD_ARRIVALS_COMPLETE
     };
 
     const result = arrivalsReducer(initialState, action);

@@ -22,7 +22,7 @@ function mockStore() {
       },
       loading: {
         123: false
-      },
+      }
     }
   };
 

@@ -29,7 +29,7 @@ function getRouteIndicatorClassName(route: number, className: string) {
     "route-indicator-green": route === 123,
     "route-indicator-orange": route === 123,
     "route-indicator-red": route === RED_LINE_NUMBER,
-    "route-indicator-yellow": route === 123,
+    "route-indicator-yellow": route === 123
   });
 }
 

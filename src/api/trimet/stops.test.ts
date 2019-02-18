@@ -13,7 +13,7 @@ describe("stops", () => {
   const location = {
     coords: {
       latitude: 123,
-      longitude: 123,
+      longitude: 123
     }
   };
 

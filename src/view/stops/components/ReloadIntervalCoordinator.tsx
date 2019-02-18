@@ -101,10 +101,7 @@ export default class ReloadIntervalCoordinator extends React.Component<
     return (
       <div className="stops-reload-button">
         {showArrivals && (
-          <ReloadButton
-            onClick={this.onClick}
-            disabled={loading}
-          >
+          <ReloadButton onClick={this.onClick} disabled={loading}>
             <span className="count-down-label">{this.state.interval}</span>
           </ReloadButton>
         )}

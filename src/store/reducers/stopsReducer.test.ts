@@ -60,7 +60,7 @@ describe("stopsReducer", () => {
           ]
         }
       },
-      type: LOAD_STOP_COMPLETE,
+      type: LOAD_STOP_COMPLETE
     };
 
     const result = stopsReducer(initialState, action);

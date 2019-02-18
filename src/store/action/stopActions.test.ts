@@ -51,7 +51,7 @@ describe("stopActions", () => {
         payload: {
           locationId: 123
         },
-        type: LOAD_ARRIVALS,
+        type: LOAD_ARRIVALS
       });
     });
 
@@ -62,9 +62,9 @@ describe("stopActions", () => {
             arrivalData: {
               foo: "bar"
             },
-            locationId: 123,
+            locationId: 123
           },
-          type: LOAD_ARRIVALS_COMPLETE,
+          type: LOAD_ARRIVALS_COMPLETE
         });
 
         done();
@@ -93,7 +93,7 @@ describe("stopActions", () => {
               foo: "bar"
             }
           },
-          type: LOAD_STOP_COMPLETE,
+          type: LOAD_STOP_COMPLETE
         });
 
         done();

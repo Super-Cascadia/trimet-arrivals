@@ -15,7 +15,7 @@ export default class ReloadButton extends React.PureComponent<Props> {
   constructor(props) {
     super(props);
 
-    this.onClick = (e) => props.onClick(e)
+    this.onClick = e => props.onClick(e);
   }
   public render() {
     const { disabled, className, children } = this.props;

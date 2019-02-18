@@ -31,7 +31,7 @@ function mockStore() {
       },
       loading: {
         123: false
-      },
+      }
     },
     stopsReducer: {
       loading: false,
