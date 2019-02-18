@@ -33,7 +33,12 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      # lint the app
+      - run: yarn prettier
+      - run: yarn tslint
+
       # run tests!
       - run: yarn test --coverage
+
       # send coverage
       - run: yarn codecov
