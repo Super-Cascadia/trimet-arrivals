@@ -16,17 +16,27 @@ const interval = 30000;
 
 class StopComponent extends React.Component<Props> {
   public refreshInterval: {};
+  private loadArrivalData: (locId: number) => void;
+
+  constructor(props) {
+    super(props);
+
+    this.loadArrivalData = (locId: number) => this.loadArrivals(locId);
+  }
+
   public loadAndSetInterval(locationId: number) {
     const { loadArrivalData } = this.props;
     loadArrivalData(locationId);
     this.refreshInterval = setInterval(loadArrivalData(locationId), interval);
   }
+
   public loadArrivals(locationId: number) {
     if (this.refreshInterval) {
       clearInterval(this.refreshInterval as number);
     }
     this.loadAndSetInterval(locationId);
   }
+
   public render() {
     const { stopLocation, locationId, loading, showArrivals } = this.props;
 
@@ -34,14 +44,14 @@ class StopComponent extends React.Component<Props> {
       <div className="stop">
         <StopsTableHeader
           stopLocation={stopLocation}
-          loadArrivalData={(locId: number) => this.loadArrivals(locId)}
+          loadArrivalData={this.loadArrivalData}
           loading={loading}
           showArrivals={showArrivals}
         />
         <ArrivalsContainer
           locationId={locationId}
           showArrivals={showArrivals}
-          loadArrivalData={(locId: number) => this.loadArrivals(locId)}
+          loadArrivalData={this.loadArrivalData}
         />
       </div>
     );

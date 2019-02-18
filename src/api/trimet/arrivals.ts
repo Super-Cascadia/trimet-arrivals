@@ -11,7 +11,7 @@ function getURL(locIDs: string, minutes: number): string {
 export function getArrivals(
   locIDs: string,
   minutes: number
-): Promise<ArrivalData> {
+) {
   const request = getURL(locIDs, minutes);
 
   return getTrimetData(request);

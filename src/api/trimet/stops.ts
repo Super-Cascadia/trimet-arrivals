@@ -14,7 +14,7 @@ function getURL(lat: number, long: number, radiusInFeet: number): string {
 export function getNearbyStops(
   location: Location,
   radiusInFeet: number
-): Promise<StopData> {
+) {
   const { coords } = location;
   const { latitude, longitude } = coords;
   const request = getURL(latitude, longitude, radiusInFeet);

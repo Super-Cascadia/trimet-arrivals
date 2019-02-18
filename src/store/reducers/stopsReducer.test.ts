@@ -85,7 +85,7 @@ describe("stopsReducer", () => {
     });
   });
 
-  describe("LOAD_ARRIVALS_COMPLETE", function() {
+  describe("LOAD_ARRIVALS_COMPLETE", () => {
     const initialState = {
       loading: true,
       timeOfLastLoad: ""

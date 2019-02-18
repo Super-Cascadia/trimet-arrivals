@@ -25,6 +25,7 @@ export default class ReloadIntervalCoordinator extends React.Component<
   State
 > {
   public refreshInterval: {};
+  private onClick: (e: Event) => void;
 
   constructor(props: Props) {
     super(props);
@@ -32,6 +33,8 @@ export default class ReloadIntervalCoordinator extends React.Component<
     this.state = {
       interval: 30
     };
+
+    this.onClick = (e: Event) => this.onReloadClick(e);
   }
 
   public componentDidMount() {
@@ -99,7 +102,7 @@ export default class ReloadIntervalCoordinator extends React.Component<
       <div className="stops-reload-button">
         {showArrivals && (
           <ReloadButton
-            onClick={(e: Event) => this.onReloadClick(e)}
+            onClick={this.onClick}
             disabled={loading}
           >
             <span className="count-down-label">{this.state.interval}</span>

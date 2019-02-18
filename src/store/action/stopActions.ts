@@ -20,7 +20,7 @@ export type LoadArrivalData = (locationId: number) => void;
 export const loadArrivalData = (locationId: number) => {
   const minutes = 45;
 
-  return function(dispatch: Function) {
+  return (dispatch) => {
     dispatch({
       payload: {
         locationId
@@ -45,7 +45,7 @@ export const loadArrivalData = (locationId: number) => {
 };
 
 export const loadStopData = (radiusInFeet: number) => {
-  return function(dispatch: Function) {
+  return dispatch => {
     dispatch({
       type: LOAD_STOPS
     });

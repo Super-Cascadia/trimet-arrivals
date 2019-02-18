@@ -19,7 +19,7 @@ describe("stops", () => {
 
   getNearbyStops(location, 123);
 
-  it("foo", function(done) {
+  it("foo", done => {
     getTrimetData().then(result => {
       expect(result).toEqual({ foo: "bar" });
       done();
