@@ -42,3 +42,6 @@ jobs:
 
       # send coverage
       - run: yarn codecov
+
+      # semantic release
+      - run: yarn semantic-release
