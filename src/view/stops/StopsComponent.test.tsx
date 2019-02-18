@@ -57,7 +57,7 @@ describe("StopsComponent", () => {
   describe("when not loading", () => {
     describe("and stop locations are provided", () => {
       const stopLocations = {
-        123: {} as StopLocation
+        123: {}
       };
       const subject = shallow(
         <StopsComponent

@@ -28,7 +28,7 @@ function mockStore() {
   const baseState = {
     arrivalsReducer: {
       arrivals: {
-        123: {} as Arrival
+        123: {}
       },
       loading: {
         123: false
@@ -39,7 +39,7 @@ function mockStore() {
       stopLocations: {
         123: {
           locid: 123
-        } as StopLocation
+        }
       },
       timeOfLastLoad: "some time"
     }

@@ -19,7 +19,7 @@ function mockStore() {
   const baseState = {
     arrivalsReducer: {
       arrivals: {
-        123: {} as Arrival
+        123: {}
       },
       loading: {
         123: false
@@ -84,7 +84,7 @@ describe("StopComponent", () => {
 
     describe("when mounted", () => {
       const loadArrivalDataSpy = jasmine.createSpy("loadArrivalDataSpy");
-      const stopLocation = {} as StopLocation;
+      const stopLocation = {};
 
       const subject = mount(
         <ProviderMock store={mockStore()}>

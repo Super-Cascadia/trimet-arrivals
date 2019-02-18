@@ -64,7 +64,7 @@ describe("ArrivalsComponent", () => {
     });
 
     describe("and arrivals are available", () => {
-      const arrivals = [{} as Arrival];
+      const arrivals = [{}];
       const subject = shallow(
         <ArrivalsComponent
           arrivals={arrivals}

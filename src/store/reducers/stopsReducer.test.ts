@@ -54,12 +54,12 @@ describe("stopsReducer", () => {
           location: [
             {
               locid: 123
-            } as StopLocation,
+            },
             {
               locid: 456
-            } as StopLocation
+            }
           ]
-        } as StopData
+        }
       },
       type: LOAD_STOP_COMPLETE,
     };

@@ -31,7 +31,7 @@ describe("arrivalsReducer", () => {
       payload: {
         arrivalData: {
           arrival: {}
-        } as ArrivalData,
+        },
         locationId: 123
       },
       type: LOAD_ARRIVALS,
@@ -65,7 +65,7 @@ describe("arrivalsReducer", () => {
               locid: 456
             }
           ]
-        } as ArrivalData,
+        },
         locationId: 123
       },
       type: LOAD_ARRIVALS_COMPLETE,

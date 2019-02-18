@@ -1,6 +1,5 @@
 import { shallow } from "enzyme";
 import React from "react";
-import { Route, StopLocation } from "../../../api/trimet/types";
 import StopInfo from "./StopInfo";
 
 describe("StopInfo", () => {
@@ -20,12 +19,12 @@ describe("StopInfo", () => {
       route: [
         {
           route: 123
-        } as Route,
+        },
         {
           route: 456
-        } as Route
+        }
       ]
-    } as StopLocation;
+    };
 
     const subject = shallow(<StopInfo stopLocation={stopLocation} />);
 

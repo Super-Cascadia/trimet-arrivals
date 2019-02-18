@@ -32,7 +32,7 @@ describe("ArrivalsTable", () => {
 
   describe("when arrivals are defined", () => {
     it("shows an arrivals table", () => {
-      const arrivals = [{} as Arrival];
+      const arrivals = [{}];
       const subject = shallow(
         <ArrivalsTable
           arrivals={arrivals}
@@ -46,7 +46,7 @@ describe("ArrivalsTable", () => {
 
     describe("the arrivals table", () => {
       describe("header", () => {
-        const arrivals = [{} as Arrival];
+        const arrivals = [{}];
         const subject = shallow(
           <ArrivalsTable
             arrivals={arrivals}
@@ -78,11 +78,11 @@ describe("ArrivalsTable", () => {
           {
             estimated: 5000,
             route: 1,
-          } as Arrival,
+          },
           {
             estimated: 2000,
             route: 2,
-          } as Arrival
+          }
         ];
         const subject = shallow(
           <ArrivalsTable
@@ -110,7 +110,7 @@ describe("ArrivalsTable", () => {
     });
 
     describe("when loading", () => {
-      const arrivals = [{} as Arrival];
+      const arrivals = [{}];
       const subject = shallow(
         <ArrivalsTable arrivals={arrivals} loading={true} now={undefined} />
       );

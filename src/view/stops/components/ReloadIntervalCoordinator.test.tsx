@@ -21,7 +21,7 @@ describe("ReloadIntervalCoordinator", () => {
 
   describe("when a stop location is provided", () => {
     describe("default behavior", () => {
-      const stopLocation = {} as StopLocation;
+      const stopLocation = {};
 
       const subject = shallow(
         <ReloadIntervalCoordinator
@@ -44,7 +44,7 @@ describe("ReloadIntervalCoordinator", () => {
     });
 
     describe("when the reload button is clicked", () => {
-      const stopLocation = {} as StopLocation;
+      const stopLocation = {};
 
       const loadArrivalDataSpy = jasmine.createSpy("loadArrivalSpy");
 
