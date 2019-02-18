@@ -6,13 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      # specify the version you desire here
       - image: circleci/node:11.9
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
 
     working_directory: ~/repo
 
@@ -32,24 +26,34 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+  unit_test:
+    docker:
+      - image: circleci/node:11.9
+    steps:
+      - run: yarn test --coverage
+  codecov:
+    docker:
+      - image: circleci/node:11.9
+    steps:
+      - run: yarn codecov
+  prettier_lint:
+    docker:
+      - image: circleci/node:11.9
+    steps:
+      - run: yarn prettier
+  tslint:
+    docker:
+      - image: circleci/node:11.9
+    steps:
+      - run: yarn tslint
+  semantic_release:
+    docker:
+      - image: circleci/node:11.9
+    steps:
+      - run: yarn semantic-release
 
 workflows:
   version: 2
-  unit_test:
-    steps:
-      - run: yarn test --coverage
-    codecov:
-      steps:
-        - run: yarn codecov
-    prettier_lint:
-      steps:
-        - run: yarn prettier
-    tslint:
-      steps:
-        - run: yarn tslint
-    semantic_release:
-      steps:
-        - run: yarn semantic-release
   build_accept_deploy:
     jobs:
       - build
