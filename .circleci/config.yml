@@ -45,3 +45,8 @@ jobs:
 
       # semantic release
       - run: yarn semantic-release
+workflows:
+  version: 2
+  build_and_test:
+      jobs:
+        - build
