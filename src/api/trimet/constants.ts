@@ -4,10 +4,16 @@ export const API = `appID/${API_ID}`;
 
 export const RED_LINE_NUMBER = 90;
 export const BLUE_LINE_NUMBER = 100;
+export const GREEN_LINE_NUMBER = 200;
+export const YELLOW_LINE_NUMBER = 190;
+export const ORANGE_LINE_NUMBER = 290;
 
 export const ROUTE_DISPLAY: Routes = {
-  90: "Red",
-  100: "Blue"
+  [RED_LINE_NUMBER]: "Red",
+  [BLUE_LINE_NUMBER]: "Blue",
+  [GREEN_LINE_NUMBER]: "Green",
+  [YELLOW_LINE_NUMBER]: "Yellow",
+  [ORANGE_LINE_NUMBER]: "Orange"
 };
 
 interface Routes {

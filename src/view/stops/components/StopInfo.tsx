@@ -5,6 +5,10 @@ import RouteIndicator from "../../../component/route/RouteIndicator";
 
 function getStopRoutes(routes: Route[]) {
   return map(routes, (route: Route) => {
+    // if (route.route === 291) {
+    //   console.log(route)
+    // }
+
     return (
       <RouteIndicator
         key={route.route}
