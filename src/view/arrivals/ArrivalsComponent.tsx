@@ -45,7 +45,7 @@ export default class ArrivalsComponent extends React.Component<Props> {
             loading={loading}
             now={now}
             onRouteIndicatorClick={onRouteIndicatorClick}
-            route={stopLocation.route[0]}
+            stopLocation={stopLocation}
           />
         )}
       </div>
