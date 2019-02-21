@@ -5,8 +5,8 @@ import RouteIndicator from "../../../component/route/RouteIndicator";
 
 function getStopRoutes(routes: Route[], onClick) {
   return map(routes, (route: Route) => {
-    // if (route.route === 291) {
-    //   console.log(route)
+    // if (routeId.routeId === 291) {
+    //   console.log(routeId)
     // }
 
     return (

@@ -45,11 +45,13 @@ export default class RouteIndicator extends React.PureComponent<Props> {
   constructor(props) {
     super(props);
 
-    this.onClick = () => this.props.onClick(this.props.route);
+    if (this.props.onClick) {
+      this.onClick = () => this.props.onClick(this.props.route);
+    }
   }
 
   public render() {
-    const { routeId, className, onClick } = this.props;
+    const { routeId, className } = this.props;
     const classNames = getRouteIndicatorClassName(routeId, className);
 
     return (

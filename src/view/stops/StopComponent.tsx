@@ -60,6 +60,8 @@ export default class StopComponent extends React.Component<Props> {
           locationId={locationId}
           showArrivals={showArrivals}
           loadArrivalData={this.loadArrivalData}
+          onRouteIndicatorClick={onRouteIndicatorClick}
+          stopLocation={stopLocation}
         />
       </div>
     );

@@ -28,8 +28,8 @@ describe("StopInfo", () => {
 
     const subject = shallow(<StopInfo stopLocation={stopLocation} />);
 
-    it("shows a route indicator for each route at the stop", () => {
-      const routeIndicators = subject.find(".route-indicators");
+    it("shows a routeId indicator for each routeId at the stop", () => {
+      const routeIndicators = subject.find(".routeId-indicators");
 
       expect(routeIndicators.children().length).toBe(2);
       expect(routeIndicators.childAt(0).name()).toBe("RouteIndicator");

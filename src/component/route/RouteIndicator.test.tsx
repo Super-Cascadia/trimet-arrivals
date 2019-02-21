@@ -8,21 +8,21 @@ describe("RouteIndicator", () => {
       shallow(<RouteIndicator routeId={undefined} />);
     });
 
-    it("has a class indicating it is a route-indicator", () => {
+    it("has a class indicating it is a routeId-indicator", () => {
       const subject = shallow(<RouteIndicator routeId={undefined} />);
 
-      expect(subject.props().className).toBe("route-indicator");
+      expect(subject.props().className).toBe("routeId-indicator");
     });
 
-    it("the route indicator displays a tick-mark when no route is defined", () => {
+    it("the routeId indicator displays a tick-mark when no routeId is defined", () => {
       const subject = shallow(<RouteIndicator routeId={undefined} />);
 
       expect(subject.text()).toBe("-");
     });
   });
 
-  describe("when a valid route is provided", () => {
-    describe("and the route is a train", () => {
+  describe("when a valid routeId is provided", () => {
+    describe("and the routeId is a train", () => {
       describe("the red line number", () => {
         const subject = shallow(<RouteIndicator routeId={90} />);
 
@@ -35,7 +35,7 @@ describe("RouteIndicator", () => {
 
         it("should be red", () => {
           expect(subject.props().className).toBe(
-            "route-indicator route-indicator-red"
+            "routeId-indicator routeId-indicator-red"
           );
         });
       });
@@ -52,23 +52,23 @@ describe("RouteIndicator", () => {
 
         it("should be blue", () => {
           expect(subject.props().className).toBe(
-            "route-indicator route-indicator-blue"
+            "routeId-indicator routeId-indicator-blue"
           );
         });
       });
     });
 
-    xdescribe("and the route is not a train", () => {
+    xdescribe("and the routeId is not a train", () => {
       describe("line 123", () => {
         const subject = shallow(<RouteIndicator routeId={123} />);
 
-        it("displays the route number", () => {
+        it("displays the routeId number", () => {
           expect(subject.text()).toBe("123");
         });
 
         it("should be blue", () => {
           expect(subject.props().className).toBe(
-            "route-indicator route-indicator-blue"
+            "routeId-indicator routeId-indicator-blue"
           );
         });
       });

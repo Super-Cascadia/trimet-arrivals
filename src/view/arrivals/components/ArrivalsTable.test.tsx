@@ -103,8 +103,8 @@ describe("ArrivalsTable", () => {
         });
 
         it("ArrivalRows are sorted by earliest estimated arrival time", () => {
-          expect(tableBody.childAt(0).props().route).toBe(2);
-          expect(tableBody.childAt(1).props().route).toBe(1);
+          expect(tableBody.childAt(0).props().routeId).toBe(2);
+          expect(tableBody.childAt(1).props().routeId).toBe(1);
         });
       });
     });
