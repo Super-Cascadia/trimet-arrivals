@@ -37,7 +37,7 @@
     "react-fontawesome": "^1.6.1",
     "react-redux": "6.0.1",
     "react-scripts": "^2.1.5",
-    "react-test-renderer": "16.8.2",
+    "react-test-renderer": "16.8.3",
     "redux": "4.0.1",
     "redux-thunk": "2.3.0",
     "superagent": "^4.1.0",
