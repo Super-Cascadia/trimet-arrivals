@@ -3,7 +3,7 @@ import React from "react";
 import { Route, StopLocation } from "../../../api/trimet/types";
 import RouteIndicator from "../../../component/route/RouteIndicator";
 
-function getStopRoutes(routes: Route[]) {
+function getStopRoutes(routes: Route[], onClick) {
   return map(routes, (route: Route) => {
     // if (route.route === 291) {
     //   console.log(route)
@@ -13,6 +13,8 @@ function getStopRoutes(routes: Route[]) {
       <RouteIndicator
         key={route.route}
         routeId={route.route}
+        route={route}
+        onClick={onClick}
         className="header-router-indicator"
       />
     );
@@ -21,9 +23,10 @@ function getStopRoutes(routes: Route[]) {
 
 interface Props {
   stopLocation: StopLocation;
+  onClick: (route: Route) => void;
 }
 
-export default function StopInfo({ stopLocation }: Props) {
+export default function StopInfo({ stopLocation, onClick }: Props) {
   if (!stopLocation) {
     return null;
   }
@@ -31,7 +34,7 @@ export default function StopInfo({ stopLocation }: Props) {
   return (
     <h2>
       <span className="route-indicators">
-        {getStopRoutes(stopLocation.route)}
+        {getStopRoutes(stopLocation.route, onClick)}
       </span>
       <span className="stop-info">
         {stopLocation.locid} - {stopLocation.desc} - {stopLocation.dir}

@@ -1,6 +1,6 @@
 import { map } from "lodash";
 import React from "react";
-import { StopLocation } from "../../../api/trimet/types";
+import { Route, StopLocation } from "../../../api/trimet/types";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import StopContainer from "../StopContainer";
 import "../Stops.css";
@@ -8,22 +8,29 @@ import "../Stops.css";
 interface Props {
   stopLocations: StopLocationsDictionary;
   showArrivals: boolean;
+  onRouteIndicatorClick: (route: Route) => void;
 }
 
-class Stops extends React.Component<Props> {
+export default class Stops extends React.Component<Props> {
   public static getLocationInfo(
     stopLocations: StopLocationsDictionary,
-    showArrivals: boolean
+    showArrivals: boolean,
+    onRouteIndicatorClick
   ) {
     return map(stopLocations, (stopLocation: StopLocation, key: number) => {
       return (
-        <StopContainer locationId={key} key={key} showArrivals={showArrivals} />
+        <StopContainer
+          locationId={key}
+          key={key}
+          showArrivals={showArrivals}
+          onRouteIndicatorClick={onRouteIndicatorClick}
+        />
       );
     });
   }
 
   public render() {
-    const { stopLocations, showArrivals } = this.props;
+    const { stopLocations, showArrivals, onRouteIndicatorClick } = this.props;
 
     if (!stopLocations) {
       return null;
@@ -31,10 +38,12 @@ class Stops extends React.Component<Props> {
 
     return (
       <div className="stops-wrapper">
-        {Stops.getLocationInfo(stopLocations, showArrivals)}
+        {Stops.getLocationInfo(
+          stopLocations,
+          showArrivals,
+          onRouteIndicatorClick
+        )}
       </div>
     );
   }
 }
-
-export default Stops;

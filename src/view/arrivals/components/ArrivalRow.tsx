@@ -35,7 +35,11 @@ export default class ArrivalRow extends React.Component<Props> {
     return (
       <tr>
         <td className="route-indicator-column">
-          <RouteIndicator routeId={route} />
+          <RouteIndicator
+            routeId={route}
+            onClick={undefined}
+            route={undefined}
+          />
         </td>
         <td className="short-sign">{shortSign}</td>
         <td>

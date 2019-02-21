@@ -9,11 +9,14 @@ import {
   ROUTE_DISPLAY,
   YELLOW_LINE_NUMBER
 } from "../../api/trimet/constants";
+import { Route } from "../../api/trimet/types";
 import "./RouteIndicator.css";
 
 interface Props {
   routeId: number;
+  route: Route;
   className?: string;
+  onClick: (route: Route) => void;
 }
 
 function getRouteDisplay(route: number) {
@@ -37,14 +40,22 @@ function getRouteIndicatorClassName(route: number, className: string) {
 }
 
 export default class RouteIndicator extends React.PureComponent<Props> {
-  public static defaultProps = {
-    className: ""
-  };
+  private onClick: (e) => void;
+
+  constructor(props) {
+    super(props);
+
+    this.onClick = () => this.props.onClick(this.props.route);
+  }
 
   public render() {
-    const { routeId, className } = this.props;
+    const { routeId, className, onClick } = this.props;
     const classNames = getRouteIndicatorClassName(routeId, className);
 
-    return <span className={classNames}>{getRouteDisplay(routeId)}</span>;
+    return (
+      <span className={classNames} onClick={this.onClick}>
+        {getRouteDisplay(routeId)}
+      </span>
+    );
   }
 }
