@@ -48,7 +48,7 @@ export default class StopComponent extends React.Component<Props> {
     } = this.props;
 
     return (
-      <div className="stop">
+      <article className="stop">
         <StopsTableHeader
           stopLocation={stopLocation}
           loadArrivalData={this.loadArrivalData}
@@ -63,7 +63,7 @@ export default class StopComponent extends React.Component<Props> {
           onRouteIndicatorClick={onRouteIndicatorClick}
           stopLocation={stopLocation}
         />
-      </div>
+      </article>
     );
   }
 }

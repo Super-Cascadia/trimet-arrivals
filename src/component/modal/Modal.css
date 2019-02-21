@@ -11,7 +11,8 @@
 }
 
 .flex-stops {
-    order: 0
+    order: 0;
+    flex-grow: 2;
 }
 
 .flex-info {
@@ -22,4 +23,8 @@
 
 .modal-content {
     padding: 5px;
+}
+
+.modal-content header h3 {
+
 }

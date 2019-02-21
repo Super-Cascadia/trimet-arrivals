@@ -29,6 +29,7 @@ export default class StopsComponent extends React.Component<Props, State> {
     };
 
     this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
   public componentDidMount() {
@@ -52,23 +53,24 @@ export default class StopsComponent extends React.Component<Props, State> {
                 Nearby Stops | <i>{timeOfLastLoad}</i>
               </h1>
               <div className="flex-container">
-                <div className="flex-stops">
+                <section className="flex-stops">
                   <Stops
                     stopLocations={stopLocations}
                     showArrivals={true}
                     onRouteIndicatorClick={this.openModal}
                   />
-                </div>
-                <div className="flex-info">
-                  {this.state.modalOpen && (
+                </section>
+                {this.state.modalOpen && (
+                  <div className="flex-info">
                     <aside id="modal-root" className="modal-wrapper" />
-                  )}
-                  {this.state.modalOpen && (
                     <Modal>
-                      <ModalContent route={this.state.routeInfo} />
+                      <ModalContent
+                        route={this.state.routeInfo}
+                        closeModal={this.closeModal}
+                      />
                     </Modal>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </main>
           </div>
@@ -77,10 +79,17 @@ export default class StopsComponent extends React.Component<Props, State> {
     );
   }
 
+  public closeModal() {
+    this.setState({
+      modalOpen: false,
+      routeInfo: null
+    });
+  }
+
   public openModal(route: Route) {
-    this.setState(state => ({
+    this.setState({
       modalOpen: true,
       routeInfo: route
-    }));
+    });
   }
 }
