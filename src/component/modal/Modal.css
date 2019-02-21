@@ -1,6 +1,7 @@
 .modal-wrapper {
     background: white;
     min-width: 200px;
+    max-width: 200px;
 }
 
 .flex-container {
@@ -17,14 +18,32 @@
 
 .flex-info {
     order: 1;
-    flex-grow: 1;
     padding-left: 20px;
 }
 
-.modal-content {
+.modal-content section {
     padding: 5px;
 }
 
-.modal-content header h3 {
+.modal-content header h4 {
+    margin: 0px;
+    line-height: 38px;
+}
 
+.modal-content header {
+    background-color: #E0D0C1;
+    padding: 5px;
+    position: relative;
+    height: 40px;
+}
+
+.modal-content header .close-button-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.modal-content header .close-button-container button {
+    background: darkgrey;
+    font-size: 20px;
 }
