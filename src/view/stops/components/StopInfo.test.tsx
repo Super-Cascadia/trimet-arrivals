@@ -6,7 +6,7 @@ describe("StopInfo", () => {
   describe("by default", () => {
     it("renders without crashing", () => {
       expect(() =>
-        shallow(<StopInfo stopLocation={undefined} />)
+        shallow(<StopInfo stopLocation={undefined} onClick={undefined} />)
       ).not.toThrow();
     });
   });
@@ -15,18 +15,38 @@ describe("StopInfo", () => {
     const stopLocation = {
       desc: "hello",
       dir: "NW",
+      lat: 123,
+      lng: 456,
       locid: 123456,
       route: [
         {
-          route: 123
+          desc: "hello",
+          dir: [
+            {
+              desc: "hello",
+              dir: 123
+            }
+          ],
+          route: 123,
+          type: "B"
         },
         {
-          route: 456
+          desc: "hello",
+          dir: [
+            {
+              desc: "hello",
+              dir: 123
+            }
+          ],
+          route: 456,
+          type: "B"
         }
       ]
     };
 
-    const subject = shallow(<StopInfo stopLocation={stopLocation} />);
+    const subject = shallow(
+      <StopInfo stopLocation={stopLocation} onClick={undefined} />
+    );
 
     it("shows a routeId indicator for each routeId at the stop", () => {
       const routeIndicators = subject.find(".routeId-indicators");
