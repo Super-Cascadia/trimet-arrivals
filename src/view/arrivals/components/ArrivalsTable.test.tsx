@@ -1,6 +1,6 @@
 import { shallow } from "enzyme";
 import React from "react";
-import { Arrival } from "../../../api/trimet/types";
+import { Arrival, StopLocation } from "../../../api/trimet/types";
 import ArrivalsTable from "./ArrivalsTable";
 
 describe("ArrivalsTable", () => {
@@ -12,6 +12,8 @@ describe("ArrivalsTable", () => {
             arrivals={undefined}
             loading={undefined}
             now={undefined}
+            stopLocation={undefined}
+            onRouteIndicatorClick={undefined}
           />
         )
       ).not.toThrow();
@@ -23,6 +25,8 @@ describe("ArrivalsTable", () => {
           arrivals={undefined}
           loading={undefined}
           now={undefined}
+          stopLocation={undefined}
+          onRouteIndicatorClick={undefined}
         />
       );
 
@@ -33,11 +37,28 @@ describe("ArrivalsTable", () => {
   describe("when arrivals are defined", () => {
     it("shows an arrivals table", () => {
       const arrivals = [{}];
+      const stopLocation: StopLocation = {
+        route: [
+          {
+            desc: "hello",
+            dir: [
+              {
+                desc: "123",
+                dir: 123
+              }
+            ],
+            route: 123,
+            type: "foo"
+          }
+        ]
+      };
       const subject = shallow(
         <ArrivalsTable
           arrivals={arrivals}
           loading={undefined}
           now={undefined}
+          stopLocation={stopLocation}
+          onRouteIndicatorClick={undefined}
         />
       );
 
@@ -47,29 +68,48 @@ describe("ArrivalsTable", () => {
     describe("the arrivals table", () => {
       describe("header", () => {
         const arrivals = [{}];
+        const stopLocation: StopLocation = {
+          route: [
+            {
+              desc: "hello",
+              dir: [
+                {
+                  desc: "123",
+                  dir: 123
+                }
+              ],
+              route: 123,
+              type: "foo"
+            }
+          ]
+        };
+
         const subject = shallow(
           <ArrivalsTable
             arrivals={arrivals}
             loading={undefined}
             now={undefined}
+            stopLocation={stopLocation}
+            onRouteIndicatorClick={undefined}
           />
         );
 
         const arrivalsTable = subject.find(".arrivals-table");
         const header = arrivalsTable.find("thead");
+        const headerRow = header.find("tr");
 
         it("has a header", () => {
           expect(header).toExist();
         });
 
         it("the header contains headings for columns for data about Arrival Time", () => {
-          expect(header.children().length).toBe(6);
-          expect(header.childAt(0).text()).toBe("");
-          expect(header.childAt(1).text()).toBe("Name");
-          expect(header.childAt(2).text()).toBe("Arrival");
-          expect(header.childAt(3).text()).toBe("On Time");
-          expect(header.childAt(4).text()).toBe("Estimated / Scheduled");
-          expect(header.childAt(5).text()).toBe("Distance");
+          expect(headerRow.children().length).toBe(6);
+          expect(headerRow.childAt(0).text()).toBe("");
+          expect(headerRow.childAt(1).text()).toBe("Name");
+          expect(headerRow.childAt(2).text()).toBe("Arrival");
+          expect(headerRow.childAt(3).text()).toBe("On Time");
+          expect(headerRow.childAt(4).text()).toBe("Estimated / Scheduled");
+          expect(headerRow.childAt(5).text()).toBe("Distance");
         });
       });
 
@@ -84,11 +124,28 @@ describe("ArrivalsTable", () => {
             route: 2
           }
         ];
+        const stopLocation: StopLocation = {
+          route: [
+            {
+              desc: "hello",
+              dir: [
+                {
+                  desc: "123",
+                  dir: 123
+                }
+              ],
+              route: 123,
+              type: "foo"
+            }
+          ]
+        };
         const subject = shallow(
           <ArrivalsTable
             arrivals={arrivals}
             loading={undefined}
             now={undefined}
+            stopLocation={stopLocation}
+            onRouteIndicatorClick={undefined}
           />
         );
 
@@ -111,8 +168,29 @@ describe("ArrivalsTable", () => {
 
     describe("when loading", () => {
       const arrivals = [{}];
+      const stopLocation: StopLocation = {
+        route: [
+          {
+            desc: "hello",
+            dir: [
+              {
+                desc: "123",
+                dir: 123
+              }
+            ],
+            route: 123,
+            type: "foo"
+          }
+        ]
+      };
       const subject = shallow(
-        <ArrivalsTable arrivals={arrivals} loading={true} now={undefined} />
+        <ArrivalsTable
+          arrivals={arrivals}
+          loading={true}
+          now={undefined}
+          stopLocation={stopLocation}
+          onRouteIndicatorClick={undefined}
+        />
       );
 
       it("the arrivals table gets a class indicating this", () => {
