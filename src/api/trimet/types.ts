@@ -1,5 +1,5 @@
 export interface ResponseBody {
-  resultSet: StopData | ArrivalData;
+  resultSet: any;
 }
 
 export interface TrimetResponse {
