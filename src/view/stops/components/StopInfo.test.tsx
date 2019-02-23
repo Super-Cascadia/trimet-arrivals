@@ -48,8 +48,8 @@ describe("StopInfo", () => {
       <StopInfo stopLocation={stopLocation} onClick={undefined} />
     );
 
-    it("shows a routeId indicator for each routeId at the stop", () => {
-      const routeIndicators = subject.find(".routeId-indicators");
+    it("shows a route indicator for each route at the stop", () => {
+      const routeIndicators = subject.find(".route-indicators");
 
       expect(routeIndicators.children().length).toBe(2);
       expect(routeIndicators.childAt(0).name()).toBe("RouteIndicator");

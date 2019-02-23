@@ -11,7 +11,7 @@ describe("RouteIndicator", () => {
     it("has a class indicating it is a routeId-indicator", () => {
       const subject = shallow(<RouteIndicator routeId={undefined} />);
 
-      expect(subject.props().className).toBe("routeId-indicator");
+      expect(subject.props().className).toBe("route-indicator");
     });
 
     it("the routeId indicator displays a tick-mark when no routeId is defined", () => {
@@ -35,7 +35,7 @@ describe("RouteIndicator", () => {
 
         it("should be red", () => {
           expect(subject.props().className).toBe(
-            "routeId-indicator routeId-indicator-red"
+            "route-indicator route-indicator-red"
           );
         });
       });
@@ -52,7 +52,7 @@ describe("RouteIndicator", () => {
 
         it("should be blue", () => {
           expect(subject.props().className).toBe(
-            "routeId-indicator routeId-indicator-blue"
+            "route-indicator route-indicator-blue"
           );
         });
       });
