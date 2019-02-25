@@ -1,9 +1,8 @@
 import { get } from "superagent";
-import { TrimetResponse } from "./types";
 
-export function getTrimetData(requestURI: string) {
+export function getTrimetData<T>(requestURI: string): Promise<T> {
   return new Promise(resolve => {
-    get(requestURI).end((err: {}, res: TrimetResponse) => {
+    get(requestURI).end((err: {}, res) => {
       resolve(res.body.resultSet);
     });
   });

@@ -1,5 +1,3 @@
-export type TrimetResponseData = StopData | ArrivalData;
-
 export interface ResponseBody {
   resultSet: StopData | ArrivalData;
 }

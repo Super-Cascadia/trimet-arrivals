@@ -9,11 +9,6 @@ import {
   LOAD_STOPS
 } from "../constants";
 
-export interface LoadAction {
-  type: "LOAD_STOPS";
-}
-
-export type StopActions = LoadAction;
 export type LoadStopData = (radiusInFeet: number) => void;
 export type LoadArrivalData = (locationId: number) => void;
 
@@ -50,18 +45,16 @@ export const loadStopData = (radiusInFeet: number) => {
       type: LOAD_STOPS
     });
 
-    getCurrentPosition()
-      // @ts-ignore
-      .then((location: Location) => {
-        getNearbyStops(location, radiusInFeet).then((stopData: StopData) => {
-          dispatch({
-            payload: {
-              stopData
-            },
-            type: LOAD_STOP_COMPLETE
-          });
-          return stopData;
+    getCurrentPosition().then((location: Location) => {
+      getNearbyStops(location, radiusInFeet).then((stopData: StopData) => {
+        dispatch({
+          payload: {
+            stopData
+          },
+          type: LOAD_STOP_COMPLETE
         });
+        return stopData;
       });
+    });
   };
 };
