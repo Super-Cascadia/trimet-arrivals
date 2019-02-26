@@ -1,11 +1,3 @@
-export interface ResponseBody {
-  resultSet: any;
-}
-
-export interface TrimetResponse {
-  body: ResponseBody;
-}
-
 export interface Location {
   coords: Coords;
 }

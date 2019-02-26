@@ -1,6 +1,6 @@
 import React from "react";
 import FontAwesome from "react-fontawesome";
-import { Route } from "../../api/trimet/types";
+import { Direction, Route } from "../../api/trimet/types";
 
 interface Props {
   route: Route;
@@ -20,6 +20,18 @@ function getHeader(closeModal: () => void) {
   );
 }
 
+function getRouteDirections(routeDirections: Direction[]) {
+  return routeDirections.map((route: Direction) => {
+    return (
+      <ul key={route.dir}>
+        <li>
+          {route.desc} | {route.dir}
+        </li>
+      </ul>
+    );
+  });
+}
+
 function getSection(route: Route) {
   if (!route) {
     return null;
@@ -30,7 +42,7 @@ function getSection(route: Route) {
       <h5>{route.desc}</h5>
       <p>Type: {route.type}</p>
       <h4>Directions:</h4>
-      <p>{route.dir[0].desc}</p>
+      {getRouteDirections(route.dir)}
     </section>
   );
 }
