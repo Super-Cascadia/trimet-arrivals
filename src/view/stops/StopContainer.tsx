@@ -7,6 +7,7 @@ import StopComponent from "./StopComponent";
 interface Props {
   locationId: number;
   showArrivals: boolean;
+  onRouteIndicatorClick: () => void;
 }
 
 const mapStateToProps = (state: RootState, props: Props) => {

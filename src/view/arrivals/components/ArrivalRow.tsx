@@ -1,5 +1,6 @@
 import moment, { Moment } from "moment";
 import React from "react";
+import { Route } from "../../../api/trimet/types";
 import OnTimeIndicator from "../../../component/arrivalIndicator/OnTimeIndicator";
 import TimeToArrivalIndicator from "../../../component/arrivalIndicator/TimeToArrivalIndicator";
 import RouteIndicator from "../../../component/route/RouteIndicator";
@@ -10,9 +11,11 @@ interface Props {
   scheduled: number;
   estimated: number;
   feet: number;
-  route: number;
+  routeId: number;
   shortSign: string;
   now: Moment;
+  onRouteIndicatorClick: (route: Route) => void;
+  route: Route;
 }
 
 export default class ArrivalRow extends React.Component<Props> {
@@ -27,7 +30,16 @@ export default class ArrivalRow extends React.Component<Props> {
   }
 
   public render() {
-    const { scheduled, estimated, feet, route, shortSign, now } = this.props;
+    const {
+      scheduled,
+      estimated,
+      feet,
+      routeId,
+      shortSign,
+      now,
+      onRouteIndicatorClick,
+      route
+    } = this.props;
     const scheduledMoment = moment(scheduled);
     const estimatedMoment = moment(estimated);
     const distance = getDistanceUntilArrival(feet);
@@ -35,7 +47,11 @@ export default class ArrivalRow extends React.Component<Props> {
     return (
       <tr>
         <td className="route-indicator-column">
-          <RouteIndicator routeId={route} />
+          <RouteIndicator
+            routeId={routeId}
+            onClick={onRouteIndicatorClick}
+            route={route}
+          />
         </td>
         <td className="short-sign">{shortSign}</td>
         <td>

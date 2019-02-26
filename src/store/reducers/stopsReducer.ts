@@ -23,7 +23,7 @@ interface Action {
 }
 
 export interface StopLocationsDictionary {
-  [index: number]: StopLocation;
+  [locationId: number]: StopLocation;
 }
 
 function getStopLocations(

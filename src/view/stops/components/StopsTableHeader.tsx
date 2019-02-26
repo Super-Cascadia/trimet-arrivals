@@ -1,5 +1,5 @@
 import React from "react";
-import { StopLocation } from "../../../api/trimet/types";
+import { Route, StopLocation } from "../../../api/trimet/types";
 import { LoadArrivalData } from "../../../store/action/stopActions";
 import "../Stops.css";
 import ReloadIntervalCoordinator from "./ReloadIntervalCoordinator";
@@ -10,11 +10,18 @@ interface Props {
   loadArrivalData: LoadArrivalData;
   loading: boolean;
   showArrivals: boolean;
+  onRouteIndicatorClick: (route: Route) => void;
 }
 
 export default class StopsTableHeader extends React.Component<Props> {
   public render() {
-    const { stopLocation, loading, showArrivals, loadArrivalData } = this.props;
+    const {
+      stopLocation,
+      loading,
+      showArrivals,
+      loadArrivalData,
+      onRouteIndicatorClick
+    } = this.props;
 
     if (!stopLocation) {
       return null;
@@ -22,7 +29,7 @@ export default class StopsTableHeader extends React.Component<Props> {
 
     return (
       <div className="stops-header">
-        <StopInfo stopLocation={stopLocation} />
+        <StopInfo stopLocation={stopLocation} onClick={onRouteIndicatorClick} />
         <ReloadIntervalCoordinator
           stopLocation={stopLocation}
           loadArrivalData={loadArrivalData}

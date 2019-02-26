@@ -1,6 +1,6 @@
 import { Moment } from "moment";
 import React from "react";
-import { Arrival } from "../../api/trimet/types";
+import { Arrival, Route, StopLocation } from "../../api/trimet/types";
 import { LoadArrivalData } from "../../store/action/stopActions";
 import "./Arrivals.css";
 import ArrivalsTable from "./components/ArrivalsTable";
@@ -12,6 +12,8 @@ interface Props {
   loadArrivalData: LoadArrivalData;
   showArrivals: boolean;
   now: Moment;
+  stopLocation: StopLocation;
+  onRouteIndicatorClick: (route: Route) => void;
 }
 
 export default class ArrivalsComponent extends React.Component<Props> {
@@ -23,7 +25,14 @@ export default class ArrivalsComponent extends React.Component<Props> {
     }
   }
   public render() {
-    const { arrivals, loading = true, showArrivals = true, now } = this.props;
+    const {
+      arrivals,
+      loading = true,
+      showArrivals = true,
+      now,
+      onRouteIndicatorClick,
+      stopLocation
+    } = this.props;
 
     return (
       <div className="arrivals-wrapper">
@@ -31,7 +40,13 @@ export default class ArrivalsComponent extends React.Component<Props> {
           <p className="no-arrivals">No arrivals available.</p>
         )}
         {showArrivals && arrivals && (
-          <ArrivalsTable arrivals={arrivals} loading={loading} now={now} />
+          <ArrivalsTable
+            arrivals={arrivals}
+            loading={loading}
+            now={now}
+            onRouteIndicatorClick={onRouteIndicatorClick}
+            stopLocation={stopLocation}
+          />
         )}
       </div>
     );

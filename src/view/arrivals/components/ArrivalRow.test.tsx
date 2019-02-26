@@ -9,7 +9,7 @@ describe("ArrivalRow", () => {
       expect(() =>
         shallow(
           <ArrivalRow
-            route={undefined}
+            routeId={undefined}
             shortSign={undefined}
             scheduled={undefined}
             estimated={undefined}
@@ -20,10 +20,10 @@ describe("ArrivalRow", () => {
       ).not.toThrow();
     });
 
-    it("Has a route indicator", () => {
+    it("Has a routeId indicator", () => {
       const subject = shallow(
         <ArrivalRow
-          route={undefined}
+          routeId={undefined}
           shortSign={undefined}
           scheduled={undefined}
           estimated={undefined}
@@ -40,7 +40,7 @@ describe("ArrivalRow", () => {
     it("has a time to arrival indicator", () => {
       const subject = shallow(
         <ArrivalRow
-          route={undefined}
+          routeId={undefined}
           shortSign={undefined}
           scheduled={undefined}
           estimated={undefined}
@@ -57,7 +57,7 @@ describe("ArrivalRow", () => {
     it("has an on time indicator", () => {
       const subject = shallow(
         <ArrivalRow
-          route={undefined}
+          routeId={undefined}
           shortSign={undefined}
           scheduled={undefined}
           estimated={undefined}
@@ -76,7 +76,7 @@ describe("ArrivalRow", () => {
     it("displays the short sign", () => {
       const subject = shallow(
         <ArrivalRow
-          route={undefined}
+          routeId={undefined}
           shortSign={"123"}
           scheduled={undefined}
           estimated={undefined}
@@ -102,7 +102,7 @@ describe("ArrivalRow", () => {
 
       const subject = shallow(
         <ArrivalRow
-          route={undefined}
+          routeId={undefined}
           shortSign={undefined}
           scheduled={scheduled}
           estimated={estimated}
@@ -121,7 +121,7 @@ describe("ArrivalRow", () => {
     it("shouws how many miles away a vehicle is from the location", () => {
       const subject = shallow(
         <ArrivalRow
-          route={undefined}
+          routeId={undefined}
           shortSign={undefined}
           scheduled={undefined}
           estimated={undefined}

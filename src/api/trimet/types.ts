@@ -1,11 +1,3 @@
-export interface ResponseBody {
-  resultSet: StopData | ArrivalData;
-}
-
-export interface TrimetResponse {
-  body: ResponseBody;
-}
-
 export interface Location {
   coords: Coords;
 }

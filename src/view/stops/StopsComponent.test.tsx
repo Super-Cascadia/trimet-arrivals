@@ -33,7 +33,7 @@ describe("StopsComponent", () => {
         );
 
         expect(loadStopData).toHaveBeenCalled();
-        expect(loadStopData).toHaveBeenCalledWith(750);
+        expect(loadStopData).toHaveBeenCalledWith(500);
       });
     });
   });

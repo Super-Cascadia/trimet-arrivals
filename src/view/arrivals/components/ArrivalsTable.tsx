@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { map, sortBy } from "lodash";
 import { Moment } from "moment";
 import React from "react";
-import { Arrival } from "../../../api/trimet/types";
+import { Arrival, Route, StopLocation } from "../../../api/trimet/types";
 import ArrivalRow from "./ArrivalRow";
 import "./Arrivals.css";
 
@@ -10,20 +10,34 @@ export interface Props {
   arrivals: Arrival[];
   loading: boolean;
   now: Moment;
+  onRouteIndicatorClick: (route: Route) => void;
+  stopLocation: StopLocation;
 }
 
 function sortArrivalsByEstimatedTime(arrivals: Arrival[]): Arrival[] {
-  return sortBy(arrivals, (arrival: Arrival) => {
-    return arrival.estimated;
-  });
+  return sortBy(arrivals, (arrival: Arrival) => arrival.estimated);
 }
 
-class ArrivalsTable extends React.Component<Props> {
-  public static getRows(arrivals: Arrival[], now) {
-    const sortedArrivals = sortArrivalsByEstimatedTime(arrivals);
+function getArrivalRoute(routes: Route[], routeId: number) {
+  return routes.find((route: Route) => route.route === routeId);
+}
 
-    return map(sortedArrivals, (arrival: Arrival) => {
-      const { scheduled, estimated, feet, route, shortSign, id } = arrival;
+export default class ArrivalsTable extends React.Component<Props> {
+  public static getRows(
+    arrivals: Arrival[],
+    now,
+    onClick,
+    stopLocation: StopLocation
+  ) {
+    return map(sortArrivalsByEstimatedTime(arrivals), (arrival: Arrival) => {
+      const {
+        scheduled,
+        estimated,
+        feet,
+        route: routeId,
+        shortSign,
+        id
+      } = arrival;
 
       return (
         <ArrivalRow
@@ -31,16 +45,24 @@ class ArrivalsTable extends React.Component<Props> {
           estimated={estimated}
           feet={feet}
           scheduled={scheduled}
-          route={route}
+          routeId={routeId}
           shortSign={shortSign}
           now={now}
+          route={getArrivalRoute(stopLocation.route, routeId)}
+          onRouteIndicatorClick={onClick}
         />
       );
     });
   }
 
   public render() {
-    const { arrivals, loading, now } = this.props;
+    const {
+      arrivals,
+      loading,
+      now,
+      onRouteIndicatorClick: onClick,
+      stopLocation
+    } = this.props;
 
     if (!arrivals) {
       return null;
@@ -53,17 +75,19 @@ class ArrivalsTable extends React.Component<Props> {
     return (
       <table className={classes}>
         <thead>
-          <th />
-          <th>Name</th>
-          <th>Arrival</th>
-          <th>On Time</th>
-          <th>Estimated / Scheduled</th>
-          <th>Distance</th>
+          <tr>
+            <th />
+            <th>Name</th>
+            <th>Arrival</th>
+            <th>On Time</th>
+            <th>Estimated / Scheduled</th>
+            <th>Distance</th>
+          </tr>
         </thead>
-        <tbody>{ArrivalsTable.getRows(arrivals, now)}</tbody>
+        <tbody>
+          {ArrivalsTable.getRows(arrivals, now, onClick, stopLocation)}
+        </tbody>
       </table>
     );
   }
 }
-
-export default ArrivalsTable;

@@ -1,30 +1,35 @@
 import { shallow } from "enzyme";
 import React from "react";
+import { Route } from "../../api/trimet/types";
 import RouteIndicator from "./RouteIndicator";
 
 describe("RouteIndicator", () => {
   describe("by default", () => {
     it("renders without crashing", () => {
-      shallow(<RouteIndicator routeId={undefined} />);
+      expect(() =>
+        shallow(<RouteIndicator routeId={undefined} />)
+      ).not.toThrow();
     });
 
-    it("has a class indicating it is a route-indicator", () => {
+    it("has a class indicating it is a routeId-indicator", () => {
       const subject = shallow(<RouteIndicator routeId={undefined} />);
 
       expect(subject.props().className).toBe("route-indicator");
     });
 
-    it("the route indicator displays a tick-mark when no route is defined", () => {
+    it("the routeId indicator displays a tick-mark when no routeId is defined", () => {
       const subject = shallow(<RouteIndicator routeId={undefined} />);
 
       expect(subject.text()).toBe("-");
     });
   });
 
-  describe("when a valid route is provided", () => {
-    describe("and the route is a train", () => {
+  describe("when a valid routeId is provided", () => {
+    describe("and the routeId is a train", () => {
       describe("the red line number", () => {
-        const subject = shallow(<RouteIndicator routeId={90} />);
+        const subject = shallow(
+          <RouteIndicator routeId={90} route={undefined} onClick={undefined} />
+        );
 
         it("displays a train icon", () => {
           const icon = subject.find("FontAwesome");
@@ -57,19 +62,24 @@ describe("RouteIndicator", () => {
         });
       });
     });
+  });
 
-    xdescribe("and the route is not a train", () => {
-      describe("line 123", () => {
-        const subject = shallow(<RouteIndicator routeId={123} />);
+  describe("when the route indicator", () => {
+    describe("is clicked", () => {
+      const onClick = jasmine.createSpy("onClick");
+      const route: Route = {
+        desc: ""
+      };
+      const subject = shallow(
+        <RouteIndicator routeId={123} route={route} onClick={onClick} />
+      );
 
-        it("displays the route number", () => {
-          expect(subject.text()).toBe("123");
-        });
+      subject.simulate("click");
 
-        it("should be blue", () => {
-          expect(subject.props().className).toBe(
-            "route-indicator route-indicator-blue"
-          );
+      it("the onClick delegate is called", () => {
+        expect(onClick).toHaveBeenCalled();
+        expect(onClick).toHaveBeenCalledWith({
+          desc: ""
         });
       });
     });

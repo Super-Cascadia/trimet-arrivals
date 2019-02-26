@@ -9,6 +9,7 @@
     line-height: 25px;
     border-radius: 5px;
     display: inline-block;
+    cursor: pointer;
 }
 
 .route-indicator-green {
