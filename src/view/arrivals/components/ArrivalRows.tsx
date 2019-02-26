@@ -28,11 +28,7 @@ interface Props {
   showAllArrivals: boolean;
 }
 
-interface State {
-  showAllArrivals: boolean;
-}
-
-export default class ArrivalRows extends React.Component<Props, State> {
+export default class ArrivalRows extends React.Component<Props> {
   public static getRows(
     arrivals: Arrival[],
     now,
@@ -71,15 +67,16 @@ export default class ArrivalRows extends React.Component<Props, State> {
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      showAllArrivals: props.showAllArrivals || false
-    };
   }
 
   public render() {
-    const { arrivals, now, onClick, stopLocation } = this.props;
-    const { showAllArrivals } = this.state;
+    const {
+      arrivals,
+      now,
+      onClick,
+      stopLocation,
+      showAllArrivals
+    } = this.props;
 
     return (
       <tbody>

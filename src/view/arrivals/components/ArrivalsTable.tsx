@@ -11,6 +11,7 @@ interface Props {
   now: Moment;
   onRouteIndicatorClick: (route: Route) => void;
   stopLocation: StopLocation;
+  showMore: boolean;
 }
 
 export default class ArrivalsTable extends React.Component<Props> {
@@ -20,7 +21,8 @@ export default class ArrivalsTable extends React.Component<Props> {
       loading,
       now,
       onRouteIndicatorClick: onClick,
-      stopLocation
+      stopLocation,
+      showMore
     } = this.props;
 
     if (!arrivals) {
@@ -48,7 +50,7 @@ export default class ArrivalsTable extends React.Component<Props> {
           onClick={onClick}
           stopLocation={stopLocation}
           now={now}
-          showAllArrivals={false}
+          showAllArrivals={showMore}
         />
       </table>
     );

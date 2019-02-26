@@ -3,7 +3,7 @@ import React from "react";
 import { Arrival, Route, StopLocation } from "../../api/trimet/types";
 import { LoadArrivalData } from "../../store/action/stopActions";
 import "./Arrivals.css";
-import ArrivalsTable from "./components/ArrivalsTable";
+import ArrivalsTableLoadMore from "./components/ArrivalsTableLoadMore";
 
 interface Props {
   loading: boolean;
@@ -40,7 +40,7 @@ export default class ArrivalsComponent extends React.Component<Props> {
           <p className="no-arrivals">No arrivals available.</p>
         )}
         {showArrivals && arrivals && (
-          <ArrivalsTable
+          <ArrivalsTableLoadMore
             arrivals={arrivals}
             loading={loading}
             now={now}
