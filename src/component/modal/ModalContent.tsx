@@ -21,6 +21,10 @@ function getHeader(closeModal: () => void) {
 }
 
 function getSection(route: Route) {
+  if (!route) {
+    return null;
+  }
+
   return (
     <section>
       <h5>{route.desc}</h5>
