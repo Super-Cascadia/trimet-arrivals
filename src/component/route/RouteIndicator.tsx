@@ -40,7 +40,7 @@ function getRouteIndicatorClassName(route: number, className: string) {
 }
 
 export default class RouteIndicator extends React.PureComponent<Props> {
-  private onClick: (e) => void;
+  private onClick: () => void;
 
   constructor(props) {
     super(props);

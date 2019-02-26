@@ -1,5 +1,6 @@
 import { shallow } from "enzyme";
 import React from "react";
+import { Route } from "../../api/trimet/types";
 import RouteIndicator from "./RouteIndicator";
 
 describe("RouteIndicator", () => {
@@ -59,19 +60,24 @@ describe("RouteIndicator", () => {
         });
       });
     });
+  });
 
-    xdescribe("and the routeId is not a train", () => {
-      describe("line 123", () => {
-        const subject = shallow(<RouteIndicator routeId={123} />);
+  describe("when the route indicator", () => {
+    describe("is clicked", () => {
+      const onClick = jasmine.createSpy("onClick");
+      const route: Route = {
+        desc: ""
+      };
+      const subject = shallow(
+        <RouteIndicator routeId={123} route={route} onClick={onClick} />
+      );
 
-        it("displays the routeId number", () => {
-          expect(subject.text()).toBe("123");
-        });
+      subject.simulate("click");
 
-        it("should be blue", () => {
-          expect(subject.props().className).toBe(
-            "routeId-indicator routeId-indicator-blue"
-          );
+      it("the onClick delegate is called", () => {
+        expect(onClick).toHaveBeenCalled();
+        expect(onClick).toHaveBeenCalledWith({
+          desc: ""
         });
       });
     });
