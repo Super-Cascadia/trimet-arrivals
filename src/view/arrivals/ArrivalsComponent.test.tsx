@@ -81,7 +81,7 @@ describe("ArrivalsComponent", () => {
       });
 
       it("shows a table", () => {
-        expect(subject.find("ArrivalsTable")).toExist();
+        expect(subject.find("ArrivalsTableLoadMore")).toExist();
       });
     });
   });
