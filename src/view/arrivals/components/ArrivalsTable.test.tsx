@@ -1,4 +1,4 @@
-import { shallow } from "enzyme";
+import { mount, shallow } from "enzyme";
 import React from "react";
 import { Arrival, StopLocation } from "../../../api/trimet/types";
 import ArrivalsTable from "./ArrivalsTable";
@@ -139,7 +139,7 @@ describe("ArrivalsTable", () => {
             }
           ]
         };
-        const subject = shallow(
+        const subject = mount(
           <ArrivalsTable
             arrivals={arrivals}
             loading={undefined}
