@@ -29,6 +29,7 @@ export default class ArrivalsTableLoadMore extends React.Component<
 
     this.toggleShowMore = this.toggleShowMore.bind(this);
   }
+
   public render() {
     const {
       arrivals,
@@ -38,6 +39,7 @@ export default class ArrivalsTableLoadMore extends React.Component<
       stopLocation
     } = this.props;
     const { showMore } = this.state;
+    const arrivalsCount = arrivals && arrivals.length;
 
     return (
       <div className="arrivals-wrapper">
@@ -49,8 +51,7 @@ export default class ArrivalsTableLoadMore extends React.Component<
           stopLocation={stopLocation}
           showMore={showMore}
         />
-        {arrivals.length > 5 &&
-          this.showLoadMoreControl(showMore, arrivals.length)}
+        {arrivalsCount > 5 && this.showLoadMoreControl(showMore, arrivalsCount)}
       </div>
     );
   }
