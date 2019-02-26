@@ -48,6 +48,7 @@ export default class ArrivalsTable extends React.Component<Props> {
           onClick={onClick}
           stopLocation={stopLocation}
           now={now}
+          showAllArrivals={false}
         />
       </table>
     );

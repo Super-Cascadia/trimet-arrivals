@@ -5,13 +5,6 @@ import { Arrival, Route, StopLocation } from "../../../api/trimet/types";
 import ArrivalRow from "./ArrivalRow";
 import "./Arrivals.css";
 
-interface Props {
-  arrivals: Arrival[];
-  now: Moment;
-  onClick: (route: Route) => void;
-  stopLocation: StopLocation;
-}
-
 function sortArrivalsByEstimatedTime(arrivals: Arrival[]): Arrival[] {
   return sortBy(arrivals, (arrival: Arrival) => arrival.estimated);
 }
@@ -20,14 +13,37 @@ function getArrivalRoute(routes: Route[], routeId: number) {
   return routes.find((route: Route) => route.route === routeId);
 }
 
-export default class ArrivalRows extends React.Component<Props> {
+function getVisibleArrivals(
+  arrivals: Arrival[],
+  showAllArrivals: boolean
+): Arrival[] {
+  return showAllArrivals ? arrivals : arrivals.slice(0, 5);
+}
+
+interface Props {
+  arrivals: Arrival[];
+  now: Moment;
+  onClick: (route: Route) => void;
+  stopLocation: StopLocation;
+  showAllArrivals: boolean;
+}
+
+interface State {
+  showAllArrivals: boolean;
+}
+
+export default class ArrivalRows extends React.Component<Props, State> {
   public static getRows(
     arrivals: Arrival[],
     now,
     onClick,
-    stopLocation: StopLocation
+    stopLocation: StopLocation,
+    showAllArrivals: boolean
   ) {
-    return sortArrivalsByEstimatedTime(arrivals).map((arrival: Arrival) => {
+    const sortedArrivals = sortArrivalsByEstimatedTime(arrivals);
+    const visibleArrivals = getVisibleArrivals(sortedArrivals, showAllArrivals);
+
+    return visibleArrivals.map((arrival: Arrival) => {
       const {
         scheduled,
         estimated,
@@ -53,11 +69,28 @@ export default class ArrivalRows extends React.Component<Props> {
     });
   }
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showAllArrivals: props.showAllArrivals || false
+    };
+  }
+
   public render() {
     const { arrivals, now, onClick, stopLocation } = this.props;
+    const { showAllArrivals } = this.state;
 
     return (
-      <tbody>{ArrivalRows.getRows(arrivals, now, onClick, stopLocation)}</tbody>
+      <tbody>
+        {ArrivalRows.getRows(
+          arrivals,
+          now,
+          onClick,
+          stopLocation,
+          showAllArrivals
+        )}
+      </tbody>
     );
   }
 }
