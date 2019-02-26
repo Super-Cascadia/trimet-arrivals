@@ -27,7 +27,9 @@ describe("RouteIndicator", () => {
   describe("when a valid routeId is provided", () => {
     describe("and the routeId is a train", () => {
       describe("the red line number", () => {
-        const subject = shallow(<RouteIndicator routeId={90} />);
+        const subject = shallow(
+          <RouteIndicator routeId={90} route={undefined} onClick={undefined} />
+        );
 
         it("displays a train icon", () => {
           const icon = subject.find("FontAwesome");
