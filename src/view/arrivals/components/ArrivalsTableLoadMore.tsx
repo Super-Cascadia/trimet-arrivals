@@ -27,8 +27,7 @@ export default class ArrivalsTableLoadMore extends React.Component<
       showMore: false
     };
 
-    this.hide = this.hide.bind(this);
-    this.showMore = this.showMore.bind(this);
+    this.toggleShowMore = this.toggleShowMore.bind(this);
   }
   public render() {
     const {
@@ -50,29 +49,34 @@ export default class ArrivalsTableLoadMore extends React.Component<
           stopLocation={stopLocation}
           showMore={showMore}
         />
-        {arrivals.length > 5 && this.showLoadMoreControl(showMore)}
+        {arrivals.length > 5 &&
+          this.showLoadMoreControl(showMore, arrivals.length)}
       </div>
     );
   }
 
-  private showLoadMoreControl(showMore: boolean) {
+  private showLoadMoreControl(showMore: boolean, arrivalCount: number) {
+    const additionalArrivals = arrivalCount - 5;
+
     return (
       <div className="arrivals-load-more-control">
-        {showMore && <button onClick={this.hide}>Hide</button>}
-        {!showMore && <button onClick={this.showMore}>Show More</button>}
+        <div className="load-more-flex-container">
+          {showMore && (
+            <button onClick={this.toggleShowMore}>Only show 5 arrivals</button>
+          )}
+          {!showMore && (
+            <button onClick={this.toggleShowMore}>
+              Show {additionalArrivals} more arrivals
+            </button>
+          )}
+        </div>
       </div>
     );
   }
 
-  private showMore() {
+  private toggleShowMore() {
     this.setState({
-      showMore: true
-    });
-  }
-
-  private hide() {
-    this.setState({
-      showMore: false
+      showMore: !this.state.showMore
     });
   }
 }
