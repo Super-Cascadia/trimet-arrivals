@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./Modal.css";
 
-export default class Modal extends React.Component {
+export default class Modal extends React.Component<{}> {
   private modalRoot: HTMLElement;
   private el: HTMLDivElement;
 

@@ -5,7 +5,9 @@ import RouteIndicator from "./RouteIndicator";
 describe("RouteIndicator", () => {
   describe("by default", () => {
     it("renders without crashing", () => {
-      shallow(<RouteIndicator routeId={undefined} />);
+      expect(() =>
+        shallow(<RouteIndicator routeId={undefined} />)
+      ).not.toThrow();
     });
 
     it("has a class indicating it is a routeId-indicator", () => {
