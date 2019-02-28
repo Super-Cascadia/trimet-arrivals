@@ -15,7 +15,7 @@
     "@types/lodash": "4.14.121",
     "@types/moment": "^2.13.0",
     "@types/node": "11.9.5",
-    "@types/prop-types": "15.5.9",
+    "@types/prop-types": "15.7.0",
     "@types/react": "16.8.5",
     "@types/react-dom": "16.8.2",
     "@types/react-fontawesome": "1.6.4",
