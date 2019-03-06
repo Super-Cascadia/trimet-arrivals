@@ -33,7 +33,7 @@
     "lodash": "4.17.11",
     "moment": "^2.24.0",
     "react": "16.8.4",
-    "react-dom": "16.8.3",
+    "react-dom": "16.8.4",
     "react-fontawesome": "^1.6.1",
     "react-redux": "6.0.1",
     "react-scripts": "^2.1.5",
