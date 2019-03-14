@@ -1297,10 +1297,10 @@
   dependencies:
     redux "*"
 
-"@types/superagent@4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@types/superagent/-/superagent-4.1.0.tgz#171086ac7ccf0a83119d5190184f87997904d84a"
-  integrity sha512-dTlZ/o76RA4TggEyQsNrv8JmF2tDBaVslYHeoxrhOqOuALbf+MKGOWUNqQQgpOXbi8gWCaiBx+hzisgP5fAAPQ==
+"@types/superagent@4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@types/superagent/-/superagent-4.1.1.tgz#61f0b43d7db93a3c286c124512b7c228183c32fa"
+  integrity sha512-NetXrraTWPcdGG6IwYJhJ5esUGx8AYNiozbc1ENWEsF6BsD4JmNODJczI6Rm1xFPVp6HZESds9YCfqz4zIsM6A==
   dependencies:
     "@types/cookiejar" "*"
     "@types/node" "*"
