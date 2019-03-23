@@ -1,8 +1,8 @@
 import React from "react";
-import { Route, StopLocation } from "../../api/trimet/types";
-import ArrivalsContainer from "../arrivals/ArrivalsContainer";
-import StopsTableHeader from "./components/StopsTableHeader";
-import "./Stops.css";
+import { Route, StopLocation } from "../../../api/trimet/types";
+import ArrivalsContainer from "../../arrivals/containers/ArrivalsContainer";
+import "../Stops.css";
+import StopsTableHeader from "./StopsTableHeader";
 
 interface Props {
   stopLocation: StopLocation;

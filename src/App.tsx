@@ -2,7 +2,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import "./App.css";
 import appStore from "./store/store";
-import StopsContainer from "./view/stops/StopsContainer";
+import StopsContainer from "./view/stops/containers/StopsContainer";
 
 const store = appStore();
 

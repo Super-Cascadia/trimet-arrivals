@@ -1,9 +1,9 @@
 import { Moment } from "moment";
 import React from "react";
-import { Arrival, Route, StopLocation } from "../../api/trimet/types";
-import { LoadArrivalData } from "../../store/action/stopActions";
-import "./Arrivals.css";
-import ArrivalsTableLoadMore from "./components/ArrivalsTableLoadMore";
+import { Arrival, Route, StopLocation } from "../../../api/trimet/types";
+import { LoadArrivalData } from "../../../store/action/stopActions";
+import "../Arrivals.css";
+import ArrivalsTableLoadMore from "./ArrivalsTableLoadMore";
 
 interface Props {
   loading: boolean;

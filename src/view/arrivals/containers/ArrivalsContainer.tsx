@@ -1,9 +1,9 @@
 import moment from "moment";
 import { connect } from "react-redux";
-import { Route } from "../../api/trimet/types";
-import { LoadArrivalData } from "../../store/action/stopActions";
-import { RootState } from "../../store/reducers";
-import ArrivalsComponent from "../arrivals/ArrivalsComponent";
+import { Route } from "../../../api/trimet/types";
+import { LoadArrivalData } from "../../../store/action/stopActions";
+import { RootState } from "../../../store/reducers";
+import ArrivalsComponent from "../components/ArrivalsComponent";
 
 interface Props {
   locationId: number;
