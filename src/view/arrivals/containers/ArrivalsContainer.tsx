@@ -3,6 +3,10 @@ import { connect } from "react-redux";
 import { Route } from "../../../api/trimet/types";
 import { LoadArrivalData } from "../../../store/action/stopActions";
 import { RootState } from "../../../store/reducers";
+import {
+  arrivalsAtStopSelector,
+  arrivalsLoadingSelector
+} from "../../../store/selectors/arrivalSelectors";
 import ArrivalsComponent from "../components/ArrivalsComponent";
 
 interface Props {
@@ -13,28 +17,21 @@ interface Props {
 }
 
 const mapStateToProps = (state: RootState, props: Props) => {
-  const { arrivalsReducer } = state;
   const { locationId } = props;
-  const loading = arrivalsReducer.loading[locationId];
-  const arrivals = arrivalsReducer.arrivals[locationId];
   const now = moment();
 
   return {
     ...props,
-    arrivals,
-    loading,
+    arrivals: arrivalsAtStopSelector(state, locationId),
+    loading: arrivalsLoadingSelector(state, locationId),
     locationId,
     now
   };
 };
 
-const mapDispatchToProps = () => {
-  return {};
-};
-
 const ArrivalsContainer = connect(
   mapStateToProps,
-  mapDispatchToProps
+  () => ({})
 )(ArrivalsComponent);
 
 export default ArrivalsContainer;

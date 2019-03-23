@@ -1,10 +1,19 @@
 import { createSelector } from "reselect";
+import { Arrival } from "../../api/trimet/types";
 import { RootState } from "../reducers";
 
-const stopsLoading = (state: RootState, locationId: number) =>
+const arrivalsAtStopLoadingState = (state: RootState, locationId: number) =>
   state.arrivalsReducer.loading[locationId];
 
+const arrivalsAtStop = (state: RootState, locationId: number) =>
+  state.arrivalsReducer.arrivals[locationId];
+
 export const arrivalsLoadingSelector = createSelector(
-  stopsLoading,
+  arrivalsAtStopLoadingState,
   (loading: boolean) => loading
+);
+
+export const arrivalsAtStopSelector = createSelector(
+  arrivalsAtStop,
+  (arrivals: Arrival[]) => arrivals
 );
