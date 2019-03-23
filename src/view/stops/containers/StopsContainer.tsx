@@ -1,18 +1,18 @@
 import { connect } from "react-redux";
 import { loadStopData } from "../../../store/action/stopActions";
 import { RootState } from "../../../store/reducers";
+import {
+  allStopLocationsSelector,
+  stopsLoadingSelector,
+  timeOfLastLoadSelector
+} from "../../../store/selectors/stopSelectors";
 import StopsComponent from "../components/StopsComponent";
 
 const mapStateToProps = (state: RootState) => {
-  const { stopsReducer } = state;
-  const loading = stopsReducer.loading;
-  const stopLocations = stopsReducer.stopLocations;
-  const timeOfLastLoad = stopsReducer.timeOfLastLoad;
-
   return {
-    loading,
-    stopLocations,
-    timeOfLastLoad
+    loading: stopsLoadingSelector(state),
+    stopLocations: allStopLocationsSelector(state),
+    timeOfLastLoad: timeOfLastLoadSelector(state)
   };
 };
 
