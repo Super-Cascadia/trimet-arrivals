@@ -1,8 +1,9 @@
 import { connect } from "react-redux";
-import { StopLocation } from "../../api/trimet/types";
-import { loadArrivalData } from "../../store/action/stopActions";
-import { RootState } from "../../store/reducers";
-import StopComponent from "./StopComponent";
+import { loadArrivalData } from "../../../store/action/stopActions";
+import { RootState } from "../../../store/reducers";
+import { arrivalsLoadingSelector } from "../../../store/selectors/arrivalSelectors";
+import { stopLocationSelector } from "../../../store/selectors/stopSelectors";
+import StopComponent from "../components/StopComponent";
 
 interface Props {
   locationId: number;
@@ -11,16 +12,10 @@ interface Props {
 }
 
 const mapStateToProps = (state: RootState, props: Props) => {
-  const { stopsReducer, arrivalsReducer } = state;
-  const { locationId } = props;
-
-  const stopLocation: StopLocation = stopsReducer.stopLocations[locationId];
-  const loading: boolean = arrivalsReducer.loading[locationId];
-
   return {
     ...props,
-    loading,
-    stopLocation
+    loading: arrivalsLoadingSelector(state, props.locationId),
+    stopLocation: stopLocationSelector(state, props.locationId)
   };
 };
 

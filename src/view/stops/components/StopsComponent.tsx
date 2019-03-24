@@ -1,11 +1,11 @@
 import React from "react";
-import { Route } from "../../api/trimet/types";
-import Modal from "../../component/modal/Modal";
-import ModalContent from "../../component/modal/ModalContent";
-import { LoadStopData } from "../../store/action/stopActions";
-import { StopLocationsDictionary } from "../../store/reducers/stopsReducer";
-import Stops from "./components/Stops";
-import "./Stops.css";
+import { Route } from "../../../api/trimet/types";
+import Modal from "../../../component/modal/Modal";
+import ModalContent from "../../../component/modal/ModalContent";
+import { LoadStopData } from "../../../store/action/stopActions";
+import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
+import "../Stops.css";
+import Stops from "./Stops";
 
 interface Props {
   loadStopData: LoadStopData;

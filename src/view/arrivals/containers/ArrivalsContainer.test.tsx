@@ -2,7 +2,7 @@ import { mount, shallow } from "enzyme";
 import React from "react";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import thunk from "redux-thunk";
-import { ProviderMock } from "../../test/util";
+import { ProviderMock } from "../../../test/util";
 import ArrivalsContainer from "./ArrivalsContainer";
 
 function mockStore() {

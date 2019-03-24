@@ -2,7 +2,7 @@ import { map } from "lodash";
 import React from "react";
 import { Route, StopLocation } from "../../../api/trimet/types";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
-import StopContainer from "../StopContainer";
+import StopContainer from "../containers/StopContainer";
 import "../Stops.css";
 
 interface Props {
