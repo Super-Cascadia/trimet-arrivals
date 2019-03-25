@@ -5,7 +5,9 @@ import { ArrivalData, Location, StopData } from "../../api/trimet/types";
 import {
   LOAD_ARRIVALS,
   LOAD_ARRIVALS_COMPLETE,
+  LOAD_ARRIVALS_DATA_REQUEST,
   LOAD_STOP_COMPLETE,
+  LOAD_STOP_DATA_REQUEST,
   LOAD_STOPS
 } from "../constants";
 
@@ -41,16 +43,12 @@ export const loadArrivalData = (locationId: number) => {
 
 export const loadStopData = (radiusInFeet: number) => {
   return dispatch => {
-    dispatch({
-      type: LOAD_STOPS
-    });
+    dispatch({ type: LOAD_STOPS });
 
     getCurrentPosition().then((location: Location) => {
       getNearbyStops(location, radiusInFeet).then((stopData: StopData) => {
         dispatch({
-          payload: {
-            stopData
-          },
+          payload: { stopData },
           type: LOAD_STOP_COMPLETE
         });
         return stopData;
@@ -58,3 +56,13 @@ export const loadStopData = (radiusInFeet: number) => {
     });
   };
 };
+
+export const loadArrivalDataRequest = (locationId: number) => ({
+  payload: { locationId },
+  type: LOAD_ARRIVALS_DATA_REQUEST
+});
+
+export const loadStopDataRequest = (radiusInFeet: number) => ({
+  payload: { radiusInFeet },
+  type: LOAD_STOP_DATA_REQUEST
+});

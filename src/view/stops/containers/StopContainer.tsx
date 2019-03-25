@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { loadArrivalData } from "../../../store/action/stopActions";
+import { loadArrivalDataRequest } from "../../../store/action/stopActions";
 import { RootState } from "../../../store/reducers";
 import { arrivalsLoadingSelector } from "../../../store/selectors/arrivalSelectors";
 import { stopLocationSelector } from "../../../store/selectors/stopSelectors";
@@ -22,7 +22,7 @@ const mapStateToProps = (state: RootState, props: Props) => {
 const mapDispatchToProps = dispatch => {
   return {
     loadArrivalData(locationId: number): void {
-      dispatch(loadArrivalData(locationId));
+      dispatch(loadArrivalDataRequest(locationId));
     }
   };
 };
