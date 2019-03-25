@@ -1,14 +1,10 @@
-import { getCurrentPosition } from "../../api/geolocation";
 import { getArrivals } from "../../api/trimet/arrivals";
-import { getNearbyStops } from "../../api/trimet/stops";
-import { ArrivalData, Location, StopData } from "../../api/trimet/types";
+import { ArrivalData } from "../../api/trimet/types";
 import {
   LOAD_ARRIVALS,
   LOAD_ARRIVALS_COMPLETE,
   LOAD_ARRIVALS_DATA_REQUEST,
-  LOAD_STOP_COMPLETE,
-  LOAD_STOP_DATA_REQUEST,
-  LOAD_STOPS
+  LOAD_STOP_DATA_REQUEST
 } from "../constants";
 
 export type LoadStopData = (radiusInFeet: number) => void;
@@ -38,22 +34,6 @@ export const loadArrivalData = (locationId: number) => {
         });
       }
     );
-  };
-};
-
-export const loadStopData = (radiusInFeet: number) => {
-  return dispatch => {
-    dispatch({ type: LOAD_STOPS });
-
-    getCurrentPosition().then((location: Location) => {
-      getNearbyStops(location, radiusInFeet).then((stopData: StopData) => {
-        dispatch({
-          payload: { stopData },
-          type: LOAD_STOP_COMPLETE
-        });
-        return stopData;
-      });
-    });
   };
 };
 
