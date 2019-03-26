@@ -13,7 +13,7 @@ function getURL(lat: number, long: number, radiusInFeet: number): string {
   return `${STOPS_BASE_URL}json/true/showRoutes/true/showRouteDirs/true/ll/${latLng}/${feet}/${API}`;
 }
 
-export function getNearbyStops(
+export async function getNearbyStops(
   location: Location,
   radiusInFeet: number
 ): Promise<StopData> {

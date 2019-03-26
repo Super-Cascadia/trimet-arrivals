@@ -10,7 +10,7 @@ function getURL(locIDs: string, minutes: number): string {
   return `${ARRIVALS_BASE_URL}json/true/locIDs/${locIDs}/showPosition/true/minutes/${minutes}/${API}`;
 }
 
-export function getArrivals(
+export async function getArrivals(
   locIDs: string,
   minutes: number
 ): Promise<ArrivalData> {
