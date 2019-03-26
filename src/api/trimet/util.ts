@@ -1,9 +1,5 @@
-import { get } from "superagent";
-
-export function getTrimetData<T>(requestURI: string): Promise<T> {
-  return new Promise(resolve => {
-    get(requestURI).end((err: {}, res) => {
-      resolve(res.body.resultSet);
-    });
-  });
+export async function getTrimetData<T>(requestURI: string): Promise<T> {
+  return fetch(requestURI)
+    .then(res => res.json())
+    .then(json => json.resultSet);
 }
