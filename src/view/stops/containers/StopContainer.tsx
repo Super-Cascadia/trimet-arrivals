@@ -1,4 +1,6 @@
 import { connect } from "react-redux";
+import { StopLocation } from "../../../api/trimet/types";
+import { bookmarkStopRequest } from "../../../store/action/bookmarkActions";
 import { loadArrivalDataRequest } from "../../../store/action/stopActions";
 import { RootState } from "../../../store/reducers";
 import { arrivalsLoadingSelector } from "../../../store/selectors/arrivalSelectors";
@@ -23,6 +25,9 @@ const mapDispatchToProps = dispatch => {
   return {
     loadArrivalData(locationId: number): void {
       dispatch(loadArrivalDataRequest(locationId));
+    },
+    onBookmarkClick(stopLocation: StopLocation): void {
+      dispatch(bookmarkStopRequest(stopLocation));
     }
   };
 };

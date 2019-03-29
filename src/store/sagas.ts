@@ -5,8 +5,10 @@ import { getCurrentPosition } from "../api/geolocation";
 import { getArrivals } from "../api/trimet/arrivals";
 import { getNearbyStops } from "../api/trimet/stops";
 import {
+  BOOKMARK_STOP_REQUEST,
   CHANGE_VIEW,
   CHANGE_VIEW_REQUEST,
+  CREATE_STOP_BOOKMARK,
   LOAD_ARRIVALS,
   LOAD_ARRIVALS_COMPLETE,
   LOAD_ARRIVALS_DATA_REQUEST,
@@ -19,6 +21,7 @@ export function* rootSaga() {
   yield takeEvery(LOAD_STOP_DATA_REQUEST, loadStopData);
   yield takeEvery(LOAD_ARRIVALS_DATA_REQUEST, loadArrivalData);
   yield takeEvery(CHANGE_VIEW_REQUEST, changeView);
+  yield takeEvery(BOOKMARK_STOP_REQUEST, bookmarkStop);
 }
 
 export function* loadStopData(action) {
@@ -60,6 +63,17 @@ export function* changeView(action) {
     yield put({
       payload: { activeView: action.payload.activeView },
       type: CHANGE_VIEW
+    });
+  } catch (e) {
+    // console.error(e)
+  }
+}
+
+export function* bookmarkStop(action) {
+  try {
+    yield put({
+      payload: { stopLocation: action.payload.stopLocation },
+      type: CREATE_STOP_BOOKMARK
     });
   } catch (e) {
     // console.error(e)

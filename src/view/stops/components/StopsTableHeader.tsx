@@ -11,6 +11,7 @@ interface Props {
   loading: boolean;
   showArrivals: boolean;
   onRouteIndicatorClick: (route: Route) => void;
+  onBookmarkClick: (stopLocation: StopLocation) => void;
 }
 
 export default class StopsTableHeader extends React.Component<Props> {
@@ -20,7 +21,8 @@ export default class StopsTableHeader extends React.Component<Props> {
       loading,
       showArrivals,
       loadArrivalData,
-      onRouteIndicatorClick
+      onRouteIndicatorClick,
+      onBookmarkClick
     } = this.props;
 
     if (!stopLocation) {
@@ -30,6 +32,9 @@ export default class StopsTableHeader extends React.Component<Props> {
     return (
       <div className="stops-header">
         <StopInfo stopLocation={stopLocation} onClick={onRouteIndicatorClick} />
+        <button onClick={onBookmarkClick.bind(this, stopLocation)}>
+          Bookmark
+        </button>
         <ReloadIntervalCoordinator
           stopLocation={stopLocation}
           loadArrivalData={loadArrivalData}

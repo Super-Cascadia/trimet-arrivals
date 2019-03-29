@@ -1,9 +1,12 @@
 import { connect } from "react-redux";
 import { RootState } from "../../../store/reducers";
+import { bookmarksSelector } from "../../../store/selectors/bookmarkSelectors";
 import BookmarksComponent from "../component/BookmarksComponent";
 
 const mapStateToProps = (state: RootState) => {
-  return {};
+  return {
+    bookmarks: bookmarksSelector(state)
+  };
 };
 
 const mapDispatchToProps = dispatch => {
