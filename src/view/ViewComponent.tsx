@@ -1,9 +1,11 @@
+import cx from "classnames";
 import React from "react";
 import {
   BOOKMARKS_VIEW,
   NEARBY_STOPS_VIEW
 } from "../store/reducers/viewReducer";
 import BookmarksContainer from "./bookmarks/container/BookmarksContainer";
+import "./Header.css";
 import StopsContainer from "./stops/containers/StopsContainer";
 
 interface Props {
@@ -24,18 +26,32 @@ export default class ViewComponent extends React.Component<Props> {
   }
 
   public getHeader() {
+    const { activeView } = this.props;
+
+    const nearbyStopsClass = cx({
+      active: activeView === NEARBY_STOPS_VIEW,
+      "view-header-menu-item": true
+    });
+
+    const bookmarksClass = cx({
+      active: activeView === BOOKMARKS_VIEW,
+      "view-header-menu-item": true
+    });
+
     return (
-      <nav>
-        <ul>
-          <li>
-            <a onClick={this.props.updateView.bind(this, NEARBY_STOPS_VIEW)}>
-              Nearby Stops
-            </a>
+      <nav className="top-navigation">
+        <ul className="view-header">
+          <li
+            className={nearbyStopsClass}
+            onClick={this.props.updateView.bind(this, NEARBY_STOPS_VIEW)}
+          >
+            <a>Nearby Stops</a>
           </li>
-          <li>
-            <a onClick={this.props.updateView.bind(this, BOOKMARKS_VIEW)}>
-              Bookmarks
-            </a>
+          <li
+            className={bookmarksClass}
+            onClick={this.props.updateView.bind(this, BOOKMARKS_VIEW)}
+          >
+            <a>Bookmarks</a>
           </li>
         </ul>
       </nav>
@@ -46,7 +62,7 @@ export default class ViewComponent extends React.Component<Props> {
     return (
       <div>
         {this.getHeader()}
-        <main>{this.getView()}</main>
+        <main className="main-view">{this.getView()}</main>
       </div>
     );
   }

@@ -41,7 +41,7 @@ export default class StopsComponent extends React.Component<Props, State> {
   }
 
   public render() {
-    const { loading, stopLocations, timeOfLastLoad } = this.props;
+    const { loading, stopLocations } = this.props;
 
     return (
       <div>
@@ -49,9 +49,9 @@ export default class StopsComponent extends React.Component<Props, State> {
         {!loading && stopLocations && (
           <div className="nearby-stops">
             <main>
-              <h1>
-                Nearby Stops | <i>{timeOfLastLoad}</i>
-              </h1>
+              {/*<h1>*/}
+              {/*  Nearby Stops | <i>{timeOfLastLoad}</i>*/}
+              {/*</h1>*/}
               <div className="flex-container">
                 <section className="flex-stops">
                   <Stops

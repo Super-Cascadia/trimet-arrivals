@@ -1,0 +1,29 @@
+.top-navigation {
+    background: white;
+}
+
+.view-header {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    justify-content: space-evenly;
+    margin-block-end: 0;
+    margin-block-start: 0;
+    padding-inline-start: 0;
+    align-content: stretch;
+}
+
+.view-header-menu-item {
+    line-height: 40px;
+    flex-grow: 1;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.view-header-menu-item.active {
+    background: darkgrey;
+}
+
+.view-header-menu-item:hover {
+    background: dimgray;
+}

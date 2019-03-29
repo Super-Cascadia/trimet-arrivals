@@ -1,6 +1,10 @@
 body {
   margin: 0;
-  padding: 15px;
+  /*padding: 15px;*/
   font-family: Helvetica, Arial, sans-serif;
   background: #00A676;
+}
+
+main.main-view {
+  padding: 15px;
 }
