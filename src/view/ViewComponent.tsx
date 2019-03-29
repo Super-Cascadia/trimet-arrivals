@@ -23,23 +23,29 @@ export default class ViewComponent extends React.Component<Props> {
     }
   }
 
+  public getHeader() {
+    return (
+      <nav>
+        <ul>
+          <li>
+            <a onClick={this.props.updateView.bind(this, NEARBY_STOPS_VIEW)}>
+              Nearby Stops
+            </a>
+          </li>
+          <li>
+            <a onClick={this.props.updateView.bind(this, BOOKMARKS_VIEW)}>
+              Bookmarks
+            </a>
+          </li>
+        </ul>
+      </nav>
+    );
+  }
+
   public render() {
     return (
       <div>
-        <nav>
-          <ul>
-            <li>
-              <a onClick={this.props.updateView.bind(this, NEARBY_STOPS_VIEW)}>
-                Nearby Stops
-              </a>
-            </li>
-            <li>
-              <a onClick={this.props.updateView.bind(this, BOOKMARKS_VIEW)}>
-                Bookmarks
-              </a>
-            </li>
-          </ul>
-        </nav>
+        {this.getHeader()}
         <main>{this.getView()}</main>
       </div>
     );
