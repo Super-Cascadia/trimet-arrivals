@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { RootState } from "../../../store/reducers";
 import { bookmarksSelector } from "../../../store/selectors/bookmarkSelectors";
-import BookmarksComponent from "../component/BookmarksComponent";
+import BookmarksViewComponent from "../component/BookmarksViewComponent";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -13,9 +13,9 @@ const mapDispatchToProps = dispatch => {
   return {};
 };
 
-const BookmarksContainer = connect(
+const BookmarksViewContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(BookmarksComponent);
+)(BookmarksViewComponent);
 
-export default BookmarksContainer;
+export default BookmarksViewContainer;

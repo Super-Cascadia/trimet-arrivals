@@ -19,7 +19,10 @@ interface State {
   routeInfo: Route;
 }
 
-export default class StopsComponent extends React.Component<Props, State> {
+export default class NearbyStopsViewComponent extends React.Component<
+  Props,
+  State
+> {
   constructor(props) {
     super(props);
 

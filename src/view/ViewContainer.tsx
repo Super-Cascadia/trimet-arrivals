@@ -1,12 +1,14 @@
 import { connect } from "react-redux";
 import { changeViewRequest } from "../store/action/viewActions";
 import { RootState } from "../store/reducers";
+import { bookmarkCountSelector } from "../store/selectors/bookmarkSelectors";
 import { viewSelector } from "../store/selectors/viewSelectors";
 import ViewComponent from "./ViewComponent";
 
 const mapStateToProps = (state: RootState) => {
   return {
-    activeView: viewSelector(state)
+    activeView: viewSelector(state),
+    numberOfBookmarks: bookmarkCountSelector(state)
   };
 };
 

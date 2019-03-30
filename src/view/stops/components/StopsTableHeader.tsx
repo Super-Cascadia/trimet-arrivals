@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, StopLocation } from "../../../api/trimet/types";
+import BookmarkButton from "../../../component/buttons/BookmarksButton";
 import { LoadArrivalData } from "../../../store/action/stopActions";
 import "../Stops.css";
 import ReloadIntervalCoordinator from "./ReloadIntervalCoordinator";
@@ -11,7 +12,11 @@ interface Props {
   loading: boolean;
   showArrivals: boolean;
   onRouteIndicatorClick: (route: Route) => void;
-  onBookmarkClick: (stopLocation: StopLocation) => void;
+  onBookmarkClick: (
+    stopLocation: StopLocation,
+    stopIsBookmarked: boolean
+  ) => void;
+  stopIsBookmarked: boolean;
 }
 
 export default class StopsTableHeader extends React.Component<Props> {
@@ -22,7 +27,8 @@ export default class StopsTableHeader extends React.Component<Props> {
       showArrivals,
       loadArrivalData,
       onRouteIndicatorClick,
-      onBookmarkClick
+      onBookmarkClick,
+      stopIsBookmarked
     } = this.props;
 
     if (!stopLocation) {
@@ -32,9 +38,11 @@ export default class StopsTableHeader extends React.Component<Props> {
     return (
       <div className="stops-header">
         <StopInfo stopLocation={stopLocation} onClick={onRouteIndicatorClick} />
-        <button onClick={onBookmarkClick.bind(this, stopLocation)}>
-          Bookmark
-        </button>
+        <BookmarkButton
+          onBookmarkClick={onBookmarkClick}
+          stopLocation={stopLocation}
+          stopIsBookmarked={stopIsBookmarked}
+        />
         <ReloadIntervalCoordinator
           stopLocation={stopLocation}
           loadArrivalData={loadArrivalData}

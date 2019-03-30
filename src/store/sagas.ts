@@ -14,7 +14,9 @@ import {
   LOAD_ARRIVALS_DATA_REQUEST,
   LOAD_STOP_COMPLETE,
   LOAD_STOP_DATA_REQUEST,
-  LOAD_STOPS
+  LOAD_STOPS,
+  REMOVE_BOOKMARK_STOP_REQUEST,
+  REMOVE_STOP_BOOKMARK
 } from "./constants";
 
 export function* rootSaga() {
@@ -22,6 +24,7 @@ export function* rootSaga() {
   yield takeEvery(LOAD_ARRIVALS_DATA_REQUEST, loadArrivalData);
   yield takeEvery(CHANGE_VIEW_REQUEST, changeView);
   yield takeEvery(BOOKMARK_STOP_REQUEST, bookmarkStop);
+  yield takeEvery(REMOVE_BOOKMARK_STOP_REQUEST, removeStopBookmark);
 }
 
 export function* loadStopData(action) {
@@ -74,6 +77,17 @@ export function* bookmarkStop(action) {
     yield put({
       payload: { stopLocation: action.payload.stopLocation },
       type: CREATE_STOP_BOOKMARK
+    });
+  } catch (e) {
+    // console.error(e)
+  }
+}
+
+export function* removeStopBookmark(action) {
+  try {
+    yield put({
+      payload: { locationId: action.payload.locationId },
+      type: REMOVE_STOP_BOOKMARK
     });
   } catch (e) {
     // console.error(e)

@@ -22,8 +22,15 @@
 
 .view-header-menu-item.active {
     background: darkgrey;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
 }
 
 .view-header-menu-item:hover {
     background: dimgray;
+}
+
+.bookmark-icon {
+    margin-right: 8px;
 }

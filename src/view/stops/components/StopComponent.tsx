@@ -11,7 +11,11 @@ interface Props {
   loading: boolean;
   showArrivals: boolean;
   onRouteIndicatorClick: (route: Route) => void;
-  onBookmarkClick: (stopLocation: StopLocation) => void;
+  onBookmarkClick: (
+    stopLocation: StopLocation,
+    stopIsBookmarked: boolean
+  ) => void;
+  stopIsBookmarked: boolean;
 }
 
 const interval = 30000;
@@ -46,7 +50,8 @@ export default class StopComponent extends React.Component<Props> {
       loading,
       showArrivals,
       onRouteIndicatorClick,
-      onBookmarkClick
+      onBookmarkClick,
+      stopIsBookmarked
     } = this.props;
 
     return (
@@ -58,6 +63,7 @@ export default class StopComponent extends React.Component<Props> {
           showArrivals={showArrivals}
           onRouteIndicatorClick={onRouteIndicatorClick}
           onBookmarkClick={onBookmarkClick}
+          stopIsBookmarked={stopIsBookmarked}
         />
         <ArrivalsContainer
           locationId={locationId}

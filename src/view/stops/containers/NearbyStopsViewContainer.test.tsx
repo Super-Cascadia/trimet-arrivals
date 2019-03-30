@@ -3,7 +3,7 @@ import React from "react";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import thunk from "redux-thunk";
 import { ProviderMock } from "../../../test/util";
-import StopsContainer from "./StopsContainer";
+import NearbyStopsViewContainer from "./NearbyStopsViewContainer";
 
 function mockStore() {
   const arrivalsInitialState = {
@@ -51,13 +51,13 @@ function mockStore() {
   );
 }
 
-describe("StopsContainer", () => {
+describe("NearbyStopsViewContainer", () => {
   describe("by default", () => {
     it("renders without crashing", () => {
       expect(() =>
         shallow(
           <ProviderMock>
-            <StopsContainer />
+            <NearbyStopsViewContainer />
           </ProviderMock>
         )
       ).not.toThrow();
@@ -67,12 +67,12 @@ describe("StopsContainer", () => {
   describe("when provided a valid stopsReducer", () => {
     const subject = mount(
       <ProviderMock store={mockStore()}>
-        <StopsContainer />
+        <NearbyStopsViewContainer />
       </ProviderMock>
     );
 
     it("hands off props to the StopComponent", () => {
-      const stopComponent = subject.find("StopsComponent");
+      const stopComponent = subject.find("NearbyStopsViewComponent");
       // @ts-ignore
       expect(stopComponent).toExist();
       // @ts-ignore

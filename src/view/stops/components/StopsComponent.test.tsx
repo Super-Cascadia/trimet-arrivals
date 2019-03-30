@@ -1,13 +1,13 @@
 import { shallow } from "enzyme";
 import React from "react";
-import StopsComponent from "./StopsComponent";
+import NearbyStopsViewComponent from "./NearbyStopsViewComponent";
 
-describe("StopsComponent", () => {
+describe("NearbyStopsViewComponent", () => {
   describe("by default", () => {
     it("renders without crashing", () => {
       expect(() =>
         shallow(
-          <StopsComponent
+          <NearbyStopsViewComponent
             loadStopData={undefined}
             loading={undefined}
             stopLocations={undefined}
@@ -24,7 +24,7 @@ describe("StopsComponent", () => {
         const loadStopData = jasmine.createSpy("loadStopDataSpy");
 
         const subject = shallow(
-          <StopsComponent
+          <NearbyStopsViewComponent
             loadStopData={loadStopData}
             loading={undefined}
             stopLocations={undefined}
@@ -41,7 +41,7 @@ describe("StopsComponent", () => {
   describe("when loading", () => {
     it("shows a loading message", () => {
       const subject = shallow(
-        <StopsComponent
+        <NearbyStopsViewComponent
           loadStopData={undefined}
           loading={true}
           stopLocations={undefined}
@@ -59,7 +59,7 @@ describe("StopsComponent", () => {
         123: {}
       };
       const subject = shallow(
-        <StopsComponent
+        <NearbyStopsViewComponent
           loadStopData={undefined}
           loading={false}
           stopLocations={stopLocations}

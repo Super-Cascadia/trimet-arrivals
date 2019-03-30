@@ -1,68 +1,41 @@
-import cx from "classnames";
 import React from "react";
+import MainNavigation from "../component/nav/MainNavigation";
 import {
   BOOKMARKS_VIEW,
   NEARBY_STOPS_VIEW
 } from "../store/reducers/viewReducer";
-import BookmarksContainer from "./bookmarks/container/BookmarksContainer";
-import "./Header.css";
-import StopsContainer from "./stops/containers/StopsContainer";
+import BookmarksViewContainer from "./bookmarks/container/BookmarksViewContainer";
+import NearbyStopsViewContainer from "./stops/containers/NearbyStopsViewContainer";
 
 interface Props {
   activeView: string;
   updateView: (activeView: string) => void;
+  numberOfBookmarks: number;
 }
 
 export default class ViewComponent extends React.Component<Props> {
-  public getView() {
-    switch (this.props.activeView) {
+  public static getView(activeView: string) {
+    switch (activeView) {
       case NEARBY_STOPS_VIEW:
-        return <StopsContainer />;
+        return <NearbyStopsViewContainer />;
       case BOOKMARKS_VIEW:
-        return <BookmarksContainer />;
+        return <BookmarksViewContainer />;
       default:
-        return <StopsContainer />;
+        return <NearbyStopsViewContainer />;
     }
   }
 
-  public getHeader() {
-    const { activeView } = this.props;
-
-    const nearbyStopsClass = cx({
-      active: activeView === NEARBY_STOPS_VIEW,
-      "view-header-menu-item": true
-    });
-
-    const bookmarksClass = cx({
-      active: activeView === BOOKMARKS_VIEW,
-      "view-header-menu-item": true
-    });
-
-    return (
-      <nav className="top-navigation">
-        <ul className="view-header">
-          <li
-            className={nearbyStopsClass}
-            onClick={this.props.updateView.bind(this, NEARBY_STOPS_VIEW)}
-          >
-            <a>Nearby Stops</a>
-          </li>
-          <li
-            className={bookmarksClass}
-            onClick={this.props.updateView.bind(this, BOOKMARKS_VIEW)}
-          >
-            <a>Bookmarks</a>
-          </li>
-        </ul>
-      </nav>
-    );
-  }
-
   public render() {
+    const { activeView, updateView, numberOfBookmarks } = this.props;
+
     return (
       <div>
-        {this.getHeader()}
-        <main className="main-view">{this.getView()}</main>
+        <MainNavigation
+          activeView={activeView}
+          updateView={updateView}
+          numberOfBookmarks={numberOfBookmarks}
+        />
+        <main className="main-view">{ViewComponent.getView(activeView)}</main>
       </div>
     );
   }
