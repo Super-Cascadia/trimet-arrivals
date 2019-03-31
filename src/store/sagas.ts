@@ -4,6 +4,7 @@ import { call, put, takeEvery } from "redux-saga/effects";
 import { getCurrentPosition } from "../api/geolocation";
 import { getArrivals } from "../api/trimet/arrivals";
 import { getNearbyStops } from "../api/trimet/stops";
+import { StopLocation } from "../api/trimet/types";
 import {
   BOOKMARK_STOP_REQUEST,
   CHANGE_VIEW,
@@ -22,8 +23,11 @@ import {
 export function* rootSaga() {
   yield takeEvery(LOAD_STOP_DATA_REQUEST, loadStopData);
   yield takeEvery(LOAD_ARRIVALS_DATA_REQUEST, loadArrivalData);
+  // @ts-ignore
   yield takeEvery(CHANGE_VIEW_REQUEST, changeView);
+  // @ts-ignore
   yield takeEvery(BOOKMARK_STOP_REQUEST, bookmarkStop);
+  // @ts-ignore
   yield takeEvery(REMOVE_BOOKMARK_STOP_REQUEST, removeStopBookmark);
 }
 
@@ -61,7 +65,13 @@ export function* loadArrivalData(action) {
   }
 }
 
-export function* changeView(action) {
+interface ChangeViewAction {
+  payload: {
+    activeView: string;
+  };
+}
+
+export function* changeView(action: ChangeViewAction) {
   try {
     yield put({
       payload: { activeView: action.payload.activeView },
@@ -72,7 +82,13 @@ export function* changeView(action) {
   }
 }
 
-export function* bookmarkStop(action) {
+interface BookmarkStopAction {
+  payload: {
+    stopLocation: StopLocation;
+  };
+}
+
+export function* bookmarkStop(action: BookmarkStopAction) {
   try {
     yield put({
       payload: { stopLocation: action.payload.stopLocation },
@@ -83,7 +99,13 @@ export function* bookmarkStop(action) {
   }
 }
 
-export function* removeStopBookmark(action) {
+interface RemoveStopBookmarkAction {
+  payload: {
+    locationId: number;
+  };
+}
+
+export function* removeStopBookmark(action: RemoveStopBookmarkAction) {
   try {
     yield put({
       payload: { locationId: action.payload.locationId },

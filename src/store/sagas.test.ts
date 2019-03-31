@@ -5,12 +5,21 @@ import { getCurrentPosition } from "../api/geolocation";
 import { getArrivals } from "../api/trimet/arrivals";
 import { getNearbyStops } from "../api/trimet/stops";
 import {
+  CHANGE_VIEW,
+  CREATE_STOP_BOOKMARK,
   LOAD_ARRIVALS,
   LOAD_ARRIVALS_COMPLETE,
   LOAD_STOP_COMPLETE,
-  LOAD_STOPS
+  LOAD_STOPS,
+  REMOVE_STOP_BOOKMARK
 } from "./constants";
-import { loadArrivalData, loadStopData } from "./sagas";
+import {
+  bookmarkStop,
+  changeView,
+  loadArrivalData,
+  loadStopData,
+  removeStopBookmark
+} from "./sagas";
 
 describe("sagas", () => {
   describe("loadStopData", () => {
@@ -73,6 +82,57 @@ describe("sagas", () => {
             locationId: 123
           },
           type: LOAD_ARRIVALS_COMPLETE
+        })
+      );
+    });
+  });
+
+  describe("changeView", () => {
+    const changeViewData = changeView({
+      payload: { activeView: "foo" }
+    });
+
+    it("dispatches the load arrivals event", () => {
+      expect(changeViewData.next().value).toEqual(
+        put({
+          payload: {
+            activeView: "foo"
+          },
+          type: CHANGE_VIEW
+        })
+      );
+    });
+  });
+
+  describe("bookmarkStop", () => {
+    const bookmarkStopData = bookmarkStop({
+      payload: { stopLocation: {} }
+    });
+
+    it("dispatches the load arrivals event", () => {
+      expect(bookmarkStopData.next().value).toEqual(
+        put({
+          payload: {
+            stopLocation: {}
+          },
+          type: CREATE_STOP_BOOKMARK
+        })
+      );
+    });
+  });
+
+  describe("removeStopBookmark", () => {
+    const removeStopBookmarkData = removeStopBookmark({
+      payload: { locationId: 123 }
+    });
+
+    it("dispatches the load arrivals event", () => {
+      expect(removeStopBookmarkData.next().value).toEqual(
+        put({
+          payload: {
+            locationId: 123
+          },
+          type: REMOVE_STOP_BOOKMARK
         })
       );
     });
