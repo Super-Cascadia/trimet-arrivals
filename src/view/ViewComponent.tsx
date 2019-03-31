@@ -11,6 +11,7 @@ interface Props {
   activeView: string;
   updateView: (activeView: string) => void;
   numberOfBookmarks: number;
+  timeOfLastLoad: string;
 }
 
 export default class ViewComponent extends React.Component<Props> {
@@ -26,7 +27,12 @@ export default class ViewComponent extends React.Component<Props> {
   }
 
   public render() {
-    const { activeView, updateView, numberOfBookmarks } = this.props;
+    const {
+      activeView,
+      updateView,
+      numberOfBookmarks,
+      timeOfLastLoad
+    } = this.props;
 
     return (
       <div>
@@ -34,6 +40,7 @@ export default class ViewComponent extends React.Component<Props> {
           activeView={activeView}
           updateView={updateView}
           numberOfBookmarks={numberOfBookmarks}
+          timeOfLastLoad={timeOfLastLoad}
         />
         <main className="main-view">{ViewComponent.getView(activeView)}</main>
       </div>

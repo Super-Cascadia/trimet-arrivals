@@ -23,6 +23,9 @@ function mockStore() {
       loading: {
         123: false
       }
+    },
+    bookmarksReducer: {
+      bookmarks: {}
     }
   };
 
@@ -84,6 +87,7 @@ describe("StopComponent", () => {
     describe("when mounted", () => {
       const loadArrivalDataSpy = jasmine.createSpy("loadArrivalDataSpy");
       const stopLocation = {};
+      const onBookmarkClickSpy = jasmine.createSpy("onBookmarkClickSpy");
 
       const subject = mount(
         <ProviderMock store={mockStore()}>
@@ -93,6 +97,8 @@ describe("StopComponent", () => {
             locationId={123}
             loading={false}
             showArrivals={true}
+            stopIsBookmarked={false}
+            onBookmarkClick={onBookmarkClickSpy}
           />
         </ProviderMock>
       );

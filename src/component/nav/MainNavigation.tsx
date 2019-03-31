@@ -15,6 +15,7 @@ interface Props {
   activeView: string;
   updateView: (activeView: string) => void;
   numberOfBookmarks: number;
+  timeOfLastLoad: string;
 }
 
 export default function MainNavigation({

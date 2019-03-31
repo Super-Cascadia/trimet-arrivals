@@ -73,10 +73,6 @@ describe("NearbyStopsViewComponent", () => {
       });
 
       describe("the nearby stops list", () => {
-        it("has a heading and the time of last load", () => {
-          expect(nearbyStops.find("h1").text()).toBe("Nearby Stops | 12:01pm");
-        });
-
         it("shows Stops", () => {
           expect(nearbyStops.find("Stops")).toExist();
         });

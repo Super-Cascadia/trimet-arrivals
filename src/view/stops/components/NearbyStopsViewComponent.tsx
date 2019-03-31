@@ -11,7 +11,6 @@ interface Props {
   loadStopData: LoadStopData;
   loading: boolean;
   stopLocations: StopLocationsDictionary;
-  timeOfLastLoad: string;
 }
 
 interface State {
@@ -52,9 +51,6 @@ export default class NearbyStopsViewComponent extends React.Component<
         {!loading && stopLocations && (
           <div className="nearby-stops">
             <main>
-              {/*<h1>*/}
-              {/*  Nearby Stops | <i>{timeOfLastLoad}</i>*/}
-              {/*</h1>*/}
               <div className="flex-container">
                 <section className="flex-stops">
                   <Stops

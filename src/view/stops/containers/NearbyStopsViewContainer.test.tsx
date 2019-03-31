@@ -33,6 +33,9 @@ function mockStore() {
         123: false
       }
     },
+    bookmarksReducer: {
+      bookmarks: {}
+    },
     stopsReducer: {
       loading: false,
       stopLocations: {
@@ -79,8 +82,6 @@ describe("NearbyStopsViewContainer", () => {
       expect(stopComponent.props().stopLocations).toEqual({
         123: { locid: 123 }
       });
-      // @ts-ignore
-      expect(stopComponent.props().timeOfLastLoad).toEqual("some time");
       // @ts-ignore
       expect(stopComponent.props().loading).toBe(false);
     });
