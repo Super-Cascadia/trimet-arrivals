@@ -18,18 +18,25 @@ interface Props {
   timeOfLastLoad: string;
 }
 
+const noop = () => {
+  return;
+};
+
 export default function MainNavigation({
-  activeView,
-  numberOfBookmarks,
-  updateView
+  activeView = NEARBY_STOPS_VIEW,
+  numberOfBookmarks = 0,
+  updateView = noop,
+  timeOfLastLoad
 }: Props) {
   const nearbyStopsClass = cx({
     active: activeView === NEARBY_STOPS_VIEW,
+    "nearby-stops": true,
     "view-header-menu-item": true
   });
 
   const bookmarksClass = cx({
     active: activeView === BOOKMARKS_VIEW,
+    bookmarks: true,
     "view-header-menu-item": true
   });
 
@@ -40,7 +47,7 @@ export default function MainNavigation({
           className={nearbyStopsClass}
           onClick={updateView.bind(this, NEARBY_STOPS_VIEW)}
         >
-          <a>Nearby Stops</a>
+          <a>Nearby Stops | {timeOfLastLoad}</a>
         </li>
         <li
           className={bookmarksClass}

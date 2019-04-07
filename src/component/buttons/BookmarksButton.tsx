@@ -9,10 +9,17 @@ function bookmarkIcon(stopIsBookmarked: boolean) {
       color: "red"
     };
 
-    return <FontAwesome name="bookmark" color="red" style={style} />;
+    return (
+      <FontAwesome
+        className="bookmarked"
+        name="bookmark"
+        color="red"
+        style={style}
+      />
+    );
   }
 
-  return <FontAwesome name="bookmark" />;
+  return <FontAwesome className="not-bookmarked" name="bookmark" />;
 }
 
 interface Props {
@@ -24,10 +31,14 @@ interface Props {
   stopIsBookmarked: boolean;
 }
 
+const noop = () => {
+  return;
+};
+
 export default function BookmarkButton({
-  onBookmarkClick,
+  onBookmarkClick = noop,
   stopLocation,
-  stopIsBookmarked
+  stopIsBookmarked = false
 }: Props) {
   return (
     <div className="bookmark-button-container">

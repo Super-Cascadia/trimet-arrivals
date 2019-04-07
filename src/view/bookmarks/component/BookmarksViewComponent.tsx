@@ -29,7 +29,11 @@ export default class BookmarksViewComponent extends React.Component<Props> {
 
   public routeBookMarksView(bookmarks: StopLocation[]) {
     if (isEmpty(bookmarks)) {
-      return <div>Bookmark a stop and see it here.</div>;
+      return (
+        <div className="no-bookmarks-container">
+          Bookmark a stop and see it here.
+        </div>
+      );
     }
 
     return this.getBookmarkedStops(bookmarks);
