@@ -1,6 +1,10 @@
 import { omitBy } from "lodash";
 import { StopLocation } from "../../api/trimet/types";
-import { CREATE_STOP_BOOKMARK, REMOVE_STOP_BOOKMARK } from "../constants";
+import {
+  CREATE_STOP_BOOKMARK,
+  LOAD_BOOKMARKS_COMPLETE,
+  REMOVE_STOP_BOOKMARK
+} from "../constants";
 
 export interface StopLocations {
   [locationId: number]: StopLocation;
@@ -15,6 +19,9 @@ interface Action {
   payload: {
     stopLocation?: StopLocation;
     locationId?: number;
+    bookmarks?: {
+      [locationId: number]: StopLocation;
+    };
   };
 }
 
@@ -45,12 +52,23 @@ function createStopBookmark(state, action: Action) {
   };
 }
 
+function loadBookmarksComplete(state, action: Action) {
+  return {
+    ...state,
+    bookmarks: {
+      ...action.payload.bookmarks
+    }
+  };
+}
+
 const bookmarksReducer = (state = InitialState, action: Action) => {
   switch (action.type) {
     case CREATE_STOP_BOOKMARK:
       return createStopBookmark(state, action);
     case REMOVE_STOP_BOOKMARK:
       return removeStopBookmark(state, action);
+    case LOAD_BOOKMARKS_COMPLETE:
+      return loadBookmarksComplete(state, action);
     default:
       return {
         ...state

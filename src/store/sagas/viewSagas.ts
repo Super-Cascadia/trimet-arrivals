@@ -1,7 +1,8 @@
 // tslint:disable:no-submodule-imports
-import { put } from "redux-saga/effects";
+import { call, put } from "redux-saga/effects";
+import { getStoredBookmarks } from "../../api/localstorage/bookmarks";
 // tslint:enable:no-submodule-imports
-import { CHANGE_VIEW } from "../constants";
+import { CHANGE_VIEW, LOAD_BOOKMARKS_COMPLETE } from "../constants";
 
 interface ChangeViewAction {
   payload: {
@@ -17,5 +18,14 @@ export function* changeView(action: ChangeViewAction) {
     });
   } catch (e) {
     // console.error(e)
+  }
+}
+
+export function* initialLoad() {
+  try {
+    const bookmarks = yield call(getStoredBookmarks);
+    yield put({ payload: { bookmarks }, type: LOAD_BOOKMARKS_COMPLETE });
+  } catch (e) {
+    // console.error(e);
   }
 }

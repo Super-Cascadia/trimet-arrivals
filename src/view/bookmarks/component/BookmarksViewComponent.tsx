@@ -2,6 +2,7 @@ import { isEmpty, map } from "lodash";
 import React from "react";
 import { StopLocation } from "../../../api/trimet/types";
 import StopContainer from "../../stops/containers/StopContainer";
+import AddBookmarkSectionControl from "./AddBookmarkSectionControl";
 
 interface Props {
   bookmarks: StopLocation[];
@@ -10,6 +11,8 @@ interface Props {
 const noop = () => {
   return;
 };
+
+const notImplemented = () => alert("not implemented");
 
 export default class BookmarksViewComponent extends React.Component<Props> {
   public getBookmarkedStops(bookmarks: StopLocation[]) {
@@ -27,6 +30,15 @@ export default class BookmarksViewComponent extends React.Component<Props> {
     });
   }
 
+  public getBookmarksView(bookmarks: StopLocation[]) {
+    return (
+      <div>
+        <AddBookmarkSectionControl onClick={notImplemented} />
+        {this.getBookmarkedStops(bookmarks)}
+      </div>
+    );
+  }
+
   public routeBookMarksView(bookmarks: StopLocation[]) {
     if (isEmpty(bookmarks)) {
       return (
@@ -36,7 +48,7 @@ export default class BookmarksViewComponent extends React.Component<Props> {
       );
     }
 
-    return this.getBookmarkedStops(bookmarks);
+    return this.getBookmarksView(bookmarks);
   }
 
   public render() {

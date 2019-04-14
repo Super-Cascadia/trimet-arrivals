@@ -12,6 +12,7 @@ interface Props {
   updateView: (activeView: string) => void;
   numberOfBookmarks: number;
   timeOfLastLoad: string;
+  onInitialLoad: () => void;
 }
 
 export default class ViewComponent extends React.Component<Props> {
@@ -24,6 +25,10 @@ export default class ViewComponent extends React.Component<Props> {
       default:
         return <NearbyStopsViewContainer />;
     }
+  }
+
+  public componentDidMount(): void {
+    this.props.onInitialLoad();
   }
 
   public render() {
