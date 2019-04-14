@@ -1,9 +1,9 @@
 // tslint:disable:no-submodule-imports
 import { call, put } from "redux-saga/effects";
 // tslint:enable:no-submodule-imports
-import { getCurrentPosition } from "../api/geolocation";
-import { getArrivals } from "../api/trimet/arrivals";
-import { getNearbyStops } from "../api/trimet/stops";
+import { getCurrentPosition } from "../../api/geolocation";
+import { getArrivals } from "../../api/trimet/arrivals";
+import { getNearbyStops } from "../../api/trimet/stops";
 import {
   CHANGE_VIEW,
   CREATE_STOP_BOOKMARK,
@@ -12,14 +12,11 @@ import {
   LOAD_STOP_COMPLETE,
   LOAD_STOPS,
   REMOVE_STOP_BOOKMARK
-} from "./constants";
-import {
-  bookmarkStop,
-  changeView,
-  loadArrivalData,
-  loadStopData,
-  removeStopBookmark
-} from "./sagas";
+} from "../constants";
+import { loadArrivalData } from "./arrivalSagas";
+import { bookmarkStop, removeStopBookmark } from "./bookmarkSagas";
+import { loadStopData } from "./stopSagas";
+import { changeView } from "./viewSagas";
 
 describe("sagas", () => {
   describe("loadStopData", () => {
