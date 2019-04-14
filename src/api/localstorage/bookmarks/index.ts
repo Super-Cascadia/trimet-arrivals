@@ -3,7 +3,11 @@ import { StopLocation } from "../../trimet/types";
 
 const BOOKMARKS_KEY = "bookmarks";
 
-function fetchStoredBookmarks() {
+interface StoredBookmarks {
+  [locationId: number]: StopLocation;
+}
+
+function fetchStoredBookmarks(): StoredBookmarks {
   return JSON.parse(localStorage.getItem(BOOKMARKS_KEY)) || {};
 }
 
@@ -19,7 +23,7 @@ export function storeLocationBookmark(stopLocation: StopLocation) {
   updateBookmarks(existingBookmarks);
 }
 
-export function getStoredBookmarks() {
+export function getStoredBookmarks(): StoredBookmarks {
   return JSON.parse(localStorage.getItem(BOOKMARKS_KEY));
 }
 
