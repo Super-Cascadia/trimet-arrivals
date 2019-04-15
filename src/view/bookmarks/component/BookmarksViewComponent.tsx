@@ -7,6 +7,7 @@ import {
 } from "../../../store/reducers/bookmarksReducer";
 import StopContainer from "../../stops/containers/StopContainer";
 import AddBookmarkSectionControl from "./AddBookmarkSectionControl";
+import "./BookmarksViewComponent.css";
 
 interface Props {
   bookmarks: StopLocation[];
@@ -23,12 +24,20 @@ const noop = () => {
 export default class BookmarksViewComponent extends React.Component<Props> {
   private static getBookmarkSections(bookmarkSections: BookmarkSections) {
     if (isEmpty(bookmarkSections)) {
-      return null;
+      return (
+        <div className="bookmark-section-message">
+          Add a bookmark section to begin organizing bookmarks.
+        </div>
+      );
     }
 
-    return map(bookmarkSections, (value: BookmarkSection) => {
-      return <div>{value.name}</div>;
-    });
+    return (
+      <div>
+        {map(bookmarkSections, (value: BookmarkSection) => {
+          return <div className="bookmark-section">{value.name}</div>;
+        })}
+      </div>
+    );
   }
 
   public getBookmarkedStops(bookmarks: StopLocation[]) {
