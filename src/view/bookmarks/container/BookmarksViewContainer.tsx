@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import {
   createBookmarkSectionRequest,
+  removeBookmarkSectionRequest,
   sectionNameUpdateRequest
 } from "../../../store/action/bookmarkActions";
 import { RootState } from "../../../store/reducers";
@@ -24,8 +25,11 @@ const mapDispatchToProps = dispatch => {
     onSectionNameUpdate(name: string) {
       dispatch(sectionNameUpdateRequest(name));
     },
-    createBookmarkSection(e) {
+    createBookmarkSection() {
       dispatch(createBookmarkSectionRequest());
+    },
+    removeBookmarkSection(bookmarkSectionId: number) {
+      dispatch(removeBookmarkSectionRequest(bookmarkSectionId));
     }
   };
 };

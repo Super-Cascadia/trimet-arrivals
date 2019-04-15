@@ -9,12 +9,14 @@ import {
   INITIAL_LOAD_REQUEST,
   LOAD_ARRIVALS_DATA_REQUEST,
   LOAD_STOP_DATA_REQUEST,
+  REMOVE_BOOKMARK_SECTION_REQUEST,
   REMOVE_BOOKMARK_STOP_REQUEST
 } from "../constants";
 import { loadArrivalData } from "./arrivalSagas";
 import {
   bookmarkStop,
   createBookmarkSection,
+  removeBookmarkSection,
   removeStopBookmark,
   updateSectionInputName
 } from "./bookmarkSagas";
@@ -34,4 +36,5 @@ export function* rootSaga() {
   // @ts-ignore
   yield takeEvery(BOOKMARK_SECTION_NAME_UPDATE_REQUEST, updateSectionInputName);
   yield takeEvery(CREATE_BOOKMARK_SECTION_REQUEST, createBookmarkSection);
+  yield takeEvery(REMOVE_BOOKMARK_SECTION_REQUEST, removeBookmarkSection);
 }

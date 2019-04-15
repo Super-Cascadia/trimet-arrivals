@@ -15,6 +15,7 @@ interface Props {
   bookmarkSectionName: string;
   createBookmarkSection: () => void;
   bookmarkSections: BookmarkSections;
+  removeBookmarkSection: (bookmarkSectionId: number) => void;
 }
 
 const noop = () => {
@@ -22,24 +23,6 @@ const noop = () => {
 };
 
 export default class BookmarksViewComponent extends React.Component<Props> {
-  private static getBookmarkSections(bookmarkSections: BookmarkSections) {
-    if (isEmpty(bookmarkSections)) {
-      return (
-        <div className="bookmark-section-message">
-          Add a bookmark section to begin organizing bookmarks.
-        </div>
-      );
-    }
-
-    return (
-      <div>
-        {map(bookmarkSections, (value: BookmarkSection) => {
-          return <div className="bookmark-section">{value.name}</div>;
-        })}
-      </div>
-    );
-  }
-
   public getBookmarkedStops(bookmarks: StopLocation[]) {
     return map(bookmarks, (stopLocation: StopLocation) => {
       const locationId = stopLocation.locid;
@@ -67,7 +50,7 @@ export default class BookmarksViewComponent extends React.Component<Props> {
           createBookmarkSection={this.props.createBookmarkSection}
           onSectionNameUpdate={this.props.onSectionNameUpdate}
         />
-        {BookmarksViewComponent.getBookmarkSections(bookmarkSections)}
+        {this.getBookmarkSections(bookmarkSections)}
         {this.getBookmarkedStops(bookmarks)}
       </div>
     );
@@ -104,6 +87,38 @@ export default class BookmarksViewComponent extends React.Component<Props> {
           bookmarkSections
         )}
       </section>
+    );
+  }
+
+  public getBookmarkSection(bookmarkSection: BookmarkSection, id: number) {
+    return (
+      <article className="bookmark-section">
+        <h3>{bookmarkSection.name}</h3>
+        <button onClick={this.props.removeBookmarkSection.bind(this, id)}>
+          Remove Section
+        </button>
+      </article>
+    );
+  }
+
+  private getBookmarkSections(bookmarkSections: BookmarkSections) {
+    if (isEmpty(bookmarkSections)) {
+      return (
+        <div className="bookmark-section-message">
+          Add a bookmark section to begin organizing bookmarks.
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        {map(
+          bookmarkSections,
+          (bookmarkSection: BookmarkSection, id: number) => {
+            return this.getBookmarkSection(bookmarkSection, id);
+          }
+        )}
+      </div>
     );
   }
 }

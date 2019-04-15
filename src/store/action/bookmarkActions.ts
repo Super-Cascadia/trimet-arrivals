@@ -3,6 +3,7 @@ import {
   BOOKMARK_SECTION_NAME_UPDATE_REQUEST,
   BOOKMARK_STOP_REQUEST,
   CREATE_BOOKMARK_SECTION_REQUEST,
+  REMOVE_BOOKMARK_SECTION_REQUEST,
   REMOVE_BOOKMARK_STOP_REQUEST
 } from "../constants";
 
@@ -23,4 +24,9 @@ export const sectionNameUpdateRequest = (name: string) => ({
 
 export const createBookmarkSectionRequest = () => ({
   type: CREATE_BOOKMARK_SECTION_REQUEST
+});
+
+export const removeBookmarkSectionRequest = (bookmarkSectionId: number) => ({
+  payload: { bookmarkSectionId },
+  type: REMOVE_BOOKMARK_SECTION_REQUEST
 });

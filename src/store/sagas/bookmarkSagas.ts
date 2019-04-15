@@ -9,6 +9,7 @@ import { StopLocation } from "../../api/trimet/types";
 import {
   CREATE_BOOKMARK_SECTION,
   CREATE_STOP_BOOKMARK,
+  REMOVE_BOOKMARK_SECTION,
   REMOVE_STOP_BOOKMARK,
   UPDATE_BOOKMARK_SECTION_NAME_INPUT
 } from "../constants";
@@ -80,6 +81,19 @@ export function* createBookmarkSection() {
   try {
     yield put({
       type: CREATE_BOOKMARK_SECTION
+    });
+  } catch (e) {
+    //  console.error(e)
+  }
+}
+
+export function* removeBookmarkSection(action) {
+  const bookmarkSectionId = action.payload.bookmarkSectionId;
+
+  try {
+    yield put({
+      payload: { bookmarkSectionId },
+      type: REMOVE_BOOKMARK_SECTION
     });
   } catch (e) {
     //  console.error(e)

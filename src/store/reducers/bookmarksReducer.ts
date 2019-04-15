@@ -1,9 +1,10 @@
-import { isEmpty, keys, omitBy, sortBy } from "lodash";
+import { isEmpty, keys, omit, omitBy, sortBy } from "lodash";
 import { StopLocation } from "../../api/trimet/types";
 import {
   CREATE_BOOKMARK_SECTION,
   CREATE_STOP_BOOKMARK,
   LOAD_BOOKMARKS_COMPLETE,
+  REMOVE_BOOKMARK_SECTION,
   REMOVE_STOP_BOOKMARK,
   UPDATE_BOOKMARK_SECTION_NAME_INPUT
 } from "../constants";
@@ -34,6 +35,7 @@ interface Action {
     stopLocation?: StopLocation;
     locationId?: number;
     name?: string;
+    bookmarkSectionId?: number;
     bookmarks?: {
       [locationId: number]: StopLocation;
     };
@@ -114,6 +116,20 @@ function createBookmarkSection(state) {
   };
 }
 
+function removeBookmarkSection(state, action: Action) {
+  const updatedBookmarkSections = omit(
+    state.bookmarkSections,
+    action.payload.bookmarkSectionId
+  );
+
+  return {
+    ...state,
+    bookmarkSections: {
+      ...updatedBookmarkSections
+    }
+  };
+}
+
 const bookmarksReducer = (state = InitialState, action: Action) => {
   switch (action.type) {
     case CREATE_STOP_BOOKMARK:
@@ -126,6 +142,8 @@ const bookmarksReducer = (state = InitialState, action: Action) => {
       return updateBookmarkSectionName(state, action);
     case CREATE_BOOKMARK_SECTION:
       return createBookmarkSection(state);
+    case REMOVE_BOOKMARK_SECTION:
+      return removeBookmarkSection(state, action);
     default:
       return {
         ...state
