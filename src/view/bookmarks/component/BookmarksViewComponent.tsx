@@ -1,12 +1,10 @@
 import { isEmpty, map } from "lodash";
 import React from "react";
 import { StopLocation } from "../../../api/trimet/types";
-import {
-  BookmarkSection,
-  BookmarkSections
-} from "../../../store/reducers/bookmarksReducer";
+import { BookmarkSectionsProps } from "../../../store/reducers/bookmarksReducer";
 import StopContainer from "../../stops/containers/StopContainer";
 import AddBookmarkSectionControl from "./AddBookmarkSectionControl";
+import BookmarkSections from "./BookmarkSections";
 import "./BookmarksViewComponent.css";
 
 interface Props {
@@ -14,7 +12,7 @@ interface Props {
   onSectionNameUpdate: (name: string) => void;
   bookmarkSectionName: string;
   createBookmarkSection: () => void;
-  bookmarkSections: BookmarkSections;
+  bookmarkSections: BookmarkSectionsProps;
   removeBookmarkSection: (bookmarkSectionId: number) => void;
 }
 
@@ -38,28 +36,10 @@ export default class BookmarksViewComponent extends React.Component<Props> {
     });
   }
 
-  public getBookmarksView(
-    bookmarks: StopLocation[],
-    bookmarkSectionName: string,
-    bookmarkSections: BookmarkSections
-  ) {
-    return (
-      <div>
-        <AddBookmarkSectionControl
-          bookmarkSectionName={bookmarkSectionName}
-          createBookmarkSection={this.props.createBookmarkSection}
-          onSectionNameUpdate={this.props.onSectionNameUpdate}
-        />
-        {this.getBookmarkSections(bookmarkSections)}
-        {this.getBookmarkedStops(bookmarks)}
-      </div>
-    );
-  }
-
   public routeBookMarksView(
     bookmarks: StopLocation[],
     bookmarkSectionName: string,
-    bookmarkSections: BookmarkSections
+    bookmarkSections: BookmarkSectionsProps
   ) {
     if (isEmpty(bookmarks)) {
       return (
@@ -69,10 +49,19 @@ export default class BookmarksViewComponent extends React.Component<Props> {
       );
     }
 
-    return this.getBookmarksView(
-      bookmarks,
-      bookmarkSectionName,
-      bookmarkSections
+    return (
+      <div>
+        <AddBookmarkSectionControl
+          bookmarkSectionName={bookmarkSectionName}
+          createBookmarkSection={this.props.createBookmarkSection}
+          onSectionNameUpdate={this.props.onSectionNameUpdate}
+        />
+        <BookmarkSections
+          bookmarkSections={bookmarkSections}
+          removeBookmarkSection={this.props.removeBookmarkSection}
+        />
+        {this.getBookmarkedStops(bookmarks)}
+      </div>
     );
   }
 
@@ -87,38 +76,6 @@ export default class BookmarksViewComponent extends React.Component<Props> {
           bookmarkSections
         )}
       </section>
-    );
-  }
-
-  public getBookmarkSection(bookmarkSection: BookmarkSection, id: number) {
-    return (
-      <article className="bookmark-section">
-        <h3>{bookmarkSection.name}</h3>
-        <button onClick={this.props.removeBookmarkSection.bind(this, id)}>
-          Remove Section
-        </button>
-      </article>
-    );
-  }
-
-  private getBookmarkSections(bookmarkSections: BookmarkSections) {
-    if (isEmpty(bookmarkSections)) {
-      return (
-        <div className="bookmark-section-message">
-          Add a bookmark section to begin organizing bookmarks.
-        </div>
-      );
-    }
-
-    return (
-      <div>
-        {map(
-          bookmarkSections,
-          (bookmarkSection: BookmarkSection, id: number) => {
-            return this.getBookmarkSection(bookmarkSection, id);
-          }
-        )}
-      </div>
     );
   }
 }

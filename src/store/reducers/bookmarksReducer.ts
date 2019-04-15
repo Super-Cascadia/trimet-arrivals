@@ -19,14 +19,14 @@ export interface BookmarkSection {
   bookmarkedStops: number[];
 }
 
-export interface BookmarkSections {
+export interface BookmarkSectionsProps {
   [id: number]: BookmarkSection;
 }
 
 export interface BookmarksReducerState {
   bookmarks: StopLocations;
   bookmarkInputSectionName: string;
-  bookmarkSections: BookmarkSections;
+  bookmarkSections: BookmarkSectionsProps;
 }
 
 interface Action {
