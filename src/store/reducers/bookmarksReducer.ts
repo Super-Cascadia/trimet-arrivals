@@ -1,17 +1,31 @@
-import { omitBy } from "lodash";
+import { isEmpty, keys, omitBy, sortBy } from "lodash";
 import { StopLocation } from "../../api/trimet/types";
 import {
+  CREATE_BOOKMARK_SECTION,
   CREATE_STOP_BOOKMARK,
   LOAD_BOOKMARKS_COMPLETE,
-  REMOVE_STOP_BOOKMARK
+  REMOVE_STOP_BOOKMARK,
+  UPDATE_BOOKMARK_SECTION_NAME_INPUT
 } from "../constants";
 
 export interface StopLocations {
   [locationId: number]: StopLocation;
 }
 
+export interface BookmarkSection {
+  name: string;
+  order: number;
+  bookmarkedStops: number[];
+}
+
+export interface BookmarkSections {
+  [id: number]: BookmarkSection;
+}
+
 export interface BookmarksReducerState {
   bookmarks: StopLocations;
+  bookmarkInputSectionName: string;
+  bookmarkSections: BookmarkSections;
 }
 
 interface Action {
@@ -19,6 +33,7 @@ interface Action {
   payload: {
     stopLocation?: StopLocation;
     locationId?: number;
+    name?: string;
     bookmarks?: {
       [locationId: number]: StopLocation;
     };
@@ -26,6 +41,8 @@ interface Action {
 }
 
 const InitialState = {
+  bookmarkInputSectionName: "",
+  bookmarkSections: {},
   bookmarks: {}
 };
 
@@ -61,6 +78,42 @@ function loadBookmarksComplete(state, action: Action) {
   };
 }
 
+function updateBookmarkSectionName(state, action: Action) {
+  return {
+    ...state,
+    bookmarkInputSectionName: action.payload.name
+  };
+}
+
+function getNextId(state) {
+  if (isEmpty(state.bookmarkSections)) {
+    return 0;
+  }
+
+  const bookmarksByKeys = keys(state.bookmarkSections);
+  const lastKey = bookmarksByKeys[bookmarksByKeys.length - 1];
+
+  return lastKey + 1;
+}
+
+function createBookmarkSection(state) {
+  const name = state.bookmarkInputSectionName;
+  const nextId = getNextId(state);
+
+  return {
+    ...state,
+    bookmarkInputSectionName: "",
+    bookmarkSections: {
+      ...state.bookmarkSections,
+      [nextId]: {
+        bookmarkedStops: [],
+        name,
+        order: 0
+      }
+    }
+  };
+}
+
 const bookmarksReducer = (state = InitialState, action: Action) => {
   switch (action.type) {
     case CREATE_STOP_BOOKMARK:
@@ -69,6 +122,10 @@ const bookmarksReducer = (state = InitialState, action: Action) => {
       return removeStopBookmark(state, action);
     case LOAD_BOOKMARKS_COMPLETE:
       return loadBookmarksComplete(state, action);
+    case UPDATE_BOOKMARK_SECTION_NAME_INPUT:
+      return updateBookmarkSectionName(state, action);
+    case CREATE_BOOKMARK_SECTION:
+      return createBookmarkSection(state);
     default:
       return {
         ...state

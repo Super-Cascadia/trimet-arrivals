@@ -6,7 +6,12 @@ import {
 } from "../../api/localstorage/bookmarks";
 // tslint:enable:no-submodule-imports
 import { StopLocation } from "../../api/trimet/types";
-import { CREATE_STOP_BOOKMARK, REMOVE_STOP_BOOKMARK } from "../constants";
+import {
+  CREATE_BOOKMARK_SECTION,
+  CREATE_STOP_BOOKMARK,
+  REMOVE_STOP_BOOKMARK,
+  UPDATE_BOOKMARK_SECTION_NAME_INPUT
+} from "../constants";
 
 interface BookmarkStopAction {
   payload: {
@@ -47,5 +52,36 @@ export function* removeStopBookmark(action: RemoveStopBookmarkAction) {
     yield call(removeStoredBookmark, locationId);
   } catch (e) {
     // console.error(e)
+  }
+}
+
+interface UpdateSectionInputAction {
+  payload: {
+    name: string;
+  };
+}
+
+export function* updateSectionInputName(action: UpdateSectionInputAction) {
+  try {
+    const name = action.payload.name;
+
+    yield put({
+      payload: {
+        name
+      },
+      type: UPDATE_BOOKMARK_SECTION_NAME_INPUT
+    });
+  } catch (e) {
+    // console.error(e);
+  }
+}
+
+export function* createBookmarkSection() {
+  try {
+    yield put({
+      type: CREATE_BOOKMARK_SECTION
+    });
+  } catch (e) {
+    //  console.error(e)
   }
 }

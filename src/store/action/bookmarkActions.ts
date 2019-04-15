@@ -1,6 +1,8 @@
 import { StopLocation } from "../../api/trimet/types";
 import {
+  BOOKMARK_SECTION_NAME_UPDATE_REQUEST,
   BOOKMARK_STOP_REQUEST,
+  CREATE_BOOKMARK_SECTION_REQUEST,
   REMOVE_BOOKMARK_STOP_REQUEST
 } from "../constants";
 
@@ -12,4 +14,13 @@ export const bookmarkStopRequest = (stopLocation: StopLocation) => ({
 export const removeStopBookmarkRequest = (locationId: number) => ({
   payload: { locationId },
   type: REMOVE_BOOKMARK_STOP_REQUEST
+});
+
+export const sectionNameUpdateRequest = (name: string) => ({
+  payload: { name },
+  type: BOOKMARK_SECTION_NAME_UPDATE_REQUEST
+});
+
+export const createBookmarkSectionRequest = () => ({
+  type: CREATE_BOOKMARK_SECTION_REQUEST
 });
