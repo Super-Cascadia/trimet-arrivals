@@ -1,9 +1,11 @@
 import { isEmpty, map } from "lodash";
 import React from "react";
+import FontAwesome from "react-fontawesome";
 import {
   BookmarkSection,
   BookmarkSectionsProps
 } from "../../../store/reducers/bookmarksReducer";
+import "./BookmarkSections.css";
 
 function getBookmarkSection(
   bookmarkSection: BookmarkSection,
@@ -13,9 +15,14 @@ function getBookmarkSection(
   return (
     <article className="bookmark-section" key={id}>
       <h3>{bookmarkSection.name}</h3>
-      <button onClick={removeBookmarkSection.bind(this, id)}>
-        Remove Section
-      </button>
+      <div className="bookmark-section-remove-button">
+        <button
+          onClick={removeBookmarkSection.bind(this, id)}
+          title="Remove Bookmark Section"
+        >
+          <FontAwesome name="times-circle" />
+        </button>
+      </div>
     </article>
   );
 }

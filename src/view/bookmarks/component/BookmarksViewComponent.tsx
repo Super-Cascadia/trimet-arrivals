@@ -51,6 +51,7 @@ export default class BookmarksViewComponent extends React.Component<Props> {
 
     return (
       <div>
+        <h1>Bookmark Sections</h1>
         <AddBookmarkSectionControl
           bookmarkSectionName={bookmarkSectionName}
           createBookmarkSection={this.props.createBookmarkSection}
@@ -60,6 +61,7 @@ export default class BookmarksViewComponent extends React.Component<Props> {
           bookmarkSections={bookmarkSections}
           removeBookmarkSection={this.props.removeBookmarkSection}
         />
+        <h1>Uncategorized Bookmarks</h1>
         {this.getBookmarkedStops(bookmarks)}
       </div>
     );

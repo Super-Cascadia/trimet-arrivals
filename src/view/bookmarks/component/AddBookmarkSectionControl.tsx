@@ -57,10 +57,11 @@ export default class AddBookmarkSectionControl extends Component<Props, State> {
           <input
             type="text"
             value={this.state.bookmarkSectionName}
+            placeholder="Bookmark name"
             onChange={this.onChange}
           />
           <button onClick={this.onClickAddBookmark} disabled={noTextEntered}>
-            Add Bookmark List
+            Create
           </button>
         </form>
       </div>
