@@ -1,6 +1,9 @@
 // tslint:disable:no-submodule-imports
 import { call, put } from "redux-saga/effects";
-import { getStoredBookmarks } from "../../api/localstorage/bookmarks";
+import {
+  fetchStoredBookmarks,
+  fetchStoredBookmarkSections
+} from "../../api/localstorage/bookmarks";
 // tslint:enable:no-submodule-imports
 import { CHANGE_VIEW, LOAD_BOOKMARKS_COMPLETE } from "../constants";
 
@@ -23,8 +26,13 @@ export function* changeView(action: ChangeViewAction) {
 
 export function* initialLoad() {
   try {
-    const bookmarks = yield call(getStoredBookmarks);
-    yield put({ payload: { bookmarks }, type: LOAD_BOOKMARKS_COMPLETE });
+    const bookmarks = yield call(fetchStoredBookmarks);
+    const bookmarkSections = yield call(fetchStoredBookmarkSections);
+
+    yield put({
+      payload: { bookmarks, bookmarkSections },
+      type: LOAD_BOOKMARKS_COMPLETE
+    });
   } catch (e) {
     // console.error(e);
   }

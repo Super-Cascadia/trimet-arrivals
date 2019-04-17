@@ -1,7 +1,10 @@
 // tslint:disable:no-submodule-imports
-import { call, put } from "redux-saga/effects";
+import { isEmpty, keys } from "lodash";
+import { call, put, select } from "redux-saga/effects";
 import {
   removeStoredBookmark,
+  removeStoredBookmarkSection,
+  storeBookmarkSection,
   storeLocationBookmark
 } from "../../api/localstorage/bookmarks";
 // tslint:enable:no-submodule-imports
@@ -21,7 +24,9 @@ interface BookmarkStopAction {
 }
 
 function logError(e) {
-  // console.error(e);
+  // tslint:disable:no-console
+  console.error(e);
+  // tslint:enable:no-console
 }
 
 export function* bookmarkStop(action: BookmarkStopAction) {
@@ -81,11 +86,41 @@ export function* updateSectionInputName(action: UpdateSectionInputAction) {
   }
 }
 
+function getNextId({ bookmarksReducer }): number {
+  if (isEmpty(bookmarksReducer.bookmarkSections)) {
+    return 0;
+  }
+
+  const bookmarksByKeys = keys(bookmarksReducer.bookmarkSections);
+  const lastKey = bookmarksByKeys[bookmarksByKeys.length - 1];
+
+  return parseInt(lastKey, 10) + 1;
+}
+
+function getBookmarkName({ bookmarksReducer }) {
+  return bookmarksReducer.bookmarkInputSectionName;
+}
+
+function buildBookmarkSection(bookmarkName: string) {
+  return {
+    bookmarkedStops: [],
+    name: bookmarkName,
+    order: 0
+  };
+}
+
 export function* createBookmarkSection() {
   try {
+    const nextId = yield select(getNextId);
+    const bookmarkName = yield select(getBookmarkName);
+    const bookmarkSection = buildBookmarkSection(bookmarkName);
+
     yield put({
+      payload: { nextId, bookmarkSection },
       type: CREATE_BOOKMARK_SECTION
     });
+
+    yield call(storeBookmarkSection, nextId, bookmarkSection);
   } catch (e) {
     logError(e);
   }
@@ -99,6 +134,8 @@ export function* removeBookmarkSection(action) {
       payload: { bookmarkSectionId },
       type: REMOVE_BOOKMARK_SECTION
     });
+
+    yield call(removeStoredBookmarkSection, bookmarkSectionId);
   } catch (e) {
     logError(e);
   }

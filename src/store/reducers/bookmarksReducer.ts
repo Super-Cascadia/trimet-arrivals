@@ -36,6 +36,7 @@ interface Action {
     locationId?: number;
     name?: string;
     bookmarkSectionId?: number;
+    bookmarkSections?: any;
     bookmarks?: {
       [locationId: number]: StopLocation;
     };
@@ -74,6 +75,9 @@ function createStopBookmark(state, action: Action) {
 function loadBookmarksComplete(state, action: Action) {
   return {
     ...state,
+    bookmarkSections: {
+      ...action.payload.bookmarkSections
+    },
     bookmarks: {
       ...action.payload.bookmarks
     }
@@ -87,31 +91,15 @@ function updateBookmarkSectionName(state, action: Action) {
   };
 }
 
-function getNextId(state) {
-  if (isEmpty(state.bookmarkSections)) {
-    return 0;
-  }
-
-  const bookmarksByKeys = keys(state.bookmarkSections);
-  const lastKey = bookmarksByKeys[bookmarksByKeys.length - 1];
-
-  return lastKey + 1;
-}
-
-function createBookmarkSection(state) {
-  const name = state.bookmarkInputSectionName;
-  const nextId = getNextId(state);
+function createBookmarkSection(state, action) {
+  const { nextId, bookmarkSection } = action.payload;
 
   return {
     ...state,
     bookmarkInputSectionName: "",
     bookmarkSections: {
       ...state.bookmarkSections,
-      [nextId]: {
-        bookmarkedStops: [],
-        name,
-        order: 0
-      }
+      [nextId]: bookmarkSection
     }
   };
 }
@@ -141,7 +129,7 @@ const bookmarksReducer = (state = InitialState, action: Action) => {
     case UPDATE_BOOKMARK_SECTION_NAME_INPUT:
       return updateBookmarkSectionName(state, action);
     case CREATE_BOOKMARK_SECTION:
-      return createBookmarkSection(state);
+      return createBookmarkSection(state, action);
     case REMOVE_BOOKMARK_SECTION:
       return removeBookmarkSection(state, action);
     default:

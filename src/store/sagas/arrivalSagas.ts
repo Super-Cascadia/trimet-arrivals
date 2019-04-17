@@ -4,8 +4,9 @@ import { call, put } from "redux-saga/effects";
 import { getArrivals } from "../../api/trimet/arrivals";
 import { LOAD_ARRIVALS, LOAD_ARRIVALS_COMPLETE } from "../constants";
 
+const MINUTES_TO_POLL_ARRIVALS = 45;
+
 export function* loadArrivalData(action) {
-  const minutes = 45;
   const locationId = action.payload.locationId;
   const stringNumberLocationId = locationId.toString(10);
 
@@ -14,7 +15,7 @@ export function* loadArrivalData(action) {
     const arrivalData = yield call(
       getArrivals,
       stringNumberLocationId,
-      minutes
+      MINUTES_TO_POLL_ARRIVALS
     );
     yield put({
       payload: { arrivalData, locationId },
