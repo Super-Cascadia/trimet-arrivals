@@ -20,6 +20,10 @@ interface BookmarkStopAction {
   };
 }
 
+function logError(e) {
+  // console.error(e);
+}
+
 export function* bookmarkStop(action: BookmarkStopAction) {
   try {
     const stopLocation = action.payload.stopLocation;
@@ -31,7 +35,7 @@ export function* bookmarkStop(action: BookmarkStopAction) {
 
     yield call(storeLocationBookmark, stopLocation);
   } catch (e) {
-    // console.error(e)
+    logError(e);
   }
 }
 
@@ -52,7 +56,7 @@ export function* removeStopBookmark(action: RemoveStopBookmarkAction) {
 
     yield call(removeStoredBookmark, locationId);
   } catch (e) {
-    // console.error(e)
+    logError(e);
   }
 }
 
@@ -73,7 +77,7 @@ export function* updateSectionInputName(action: UpdateSectionInputAction) {
       type: UPDATE_BOOKMARK_SECTION_NAME_INPUT
     });
   } catch (e) {
-    // console.error(e);
+    logError(e);
   }
 }
 
@@ -83,7 +87,7 @@ export function* createBookmarkSection() {
       type: CREATE_BOOKMARK_SECTION
     });
   } catch (e) {
-    //  console.error(e)
+    logError(e);
   }
 }
 
@@ -96,6 +100,6 @@ export function* removeBookmarkSection(action) {
       type: REMOVE_BOOKMARK_SECTION
     });
   } catch (e) {
-    //  console.error(e)
+    logError(e);
   }
 }
