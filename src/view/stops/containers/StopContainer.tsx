@@ -1,13 +1,7 @@
 import { connect } from "react-redux";
-import { StopLocation } from "../../../api/trimet/types";
-import {
-  bookmarkStopRequest,
-  removeStopBookmarkRequest
-} from "../../../store/action/bookmarkActions";
 import { loadArrivalDataRequest } from "../../../store/action/stopActions";
 import { RootState } from "../../../store/reducers";
 import { arrivalsLoadingSelector } from "../../../store/selectors/arrivalSelectors";
-import { stopIsBookmarkedSelector } from "../../../store/selectors/bookmarkSelectors";
 import { stopLocationSelector } from "../../../store/selectors/stopSelectors";
 import StopComponent from "../components/StopComponent";
 
@@ -21,7 +15,6 @@ const mapStateToProps = (state: RootState, props: Props) => {
   return {
     ...props,
     loading: arrivalsLoadingSelector(state, props.locationId),
-    stopIsBookmarked: stopIsBookmarkedSelector(state, props.locationId),
     stopLocation: stopLocationSelector(state, props.locationId)
   };
 };
@@ -30,16 +23,6 @@ const mapDispatchToProps = dispatch => {
   return {
     loadArrivalData(locationId: number): void {
       dispatch(loadArrivalDataRequest(locationId));
-    },
-    onBookmarkClick(
-      stopLocation: StopLocation,
-      stopIsBookmarked: boolean
-    ): void {
-      if (stopIsBookmarked) {
-        dispatch(removeStopBookmarkRequest(stopLocation.locid));
-      } else {
-        dispatch(bookmarkStopRequest(stopLocation));
-      }
     }
   };
 };

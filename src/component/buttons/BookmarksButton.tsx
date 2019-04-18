@@ -2,6 +2,7 @@ import React from "react";
 import FontAwesome from "react-fontawesome";
 import { StopLocation } from "../../api/trimet/types";
 import "./BookmarksButton.css";
+import BookmarkSectionSelector from "./BookmarkSectionSelector";
 
 function bookmarkIcon(stopIsBookmarked: boolean) {
   if (stopIsBookmarked) {
@@ -48,6 +49,7 @@ export default function BookmarkButton({
       >
         {bookmarkIcon(stopIsBookmarked)}
       </button>
+      <BookmarkSectionSelector />
     </div>
   );
 }
