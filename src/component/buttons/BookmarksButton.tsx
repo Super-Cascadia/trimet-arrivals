@@ -1,6 +1,7 @@
 import React from "react";
 import FontAwesome from "react-fontawesome";
 import { StopLocation } from "../../api/trimet/types";
+import { BookmarkSectionsProps } from "../../store/reducers/bookmarksReducer";
 import "./BookmarksButton.css";
 import BookmarkSectionSelector from "./BookmarkSectionSelector";
 
@@ -30,6 +31,11 @@ interface Props {
     stopIsBookmarked: boolean
   ) => void;
   stopIsBookmarked: boolean;
+  bookmarkSections: BookmarkSectionsProps;
+  onBookmarkSectionSelect: (
+    selectedBookmarkSection: number,
+    stopLocation: StopLocation
+  ) => void;
 }
 
 const noop = () => {
@@ -39,7 +45,9 @@ const noop = () => {
 export default function BookmarkButton({
   onBookmarkClick = noop,
   stopLocation,
-  stopIsBookmarked = false
+  stopIsBookmarked = false,
+  bookmarkSections,
+  onBookmarkSectionSelect
 }: Props) {
   return (
     <div className="bookmark-button-container">
@@ -49,7 +57,11 @@ export default function BookmarkButton({
       >
         {bookmarkIcon(stopIsBookmarked)}
       </button>
-      <BookmarkSectionSelector />
+      <BookmarkSectionSelector
+        bookmarkSections={bookmarkSections}
+        stopLocation={stopLocation}
+        onBookmarkSectionSelect={onBookmarkSectionSelect}
+      />
     </div>
   );
 }

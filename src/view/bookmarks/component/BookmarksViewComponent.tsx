@@ -1,46 +1,16 @@
 import { isEmpty, map } from "lodash";
 import React from "react";
 import { StopLocation } from "../../../api/trimet/types";
-import { BookmarkSectionsProps } from "../../../store/reducers/bookmarksReducer";
 import StopContainer from "../../stops/containers/StopContainer";
-import AddBookmarkSectionControl from "./AddBookmarkSectionControl";
-import BookmarkSections from "./BookmarkSections";
+import BookmarkSectionsContainer from "../container/BookmarkSectionsContainer";
 import "./BookmarksViewComponent.css";
 
 interface Props {
   bookmarks: StopLocation[];
-  onSectionNameUpdate: (name: string) => void;
-  bookmarkSectionName: string;
-  createBookmarkSection: () => void;
-  bookmarkSections: BookmarkSectionsProps;
-  removeBookmarkSection: (bookmarkSectionId: number) => void;
 }
 
-const noop = () => {
-  return;
-};
-
 export default class BookmarksViewComponent extends React.Component<Props> {
-  public getBookmarkedStops(bookmarks: StopLocation[]) {
-    return map(bookmarks, (stopLocation: StopLocation) => {
-      const locationId = stopLocation.locid;
-
-      return (
-        <StopContainer
-          key={locationId}
-          locationId={locationId}
-          onRouteIndicatorClick={noop}
-          showArrivals={true}
-        />
-      );
-    });
-  }
-
-  public routeBookMarksView(
-    bookmarks: StopLocation[],
-    bookmarkSectionName: string,
-    bookmarkSections: BookmarkSectionsProps
-  ) {
+  public static getBookmarkedStops(bookmarks: StopLocation[]) {
     if (isEmpty(bookmarks)) {
       return (
         <div className="no-bookmarks-container">
@@ -49,34 +19,29 @@ export default class BookmarksViewComponent extends React.Component<Props> {
       );
     }
 
-    return (
-      <div>
-        <h1>Bookmark Sections</h1>
-        <AddBookmarkSectionControl
-          bookmarkSectionName={bookmarkSectionName}
-          createBookmarkSection={this.props.createBookmarkSection}
-          onSectionNameUpdate={this.props.onSectionNameUpdate}
+    return map(bookmarks, (stopLocation: StopLocation) => {
+      const locationId = stopLocation.locid;
+
+      return (
+        <StopContainer
+          key={locationId}
+          locationId={locationId}
+          showArrivals={true}
         />
-        <BookmarkSections
-          bookmarkSections={bookmarkSections}
-          removeBookmarkSection={this.props.removeBookmarkSection}
-        />
-        <h1>Uncategorized Bookmarks</h1>
-        {this.getBookmarkedStops(bookmarks)}
-      </div>
-    );
+      );
+    });
   }
 
   public render() {
-    const { bookmarks, bookmarkSectionName, bookmarkSections } = this.props;
+    const { bookmarks } = this.props;
 
     return (
       <section>
-        {this.routeBookMarksView(
-          bookmarks,
-          bookmarkSectionName,
-          bookmarkSections
-        )}
+        <div>
+          <BookmarkSectionsContainer />
+          <h1>Uncategorized Bookmarks</h1>
+          {BookmarksViewComponent.getBookmarkedStops(bookmarks)}
+        </div>
       </section>
     );
   }

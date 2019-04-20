@@ -5,7 +5,8 @@ import {
   removeStoredBookmark,
   removeStoredBookmarkSection,
   storeBookmarkSection,
-  storeLocationBookmark
+  storeLocationBookmark,
+  updateStoredBookmarkSection
 } from "../../api/localstorage/bookmarks";
 // tslint:enable:no-submodule-imports
 import { StopLocation } from "../../api/trimet/types";
@@ -14,7 +15,8 @@ import {
   CREATE_STOP_BOOKMARK,
   REMOVE_BOOKMARK_SECTION,
   REMOVE_STOP_BOOKMARK,
-  UPDATE_BOOKMARK_SECTION_NAME_INPUT
+  UPDATE_BOOKMARK_SECTION_NAME_INPUT,
+  UPDATE_BOOKMARKS_SECTION_CONTENTS
 } from "../constants";
 
 interface BookmarkStopAction {
@@ -136,6 +138,25 @@ export function* removeBookmarkSection(action) {
     });
 
     yield call(removeStoredBookmarkSection, bookmarkSectionId);
+  } catch (e) {
+    logError(e);
+  }
+}
+
+export function* updateSelectedBookmarkSection(action) {
+  const { selectedBookmarkSection, stopLocation } = action.payload;
+
+  try {
+    yield put({
+      payload: { selectedBookmarkSection, stopLocation },
+      type: UPDATE_BOOKMARKS_SECTION_CONTENTS
+    });
+
+    yield call(
+      updateStoredBookmarkSection,
+      selectedBookmarkSection,
+      stopLocation
+    );
   } catch (e) {
     logError(e);
   }

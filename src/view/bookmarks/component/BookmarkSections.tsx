@@ -1,41 +1,17 @@
 import { isEmpty, map } from "lodash";
 import React from "react";
-import FontAwesome from "react-fontawesome";
 import {
-  BookmarkSection,
+  BookmarkSectionProps,
   BookmarkSectionsProps
 } from "../../../store/reducers/bookmarksReducer";
+import BookmarkSectionContainer from "../container/BookmarkSectionContainer";
 import "./BookmarkSections.css";
-
-function getBookmarkSection(
-  bookmarkSection: BookmarkSection,
-  id: number,
-  removeBookmarkSection
-) {
-  return (
-    <article className="bookmark-section" key={id}>
-      <h3>{bookmarkSection.name}</h3>
-      <div className="bookmark-section-remove-button">
-        <button
-          onClick={removeBookmarkSection.bind(this, id)}
-          title="Remove Bookmark Section"
-        >
-          <FontAwesome name="times-circle" />
-        </button>
-      </div>
-    </article>
-  );
-}
 
 interface Props {
   bookmarkSections: BookmarkSectionsProps;
-  removeBookmarkSection: (bookmarkSectionId: number) => void;
 }
 
-export default function BookmarkSections({
-  bookmarkSections,
-  removeBookmarkSection
-}: Props) {
+export default function BookmarkSections({ bookmarkSections }: Props) {
   if (isEmpty(bookmarkSections)) {
     return (
       <div className="bookmark-section-message">
@@ -46,9 +22,12 @@ export default function BookmarkSections({
 
   return (
     <div>
-      {map(bookmarkSections, (bookmarkSection: BookmarkSection, id: number) => {
-        return getBookmarkSection(bookmarkSection, id, removeBookmarkSection);
-      })}
+      {map(
+        bookmarkSections,
+        (bookmarkSection: BookmarkSectionProps, id: number) => {
+          return <BookmarkSectionContainer bookmarkSectionId={id} />;
+        }
+      )}
     </div>
   );
 }

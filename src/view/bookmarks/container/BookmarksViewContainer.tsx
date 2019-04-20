@@ -20,23 +20,11 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onSectionNameUpdate(name: string) {
-      dispatch(sectionNameUpdateRequest(name));
-    },
-    createBookmarkSection() {
-      dispatch(createBookmarkSectionRequest());
-    },
-    removeBookmarkSection(bookmarkSectionId: number) {
-      dispatch(removeBookmarkSectionRequest(bookmarkSectionId));
-    }
-  };
-};
-
 const BookmarksViewContainer = connect(
   mapStateToProps,
-  mapDispatchToProps
+  // tslint:disable:no-empty
+  () => {}
+  // tslint:enable:no-empty
 )(BookmarksViewComponent);
 
 export default BookmarksViewContainer;

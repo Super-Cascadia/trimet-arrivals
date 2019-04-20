@@ -10,7 +10,7 @@ interface Props {
   locationId: number;
   loading: boolean;
   showArrivals: boolean;
-  onRouteIndicatorClick: (route: Route) => void;
+  onRouteIndicatorClick?: (route: Route) => void;
 }
 
 const interval = 30000;

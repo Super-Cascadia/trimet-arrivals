@@ -3,6 +3,7 @@ import { takeEvery } from "redux-saga/effects";
 // tslint:enable:no-submodule-imports
 import {
   BOOKMARK_SECTION_NAME_UPDATE_REQUEST,
+  BOOKMARK_SECTION_SELECT_REQUEST,
   BOOKMARK_STOP_REQUEST,
   CHANGE_VIEW_REQUEST,
   CREATE_BOOKMARK_SECTION_REQUEST,
@@ -18,7 +19,8 @@ import {
   createBookmarkSection,
   removeBookmarkSection,
   removeStopBookmark,
-  updateSectionInputName
+  updateSectionInputName,
+  updateSelectedBookmarkSection
 } from "./bookmarkSagas";
 import { loadStopData } from "./stopSagas";
 import { changeView, initialLoad } from "./viewSagas";
@@ -37,4 +39,8 @@ export function* rootSaga() {
   yield takeEvery(BOOKMARK_SECTION_NAME_UPDATE_REQUEST, updateSectionInputName);
   yield takeEvery(CREATE_BOOKMARK_SECTION_REQUEST, createBookmarkSection);
   yield takeEvery(REMOVE_BOOKMARK_SECTION_REQUEST, removeBookmarkSection);
+  yield takeEvery(
+    BOOKMARK_SECTION_SELECT_REQUEST,
+    updateSelectedBookmarkSection
+  );
 }

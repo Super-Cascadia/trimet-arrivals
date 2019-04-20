@@ -2,7 +2,11 @@ import { isEmpty } from "lodash";
 import { createSelector } from "reselect";
 import { StopLocation } from "../../api/trimet/types";
 import { RootState } from "../reducers";
-import { StopLocations } from "../reducers/bookmarksReducer";
+import {
+  BookmarkSectionProps,
+  BookmarkSectionsProps,
+  StopLocations
+} from "../reducers/bookmarksReducer";
 
 const selectBookmarks = (state: RootState) => state.bookmarksReducer.bookmarks;
 const selectBookmarkedStop = (state: RootState, locationId: number) =>
@@ -11,6 +15,8 @@ const selectBookmarkInputSectionName = (state: RootState) =>
   state.bookmarksReducer.bookmarkInputSectionName;
 const selectBookmarkSections = (state: RootState) =>
   state.bookmarksReducer.bookmarkSections;
+const selectBookmarkSectionById = (state: RootState, id: number) =>
+  state.bookmarksReducer.bookmarkSections[id];
 
 export const bookmarksSelector = createSelector(
   selectBookmarks,
@@ -35,5 +41,15 @@ export const bookmarkInputSectionnameSelector = createSelector(
 
 export const bookmarkSectionSelector = createSelector(
   selectBookmarkSections,
-  bookmarkSections => bookmarkSections
+  (bookmarkSections: BookmarkSectionsProps) => bookmarkSections
+);
+
+export const bookmarkSectionNameSelector = createSelector(
+  selectBookmarkSectionById,
+  (bookmarkSection: BookmarkSectionProps) => bookmarkSection.name
+);
+
+export const bookmarkSectionStopsSelector = createSelector(
+  selectBookmarkSectionById,
+  (bookmarkSection: BookmarkSectionProps) => bookmarkSection.bookmarkedStops
 );

@@ -61,3 +61,10 @@ export function removeStoredBookmarkSection(bookmarkSectionId) {
 
   return updateBookmarkSections(updatedBookmarkSections);
 }
+
+export function updateStoredBookmarkSection(
+  selectedBookmarkSection: number,
+  stopLocation: StopLocation
+) {
+  return;
+}

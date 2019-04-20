@@ -6,21 +6,23 @@ import {
   LOAD_BOOKMARKS_COMPLETE,
   REMOVE_BOOKMARK_SECTION,
   REMOVE_STOP_BOOKMARK,
-  UPDATE_BOOKMARK_SECTION_NAME_INPUT
+  UPDATE_BOOKMARK_SECTION_NAME_INPUT,
+  UPDATE_BOOKMARKS_SECTION_CONTENTS
 } from "../constants";
+import { RootState } from "./index";
 
 export interface StopLocations {
   [locationId: number]: StopLocation;
 }
 
-export interface BookmarkSection {
+export interface BookmarkSectionProps {
   name: string;
   order: number;
   bookmarkedStops: number[];
 }
 
 export interface BookmarkSectionsProps {
-  [id: number]: BookmarkSection;
+  [id: number]: BookmarkSectionProps;
 }
 
 export interface BookmarksReducerState {
@@ -32,9 +34,12 @@ export interface BookmarksReducerState {
 interface Action {
   type: string;
   payload: {
+    selectedBookmarkSection?: number;
     stopLocation?: StopLocation;
     locationId?: number;
     name?: string;
+    nextId?: number;
+    bookmarkSection?: BookmarkSectionProps;
     bookmarkSectionId?: number;
     bookmarkSections?: any;
     bookmarks?: {
@@ -49,7 +54,7 @@ const InitialState = {
   bookmarks: {}
 };
 
-function removeStopBookmark(state, action: Action) {
+function removeStopBookmark(state: BookmarksReducerState, action: Action) {
   const newBookmarks = omitBy({ ...state.bookmarks }, (item: StopLocation) => {
     return item.locid === action.payload.locationId;
   });
@@ -60,7 +65,7 @@ function removeStopBookmark(state, action: Action) {
   };
 }
 
-function createStopBookmark(state, action: Action) {
+function createStopBookmark(state: BookmarksReducerState, action: Action) {
   return {
     ...state,
     bookmarks: {
@@ -72,7 +77,7 @@ function createStopBookmark(state, action: Action) {
   };
 }
 
-function loadBookmarksComplete(state, action: Action) {
+function loadBookmarksComplete(state: BookmarksReducerState, action: Action) {
   return {
     ...state,
     bookmarkSections: {
@@ -84,14 +89,17 @@ function loadBookmarksComplete(state, action: Action) {
   };
 }
 
-function updateBookmarkSectionName(state, action: Action) {
+function updateBookmarkSectionName(
+  state: BookmarksReducerState,
+  action: Action
+) {
   return {
     ...state,
     bookmarkInputSectionName: action.payload.name
   };
 }
 
-function createBookmarkSection(state, action) {
+function createBookmarkSection(state: BookmarksReducerState, action: Action) {
   const { nextId, bookmarkSection } = action.payload;
 
   return {
@@ -104,7 +112,7 @@ function createBookmarkSection(state, action) {
   };
 }
 
-function removeBookmarkSection(state, action: Action) {
+function removeBookmarkSection(state: BookmarksReducerState, action: Action) {
   const updatedBookmarkSections = omit(
     state.bookmarkSections,
     action.payload.bookmarkSectionId
@@ -114,6 +122,27 @@ function removeBookmarkSection(state, action: Action) {
     ...state,
     bookmarkSections: {
       ...updatedBookmarkSections
+    }
+  };
+}
+
+function updateBookmarkSectionContents(
+  state: BookmarksReducerState,
+  action: Action
+) {
+  const { bookmarkSections } = state;
+  const { selectedBookmarkSection, stopLocation } = action.payload;
+  const bookmarkSection = bookmarkSections[selectedBookmarkSection];
+
+  bookmarkSection.bookmarkedStops.push(stopLocation.locid);
+
+  return {
+    ...state,
+    bookmarkSections: {
+      ...state.bookmarkSections,
+      [selectedBookmarkSection]: {
+        ...bookmarkSection
+      }
     }
   };
 }
@@ -132,6 +161,8 @@ const bookmarksReducer = (state = InitialState, action: Action) => {
       return createBookmarkSection(state, action);
     case REMOVE_BOOKMARK_SECTION:
       return removeBookmarkSection(state, action);
+    case UPDATE_BOOKMARKS_SECTION_CONTENTS:
+      return updateBookmarkSectionContents(state, action);
     default:
       return {
         ...state
