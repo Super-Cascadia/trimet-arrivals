@@ -2,17 +2,19 @@
 import { takeEvery } from "redux-saga/effects";
 // tslint:enable:no-submodule-imports
 import {
-  BOOKMARK_SECTION_NAME_UPDATE_REQUEST,
-  BOOKMARK_SECTION_SELECT_REQUEST,
   BOOKMARK_STOP_REQUEST,
   CHANGE_VIEW_REQUEST,
-  CREATE_BOOKMARK_SECTION_REQUEST,
   INITIAL_LOAD_REQUEST,
   LOAD_ARRIVALS_DATA_REQUEST,
   LOAD_STOP_DATA_REQUEST,
-  REMOVE_BOOKMARK_SECTION_REQUEST,
   REMOVE_BOOKMARK_STOP_REQUEST
 } from "../constants";
+import {
+  BOOKMARK_SECTION_NAME_UPDATE_REQUEST,
+  BOOKMARK_SECTION_SELECT_REQUEST,
+  CREATE_BOOKMARK_SECTION_REQUEST,
+  REMOVE_BOOKMARK_SECTION_REQUEST
+} from "../constants/bookmarkSections";
 import { loadArrivalData } from "./arrivalSagas";
 import {
   bookmarkStop,

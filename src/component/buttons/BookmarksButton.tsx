@@ -1,7 +1,7 @@
 import React from "react";
 import FontAwesome from "react-fontawesome";
 import { StopLocation } from "../../api/trimet/types";
-import { BookmarkSectionsProps } from "../../store/reducers/bookmarksReducer";
+import { BookmarkSectionsProps } from "../../store/reducers/bookmarkSectionReducer";
 import "./BookmarksButton.css";
 import BookmarkSectionSelector from "./BookmarkSectionSelector";
 

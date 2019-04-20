@@ -4,7 +4,7 @@ import { StopLocation } from "../../api/trimet/types";
 import {
   BookmarkSectionProps,
   BookmarkSectionsProps
-} from "../../store/reducers/bookmarksReducer";
+} from "../../store/reducers/bookmarkSectionReducer";
 
 interface Props {
   bookmarkSections: BookmarkSectionsProps;

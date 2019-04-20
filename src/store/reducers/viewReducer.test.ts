@@ -1,7 +1,7 @@
 import { CHANGE_VIEW } from "../constants";
 import viewReducer, { BOOKMARKS_VIEW, NEARBY_STOPS_VIEW } from "./viewReducer";
 
-describe("bookmarksReducer", () => {
+describe("bookmarkSectionReducer", () => {
   describe("by default", () => {
     it("by default the active view is the nearby stops view", () => {
       const initialState = viewReducer(undefined, {});

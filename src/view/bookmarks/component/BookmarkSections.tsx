@@ -3,7 +3,7 @@ import React from "react";
 import {
   BookmarkSectionProps,
   BookmarkSectionsProps
-} from "../../../store/reducers/bookmarksReducer";
+} from "../../../store/reducers/bookmarkSectionReducer";
 import BookmarkSectionContainer from "../container/BookmarkSectionContainer";
 import "./BookmarkSections.css";
 

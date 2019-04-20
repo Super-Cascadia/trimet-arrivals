@@ -2,18 +2,18 @@ import { connect } from "react-redux";
 import {
   createBookmarkSectionRequest,
   sectionNameUpdateRequest
-} from "../../../store/action/bookmarkActions";
+} from "../../../store/action/bookmarkSectionActions";
 import { RootState } from "../../../store/reducers";
 import {
-  bookmarkInputSectionnameSelector,
-  bookmarkSectionSelector
-} from "../../../store/selectors/bookmarkSelectors";
+  bookmarkSectionSelectors,
+  sectionNameInputSelector
+} from "../../../store/selectors/bookmarkSectionSelectors";
 import BookmarkSectionsComponent from "../component/BookmarkSectionsComponent";
 
 const mapStateToProps = (state: RootState) => {
   return {
-    bookmarkSectionName: bookmarkInputSectionnameSelector(state),
-    bookmarkSections: bookmarkSectionSelector(state)
+    bookmarkSectionName: sectionNameInputSelector(state),
+    bookmarkSections: bookmarkSectionSelectors(state)
   };
 };
 

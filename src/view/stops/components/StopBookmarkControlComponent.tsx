@@ -1,7 +1,7 @@
 import React from "react";
 import { StopLocation } from "../../../api/trimet/types";
 import BookmarkButton from "../../../component/buttons/BookmarksButton";
-import { BookmarkSectionsProps } from "../../../store/reducers/bookmarksReducer";
+import { BookmarkSectionsProps } from "../../../store/reducers/bookmarkSectionReducer";
 
 interface Props {
   stopLocation: StopLocation;

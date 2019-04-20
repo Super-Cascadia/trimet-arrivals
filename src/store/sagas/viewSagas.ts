@@ -6,6 +6,7 @@ import {
 } from "../../api/localstorage/bookmarks";
 // tslint:enable:no-submodule-imports
 import { CHANGE_VIEW, LOAD_BOOKMARKS_COMPLETE } from "../constants";
+import { LOAD_BOOKMARK_SECTIONS_COMPLETE } from "../constants/bookmarkSections";
 
 interface ChangeViewAction {
   payload: {
@@ -32,6 +33,11 @@ export function* initialLoad() {
     yield put({
       payload: { bookmarks, bookmarkSections },
       type: LOAD_BOOKMARKS_COMPLETE
+    });
+
+    yield put({
+      payload: { bookmarkSections },
+      type: LOAD_BOOKMARK_SECTIONS_COMPLETE
     });
   } catch (e) {
     // console.error(e);

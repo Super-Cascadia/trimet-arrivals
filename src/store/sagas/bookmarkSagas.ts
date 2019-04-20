@@ -10,14 +10,13 @@ import {
 } from "../../api/localstorage/bookmarks";
 // tslint:enable:no-submodule-imports
 import { StopLocation } from "../../api/trimet/types";
+import { CREATE_STOP_BOOKMARK, REMOVE_STOP_BOOKMARK } from "../constants";
 import {
   CREATE_BOOKMARK_SECTION,
-  CREATE_STOP_BOOKMARK,
   REMOVE_BOOKMARK_SECTION,
-  REMOVE_STOP_BOOKMARK,
   UPDATE_BOOKMARK_SECTION_NAME_INPUT,
   UPDATE_BOOKMARKS_SECTION_CONTENTS
-} from "../constants";
+} from "../constants/bookmarkSections";
 
 interface BookmarkStopAction {
   payload: {

@@ -1,15 +1,13 @@
 import { connect } from "react-redux";
 import { StopLocation } from "../../../api/trimet/types";
 import {
-  bookmarkSectionSelectRequest,
   bookmarkStopRequest,
   removeStopBookmarkRequest
 } from "../../../store/action/bookmarkActions";
+import { bookmarkSectionSelectRequest } from "../../../store/action/bookmarkSectionActions";
 import { RootState } from "../../../store/reducers";
-import {
-  bookmarkSectionSelector,
-  stopIsBookmarkedSelector
-} from "../../../store/selectors/bookmarkSelectors";
+import { bookmarkSectionSelectors } from "../../../store/selectors/bookmarkSectionSelectors";
+import { stopIsBookmarkedSelector } from "../../../store/selectors/bookmarkSelectors";
 import StopBookmarkControlComponent from "../components/StopBookmarkControlComponent";
 
 interface Props {
@@ -19,7 +17,7 @@ interface Props {
 const mapStateToProps = (state: RootState, props: Props) => {
   return {
     ...props,
-    bookmarkSections: bookmarkSectionSelector(state),
+    bookmarkSections: bookmarkSectionSelectors(state),
     stopIsBookmarked: stopIsBookmarkedSelector(state, props.locationId)
   };
 };

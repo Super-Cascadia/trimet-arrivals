@@ -1,10 +1,10 @@
 import { connect } from "react-redux";
-import { removeBookmarkSectionRequest } from "../../../store/action/bookmarkActions";
+import { removeBookmarkSectionRequest } from "../../../store/action/bookmarkSectionActions";
 import { RootState } from "../../../store/reducers";
 import {
   bookmarkSectionNameSelector,
   bookmarkSectionStopsSelector
-} from "../../../store/selectors/bookmarkSelectors";
+} from "../../../store/selectors/bookmarkSectionSelectors";
 import BookmarkSectionComponent from "../component/BookmarkSectionComponent";
 
 const mapStateToProps = (state: RootState, ownProps) => {
