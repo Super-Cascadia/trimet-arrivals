@@ -16,14 +16,13 @@ import {
   REMOVE_BOOKMARK_SECTION_REQUEST
 } from "../constants/bookmarkSections";
 import { loadArrivalData } from "./arrivalSagas";
+import { bookmarkStop, removeStopBookmark } from "./bookmarkSagas";
 import {
-  bookmarkStop,
   createBookmarkSection,
   removeBookmarkSection,
-  removeStopBookmark,
   updateSectionInputName,
   updateSelectedBookmarkSection
-} from "./bookmarkSagas";
+} from "./bookmarkSectionSagas";
 import { loadStopData } from "./stopSagas";
 import { changeView, initialLoad } from "./viewSagas";
 
