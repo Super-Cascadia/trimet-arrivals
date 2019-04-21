@@ -17,10 +17,6 @@ export default class BookmarkSection extends Component<Props> {
     });
   }
 
-  public shouldComponentUpdate() {
-    return true;
-  }
-
   public render() {
     const { name, removeBookmarkSection, bookmarkedStops, id } = this.props;
 

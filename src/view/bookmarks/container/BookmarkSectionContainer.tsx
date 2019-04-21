@@ -10,11 +10,12 @@ import BookmarkSectionComponent from "../component/BookmarkSectionComponent";
 const mapStateToProps = (state: RootState, ownProps) => {
   const id = ownProps.bookmarkSectionId;
   const bookmarkedStops = bookmarkSectionStopsSelector(state, id);
+  const name = bookmarkSectionNameSelector(state, id);
 
   return {
     bookmarkedStops,
     id,
-    name: bookmarkSectionNameSelector(state, id)
+    name
   };
 };
 
