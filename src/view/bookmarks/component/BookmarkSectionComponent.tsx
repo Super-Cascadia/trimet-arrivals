@@ -8,12 +8,29 @@ interface Props {
   id: number;
   bookmarkedStops: number[];
   removeBookmarkSection: (bookmarkSectionId: number) => void;
+  removeBookmarkFromSection: (
+    bookmarkSectionId: number,
+    stopId: number
+  ) => void;
 }
 
 export default class BookmarkSection extends Component<Props> {
-  public static getBookmarksInSection(bookmarkedStops: number[]) {
-    return map(bookmarkedStops, bookmarkedStopId => {
-      return <li key={bookmarkedStopId}>{bookmarkedStopId}</li>;
+  public getBookmarksInSection(bookmarkedStops: number[], id: number) {
+    return map(bookmarkedStops, stopId => {
+      return (
+        <li key={stopId}>
+          <span>{stopId}</span>
+          <button
+            onClick={this.props.removeBookmarkFromSection.bind(
+              this,
+              id,
+              stopId
+            )}
+          >
+            <FontAwesome name="times-circle" />
+          </button>
+        </li>
+      );
     });
   }
 
@@ -33,7 +50,7 @@ export default class BookmarkSection extends Component<Props> {
             </button>
           </div>
         </nav>
-        <ul>{BookmarkSection.getBookmarksInSection(bookmarkedStops)}</ul>
+        <ul>{this.getBookmarksInSection(bookmarkedStops, id)}</ul>
       </article>
     );
   }

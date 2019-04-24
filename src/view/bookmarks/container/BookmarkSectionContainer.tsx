@@ -1,5 +1,8 @@
 import { connect } from "react-redux";
-import { removeBookmarkSectionRequest } from "../../../store/action/bookmarkSectionActions";
+import {
+  removeBookmarkFromSection,
+  removeBookmarkSectionRequest
+} from "../../../store/action/bookmarkSectionActions";
 import { RootState } from "../../../store/reducers";
 import {
   bookmarkSectionNameSelector,
@@ -23,6 +26,9 @@ const mapDispatchToProps = dispatch => {
   return {
     removeBookmarkSection(bookmarkSectionId: number) {
       dispatch(removeBookmarkSectionRequest(bookmarkSectionId));
+    },
+    removeBookmarkFromSection(bookmarkSectionId: number, stopId: number) {
+      dispatch(removeBookmarkFromSection(bookmarkSectionId, stopId));
     }
   };
 };

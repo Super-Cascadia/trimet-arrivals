@@ -1,8 +1,9 @@
-import { find, omit, slice } from "lodash";
+import { find, omit, remove, slice } from "lodash";
 import { StopLocation } from "../../api/trimet/types";
 import {
   CREATE_BOOKMARK_SECTION,
   LOAD_BOOKMARK_SECTIONS_COMPLETE,
+  REMOVE_BOOKMARK_FROM_SECTION,
   REMOVE_BOOKMARK_SECTION,
   UPDATE_BOOKMARK_SECTION_NAME_INPUT,
   UPDATE_BOOKMARKS_SECTION_CONTENTS
@@ -125,6 +126,35 @@ function loadBookmarkSectionsComplete(
   };
 }
 
+function removeBookmarkFromSection(state, action) {
+  const { bookmarkSections } = state;
+  const { bookmarkSectionId, stopId } = action.payload;
+  const bookmarkSection = bookmarkSections[bookmarkSectionId];
+  const bookmarkedStops = bookmarkSection.bookmarkedStops;
+  const bookmarkInSection = find(bookmarkedStops, stop => stop === stopId);
+
+  if (bookmarkInSection) {
+    const updatedBookmarks = remove(bookmarkedStops, bookmarkedStopId => {
+      return bookmarkedStopId === stopId;
+    });
+
+    return {
+      ...state,
+      bookmarkSections: {
+        ...state.bookmarkSections,
+        [bookmarkSectionId]: {
+          ...bookmarkSection,
+          bookmarkedStops: [...updatedBookmarks]
+        }
+      }
+    };
+  }
+
+  return {
+    ...state
+  };
+}
+
 const bookmarkSectionReducer = (state = InitialState, action: Action) => {
   switch (action.type) {
     case UPDATE_BOOKMARK_SECTION_NAME_INPUT:
@@ -137,6 +167,8 @@ const bookmarkSectionReducer = (state = InitialState, action: Action) => {
       return updateBookmarkSectionContents(state, action);
     case LOAD_BOOKMARK_SECTIONS_COMPLETE:
       return loadBookmarkSectionsComplete(state, action);
+    case REMOVE_BOOKMARK_FROM_SECTION:
+      return removeBookmarkFromSection(state, action);
     default:
       return {
         ...state
