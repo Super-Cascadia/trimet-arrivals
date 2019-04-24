@@ -26,7 +26,7 @@ export default class BookmarksViewComponent extends React.Component<Props> {
         <StopContainer
           key={locationId}
           locationId={locationId}
-          showArrivals={true}
+          showArrivals={false}
         />
       );
     });

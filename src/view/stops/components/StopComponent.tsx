@@ -57,13 +57,15 @@ export default class StopComponent extends React.Component<Props> {
           onRouteIndicatorClick={onRouteIndicatorClick}
           locationId={locationId}
         />
-        <ArrivalsContainer
-          locationId={locationId}
-          showArrivals={showArrivals}
-          loadArrivalData={this.loadArrivalData}
-          onRouteIndicatorClick={onRouteIndicatorClick}
-          stopLocation={stopLocation}
-        />
+        {showArrivals && (
+          <ArrivalsContainer
+            locationId={locationId}
+            showArrivals={showArrivals}
+            loadArrivalData={this.loadArrivalData}
+            onRouteIndicatorClick={onRouteIndicatorClick}
+            stopLocation={stopLocation}
+          />
+        )}
       </article>
     );
   }
