@@ -1,9 +1,7 @@
 // tslint:disable:no-submodule-imports
 import { call, put } from "redux-saga/effects";
-import {
-  fetchStoredBookmarks,
-  fetchStoredBookmarkSections
-} from "../../api/localstorage/bookmarks";
+import { fetchStoredBookmarks } from "../../api/localstorage/bookmarks";
+import { fetchStoredBookmarkSections } from "../../api/localstorage/bookmarkSections";
 // tslint:enable:no-submodule-imports
 import { CHANGE_VIEW, LOAD_BOOKMARKS_COMPLETE } from "../constants";
 import { LOAD_BOOKMARK_SECTIONS_COMPLETE } from "../constants/bookmarkSections";

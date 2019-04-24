@@ -6,7 +6,7 @@ import {
   removeStoredBookmarkSection,
   storeBookmarkSection,
   updateStoredBookmarkSection
-} from "../../api/localstorage/bookmarks";
+} from "../../api/localstorage/bookmarkSections";
 import {
   CREATE_BOOKMARK_SECTION,
   REMOVE_BOOKMARK_FROM_SECTION,
