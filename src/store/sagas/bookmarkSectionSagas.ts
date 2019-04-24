@@ -14,12 +14,12 @@ import {
 } from "../constants/bookmarkSections";
 import { logError } from "./util";
 
-function getNextId({ bookmarksReducer }): number {
-  if (isEmpty(bookmarksReducer.bookmarkSections)) {
+function getNextId({ bookmarkSectionReducer }): number {
+  if (isEmpty(bookmarkSectionReducer.bookmarkSections)) {
     return 0;
   }
 
-  const bookmarksByKeys = keys(bookmarksReducer.bookmarkSections);
+  const bookmarksByKeys = keys(bookmarkSectionReducer.bookmarkSections);
   const lastKey = bookmarksByKeys[bookmarksByKeys.length - 1];
 
   return parseInt(lastKey, 10) + 1;
