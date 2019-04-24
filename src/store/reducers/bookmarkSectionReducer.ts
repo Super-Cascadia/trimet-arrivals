@@ -34,6 +34,7 @@ interface Action {
     bookmarkSection?: BookmarkSectionProps;
     bookmarkSectionId?: number;
     bookmarkSections?: any;
+    stopId?: number;
   };
 }
 
@@ -126,7 +127,10 @@ function loadBookmarkSectionsComplete(
   };
 }
 
-function removeBookmarkFromSection(state, action) {
+function removeBookmarkFromSection(
+  state: BookmarkSectionReducerState,
+  action: Action
+) {
   const { bookmarkSections } = state;
   const { bookmarkSectionId, stopId } = action.payload;
   const bookmarkSection = bookmarkSections[bookmarkSectionId];
