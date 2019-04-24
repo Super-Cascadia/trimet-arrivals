@@ -1,4 +1,4 @@
-import { omit, slice } from "lodash";
+import { find, omit, slice } from "lodash";
 import { StopLocation } from "../../api/trimet/types";
 import {
   CREATE_BOOKMARK_SECTION,
@@ -90,20 +90,26 @@ function updateBookmarkSectionContents(
 ) {
   const { bookmarkSections } = state;
   const { selectedBookmarkSection, stopLocation } = action.payload;
+  const stopId = stopLocation.locid;
   const bookmarkSection = bookmarkSections[selectedBookmarkSection];
+  const bookmarkedStops = bookmarkSection.bookmarkedStops;
+  const bookmarkInSection = find(bookmarkedStops, stop => stop === stopId);
+
+  if (!bookmarkInSection) {
+    return {
+      ...state,
+      bookmarkSections: {
+        ...state.bookmarkSections,
+        [selectedBookmarkSection]: {
+          ...bookmarkSection,
+          bookmarkedStops: [...slice(bookmarkedStops), stopLocation.locid]
+        }
+      }
+    };
+  }
 
   return {
-    ...state,
-    bookmarkSections: {
-      ...state.bookmarkSections,
-      [selectedBookmarkSection]: {
-        ...bookmarkSection,
-        bookmarkedStops: [
-          ...slice(bookmarkSection.bookmarkedStops),
-          stopLocation.locid
-        ]
-      }
-    }
+    ...state
   };
 }
 

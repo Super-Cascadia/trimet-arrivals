@@ -1,4 +1,5 @@
-import { omit } from "lodash";
+import { find, omit } from "lodash";
+import { BookmarkSectionsProps } from "../../../store/reducers/bookmarkSectionReducer";
 import { StopLocation } from "../../trimet/types";
 
 const BOOKMARKS = "BOOKMARKS";
@@ -24,11 +25,11 @@ function updateBookmarks(existingBookmarks) {
   updateBookmarksByKey(BOOKMARKS, existingBookmarks);
 }
 
-export function fetchStoredBookmarkSections() {
+export function fetchStoredBookmarkSections(): BookmarkSectionsProps {
   return fetchLocalStorageItemByKey(BOOKMARK_SECTIONS);
 }
 
-function updateBookmarkSections(bookmarkSections) {
+function updateStoredBookmarkSections(bookmarkSections) {
   updateBookmarksByKey(BOOKMARK_SECTIONS, bookmarkSections);
 }
 
@@ -52,19 +53,30 @@ export function storeBookmarkSection(nextId: number, bookmarkSection) {
 
   bookmarkSections[nextId] = bookmarkSection;
 
-  updateBookmarkSections(bookmarkSections);
+  updateStoredBookmarkSections(bookmarkSections);
 }
 
-export function removeStoredBookmarkSection(bookmarkSectionId) {
+export function removeStoredBookmarkSection(bookmarkSectionId: number) {
   const bookmarkSections = fetchStoredBookmarkSections();
   const updatedBookmarkSections = omit(bookmarkSections, bookmarkSectionId);
 
-  return updateBookmarkSections(updatedBookmarkSections);
+  updateStoredBookmarkSections(updatedBookmarkSections);
 }
 
 export function updateStoredBookmarkSection(
-  selectedBookmarkSection: number,
+  bookmarkSectionId: number,
   stopLocation: StopLocation
 ) {
-  return;
+  const stopId = stopLocation.locid;
+  const bookmarkSections = fetchStoredBookmarkSections();
+  const bookmarkSection = bookmarkSections[bookmarkSectionId];
+  const bookmarkInSection = find(
+    bookmarkSection.bookmarkedStops,
+    stop => stop === stopId
+  );
+
+  if (!bookmarkInSection) {
+    bookmarkSection.bookmarkedStops.push(stopId);
+    updateStoredBookmarkSections(bookmarkSections);
+  }
 }
