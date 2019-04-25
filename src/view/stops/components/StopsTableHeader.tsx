@@ -1,3 +1,4 @@
+import cx from "classnames";
 import React from "react";
 import { Route, StopLocation } from "../../../api/trimet/types";
 import { LoadArrivalData } from "../../../store/action/stopActions";
@@ -30,8 +31,12 @@ export default class StopsTableHeader extends React.Component<Props> {
       return null;
     }
 
+    const classNames = cx("stops-header", {
+      "arrivals-hidden": !showArrivals
+    });
+
     return (
-      <div className="stops-header">
+      <div className={classNames}>
         <StopInfo stopLocation={stopLocation} onClick={onRouteIndicatorClick} />
         <StopBookmarkControlContainer
           locationId={locationId}

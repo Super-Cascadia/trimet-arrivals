@@ -1,20 +1,15 @@
-.bookmark-section {
-    position: relative;
-}
-
-.bookmark-section-remove-button {
-    position: absolute;
-    right: 10px;
-    top: 7px;
-}
-
 .bookmark-section h3 {
     margin-top: 0px;
     margin-bottom: 0px;
 }
 
-.bookmark-section-remove-button button {
+button.close-button {
     background: grey;
     border: none;
     font-size: 20px;
+    cursor: pointer;
+}
+
+button.close-button:hover {
+    background: darkgrey;
 }

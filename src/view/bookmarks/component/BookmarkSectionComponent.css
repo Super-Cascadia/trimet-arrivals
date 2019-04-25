@@ -1,0 +1,30 @@
+.bookmark-section {
+    position: relative;
+}
+
+.bookmark-section-remove-button {
+    position: absolute;
+    right: 10px;
+    top: 7px;
+}
+
+ul.bookmark-section-bookmarks {
+    list-style: none;
+    padding: 0;
+    marging: 0;
+}
+
+.bookmark-flex-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+
+.bookmark-stop-flex-item {
+    flex-grow: 3
+}
+
+.bookmark-remove-flex-item {
+    padding-left: 10px;
+}

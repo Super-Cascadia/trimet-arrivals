@@ -13,6 +13,10 @@
     position: relative;
 }
 
+.stops-header.arrivals-hidden {
+    border-radius: 5px 5px 5px 5px;
+}
+
 .stops-header h2 {
     margin: 0px;
     font-size: 18px;
