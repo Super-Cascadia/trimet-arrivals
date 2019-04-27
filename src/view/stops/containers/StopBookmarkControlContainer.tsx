@@ -32,12 +32,10 @@ const mapDispatchToProps = dispatch => {
       }
     },
     onBookmarkSectionSelect(
-      selectedBookmarkSection: number,
+      bookmarkSectionId: number,
       stopLocation: StopLocation
     ) {
-      dispatch(
-        bookmarkSectionSelectRequest(selectedBookmarkSection, stopLocation)
-      );
+      dispatch(bookmarkSectionSelectRequest(bookmarkSectionId, stopLocation));
     }
   };
 };

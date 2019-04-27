@@ -93,19 +93,15 @@ export function* removeBookmarkSection(action) {
 }
 
 export function* updateSelectedBookmarkSection(action) {
-  const { selectedBookmarkSection, stopLocation } = action.payload;
+  const { selectedBookmarkSection, stopId } = action.payload;
 
   try {
     yield put({
-      payload: { selectedBookmarkSection, stopLocation },
+      payload: { selectedBookmarkSection, stopId },
       type: UPDATE_BOOKMARKS_SECTION_CONTENTS
     });
 
-    yield call(
-      updateStoredBookmarkSection,
-      selectedBookmarkSection,
-      stopLocation
-    );
+    yield call(updateStoredBookmarkSection, selectedBookmarkSection, stopId);
   } catch (e) {
     logError(e);
   }

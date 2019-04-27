@@ -1,12 +1,12 @@
 import { RootState } from "../reducers";
 import {
   bookmarkCountSelector,
-  bookmarksSelector,
+  bookmarkedStopLocationsSelector,
   stopIsBookmarkedSelector
 } from "./bookmarkSelectors";
 
 describe("bookmarkSelectors", () => {
-  describe("bookmarksSelector", () => {
+  describe("bookmarkedStopLocationsSelector", () => {
     it("returns all bookmarks", () => {
       const state = {
         bookmarksReducer: {
@@ -16,7 +16,7 @@ describe("bookmarkSelectors", () => {
         }
       };
 
-      const result = bookmarksSelector(state as RootState);
+      const result = bookmarkedStopLocationsSelector(state as RootState);
 
       expect(result).toEqual({ foo: "bar" });
     });

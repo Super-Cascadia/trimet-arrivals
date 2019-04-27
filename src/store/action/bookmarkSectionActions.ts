@@ -21,7 +21,7 @@ export const removeBookmarkSectionRequest = (bookmarkSectionId: number) => ({
   type: REMOVE_BOOKMARK_SECTION_REQUEST
 });
 
-export const removeBookmarkFromSection = (
+export const removeBookmarkFromSectionRequest = (
   bookmarkSectionId: number,
   stopId: number
 ) => ({
@@ -34,5 +34,13 @@ export const bookmarkSectionSelectRequest = (
   stopLocation: StopLocation
 ) => ({
   payload: { selectedBookmarkSection, stopLocation },
+  type: BOOKMARK_SECTION_SELECT_REQUEST
+});
+
+export const addBookmarkToBookmarkSection = (
+  selectedBookmarkSection: number,
+  stopId: StopLocation
+) => ({
+  payload: { selectedBookmarkSection, stopId },
   type: BOOKMARK_SECTION_SELECT_REQUEST
 });

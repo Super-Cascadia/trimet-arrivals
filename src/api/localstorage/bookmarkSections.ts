@@ -1,6 +1,5 @@
-import { find, omit, remove } from "lodash";
+import { filter, find, omit } from "lodash";
 import { BookmarkSectionsProps } from "../../store/reducers/bookmarkSectionReducer";
-import { StopLocation } from "../trimet/types";
 import { fetchLocalStorageItemByKey, updateStoredItemByKey } from "./util";
 
 const BOOKMARK_SECTIONS = "BOOKMARK_SECTIONS";
@@ -30,9 +29,8 @@ export function removeStoredBookmarkSection(bookmarkSectionId: number) {
 
 export function updateStoredBookmarkSection(
   bookmarkSectionId: number,
-  stopLocation: StopLocation
+  stopId: number
 ) {
-  const stopId = stopLocation.locid;
   const bookmarkSections = fetchStoredBookmarkSections();
   const bookmarkSection = bookmarkSections[bookmarkSectionId];
   const bookmarkInSection = find(
@@ -56,11 +54,9 @@ export function removeStoredBookmarkFromSection(
   const bookmarkInSection = find(bookmarkSectionStops, stop => stop === stopId);
 
   if (bookmarkInSection) {
-    bookmarkSections[bookmarkSectionId].bookmarkedStops = remove(
+    bookmarkSections[bookmarkSectionId].bookmarkedStops = filter(
       bookmarkSectionStops,
-      bookmarkedStopId => {
-        return bookmarkedStopId === stopId;
-      }
+      id => id !== stopId
     );
 
     updateStoredBookmarkSections(bookmarkSections);

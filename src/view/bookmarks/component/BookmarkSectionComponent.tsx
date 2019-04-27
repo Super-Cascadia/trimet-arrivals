@@ -1,15 +1,21 @@
 import { map } from "lodash";
 import React, { Component } from "react";
-import FontAwesome from "react-fontawesome";
 import StopContainer from "../../stops/containers/StopContainer";
 import "./BookmarkSectionComponent.css";
+import { BookmarkSectionNav } from "./BookmarkSectionNav";
+import { RemoveBookmarkButton } from "./RemoveBookmarkButton";
 
 interface Props {
   name: string;
   id: number;
-  bookmarkedStops: number[];
+  bookmarksInSection: number[];
   removeBookmarkSection: (bookmarkSectionId: number) => void;
+  allBookmarks: number[];
   removeBookmarkFromSection: (
+    bookmarkSectionId: number,
+    stopId: number
+  ) => void;
+  addBookmarkToBookmarkSection: (
     bookmarkSectionId: number,
     stopId: number
   ) => void;
@@ -17,24 +23,6 @@ interface Props {
 
 export default class BookmarkSection extends Component<Props> {
   public getBookmarksInSection(bookmarkedStops: number[], id: number) {
-    const RemoveBookmarkButton = ({ stopId }) => {
-      const onClick = this.props.removeBookmarkFromSection.bind(
-        this,
-        id,
-        stopId
-      );
-
-      return (
-        <button
-          onClick={onClick}
-          className="close-button"
-          title="Remove bookmark from Bookmark Section"
-        >
-          <FontAwesome name="times-circle" />
-        </button>
-      );
-    };
-
     return map(bookmarkedStops, stopId => {
       return (
         <li key={stopId}>
@@ -47,7 +35,13 @@ export default class BookmarkSection extends Component<Props> {
               />
             </div>
             <div className="bookmark-remove-flex-item">
-              <RemoveBookmarkButton stopId={stopId} />
+              <RemoveBookmarkButton
+                stopId={stopId}
+                removeBookmarkFromSection={this.props.removeBookmarkFromSection.bind(
+                  this,
+                  id
+                )}
+              />
             </div>
           </div>
         </li>
@@ -56,32 +50,44 @@ export default class BookmarkSection extends Component<Props> {
   }
 
   public render() {
-    const { name, removeBookmarkSection, bookmarkedStops, id } = this.props;
-
-    const RemoveBookmarkSectionButton = () => {
-      return (
-        <div className="bookmark-section-remove-button ">
-          <button
-            className="close-button"
-            onClick={removeBookmarkSection.bind(this, id)}
-            title="Remove Bookmark Section"
-          >
-            <FontAwesome name="times-circle" />
-          </button>
-        </div>
-      );
-    };
+    const { name, bookmarksInSection, id, allBookmarks } = this.props;
 
     return (
       <article className="bookmark-section" key={id}>
-        <nav>
-          <h3>{name}</h3>
-          <RemoveBookmarkSectionButton />
-        </nav>
+        <BookmarkSectionNav
+          bookmarksInSection={bookmarksInSection}
+          name={name}
+          onReactSelectBookmarkChange={this.onReactSelectBookmarkChange.bind(
+            this,
+            id
+          )}
+          removeBookmarkSection={this.removeBookmarkSection.bind(this, id)}
+          allBookmarks={allBookmarks}
+        />
         <ul className="bookmark-section-bookmarks">
-          {this.getBookmarksInSection(bookmarkedStops, id)}
+          {this.getBookmarksInSection(bookmarksInSection, id)}
         </ul>
       </article>
     );
+  }
+
+  private removeBookmarkSection(id) {
+    this.props.removeBookmarkSection(id);
+  }
+
+  private onReactSelectBookmarkChange(id, val, event) {
+    const REMOVE_VALUE = "remove-value";
+    const SELECT_OPTION = "select-option";
+    const POP_VALUE = "pop-value";
+
+    switch (event.action) {
+      case REMOVE_VALUE:
+      case POP_VALUE:
+        this.props.removeBookmarkFromSection(id, event.removedValue.value);
+        break;
+      case SELECT_OPTION:
+        this.props.addBookmarkToBookmarkSection(id, event.option.value);
+        break;
+    }
   }
 }
