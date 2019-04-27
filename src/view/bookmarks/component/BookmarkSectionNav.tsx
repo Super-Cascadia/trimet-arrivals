@@ -1,6 +1,7 @@
 import { map } from "lodash";
 import React from "react";
 import Select from "react-select";
+import "./BookmarkSectionNav.css";
 import { RemoveBookmarkSectionButton } from "./RemoveBookmarkSectionButton";
 
 interface BookmarkSectionNavProps {
@@ -28,17 +29,21 @@ export const BookmarkSectionNav = ({
   const options = formatOptions(allBookmarks);
 
   return (
-    <nav>
-      <h3>{name}</h3>
-      <RemoveBookmarkSectionButton
-        removeBookmarkSection={removeBookmarkSection}
-      />
-      <Select
-        options={options}
-        isMulti={true}
-        defaultValue={defaultOptions}
-        onChange={onReactSelectBookmarkChange}
-      />
+    <nav className="bookmark-section-nav-wrapper">
+      <div className="bookmark-section-control-wrapper">
+        <h3>{name}</h3>
+        <RemoveBookmarkSectionButton
+          removeBookmarkSection={removeBookmarkSection}
+        />
+      </div>
+      <div>
+        <Select
+          options={options}
+          isMulti={true}
+          defaultValue={defaultOptions}
+          onChange={onReactSelectBookmarkChange}
+        />
+      </div>
     </nav>
   );
 };

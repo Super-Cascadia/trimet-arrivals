@@ -28,3 +28,7 @@ ul.bookmark-section-bookmarks {
 .bookmark-remove-flex-item {
     padding-left: 10px;
 }
+
+.bookmark-section-add-more {
+    text-align: center;
+}

@@ -1,4 +1,4 @@
-import { map } from "lodash";
+import { isEmpty, map } from "lodash";
 import React, { Component } from "react";
 import StopContainer from "../../stops/containers/StopContainer";
 import "./BookmarkSectionComponent.css";
@@ -23,6 +23,14 @@ interface Props {
 
 export default class BookmarkSection extends Component<Props> {
   public getBookmarksInSection(bookmarkedStops: number[], id: number) {
+    if (isEmpty(bookmarkedStops)) {
+      return (
+        <p className="bookmark-section-add-more">
+          Select bookmarks from the list above to see them here.
+        </p>
+      );
+    }
+
     return map(bookmarkedStops, stopId => {
       return (
         <li key={stopId}>
