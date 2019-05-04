@@ -55,7 +55,7 @@ export default class NearbyStopsViewComponent extends React.Component<
                 <section className="flex-stops">
                   <Stops
                     stopLocations={stopLocations}
-                    showArrivals={true}
+                    showArrivals={false}
                     onRouteIndicatorClick={this.openModal}
                   />
                 </section>

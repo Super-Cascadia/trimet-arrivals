@@ -9,7 +9,7 @@ export const RemoveBookmarkSectionButton = ({
   removeBookmarkSection
 }: RemoveBookmarkSectionButtonProps) => {
   return (
-    <div className="bookmark-section-remove-button ">
+    <div className="bookmark-section-remove-button">
       <button
         className="close-button"
         onClick={removeBookmarkSection}

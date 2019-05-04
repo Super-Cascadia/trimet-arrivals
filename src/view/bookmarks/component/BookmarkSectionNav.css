@@ -1,7 +1,21 @@
 .bookmark-section-nav-wrapper {
-    margin-bottom: 25px;
+    margin-bottom: 0px;
 }
 
 .bookmark-section-control-wrapper {
     margin-bottom: 15px;
+}
+
+.edit-toggle-button {
+    background: grey;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 7px;
+}
+
+.edit-toggle-button:hover {
+    background: darkgrey;
 }

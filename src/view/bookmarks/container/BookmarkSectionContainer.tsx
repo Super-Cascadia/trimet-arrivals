@@ -1,21 +1,22 @@
 import { connect } from "react-redux";
 import {
-  addBookmarkToBookmarkSection,
+  addBookmarkToBookmarkSectionRequest,
+  removeAllBookmarksInSectionRequest,
   removeBookmarkFromSectionRequest,
   removeBookmarkSectionRequest
 } from "../../../store/action/bookmarkSectionActions";
 import { RootState } from "../../../store/reducers";
 import {
   bookmarkSectionNameSelector,
-  bookmarkSectionStopsSelector
+  bookmarksInSectionSelector
 } from "../../../store/selectors/bookmarkSectionSelectors";
-import { bookmarkedStopLocationIds } from "../../../store/selectors/bookmarkSelectors";
+import { bookmarkedStopLocationSelector } from "../../../store/selectors/bookmarkSelectors";
 import BookmarkSectionComponent from "../component/BookmarkSectionComponent";
 
 const mapStateToProps = (state: RootState, ownProps) => {
   const id = ownProps.bookmarkSectionId;
-  const bookmarksInSection = bookmarkSectionStopsSelector(state, id);
-  const allBookmarks = bookmarkedStopLocationIds(state);
+  const bookmarksInSection = bookmarksInSectionSelector(state, id);
+  const allBookmarks = bookmarkedStopLocationSelector(state);
   const name = bookmarkSectionNameSelector(state, id);
 
   return {
@@ -35,7 +36,10 @@ const mapDispatchToProps = dispatch => {
       dispatch(removeBookmarkFromSectionRequest(bookmarkSectionId, stopId));
     },
     addBookmarkToBookmarkSection(bookmarkSectionId, stopId) {
-      dispatch(addBookmarkToBookmarkSection(bookmarkSectionId, stopId));
+      dispatch(addBookmarkToBookmarkSectionRequest(bookmarkSectionId, stopId));
+    },
+    removeAllBookmarksFromSection(bookmarkSectionId) {
+      dispatch(removeAllBookmarksInSectionRequest(bookmarkSectionId));
     }
   };
 };

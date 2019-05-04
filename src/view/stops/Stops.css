@@ -1,12 +1,15 @@
 .stop {
-    background: #F7F9F9;
-    margin-bottom: 15px;
+    background: rgb(255,255,255, 0.80);
     border-radius: 5px;
+}
+
+.stop-wrapper {
+    margin-bottom: 30px;
 }
 
 .stops-header {
     border-radius: 5px 5px 0px 0px;
-    background: #E0D0C1;
+    /* background: rgb(255, 255, 255, 0.85); */
     line-height: 45px;
     padding-left: 10px;
     padding-right: 10px;

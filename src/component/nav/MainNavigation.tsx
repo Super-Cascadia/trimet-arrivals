@@ -47,6 +47,7 @@ export default function MainNavigation({
           className={nearbyStopsClass}
           onClick={updateView.bind(this, NEARBY_STOPS_VIEW)}
         >
+          <FontAwesome name="map-marker" className="bookmark-icon" />
           <a>Nearby Stops | {timeOfLastLoad}</a>
         </li>
         <li

@@ -23,11 +23,13 @@ export default class BookmarksViewComponent extends React.Component<Props> {
       const locationId = stopLocation.locid;
 
       return (
-        <StopContainer
-          key={locationId}
-          locationId={locationId}
-          showArrivals={false}
-        />
+        <div className="bookmark-stop-wrapper">
+          <StopContainer
+            key={locationId}
+            locationId={locationId}
+            showArrivals={false}
+          />
+        </div>
       );
     });
   }

@@ -2,6 +2,7 @@
 import { isEmpty, keys } from "lodash";
 import { call, put, select } from "redux-saga/effects";
 import {
+  removeAllStoredBookmarksInSection,
   removeStoredBookmarkFromSection,
   removeStoredBookmarkSection,
   storeBookmarkSection,
@@ -9,6 +10,7 @@ import {
 } from "../../api/localstorage/bookmarkSections";
 import {
   CREATE_BOOKMARK_SECTION,
+  REMOVE_ALL_BOOKMARKS_FROM_SECTION,
   REMOVE_BOOKMARK_FROM_SECTION,
   REMOVE_BOOKMARK_SECTION,
   UPDATE_BOOKMARK_SECTION_NAME_INPUT,
@@ -117,6 +119,21 @@ export function* removeBookmarkFromSection(action) {
     });
 
     yield call(removeStoredBookmarkFromSection, bookmarkSectionId, stopId);
+  } catch (e) {
+    logError(e);
+  }
+}
+
+export function* removeAllBookmarksInSection(action) {
+  const { bookmarkSectionId } = action.payload;
+
+  try {
+    yield put({
+      payload: { bookmarkSectionId },
+      type: REMOVE_ALL_BOOKMARKS_FROM_SECTION
+    });
+
+    yield call(removeAllStoredBookmarksInSection, bookmarkSectionId);
   } catch (e) {
     logError(e);
   }

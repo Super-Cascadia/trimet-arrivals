@@ -7,8 +7,7 @@
 }
 
 .bookmark-section {
-    background: darkslategrey;
-    color: white;
+    background: rgb(0,0,0, 0.10);
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 10px;

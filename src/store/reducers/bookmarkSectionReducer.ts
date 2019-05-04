@@ -3,6 +3,7 @@ import { StopLocation } from "../../api/trimet/types";
 import {
   CREATE_BOOKMARK_SECTION,
   LOAD_BOOKMARK_SECTIONS_COMPLETE,
+  REMOVE_ALL_BOOKMARKS_FROM_SECTION,
   REMOVE_BOOKMARK_FROM_SECTION,
   REMOVE_BOOKMARK_SECTION,
   UPDATE_BOOKMARK_SECTION_NAME_INPUT,
@@ -160,6 +161,26 @@ function removeBookmarkFromSection(
   };
 }
 
+function removeAllBookmarksInSection(
+  state: BookmarkSectionReducerState,
+  action
+) {
+  const { bookmarkSections } = state;
+  const { bookmarkSectionId } = action.payload;
+  const bookmarkSection = bookmarkSections[bookmarkSectionId];
+
+  return {
+    ...state,
+    bookmarkSections: {
+      ...state.bookmarkSections,
+      [bookmarkSectionId]: {
+        ...bookmarkSection,
+        bookmarkedStops: []
+      }
+    }
+  };
+}
+
 const bookmarkSectionReducer = (state = InitialState, action: Action) => {
   switch (action.type) {
     case UPDATE_BOOKMARK_SECTION_NAME_INPUT:
@@ -174,6 +195,8 @@ const bookmarkSectionReducer = (state = InitialState, action: Action) => {
       return loadBookmarkSectionsComplete(state, action);
     case REMOVE_BOOKMARK_FROM_SECTION:
       return removeBookmarkFromSection(state, action);
+    case REMOVE_ALL_BOOKMARKS_FROM_SECTION:
+      return removeAllBookmarksInSection(state, action);
     default:
       return {
         ...state

@@ -62,3 +62,11 @@ export function removeStoredBookmarkFromSection(
     updateStoredBookmarkSections(bookmarkSections);
   }
 }
+
+export function removeAllStoredBookmarksInSection(bookmarkSectionId: number) {
+  const bookmarkSections = fetchStoredBookmarkSections();
+  const bookmarkSection = bookmarkSections[bookmarkSectionId];
+  bookmarkSection.bookmarkedStops = [];
+
+  updateStoredBookmarkSections(bookmarkSections);
+}

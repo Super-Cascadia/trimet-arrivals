@@ -3,6 +3,7 @@ import {
   BOOKMARK_SECTION_NAME_UPDATE_REQUEST,
   BOOKMARK_SECTION_SELECT_REQUEST,
   CREATE_BOOKMARK_SECTION_REQUEST,
+  REMOVE_ALL_BOOKMARKS_IN_SECTION_REQUEST,
   REMOVE_BOOKMARK_FROM_SECTION_REQUEST,
   REMOVE_BOOKMARK_SECTION_REQUEST
 } from "../constants/bookmarkSections";
@@ -37,10 +38,17 @@ export const bookmarkSectionSelectRequest = (
   type: BOOKMARK_SECTION_SELECT_REQUEST
 });
 
-export const addBookmarkToBookmarkSection = (
+export const addBookmarkToBookmarkSectionRequest = (
   selectedBookmarkSection: number,
   stopId: StopLocation
 ) => ({
   payload: { selectedBookmarkSection, stopId },
   type: BOOKMARK_SECTION_SELECT_REQUEST
+});
+
+export const removeAllBookmarksInSectionRequest = (
+  bookmarkSectionId: number
+) => ({
+  payload: { bookmarkSectionId },
+  type: REMOVE_ALL_BOOKMARKS_IN_SECTION_REQUEST
 });

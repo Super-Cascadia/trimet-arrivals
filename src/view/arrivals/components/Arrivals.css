@@ -40,4 +40,9 @@
     background: darkgrey;
     font-size: 14px;
     line-height: 26px;
+    cursor: pointer;
+}
+
+.load-more-flex-container button:hover {
+    background-color: dimgray;
 }

@@ -4,7 +4,8 @@ import { StopLocation } from "../../api/trimet/types";
 import { RootState } from "../reducers";
 import { StopLocations } from "../reducers/bookmarksReducer";
 
-const selectBookmarks = (state: RootState) => state.bookmarksReducer.bookmarks;
+export const selectBookmarks = (state: RootState) =>
+  state.bookmarksReducer.bookmarks;
 const selectBookmarkedStop = (state: RootState, locationId: number) =>
   state.bookmarksReducer.bookmarks[locationId];
 
@@ -13,10 +14,10 @@ export const bookmarkedStopLocationsSelector = createSelector(
   (bookmarks: StopLocations) => bookmarks
 );
 
-export const bookmarkedStopLocationIds = createSelector(
+export const bookmarkedStopLocationSelector = createSelector(
   selectBookmarks,
   (bookmarks: StopLocations) =>
-    map(bookmarks, (stopLocation: StopLocation) => stopLocation.locid)
+    map(bookmarks, (stopLocation: StopLocation) => stopLocation)
 );
 
 export const bookmarkCountSelector = createSelector(

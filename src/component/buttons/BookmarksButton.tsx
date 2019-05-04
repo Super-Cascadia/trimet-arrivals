@@ -3,7 +3,6 @@ import FontAwesome from "react-fontawesome";
 import { StopLocation } from "../../api/trimet/types";
 import { BookmarkSectionsProps } from "../../store/reducers/bookmarkSectionReducer";
 import "./BookmarksButton.css";
-import BookmarkSectionSelector from "./BookmarkSectionSelector";
 
 function bookmarkIcon(stopIsBookmarked: boolean) {
   if (stopIsBookmarked) {
@@ -57,11 +56,11 @@ export default function BookmarkButton({
       >
         {bookmarkIcon(stopIsBookmarked)}
       </button>
-      <BookmarkSectionSelector
-        bookmarkSections={bookmarkSections}
-        stopLocation={stopLocation}
-        onBookmarkSectionSelect={onBookmarkSectionSelect}
-      />
+      {/*<BookmarkSectionSelector*/}
+      {/*  bookmarkSections={bookmarkSections}*/}
+      {/*  stopLocation={stopLocation}*/}
+      {/*  onBookmarkSectionSelect={onBookmarkSectionSelect}*/}
+      {/*/>*/}
     </div>
   );
 }

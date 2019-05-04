@@ -1,9 +1,11 @@
+import { map } from "lodash";
 import { createSelector } from "reselect";
 import { RootState } from "../reducers";
 import {
   BookmarkSectionProps,
   BookmarkSectionsProps
 } from "../reducers/bookmarkSectionReducer";
+import { selectBookmarks } from "./bookmarkSelectors";
 
 const selectSectionName = (state: RootState) => {
   return state.bookmarkSectionReducer.bookmarkInputSectionName;
@@ -32,7 +34,11 @@ export const bookmarkSectionNameSelector = createSelector(
   (section: BookmarkSectionProps) => section.name
 );
 
-export const bookmarkSectionStopsSelector = createSelector(
-  selectSectionById,
-  (section: BookmarkSectionProps) => section.bookmarkedStops
+export const bookmarksInSectionSelector = createSelector(
+  [selectSectionById, selectBookmarks],
+  (section: BookmarkSectionProps, bookmarks) => {
+    return map(section.bookmarkedStops, stopId => {
+      return bookmarks[stopId];
+    });
+  }
 );
