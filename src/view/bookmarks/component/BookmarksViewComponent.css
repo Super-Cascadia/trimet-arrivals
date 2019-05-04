@@ -1,9 +1,10 @@
 .bookmark-section-message {
-    background: darkslategrey;
+    background: rgb(0,0,0, 0.2);
     color: white;
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 10px;
+    text-align: center;
 }
 
 .bookmark-section {

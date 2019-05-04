@@ -59,8 +59,8 @@ export default class BookmarkSection extends Component<Props, State> {
                   onRouteIndicatorClick={undefined}
                 />
               </div>
-              <div className="bookmark-remove-flex-item">
-                {this.state.editMode && (
+              {this.state.editMode && (
+                <div className="bookmark-remove-flex-item">
                   <RemoveBookmarkButton
                     stopId={stopLocation}
                     removeBookmarkFromSection={this.props.removeBookmarkFromSection.bind(
@@ -68,8 +68,8 @@ export default class BookmarkSection extends Component<Props, State> {
                       id
                     )}
                   />
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         </li>

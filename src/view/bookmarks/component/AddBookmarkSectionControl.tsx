@@ -53,16 +53,25 @@ export default class AddBookmarkSectionControl extends Component<Props, State> {
 
     return (
       <div className="add-bookmark-section-control">
-        <form className="add-bookmark-input">
-          <input
-            type="text"
-            value={this.state.bookmarkSectionName}
-            placeholder="Bookmark name"
-            onChange={this.onChange}
-          />
-          <button onClick={this.onClickAddBookmark} disabled={noTextEntered}>
-            Create
-          </button>
+        <form className="add-bookmark-input-form">
+          <div className="add-bookmark-name-input-flex-container">
+            <input
+              type="text"
+              className="add-bookmark-name-input"
+              value={this.state.bookmarkSectionName}
+              placeholder="Bookmark Section Name"
+              onChange={this.onChange}
+            />
+          </div>
+          <div className="add-bookmark-button-flex-container">
+            <button
+              onClick={this.onClickAddBookmark}
+              disabled={noTextEntered}
+              className="add-bookmark-button"
+            >
+              Create
+            </button>
+          </div>
         </form>
       </div>
     );

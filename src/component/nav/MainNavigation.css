@@ -1,5 +1,5 @@
 .top-navigation {
-    background: white;
+    /* background: white; */
 }
 
 .view-header {
@@ -18,17 +18,16 @@
     flex-grow: 1;
     cursor: pointer;
     padding: 10px;
+    background: rgb(255, 255, 255, 0.30);
+    font-weight: bold;
 }
 
 .view-header-menu-item.active {
-    background: darkgrey;
-    border-top: 1px solid black;
-    border-left: 1px solid black;
-    border-right: 1px solid black;
+    background: rgb(255, 255, 255, 0.80);
 }
 
 .view-header-menu-item:hover {
-    background: dimgray;
+    background: rgb(255, 255, 255, 0.50);
 }
 
 .bookmark-icon {

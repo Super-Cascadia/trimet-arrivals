@@ -1,7 +1,7 @@
 body {
   margin: 0;
   /*padding: 15px;*/
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', Helvetica, Arial, sans-serif;
   background: #00A676;
   background-image: url('./images/umit-aslan-728189-unsplash.jpg');
   background-size: cover;

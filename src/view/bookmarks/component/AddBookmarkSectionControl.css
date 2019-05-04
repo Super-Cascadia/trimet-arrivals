@@ -1,12 +1,47 @@
 .add-bookmark-section-control {
-    background: darkslategrey;
-    padding-top: 10px;
-    padding-bottom: 10px;
     margin-bottom: 10px;
     width: 100%;
     border-radius: 5px;
 }
 
-.add-bookmark-input {
-    margin-left: 10px;
+.add-bookmark-input-form {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.add-bookmark-name-input {
+    background: rgb(255,255, 255, 0.5);
+    height: 33px;
+    width: 100%;
+    color: black;
+    /* border: none; */
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+.add-bookmark-name-input::placeholder {
+    color: black;
+}
+
+.add-bookmark-name-input-flex-container {
+    flex-grow: 4;
+}
+
+.add-bookmark-button-flex-container {
+    margin-left: 15px;
+}
+
+.add-bookmark-button {
+    background: rgb(0,0,0, 0.5);
+    border: 0px;
+    color: white;
+    height: 35px;
+    font-size: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.add-bookmark-button:hover {
+    background: rgb(0,0,0, 0.7);
 }
