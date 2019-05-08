@@ -1,7 +1,15 @@
 import React from "react";
 import FontAwesome from "react-fontawesome";
 
-export const RemoveBookmarkButton = ({ stopId, removeBookmarkFromSection }) => {
+interface Props {
+  stopId: number;
+  removeBookmarkFromSection: (stopId: number) => void;
+}
+
+export const RemoveBookmarkButton = ({
+  stopId,
+  removeBookmarkFromSection
+}: Props) => {
   return (
     <button
       onClick={removeBookmarkFromSection.bind(this, stopId)}

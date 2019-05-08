@@ -6,13 +6,15 @@ import {
   removeStoredBookmarkFromSection,
   removeStoredBookmarkSection,
   storeBookmarkSection,
-  updateStoredBookmarkSection
+  updateStoredBookmarkSection,
+  updateStoredBookmarkSectionName
 } from "../../api/localstorage/bookmarkSections";
 import {
   CREATE_BOOKMARK_SECTION,
   REMOVE_ALL_BOOKMARKS_FROM_SECTION,
   REMOVE_BOOKMARK_FROM_SECTION,
   REMOVE_BOOKMARK_SECTION,
+  UPDATE_BOOKMARK_SECTION_NAME,
   UPDATE_BOOKMARK_SECTION_NAME_INPUT,
   UPDATE_BOOKMARKS_SECTION_CONTENTS
 } from "../constants/bookmarkSections";
@@ -134,6 +136,25 @@ export function* removeAllBookmarksInSection(action) {
     });
 
     yield call(removeAllStoredBookmarksInSection, bookmarkSectionId);
+  } catch (e) {
+    logError(e);
+  }
+}
+
+export function* updateBookmarkSectionName(action) {
+  const { bookmarkSectionId, bookmarkSectionName } = action.payload;
+
+  try {
+    yield put({
+      payload: { bookmarkSectionId, bookmarkSectionName },
+      type: UPDATE_BOOKMARK_SECTION_NAME
+    });
+
+    yield call(
+      updateStoredBookmarkSectionName,
+      bookmarkSectionId,
+      bookmarkSectionName
+    );
   } catch (e) {
     logError(e);
   }

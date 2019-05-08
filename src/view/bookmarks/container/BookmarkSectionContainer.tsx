@@ -3,7 +3,8 @@ import {
   addBookmarkToBookmarkSectionRequest,
   removeAllBookmarksInSectionRequest,
   removeBookmarkFromSectionRequest,
-  removeBookmarkSectionRequest
+  removeBookmarkSectionRequest,
+  updateBookmarkSectionNameRequest
 } from "../../../store/action/bookmarkSectionActions";
 import { RootState } from "../../../store/reducers";
 import {
@@ -40,6 +41,14 @@ const mapDispatchToProps = dispatch => {
     },
     removeAllBookmarksFromSection(bookmarkSectionId) {
       dispatch(removeAllBookmarksInSectionRequest(bookmarkSectionId));
+    },
+    updateBookmarkSectionName(
+      bookmarkSectionId: number,
+      bookmarkSectionName: string
+    ) {
+      dispatch(
+        updateBookmarkSectionNameRequest(bookmarkSectionId, bookmarkSectionName)
+      );
     }
   };
 };

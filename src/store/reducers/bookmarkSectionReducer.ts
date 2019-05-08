@@ -6,6 +6,7 @@ import {
   REMOVE_ALL_BOOKMARKS_FROM_SECTION,
   REMOVE_BOOKMARK_FROM_SECTION,
   REMOVE_BOOKMARK_SECTION,
+  UPDATE_BOOKMARK_SECTION_NAME,
   UPDATE_BOOKMARK_SECTION_NAME_INPUT,
   UPDATE_BOOKMARKS_SECTION_CONTENTS
 } from "../constants/bookmarkSections";
@@ -44,7 +45,7 @@ const InitialState = {
   bookmarkSections: {}
 };
 
-function updateBookmarkSectionName(
+function updateNewBookmarkSectionName(
   state: BookmarkSectionReducerState,
   action: Action
 ) {
@@ -181,10 +182,27 @@ function removeAllBookmarksInSection(
   };
 }
 
+function updateBookmarkSectionName(state: BookmarkSectionReducerState, action) {
+  const { bookmarkSections } = state;
+  const { bookmarkSectionId, bookmarkSectionName } = action.payload;
+  const bookmarkSection = bookmarkSections[bookmarkSectionId];
+
+  return {
+    ...state,
+    bookmarkSections: {
+      ...state.bookmarkSections,
+      [bookmarkSectionId]: {
+        ...bookmarkSection,
+        name: bookmarkSectionName
+      }
+    }
+  };
+}
+
 const bookmarkSectionReducer = (state = InitialState, action: Action) => {
   switch (action.type) {
     case UPDATE_BOOKMARK_SECTION_NAME_INPUT:
-      return updateBookmarkSectionName(state, action);
+      return updateNewBookmarkSectionName(state, action);
     case CREATE_BOOKMARK_SECTION:
       return createBookmarkSection(state, action);
     case REMOVE_BOOKMARK_SECTION:
@@ -197,6 +215,8 @@ const bookmarkSectionReducer = (state = InitialState, action: Action) => {
       return removeBookmarkFromSection(state, action);
     case REMOVE_ALL_BOOKMARKS_FROM_SECTION:
       return removeAllBookmarksInSection(state, action);
+    case UPDATE_BOOKMARK_SECTION_NAME:
+      return updateBookmarkSectionName(state, action);
     default:
       return {
         ...state

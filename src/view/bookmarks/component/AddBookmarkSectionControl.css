@@ -36,12 +36,20 @@
     background: rgb(0,0,0, 0.5);
     border: 0px;
     color: white;
-    height: 35px;
     font-size: 20px;
     border-radius: 5px;
     cursor: pointer;
+    line-height: 39px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .add-bookmark-button:hover {
     background: rgb(0,0,0, 0.7);
+}
+
+.add-bookmark-button:disabled {
+    background: rgb(0,0,0, 0.2);
+    color: rgb(0,0,0, 0.2);
+    cursor: not-allowed;
 }

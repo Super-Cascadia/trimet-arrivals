@@ -15,7 +15,8 @@ import {
   CREATE_BOOKMARK_SECTION_REQUEST,
   REMOVE_ALL_BOOKMARKS_IN_SECTION_REQUEST,
   REMOVE_BOOKMARK_FROM_SECTION_REQUEST,
-  REMOVE_BOOKMARK_SECTION_REQUEST
+  REMOVE_BOOKMARK_SECTION_REQUEST,
+  UPDATE_BOOKMARK_SECTION_NAME_REQUEST
 } from "../constants/bookmarkSections";
 import { loadArrivalData } from "./arrivalSagas";
 import { bookmarkStop, removeStopBookmark } from "./bookmarkSagas";
@@ -24,6 +25,7 @@ import {
   removeAllBookmarksInSection,
   removeBookmarkFromSection,
   removeBookmarkSection,
+  updateBookmarkSectionName,
   updateSectionInputName,
   updateSelectedBookmarkSection
 } from "./bookmarkSectionSagas";
@@ -55,5 +57,9 @@ export function* rootSaga() {
   yield takeEvery(
     REMOVE_ALL_BOOKMARKS_IN_SECTION_REQUEST,
     removeAllBookmarksInSection
+  );
+  yield takeEvery(
+    UPDATE_BOOKMARK_SECTION_NAME_REQUEST,
+    updateBookmarkSectionName
   );
 }

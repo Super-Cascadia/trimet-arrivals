@@ -2,15 +2,21 @@
     margin-top: 0px;
     margin-bottom: 0px;
     color: white;
+    line-height: 40px;
 }
 
 button.close-button {
-    background: grey;
+    background: rgb(0,0,0, 0.5);
     border: none;
     font-size: 20px;
     cursor: pointer;
+    color: white;
+    padding-left: 12px;
+    padding-right: 12px;
+    line-height: 40px;
+    border-radius: 5px;
 }
 
 button.close-button:hover {
-    background: darkgrey;
+    background: rgb(0,0,0, 0.70);
 }

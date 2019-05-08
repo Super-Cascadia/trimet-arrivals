@@ -5,7 +5,8 @@ import {
   CREATE_BOOKMARK_SECTION_REQUEST,
   REMOVE_ALL_BOOKMARKS_IN_SECTION_REQUEST,
   REMOVE_BOOKMARK_FROM_SECTION_REQUEST,
-  REMOVE_BOOKMARK_SECTION_REQUEST
+  REMOVE_BOOKMARK_SECTION_REQUEST,
+  UPDATE_BOOKMARK_SECTION_NAME_REQUEST
 } from "../constants/bookmarkSections";
 
 export const sectionNameUpdateRequest = (name: string) => ({
@@ -51,4 +52,15 @@ export const removeAllBookmarksInSectionRequest = (
 ) => ({
   payload: { bookmarkSectionId },
   type: REMOVE_ALL_BOOKMARKS_IN_SECTION_REQUEST
+});
+
+export const updateBookmarkSectionNameRequest = (
+  bookmarkSectionId: number,
+  bookmarkSectionName: string
+) => ({
+  payload: {
+    bookmarkSectionId,
+    bookmarkSectionName
+  },
+  type: UPDATE_BOOKMARK_SECTION_NAME_REQUEST
 });

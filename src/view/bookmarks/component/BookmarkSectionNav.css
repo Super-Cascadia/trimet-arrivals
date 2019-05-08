@@ -4,18 +4,46 @@
 
 .bookmark-section-control-wrapper {
     margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: flex-start;
 }
 
 .edit-toggle-button {
-    background: grey;
+    background: rgb(0,0,0, 0.5);
     border: none;
     font-size: 20px;
     cursor: pointer;
-    position: absolute;
-    right: 10px;
-    top: 7px;
+    height: 40px;
+    color: white;
+    line-height: 40px;
+    /* position: absolute; */
+    /* right: 10px; */
+    /* top: 7px; */
 }
 
 .edit-toggle-button:hover {
-    background: darkgrey;
+    background: rgb(0,0,0, 0.70);
+}
+
+.bookmark-section-name-wrapper {
+    flex-grow: 3;
+    order: 0;
+}
+
+.bookmark-section-edit-controls-wrapper {
+    order: 1;
+    margin-left: 15px;
+    display: flex;
+}
+
+.edit-section-name-input {
+    background: rgb(255,255, 255, 0.70);
+    height: 33px;
+    width: 100%;
+    color: black;
+    /* border: none; */
+    border-radius: 5px;
+    font-size: 20px;
 }

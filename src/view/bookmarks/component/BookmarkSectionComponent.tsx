@@ -21,13 +21,17 @@ interface Props {
     stopId: number
   ) => void;
   removeAllBookmarksFromSection: (bookmarkSectionId: number) => void;
+  updateBookmarkSectionName: (
+    bookmarkSectionId: number,
+    bookmarkSectionName: string
+  ) => void;
 }
 
 interface State {
   editMode: boolean;
 }
 
-export default class BookmarkSection extends Component<Props, State> {
+export default class BookmarkSectionComponent extends Component<Props, State> {
   constructor(props) {
     super(props);
 
@@ -62,7 +66,7 @@ export default class BookmarkSection extends Component<Props, State> {
               {this.state.editMode && (
                 <div className="bookmark-remove-flex-item">
                   <RemoveBookmarkButton
-                    stopId={stopLocation}
+                    stopId={stopLocation.locid}
                     removeBookmarkFromSection={this.props.removeBookmarkFromSection.bind(
                       this,
                       id
@@ -78,7 +82,13 @@ export default class BookmarkSection extends Component<Props, State> {
   }
 
   public render() {
-    const { name, bookmarksInSection, id, allBookmarks } = this.props;
+    const {
+      name,
+      bookmarksInSection,
+      id,
+      allBookmarks,
+      updateBookmarkSectionName
+    } = this.props;
 
     return (
       <article className="bookmark-section" key={id}>
@@ -93,6 +103,7 @@ export default class BookmarkSection extends Component<Props, State> {
           editMode={this.state.editMode}
           removeBookmarkSection={this.removeBookmarkSection.bind(this, id)}
           allBookmarks={allBookmarks}
+          updateBookmarkSectionName={updateBookmarkSectionName.bind(this, id)}
         />
         <ul className="bookmark-section-bookmarks">
           {this.getBookmarksInSection(bookmarksInSection, id)}

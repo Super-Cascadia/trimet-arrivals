@@ -3,15 +3,16 @@
 }
 
 .bookmark-section-remove-button {
-    position: absolute;
-    right: 55px;
-    top: 7px;
+    /* position: absolute; */
+    /* right: 55px; */
+    /* top: 7px; */
 }
 
 ul.bookmark-section-bookmarks {
     list-style: none;
     padding: 0;
-    marging: 0;
+    margin: 0;
+    margin-top: 10px;
 }
 
 .bookmark-flex-container {
@@ -37,3 +38,7 @@ ul.bookmark-section-bookmarks {
 .bookmark-stop-wrapper {
     margin-bottom: 10px;
 }
+
+.bookmark-section-bookmarks li:last-child .bookmark-stop-wrapper {
+    margin-bottom: 0px;
+}   

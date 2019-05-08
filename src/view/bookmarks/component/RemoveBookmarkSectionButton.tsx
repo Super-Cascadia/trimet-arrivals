@@ -9,14 +9,12 @@ export const RemoveBookmarkSectionButton = ({
   removeBookmarkSection
 }: RemoveBookmarkSectionButtonProps) => {
   return (
-    <div className="bookmark-section-remove-button">
-      <button
-        className="close-button"
-        onClick={removeBookmarkSection}
-        title="Remove Bookmark Section"
-      >
-        <FontAwesome name="times-circle" />
-      </button>
-    </div>
+    <button
+      className="close-button group-menu-item"
+      onClick={removeBookmarkSection}
+      title="Remove Bookmark Section"
+    >
+      <FontAwesome name="times-circle" />
+    </button>
   );
 };

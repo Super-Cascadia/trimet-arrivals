@@ -70,3 +70,14 @@ export function removeAllStoredBookmarksInSection(bookmarkSectionId: number) {
 
   updateStoredBookmarkSections(bookmarkSections);
 }
+
+export function updateStoredBookmarkSectionName(
+  bookmarkSectionId: number,
+  bookmarkSectionName: string
+) {
+  const bookmarkSections = fetchStoredBookmarkSections();
+  const bookmarkSection = bookmarkSections[bookmarkSectionId];
+  bookmarkSection.name = bookmarkSectionName;
+
+  updateStoredBookmarkSections(bookmarkSections);
+}
