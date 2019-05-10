@@ -38,16 +38,18 @@ export default class StopsTableHeader extends React.Component<Props> {
     return (
       <div className={classNames}>
         <StopInfo stopLocation={stopLocation} onClick={onRouteIndicatorClick} />
-        <StopBookmarkControlContainer
-          locationId={locationId}
-          stopLocation={stopLocation}
-        />
-        <ReloadIntervalCoordinator
-          stopLocation={stopLocation}
-          loadArrivalData={loadArrivalData}
-          loading={loading}
-          showArrivals={showArrivals}
-        />
+        <div className="stop-control-section">
+          <StopBookmarkControlContainer
+            locationId={locationId}
+            stopLocation={stopLocation}
+          />
+          <ReloadIntervalCoordinator
+            stopLocation={stopLocation}
+            loadArrivalData={loadArrivalData}
+            loading={loading}
+            showArrivals={showArrivals}
+          />
+        </div>
       </div>
     );
   }

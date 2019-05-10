@@ -14,7 +14,7 @@
 }
 
 .view-header-menu-item {
-    line-height: 40px;
+    line-height: 30px;
     flex-grow: 1;
     cursor: pointer;
     padding: 10px;

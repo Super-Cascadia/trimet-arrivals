@@ -9,11 +9,15 @@
 
 .stops-header {
     border-radius: 5px 5px 0px 0px;
-    /* background: rgb(255, 255, 255, 0.85); */
-    line-height: 45px;
+    line-height: 35px;
     padding-left: 10px;
     padding-right: 10px;
     position: relative;
+    display: flex;
+}
+
+.stop-info-header {
+    flex: 4
 }
 
 .stops-header.arrivals-hidden {
@@ -22,7 +26,7 @@
 
 .stops-header h2 {
     margin: 0px;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 table {

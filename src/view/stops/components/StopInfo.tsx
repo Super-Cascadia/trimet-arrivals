@@ -28,13 +28,15 @@ export default function StopInfo({ stopLocation, onClick }: Props) {
   }
 
   return (
-    <h2>
-      <span className="route-indicators">
-        {getStopRoutes(stopLocation.route, onClick)}
-      </span>
-      <span className="stop-info">
-        {stopLocation.locid} - {stopLocation.desc} - {stopLocation.dir}
-      </span>
-    </h2>
+    <div className="stop-info-header">
+      <h2>
+        <span className="route-indicators">
+          {getStopRoutes(stopLocation.route, onClick)}
+        </span>
+        <span className="stop-info">
+          {stopLocation.locid} - {stopLocation.desc} - {stopLocation.dir}
+        </span>
+      </h2>
+    </div>
   );
 }

@@ -1,15 +1,16 @@
 .route-indicator {
-    background: black;    
-    height: 25px;
-    width: 25px;
+    background: #1e4d88;
+    height: 21px;
+    width: 21px;
     vertical-align: middle;
     text-align: center;
     color: white;
-    font-size: 14px;
-    line-height: 25px;
+    font-size: 12px;
+    line-height: 20px;
     border-radius: 5px;
     display: inline-block;
     cursor: pointer;
+    border: 2px solid #c25033;
 }
 
 .route-indicator-green {

@@ -1,6 +1,5 @@
 body {
   margin: 0;
-  /*padding: 15px;*/
   font-family: 'Roboto', Helvetica, Arial, sans-serif;
   background: #00A676;
   background-image: url('./images/umit-aslan-728189-unsplash.jpg');
@@ -9,7 +8,7 @@ body {
 }
 
 main.main-view {
-  padding: 15px;
+  padding: 10px;
 }
 
 body button {
@@ -18,8 +17,8 @@ body button {
 }
 
 .group-menu-item {
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-left: 7px;
+  padding-right: 7px;
 }
 
 .group-menu-item.enabled {
@@ -31,10 +30,11 @@ body button {
 }
 
 .group-menu-item:last-child {
-  border-left: 1px solid black !important; 
+  border-left: 1px solid black; 
   border-radius: 0px 5px 5px 0px;
 }
 
 .group-menu-item:only-child {
   border-radius: 5px 5px 5px 5px;
+  border-left: none;
 }
