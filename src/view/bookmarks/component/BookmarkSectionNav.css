@@ -36,9 +36,9 @@
 
 .edit-section-name-input {
     background: rgb(255,255, 255, 0.70);
-    height: 24px;
     width: 100%;
     color: black;
     border-radius: 5px;
-    font-size: 20px;
+    font-size: 16px;
+    line-height: 23px;
 }

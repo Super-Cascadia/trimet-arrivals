@@ -12,12 +12,11 @@
 
 .add-bookmark-name-input {
     background: rgb(255,255, 255, 0.5);
-    height: 33px;
     width: 100%;
     color: black;
-    /* border: none; */
     border-radius: 5px;
-    font-size: 20px;
+    font-size: 16px;
+    line-height: 24px;
 }
 
 .add-bookmark-name-input::placeholder {
@@ -36,12 +35,12 @@
     background: rgb(0,0,0, 0.5);
     border: 0px;
     color: white;
-    font-size: 20px;
+    font-size: 16px;
     border-radius: 5px;
     cursor: pointer;
-    line-height: 39px;
-    padding-left: 10px;
-    padding-right: 10px;
+    line-height: 30px;
+    padding-left: 9px;
+    padding-right: 9px;
 }
 
 .add-bookmark-button:hover {

@@ -38,7 +38,7 @@ export default class NearbyStopsViewComponent extends React.Component<
     const { loadStopData } = this.props;
 
     if (loadStopData) {
-      loadStopData(500);
+      loadStopData(1000);
     }
   }
 
