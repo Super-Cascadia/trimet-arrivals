@@ -5,6 +5,11 @@ import ViewComponent from "./ViewComponent";
 describe("ViewComponent", () => {
   describe("by default", () => {
     it("renders without errors", () => {
+      // tslint:disable-next-line:no-empty
+      const onInitialLoad = () => {
+        return;
+      };
+
       expect(() =>
         shallow(
           <ViewComponent
@@ -12,18 +17,24 @@ describe("ViewComponent", () => {
             updateView={undefined}
             numberOfBookmarks={undefined}
             timeOfLastLoad={undefined}
+            onInitialLoad={onInitialLoad}
           />
         )
       ).not.toThrow();
     });
 
     it("shows navigation", () => {
+      const onInitialLoad = () => {
+        return;
+      };
+
       const subject = shallow(
         <ViewComponent
           activeView={undefined}
           updateView={undefined}
           numberOfBookmarks={undefined}
           timeOfLastLoad={undefined}
+          onInitialLoad={onInitialLoad}
         />
       );
 

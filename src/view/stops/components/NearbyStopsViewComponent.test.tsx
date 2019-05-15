@@ -33,7 +33,7 @@ describe("NearbyStopsViewComponent", () => {
         );
 
         expect(loadStopData).toHaveBeenCalled();
-        expect(loadStopData).toHaveBeenCalledWith(500);
+        expect(loadStopData).toHaveBeenCalledWith(1000);
       });
     });
   });

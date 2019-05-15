@@ -24,6 +24,9 @@ function mockStore() {
         123: false
       }
     },
+    bookmarkSectionReducer: {
+      bookmarkSections: []
+    },
     bookmarksReducer: {
       bookmarks: {}
     }
@@ -66,7 +69,7 @@ describe("StopComponent", () => {
       expect(subject.find("StopsTableHeader")).toExist();
     });
 
-    it("shows an ArrivalsContainer", () => {
+    it("does not show an ArrivalsContainer", () => {
       const subject = mount(
         <ProviderMock store={mockStore()}>
           <StopComponent
@@ -74,19 +77,19 @@ describe("StopComponent", () => {
             loadArrivalData={undefined}
             locationId={undefined}
             loading={undefined}
-            showArrivals={undefined}
+            showArrivals={false}
           />
         </ProviderMock>
       );
 
       const stop = subject.find(".stop");
 
-      expect(stop.childAt(1).name()).toBe("Connect(ArrivalsComponent)");
+      expect(stop.childAt(1)).not.toExist();
     });
 
     describe("when mounted", () => {
       const loadArrivalDataSpy = jasmine.createSpy("loadArrivalDataSpy");
-      const stopLocation = {};
+      const stopLocation = { locid: 123 };
       const onBookmarkClickSpy = jasmine.createSpy("onBookmarkClickSpy");
 
       const subject = mount(
@@ -121,6 +124,29 @@ describe("StopComponent", () => {
           jest.runOnlyPendingTimers();
           expect(setInterval).toHaveBeenCalledTimes(1);
         });
+      });
+    });
+
+    describe("When showArrivals is enabled", () => {
+      it("shows an ArrivalsContainer", () => {
+        const loadArrivalDataSpy = jasmine.createSpy("loadArrivalDataSpy");
+
+        const subject = mount(
+          <ProviderMock store={mockStore()}>
+            <StopComponent
+              stopLocation={undefined}
+              loadArrivalData={loadArrivalDataSpy}
+              locationId={undefined}
+              loading={undefined}
+              showArrivals={true}
+            />
+          </ProviderMock>
+        );
+
+        const stop = subject.find(".stop");
+
+        expect(stop.childAt(1)).toExist();
+        expect(stop.childAt(1).name()).toBe("Connect(ArrivalsComponent)");
       });
     });
   });
