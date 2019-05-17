@@ -10,9 +10,13 @@ export const RemoveBookmarkButton = ({
   stopId,
   removeBookmarkFromSection
 }: Props) => {
+  const onClick = removeBookmarkFromSection
+    ? removeBookmarkFromSection.bind(this, stopId)
+    : undefined;
+
   return (
     <button
-      onClick={removeBookmarkFromSection.bind(this, stopId)}
+      onClick={onClick}
       className="close-button"
       title="Remove bookmark from Bookmark Section"
     >
