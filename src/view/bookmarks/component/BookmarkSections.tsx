@@ -21,7 +21,7 @@ export default function BookmarkSections({ bookmarkSections }: Props) {
   }
 
   return (
-    <div>
+    <div className="bookmark-section-list">
       {map(
         bookmarkSections,
         (bookmarkSection: BookmarkSectionProps, id: number) => {
