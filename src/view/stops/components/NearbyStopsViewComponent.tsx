@@ -46,7 +46,7 @@ export default class NearbyStopsViewComponent extends React.Component<
     const { loading, stopLocations } = this.props;
 
     return (
-      <div>
+      <div id="nearby-stops-view-component">
         {loading && <div className="loading-message">Loading...</div>}
         {!loading && stopLocations && (
           <div className="nearby-stops">

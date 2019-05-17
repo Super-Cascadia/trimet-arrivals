@@ -38,7 +38,7 @@ export default class BookmarksViewComponent extends React.Component<Props> {
     const { bookmarks } = this.props;
 
     return (
-      <section>
+      <section id="bookmarks-view-container">
         <div>
           <BookmarkSectionsContainer />
           <h1>Uncategorized Bookmarks</h1>
