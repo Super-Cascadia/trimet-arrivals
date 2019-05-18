@@ -50,6 +50,10 @@ export default class BookmarkSectionComponent extends Component<Props, State> {
         </p>
       );
     }
+    const { removeBookmarkFromSection } = this.props;
+    const onRemoveBookmarkFromSection = removeBookmarkFromSection
+      ? removeBookmarkFromSection.bind(this, id)
+      : undefined;
 
     return map(bookmarkedStops, stopLocation => {
       return (
@@ -67,10 +71,7 @@ export default class BookmarkSectionComponent extends Component<Props, State> {
                 <div className="bookmark-remove-flex-item">
                   <RemoveBookmarkButton
                     stopId={stopLocation.locid}
-                    removeBookmarkFromSection={this.props.removeBookmarkFromSection.bind(
-                      this,
-                      id
-                    )}
+                    removeBookmarkFromSection={onRemoveBookmarkFromSection}
                   />
                 </div>
               )}
@@ -90,20 +91,25 @@ export default class BookmarkSectionComponent extends Component<Props, State> {
       updateBookmarkSectionName
     } = this.props;
 
+    const onUpdateBookmarkSectionName = updateBookmarkSectionName
+      ? updateBookmarkSectionName.bind(this, id)
+      : undefined;
+    const removeBookmarkSection = this.removeBookmarkSection.bind(this, id);
+    const onReactSelectBookmarkChange = this.onReactSelectBookmarkChange.bind(
+      this,
+      id
+    );
     return (
       <article className="bookmark-section" key={id}>
         <BookmarkSectionNav
           bookmarksInSection={bookmarksInSection}
           name={name}
-          onReactSelectBookmarkChange={this.onReactSelectBookmarkChange.bind(
-            this,
-            id
-          )}
+          onReactSelectBookmarkChange={onReactSelectBookmarkChange}
           toggleEditMode={this.toggleEditMode}
           editMode={this.state.editMode}
-          removeBookmarkSection={this.removeBookmarkSection.bind(this, id)}
+          removeBookmarkSection={removeBookmarkSection}
           allBookmarks={allBookmarks}
-          updateBookmarkSectionName={updateBookmarkSectionName.bind(this, id)}
+          updateBookmarkSectionName={onUpdateBookmarkSectionName}
         />
         <ul className="bookmark-section-bookmarks">
           {this.getBookmarksInSection(bookmarksInSection, id)}
