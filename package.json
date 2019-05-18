@@ -17,7 +17,7 @@
     "@types/node": "11.11.5",
     "@types/prop-types": "15.7.1",
     "@types/react": "16.8.8",
-    "@types/react-dom": "16.8.3",
+    "@types/react-dom": "16.8.4",
     "@types/react-fontawesome": "1.6.4",
     "@types/react-redux": "7.0.4",
     "@types/redux": "^3.6.0",
