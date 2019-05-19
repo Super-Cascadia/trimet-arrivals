@@ -2,7 +2,7 @@ body {
   margin: 0;
   font-family: 'Roboto', Helvetica, Arial, sans-serif;
   background: #00A676;
-  background-image: url('./images/umit-aslan-728189-unsplash.jpg');
+  background-image: url('assets/images/umit-aslan-728189-unsplash.jpg');
   background-size: cover;
   background-attachment: fixed;
 }
@@ -30,7 +30,7 @@ body button {
 }
 
 .group-menu-item:last-child {
-  border-left: 1px solid black; 
+  border-left: 1px solid black;
   border-radius: 0px 5px 5px 0px;
 }
 
