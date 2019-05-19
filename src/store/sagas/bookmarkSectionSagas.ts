@@ -20,7 +20,7 @@ import {
 } from "../constants/bookmarkSections";
 import { logError } from "./util";
 
-function getNextId({ bookmarkSectionReducer }): number {
+export function getNextId({ bookmarkSectionReducer }): number {
   if (isEmpty(bookmarkSectionReducer.bookmarkSections)) {
     return 0;
   }
@@ -31,11 +31,11 @@ function getNextId({ bookmarkSectionReducer }): number {
   return parseInt(lastKey, 10) + 1;
 }
 
-function getBookmarkName({ bookmarkSectionReducer }) {
+export function getBookmarkName({ bookmarkSectionReducer }) {
   return bookmarkSectionReducer.bookmarkInputSectionName;
 }
 
-function buildBookmarkSection(bookmarkName: string) {
+export function buildBookmarkSection(bookmarkName: string) {
   return {
     bookmarkedStops: [],
     name: bookmarkName,
@@ -54,9 +54,7 @@ export function* updateSectionInputName(action: UpdateSectionInputAction) {
     const name = action.payload.name;
 
     yield put({
-      payload: {
-        name
-      },
+      payload: { name },
       type: UPDATE_BOOKMARK_SECTION_NAME_INPUT
     });
   } catch (e) {
@@ -68,7 +66,7 @@ export function* createBookmarkSection() {
   try {
     const nextId = yield select(getNextId);
     const bookmarkName = yield select(getBookmarkName);
-    const bookmarkSection = buildBookmarkSection(bookmarkName);
+    const bookmarkSection = yield buildBookmarkSection(bookmarkName);
 
     yield put({
       payload: { nextId, bookmarkSection },
