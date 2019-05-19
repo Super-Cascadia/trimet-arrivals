@@ -1,5 +1,9 @@
 // tslint:disable:no-submodule-imports
-import { put } from "redux-saga/effects";
+import { call, put } from "redux-saga/effects";
+import {
+  removeStoredBookmark,
+  storeLocationBookmark
+} from "../../api/localstorage/bookmarks";
 // tslint:enable:no-submodule-imports
 import { CREATE_STOP_BOOKMARK, REMOVE_STOP_BOOKMARK } from "../constants";
 import { bookmarkStop, removeStopBookmark } from "./bookmarkSagas";
@@ -20,6 +24,12 @@ describe("sagas", () => {
         })
       );
     });
+
+    it("makes a call add the bookmarked stopLocation to local storage", () => {
+      expect(bookmarkStopData.next().value).toEqual(
+        call(storeLocationBookmark, {})
+      );
+    });
   });
 
   describe("removeStopBookmark", () => {
@@ -27,7 +37,7 @@ describe("sagas", () => {
       payload: { locationId: 123 }
     });
 
-    it("dispatches the load arrivals event", () => {
+    it("dispatches the remove stop bookmark event", () => {
       expect(removeStopBookmarkData.next().value).toEqual(
         put({
           payload: {
@@ -35,6 +45,12 @@ describe("sagas", () => {
           },
           type: REMOVE_STOP_BOOKMARK
         })
+      );
+    });
+
+    it("makes a call to remove the bookmarked stoplocation from local storage", () => {
+      expect(removeStopBookmarkData.next().value).toEqual(
+        call(removeStoredBookmark, 123)
       );
     });
   });
