@@ -3,7 +3,7 @@ import { call, put } from "redux-saga/effects";
 import {
   removeStoredBookmark,
   storeLocationBookmark
-} from "../../api/localstorage/bookmarks";
+} from "../../api/localstorage/bookmarks.localstorage";
 // tslint:enable:no-submodule-imports
 import { CREATE_STOP_BOOKMARK, REMOVE_STOP_BOOKMARK } from "../constants";
 import { bookmarkStop, removeStopBookmark } from "./bookmarkSagas";
