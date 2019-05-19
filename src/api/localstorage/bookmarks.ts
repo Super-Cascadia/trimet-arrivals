@@ -2,7 +2,7 @@ import { omit } from "lodash";
 import { StopLocation } from "../trimet/types";
 import { fetchLocalStorageItemByKey, updateStoredItemByKey } from "./util";
 
-const BOOKMARKS = "BOOKMARKS";
+export const BOOKMARKS = "BOOKMARKS";
 
 interface StoredBookmarks {
   [locationId: number]: StopLocation;
