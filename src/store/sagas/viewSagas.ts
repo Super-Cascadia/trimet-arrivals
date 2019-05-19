@@ -29,7 +29,7 @@ export function* initialLoad() {
     const bookmarkSections = yield call(fetchStoredBookmarkSections);
 
     yield put({
-      payload: { bookmarks, bookmarkSections },
+      payload: { bookmarks },
       type: LOAD_BOOKMARKS_COMPLETE
     });
 
