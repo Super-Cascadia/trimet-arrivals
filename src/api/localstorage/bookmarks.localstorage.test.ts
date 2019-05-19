@@ -14,7 +14,7 @@ const localStoreContents = {
 fetchLocalStorageItemByKey.mockReturnValue(localStoreContents);
 updateStoredItemByKey.mockReturnValue({});
 
-describe("Bookmarks.ts", () => {
+describe("bookmarks.localstorage", () => {
   describe("removeStoredBookmark", () => {
     removeStoredBookmark(123);
 

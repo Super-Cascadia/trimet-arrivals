@@ -1,18 +1,24 @@
 import { filter, find, omit } from "lodash";
-import { BookmarkSectionsProps } from "../../store/reducers/bookmarkSectionReducer";
+import {
+  BookmarkSectionProps,
+  BookmarkSectionsProps
+} from "../../store/reducers/bookmarkSectionReducer";
 import { fetchLocalStorageItemByKey, updateStoredItemByKey } from "./util";
 
-const BOOKMARK_SECTIONS = "BOOKMARK_SECTIONS";
+export const BOOKMARK_SECTIONS = "BOOKMARK_SECTIONS";
 
 export function fetchStoredBookmarkSections(): BookmarkSectionsProps {
   return fetchLocalStorageItemByKey(BOOKMARK_SECTIONS);
 }
 
-function updateStoredBookmarkSections(bookmarkSections) {
+function updateStoredBookmarkSections(bookmarkSections: BookmarkSectionsProps) {
   updateStoredItemByKey(BOOKMARK_SECTIONS, bookmarkSections);
 }
 
-export function storeBookmarkSection(nextId: number, bookmarkSection) {
+export function storeBookmarkSection(
+  nextId: number,
+  bookmarkSection: BookmarkSectionProps
+) {
   const bookmarkSections = fetchStoredBookmarkSections();
 
   bookmarkSections[nextId] = bookmarkSection;
