@@ -1,8 +1,8 @@
 import cx from "classnames";
 import React from "react";
 import FontAwesome from "react-fontawesome";
+import { RemoveBookmarkSectionButton } from "../../../component/buttons/RemoveBookmarkSectionButton";
 import EditSectionNameInput from "./EditSectionNameInput";
-import { RemoveBookmarkSectionButton } from "./RemoveBookmarkSectionButton";
 
 function EditModeToggleButton({ onClick, editMode }) {
   const classNames = cx("group-menu-item", "edit-toggle-button", {
