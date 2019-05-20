@@ -2,34 +2,26 @@ import { connect } from "react-redux";
 import {
   addBookmarkToBookmarkSectionRequest,
   removeAllBookmarksInSectionRequest,
-  removeBookmarkFromSectionRequest,
-  removeBookmarkSectionRequest,
-  updateBookmarkSectionNameRequest
+  removeBookmarkFromSectionRequest
 } from "../../../store/action/bookmarkSectionActions";
 import { RootState } from "../../../store/reducers";
-import {
-  bookmarkSectionNameSelector,
-  bookmarksInSectionSelector
-} from "../../../store/selectors/bookmarkSectionSelectors";
-import BookmarkSectionComponent from "../component/BookmarkSectionComponent";
+import { bookmarksInSectionSelector } from "../../../store/selectors/bookmarkSectionSelectors";
+import { bookmarkedStopLocationSelector } from "../../../store/selectors/bookmarkSelectors";
+import BookmarksInSectionSelectionHandler from "../component/BookmarksInSectionSelectionHandler";
 
 const mapStateToProps = (state: RootState, ownProps) => {
   const id = ownProps.bookmarkSectionId;
   const bookmarksInSection = bookmarksInSectionSelector(state, id);
-  const name = bookmarkSectionNameSelector(state, id);
+  const allBookmarks = bookmarkedStopLocationSelector(state);
 
   return {
-    bookmarksInSection,
-    id,
-    name
+    allBookmarks,
+    bookmarksInSection
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    removeBookmarkSection(bookmarkSectionId: number) {
-      dispatch(removeBookmarkSectionRequest(bookmarkSectionId));
-    },
     removeBookmarkFromSection(bookmarkSectionId: number, stopId: number) {
       dispatch(removeBookmarkFromSectionRequest(bookmarkSectionId, stopId));
     },
@@ -38,21 +30,13 @@ const mapDispatchToProps = dispatch => {
     },
     removeAllBookmarksFromSection(bookmarkSectionId) {
       dispatch(removeAllBookmarksInSectionRequest(bookmarkSectionId));
-    },
-    updateBookmarkSectionName(
-      bookmarkSectionId: number,
-      bookmarkSectionName: string
-    ) {
-      dispatch(
-        updateBookmarkSectionNameRequest(bookmarkSectionId, bookmarkSectionName)
-      );
     }
   };
 };
 
-const BookmarkSectionContainer = connect(
+const BookmarksInSectionSelectorContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(BookmarkSectionComponent);
+)(BookmarksInSectionSelectionHandler);
 
-export default BookmarkSectionContainer;
+export default BookmarksInSectionSelectorContainer;

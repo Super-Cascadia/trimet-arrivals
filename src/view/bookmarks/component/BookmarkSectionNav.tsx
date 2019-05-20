@@ -1,29 +1,24 @@
 import React from "react";
-import { StopLocation } from "../../../api/trimet/types";
+import BookmarksInSectionSelectorContainer from "../container/BookmarksInSectionSelectorContainer";
 import BookmarkSectionNameControl from "./BookmarkSectionNameControl";
 import "./BookmarkSectionNav.css";
-import BookmarksInSectionSelector from "./BookmarksInSectionSelector";
 
 interface BookmarkSectionNavProps {
   name: string;
-  bookmarksInSection: StopLocation[];
   removeBookmarkSection: () => void;
-  onReactSelectBookmarkChange: () => void;
-  allBookmarks: StopLocation[];
   editMode: boolean;
   toggleEditMode: () => void;
   updateBookmarkSectionName: (bookmarkSectionName: string) => void;
+  bookmarkSectionId: number;
 }
 
 export const BookmarkSectionNav = ({
-  bookmarksInSection,
   removeBookmarkSection,
-  onReactSelectBookmarkChange,
   name,
-  allBookmarks,
   editMode,
   updateBookmarkSectionName,
-  toggleEditMode
+  toggleEditMode,
+  bookmarkSectionId
 }: BookmarkSectionNavProps) => {
   return (
     <nav className="bookmark-section-nav-wrapper">
@@ -36,10 +31,8 @@ export const BookmarkSectionNav = ({
       />
       <div>
         {editMode && (
-          <BookmarksInSectionSelector
-            onReactSelectBookmarkChange={onReactSelectBookmarkChange}
-            allBookmarks={allBookmarks}
-            bookmarksInSection={bookmarksInSection}
+          <BookmarksInSectionSelectorContainer
+            bookmarkSectionId={bookmarkSectionId}
           />
         )}
       </div>

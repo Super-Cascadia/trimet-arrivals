@@ -16,11 +16,6 @@ interface Props {
     bookmarkSectionId: number,
     stopId: number
   ) => void;
-  addBookmarkToBookmarkSection: (
-    bookmarkSectionId: number,
-    stopId: number
-  ) => void;
-  removeAllBookmarksFromSection: (bookmarkSectionId: number) => void;
   updateBookmarkSectionName: (
     bookmarkSectionId: number,
     bookmarkSectionName: string
@@ -87,7 +82,6 @@ export default class BookmarkSectionComponent extends Component<Props, State> {
       name,
       bookmarksInSection,
       id,
-      allBookmarks,
       updateBookmarkSectionName
     } = this.props;
 
@@ -95,21 +89,16 @@ export default class BookmarkSectionComponent extends Component<Props, State> {
       ? updateBookmarkSectionName.bind(this, id)
       : undefined;
     const removeBookmarkSection = this.removeBookmarkSection.bind(this, id);
-    const onReactSelectBookmarkChange = this.onReactSelectBookmarkChange.bind(
-      this,
-      id
-    );
+
     return (
       <article className="bookmark-section" key={id}>
         <BookmarkSectionNav
-          bookmarksInSection={bookmarksInSection}
           name={name}
-          onReactSelectBookmarkChange={onReactSelectBookmarkChange}
           toggleEditMode={this.toggleEditMode}
           editMode={this.state.editMode}
           removeBookmarkSection={removeBookmarkSection}
-          allBookmarks={allBookmarks}
           updateBookmarkSectionName={onUpdateBookmarkSectionName}
+          bookmarkSectionId={id}
         />
         <ul className="bookmark-section-bookmarks">
           {this.getBookmarksInSection(bookmarksInSection, id)}
@@ -126,25 +115,5 @@ export default class BookmarkSectionComponent extends Component<Props, State> {
 
   private removeBookmarkSection(id) {
     this.props.removeBookmarkSection(id);
-  }
-
-  private onReactSelectBookmarkChange(id, val, event) {
-    const REMOVE_VALUE = "remove-value";
-    const SELECT_OPTION = "select-option";
-    const POP_VALUE = "pop-value";
-    const CLEAR = "clear";
-
-    switch (event.action) {
-      case CLEAR:
-        this.props.removeAllBookmarksFromSection(id);
-        break;
-      case REMOVE_VALUE:
-      case POP_VALUE:
-        this.props.removeBookmarkFromSection(id, event.removedValue.value);
-        break;
-      case SELECT_OPTION:
-        this.props.addBookmarkToBookmarkSection(id, event.option.value);
-        break;
-    }
   }
 }
