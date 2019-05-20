@@ -1,7 +1,5 @@
 import { connect } from "react-redux";
 import {
-  addBookmarkToBookmarkSectionRequest,
-  removeAllBookmarksInSectionRequest,
   removeBookmarkFromSectionRequest,
   removeBookmarkSectionRequest,
   updateBookmarkSectionNameRequest
@@ -32,12 +30,6 @@ const mapDispatchToProps = dispatch => {
     },
     removeBookmarkFromSection(bookmarkSectionId: number, stopId: number) {
       dispatch(removeBookmarkFromSectionRequest(bookmarkSectionId, stopId));
-    },
-    addBookmarkToBookmarkSection(bookmarkSectionId, stopId) {
-      dispatch(addBookmarkToBookmarkSectionRequest(bookmarkSectionId, stopId));
-    },
-    removeAllBookmarksFromSection(bookmarkSectionId) {
-      dispatch(removeAllBookmarksInSectionRequest(bookmarkSectionId));
     },
     updateBookmarkSectionName(
       bookmarkSectionId: number,
