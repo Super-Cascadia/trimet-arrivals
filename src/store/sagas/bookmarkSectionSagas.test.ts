@@ -47,43 +47,66 @@ describe("bookmarkSectionSagas", () => {
   });
 
   describe("createBookmarkSection", () => {
-    const createBookmarkSectionGenerator = createBookmarkSection({
-      payload: { name: "foo" }
-    });
+    describe("when an error occurs", () => {
+      it("catches the error", () => {
+        const createBookmarkSectionGenerator = createBookmarkSection({
+          payload: { name: "foo" }
+        });
 
-    it("determines the next id for a bookmark section", () => {
-      expect(createBookmarkSectionGenerator.next().value).toEqual(
-        select(getNextId)
-      );
-    });
+        const val = {
+          error: "fooo",
+          type: "API_ERROR"
+        };
 
-    it("gets the value of the name for the bookmark section", () => {
-      expect(createBookmarkSectionGenerator.next().value).toEqual(
-        select(getBookmarkName)
-      );
-    });
+        expect(createBookmarkSectionGenerator.next().value).toEqual(
+          select(getNextId)
+        );
 
-    it("builds the bookmark section model", () => {
-      expect(createBookmarkSectionGenerator.next().value).toEqual({
-        bookmarkedStops: [],
-        name: undefined,
-        order: 0
+        expect(createBookmarkSectionGenerator.throw("fooo").value).toEqual(
+          put(val)
+        );
       });
     });
 
-    it("dispatches a create bookmark section event", () => {
-      expect(createBookmarkSectionGenerator.next().value).toEqual(
-        put({
-          payload: { nextId: undefined, bookmarkSection: undefined },
-          type: CREATE_BOOKMARK_SECTION
-        })
-      );
-    });
+    describe("when no error occurs", () => {
+      const createBookmarkSectionGenerator = createBookmarkSection({
+        payload: { name: "foo" }
+      });
 
-    it("stores the bookmark section in local storage", () => {
-      expect(createBookmarkSectionGenerator.next().value).toEqual(
-        call(storeBookmarkSection, undefined, undefined)
-      );
+      it("determines the next id for a bookmark section", () => {
+        expect(createBookmarkSectionGenerator.next().value).toEqual(
+          select(getNextId)
+        );
+      });
+
+      it("gets the value of the name for the bookmark section", () => {
+        expect(createBookmarkSectionGenerator.next().value).toEqual(
+          select(getBookmarkName)
+        );
+      });
+
+      it("builds the bookmark section model", () => {
+        expect(createBookmarkSectionGenerator.next().value).toEqual({
+          bookmarkedStops: [],
+          name: undefined,
+          order: 0
+        });
+      });
+
+      it("dispatches a create bookmark section event", () => {
+        expect(createBookmarkSectionGenerator.next().value).toEqual(
+          put({
+            payload: { nextId: undefined, bookmarkSection: undefined },
+            type: CREATE_BOOKMARK_SECTION
+          })
+        );
+      });
+
+      it("stores the bookmark section in local storage", () => {
+        expect(createBookmarkSectionGenerator.next().value).toEqual(
+          call(storeBookmarkSection, undefined, undefined)
+        );
+      });
     });
   });
 
@@ -133,7 +156,10 @@ describe("bookmarkSectionSagas", () => {
 
   describe("removeBookmarkFromSection", () => {
     const removeBookmarkFromSectionGenerator = removeBookmarkFromSection({
-      payload: { bookmarkSectionId: 123, stopId: 456 }
+      payload: {
+        bookmarkSectionId: 123,
+        stopId: 456
+      }
     });
 
     it("dispatches a remove bookmark section event", () => {
@@ -175,7 +201,10 @@ describe("bookmarkSectionSagas", () => {
 
   describe("updateBookmarkSectionName", () => {
     const removeAllBookmarksInSectionGenerator = updateBookmarkSectionName({
-      payload: { bookmarkSectionId: 123, bookmarkSectionName: "foo" }
+      payload: {
+        bookmarkSectionId: 123,
+        bookmarkSectionName: "foo"
+      }
     });
 
     it("dispatches a remove bookmark section event", () => {

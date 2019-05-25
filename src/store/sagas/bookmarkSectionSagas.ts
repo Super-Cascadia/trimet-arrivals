@@ -50,16 +50,12 @@ interface UpdateSectionInputAction {
 }
 
 export function* updateSectionInputName(action: UpdateSectionInputAction) {
-  try {
-    const name = action.payload.name;
+  const name = action.payload.name;
 
-    yield put({
-      payload: { name },
-      type: UPDATE_BOOKMARK_SECTION_NAME_INPUT
-    });
-  } catch (e) {
-    logError(e);
-  }
+  yield put({
+    payload: { name },
+    type: UPDATE_BOOKMARK_SECTION_NAME_INPUT
+  });
 }
 
 export function* createBookmarkSection() {
@@ -75,7 +71,7 @@ export function* createBookmarkSection() {
 
     yield call(storeBookmarkSection, nextId, bookmarkSection);
   } catch (e) {
-    logError(e);
+    yield put({ type: "API_ERROR", error: e });
   }
 }
 
