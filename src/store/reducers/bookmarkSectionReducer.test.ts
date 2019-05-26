@@ -10,6 +10,16 @@ import {
 } from "../constants/bookmarkSections";
 import bookmarkSectionReducer from "./bookmarkSectionReducer";
 
+function removeBookmarkFromSectionAction() {
+  return {
+    payload: {
+      bookmarkSectionId: 123,
+      stopId: 456
+    },
+    type: REMOVE_BOOKMARK_FROM_SECTION
+  };
+}
+
 describe("bookmarkSectionReducer", () => {
   describe("by default", () => {
     it("returns the state returned to it", () => {
@@ -149,14 +159,10 @@ describe("bookmarkSectionReducer", () => {
           123: { bookmarkedStops: [456, 789] }
         }
       };
-      const action = {
-        payload: {
-          bookmarkSectionId: 123,
-          stopId: 456
-        },
-        type: REMOVE_BOOKMARK_FROM_SECTION
-      };
-      const state = bookmarkSectionReducer(initialState, action);
+      const state = bookmarkSectionReducer(
+        initialState,
+        removeBookmarkFromSectionAction()
+      );
 
       it("removes the bookmark from the bookmark section", () => {
         expect(state.bookmarkSections).toEqual({
@@ -171,14 +177,10 @@ describe("bookmarkSectionReducer", () => {
           123: { bookmarkedStops: [789] }
         }
       };
-      const action = {
-        payload: {
-          bookmarkSectionId: 123,
-          stopId: 456
-        },
-        type: REMOVE_BOOKMARK_FROM_SECTION
-      };
-      const state = bookmarkSectionReducer(initialState, action);
+      const state = bookmarkSectionReducer(
+        initialState,
+        removeBookmarkFromSectionAction()
+      );
 
       it("removes the bookmark from the bookmark section", () => {
         expect(state.bookmarkSections).toEqual({
