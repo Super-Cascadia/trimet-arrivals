@@ -7,7 +7,7 @@ import {
 import { RootState } from "../../../store/reducers";
 import { bookmarksInSectionSelector } from "../../../store/selectors/bookmarkSectionSelectors";
 import { bookmarkedStopLocationSelector } from "../../../store/selectors/bookmarkSelectors";
-import BookmarksInSectionSelectionHandler from "../component/sectionSelector/BookmarksInSectionSelectionHandler";
+import BookmarksInSectionSelectionHandler from "../component/bookmarkSections/sectionSelector/BookmarksInSectionSelectionHandler";
 
 const mapStateToProps = (state: RootState, ownProps) => {
   const id = ownProps.bookmarkSectionId;

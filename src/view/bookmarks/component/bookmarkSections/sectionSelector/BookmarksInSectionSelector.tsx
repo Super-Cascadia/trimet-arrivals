@@ -1,6 +1,6 @@
 import React from "react";
 import Select from "react-select";
-import { StopLocation } from "../../../../api/trimet/types";
+import { StopLocation } from "../../../../../api/trimet/types";
 import { customStyles, formatStopLocations } from "./sectionSelectorUtil";
 
 interface Props {
