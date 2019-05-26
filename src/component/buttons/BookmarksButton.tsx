@@ -44,9 +44,7 @@ const noop = () => {
 export default function BookmarkButton({
   onBookmarkClick = noop,
   stopLocation,
-  stopIsBookmarked = false,
-  bookmarkSections,
-  onBookmarkSectionSelect
+  stopIsBookmarked = false
 }: Props) {
   return (
     <div className="bookmark-button-container">
@@ -56,11 +54,6 @@ export default function BookmarkButton({
       >
         {bookmarkIcon(stopIsBookmarked)}
       </button>
-      {/*<BookmarkSectionSelector*/}
-      {/*  bookmarkSections={bookmarkSections}*/}
-      {/*  stopLocation={stopLocation}*/}
-      {/*  onBookmarkSectionSelect={onBookmarkSectionSelect}*/}
-      {/*/>*/}
     </div>
   );
 }
