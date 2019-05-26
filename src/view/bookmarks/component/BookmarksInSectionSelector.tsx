@@ -63,13 +63,13 @@ function formatStopLocations(bookmarks: StopLocation[]) {
 interface Props {
   bookmarksInSection: StopLocation[];
   allBookmarks: StopLocation[];
-  onReactSelectBookmarkChange: () => void;
+  onChange: () => void;
 }
 
 export default function BookmarksInSectionSelector({
   bookmarksInSection,
   allBookmarks,
-  onReactSelectBookmarkChange
+  onChange
 }: Props) {
   const defaultOptions = formatStopLocations(bookmarksInSection);
   const options = formatStopLocations(allBookmarks);
@@ -80,7 +80,7 @@ export default function BookmarksInSectionSelector({
       options={options}
       isMulti={true}
       defaultValue={defaultOptions}
-      onChange={onReactSelectBookmarkChange}
+      onChange={onChange}
     />
   );
 }

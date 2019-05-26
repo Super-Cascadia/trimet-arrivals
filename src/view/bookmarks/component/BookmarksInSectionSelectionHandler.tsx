@@ -17,31 +17,28 @@ interface Props {
   bookmarkSectionId: number;
 }
 
+export const REMOVE_VALUE = "remove-value";
+export const SELECT_OPTION = "select-option";
+export const POP_VALUE = "pop-value";
+export const CLEAR = "clear";
+
 export default class BookmarksInSectionSelectionHandler extends Component<
   Props
 > {
   public render() {
     const { allBookmarks, bookmarksInSection, bookmarkSectionId } = this.props;
-    const onReactSelectBookmarkChange = this.onReactSelectBookmarkChange.bind(
-      this,
-      bookmarkSectionId
-    );
+    const onChange = this.onChange.bind(this, bookmarkSectionId);
 
     return (
       <BookmarksInSectionSelector
         bookmarksInSection={bookmarksInSection}
         allBookmarks={allBookmarks}
-        onReactSelectBookmarkChange={onReactSelectBookmarkChange}
+        onChange={onChange}
       />
     );
   }
 
-  private onReactSelectBookmarkChange(id, val, event) {
-    const REMOVE_VALUE = "remove-value";
-    const SELECT_OPTION = "select-option";
-    const POP_VALUE = "pop-value";
-    const CLEAR = "clear";
-
+  private onChange(id, val, event) {
     switch (event.action) {
       case CLEAR:
         this.props.removeAllBookmarksFromSection(id);
