@@ -18,14 +18,10 @@ interface Props {
   timeOfLastLoad: string;
 }
 
-const noop = () => {
-  return;
-};
-
 export default function MainNavigation({
   activeView = NEARBY_STOPS_VIEW,
   numberOfBookmarks = 0,
-  updateView = noop,
+  updateView,
   timeOfLastLoad
 }: Props) {
   const nearbyStopsClass = cx({
@@ -40,20 +36,19 @@ export default function MainNavigation({
     "view-header-menu-item": true
   });
 
+  const updateToBookmarksView =
+    updateView && updateView.bind(this, BOOKMARKS_VIEW);
+  const updateToNearbyStopsView =
+    updateView && updateView.bind(this, NEARBY_STOPS_VIEW);
+
   return (
     <nav className="top-navigation">
       <ul className="view-header">
-        <li
-          className={nearbyStopsClass}
-          onClick={updateView.bind(this, NEARBY_STOPS_VIEW)}
-        >
+        <li className={nearbyStopsClass} onClick={updateToNearbyStopsView}>
           <FontAwesome name="map-marker" className="bookmark-icon" />
           <a>Nearby Stops | {timeOfLastLoad}</a>
         </li>
-        <li
-          className={bookmarksClass}
-          onClick={updateView.bind(this, BOOKMARKS_VIEW)}
-        >
+        <li className={bookmarksClass} onClick={updateToBookmarksView}>
           <a>
             <FontAwesome name="bookmark" className="bookmark-icon" />
             Bookmarks {bookmarkCount(numberOfBookmarks)}
