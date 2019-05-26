@@ -1,8 +1,8 @@
 import { isEmpty, map } from "lodash";
 import React, { Component } from "react";
-import { StopLocation } from "../../../api/trimet/types";
-import { RemoveBookmarkButton } from "../../../component/buttons/RemoveBookmarkButton";
-import StopContainer from "../../stops/containers/StopContainer";
+import { StopLocation } from "../../../../api/trimet/types";
+import { RemoveBookmarkButton } from "../../../../component/buttons/RemoveBookmarkButton";
+import StopContainer from "../../../stops/containers/StopContainer";
 import "./BookmarkSectionComponent.css";
 import { BookmarkSectionNav } from "./BookmarkSectionNav";
 

@@ -3,8 +3,8 @@ import React from "react";
 import {
   BookmarkSectionProps,
   BookmarkSectionsProps
-} from "../../../store/reducers/bookmarkSectionReducer";
-import BookmarkSectionContainer from "../container/BookmarkSectionContainer";
+} from "../../../../store/reducers/bookmarkSectionReducer";
+import BookmarkSectionContainer from "../../container/BookmarkSectionContainer";
 import "./BookmarkSections.css";
 
 interface Props {

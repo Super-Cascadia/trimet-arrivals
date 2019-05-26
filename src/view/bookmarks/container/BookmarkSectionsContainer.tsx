@@ -8,7 +8,7 @@ import {
   bookmarkSectionSelectors,
   sectionNameInputSelector
 } from "../../../store/selectors/bookmarkSectionSelectors";
-import BookmarkSectionsComponent from "../component/BookmarkSectionsComponent";
+import BookmarkSectionsComponent from "../component/bookmarkSections/BookmarkSectionsComponent";
 
 const mapStateToProps = (state: RootState) => {
   return {

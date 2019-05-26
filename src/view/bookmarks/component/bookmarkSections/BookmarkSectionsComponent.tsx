@@ -1,8 +1,8 @@
 import React from "react";
-import { BookmarkSectionsProps } from "../../../store/reducers/bookmarkSectionReducer";
+import { BookmarkSectionsProps } from "../../../../store/reducers/bookmarkSectionReducer";
+import "../BookmarksViewComponent.css";
 import AddBookmarkSectionControl from "./AddBookmarkSectionControl";
 import BookmarkSections from "./BookmarkSections";
-import "./BookmarksViewComponent.css";
 
 interface Props {
   onSectionNameUpdate: (name: string) => void;

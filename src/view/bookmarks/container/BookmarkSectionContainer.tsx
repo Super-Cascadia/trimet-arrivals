@@ -9,7 +9,7 @@ import {
   bookmarkSectionNameSelector,
   bookmarksInSectionSelector
 } from "../../../store/selectors/bookmarkSectionSelectors";
-import BookmarkSectionComponent from "../component/BookmarkSectionComponent";
+import BookmarkSectionComponent from "../component/bookmarkSections/BookmarkSectionComponent";
 
 const mapStateToProps = (state: RootState, ownProps) => {
   const id = ownProps.bookmarkSectionId;
