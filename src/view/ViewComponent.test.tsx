@@ -9,14 +9,29 @@ import {
 import { ProviderMock } from "../test/util";
 import ViewComponent from "./ViewComponent";
 
+const onInitialLoad = () => {
+  return;
+};
+
+function createViewReducerStore(baseState) {
+  const initialState = {
+    activeView: NEARBY_STOPS_VIEW
+  };
+
+  const viewReducer = (state = initialState) => {
+    return state;
+  };
+
+  return createStore(
+    combineReducers({ viewReducer }),
+    baseState,
+    applyMiddleware(thunk)
+  );
+}
+
 describe("ViewComponent", () => {
   describe("by default", () => {
     it("renders without errors", () => {
-      // tslint:disable-next-line:no-empty
-      const onInitialLoad = () => {
-        return;
-      };
-
       expect(() =>
         shallow(
           <ViewComponent
@@ -31,10 +46,6 @@ describe("ViewComponent", () => {
     });
 
     it("shows navigation", () => {
-      const onInitialLoad = () => {
-        return;
-      };
-
       const subject = shallow(
         <ViewComponent
           activeView={undefined}
@@ -52,14 +63,6 @@ describe("ViewComponent", () => {
 
     it("shows the Nearby Stops View", () => {
       function mockStore() {
-        const initialState = {
-          activeView: NEARBY_STOPS_VIEW
-        };
-
-        const viewReducer = (state = initialState) => {
-          return state;
-        };
-
         const baseState = {
           stopsReducer: {
             loading: false
@@ -69,16 +72,8 @@ describe("ViewComponent", () => {
           }
         };
 
-        return createStore(
-          combineReducers({ viewReducer }),
-          baseState,
-          applyMiddleware(thunk)
-        );
+        return createViewReducerStore(baseState);
       }
-
-      const onInitialLoad = () => {
-        return;
-      };
 
       const subject = mount(
         <ProviderMock store={mockStore()}>
@@ -102,14 +97,6 @@ describe("ViewComponent", () => {
   describe("the Nearby Stops View is selected", () => {
     it("shows the Nearby Stops View", () => {
       function mockStore() {
-        const initialState = {
-          activeView: NEARBY_STOPS_VIEW
-        };
-
-        const viewReducer = (state = initialState) => {
-          return state;
-        };
-
         const baseState = {
           stopsReducer: {
             loading: false
@@ -119,16 +106,8 @@ describe("ViewComponent", () => {
           }
         };
 
-        return createStore(
-          combineReducers({ viewReducer }),
-          baseState,
-          applyMiddleware(thunk)
-        );
+        return createViewReducerStore(baseState);
       }
-
-      const onInitialLoad = () => {
-        return;
-      };
 
       const subject = mount(
         <ProviderMock store={mockStore()}>
@@ -190,10 +169,6 @@ describe("ViewComponent", () => {
           applyMiddleware(thunk)
         );
       }
-
-      const onInitialLoad = () => {
-        return;
-      };
 
       const subject = mount(
         <ProviderMock store={mockStore()}>
