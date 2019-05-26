@@ -4,25 +4,7 @@ import BookmarkSectionComponent from "./BookmarkSectionComponent";
 
 describe("BookmarkSectionComponent", () => {
   describe("by default", () => {
-    it("renders without errors", () => {
-      expect(() =>
-        shallow(
-          <BookmarkSectionComponent
-            name={undefined}
-            id={undefined}
-            bookmarksInSection={undefined}
-            removeBookmarkSection={undefined}
-            allBookmarks={undefined}
-            removeBookmarkFromSection={undefined}
-            addBookmarkToBookmarkSection={undefined}
-            removeAllBookmarksFromSection={undefined}
-            updateBookmarkSectionName={undefined}
-          />
-        )
-      ).not.toThrow();
-    });
-
-    const subject = shallow(
+    const baseComponent = (
       <BookmarkSectionComponent
         name={undefined}
         id={undefined}
@@ -35,6 +17,12 @@ describe("BookmarkSectionComponent", () => {
         updateBookmarkSectionName={undefined}
       />
     );
+
+    it("renders without errors", () => {
+      expect(() => shallow(baseComponent)).not.toThrow();
+    });
+
+    const subject = shallow(baseComponent);
 
     it("has a BookmarkSectionNav", () => {
       const bookmarkSectionNav = subject.find("BookmarkSectionNav");

@@ -1,20 +1,17 @@
 import React from "react";
 import { StopLocation } from "../../../api/trimet/types";
-import BookmarkButton from "../../../component/buttons/BookmarksButton";
+import BookmarkButton, {
+  BookmarkClick,
+  BookmarkSectionClick
+} from "../../../component/buttons/BookmarksButton";
 import { BookmarkSectionsProps } from "../../../store/reducers/bookmarkSectionReducer";
 
 interface Props {
   stopLocation: StopLocation;
-  onBookmarkClick: (
-    stopLocation: StopLocation,
-    stopIsBookmarked: boolean
-  ) => void;
+  onBookmarkClick: BookmarkClick;
   stopIsBookmarked: boolean;
   bookmarkSections: BookmarkSectionsProps;
-  onBookmarkSectionSelect: (
-    selectedBookmarkSection: number,
-    stopLocation: StopLocation
-  ) => void;
+  onBookmarkSectionSelect: BookmarkSectionClick;
 }
 
 export default function StopBookmarkControlComponent(props: Props) {

@@ -23,18 +23,22 @@ function bookmarkIcon(stopIsBookmarked: boolean) {
   return <FontAwesome className="not-bookmarked" name="bookmark" />;
 }
 
+export type BookmarkClick = (
+  stopLocation: StopLocation,
+  stopIsBookmarked: boolean
+) => void;
+
+export type BookmarkSectionClick = (
+  selectedBookmarkSection: number,
+  stopLocation: StopLocation
+) => void;
+
 interface Props {
   stopLocation: StopLocation;
-  onBookmarkClick: (
-    stopLocation: StopLocation,
-    stopIsBookmarked: boolean
-  ) => void;
+  onBookmarkClick: BookmarkClick;
   stopIsBookmarked: boolean;
   bookmarkSections: BookmarkSectionsProps;
-  onBookmarkSectionSelect: (
-    selectedBookmarkSection: number,
-    stopLocation: StopLocation
-  ) => void;
+  onBookmarkSectionSelect: BookmarkSectionClick;
 }
 
 export default function BookmarkButton({
