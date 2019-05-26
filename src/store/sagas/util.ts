@@ -1,10 +1,5 @@
 import { isEmpty, keys } from "lodash";
-
-export function logError(e) {
-  // tslint:disable:no-console
-  console.error(e);
-  // tslint:enable:no-console
-}
+import { BookmarkSectionProps } from "../reducers/bookmarkSectionReducer";
 
 export function getNextId({ bookmarkSectionReducer }): number {
   if (isEmpty(bookmarkSectionReducer.bookmarkSections)) {
@@ -21,7 +16,9 @@ export function getBookmarkName({ bookmarkSectionReducer }) {
   return bookmarkSectionReducer.bookmarkInputSectionName;
 }
 
-export function buildBookmarkSection(bookmarkName: string) {
+export function buildBookmarkSection(
+  bookmarkName: string
+): BookmarkSectionProps {
   return {
     bookmarkedStops: [],
     name: bookmarkName,

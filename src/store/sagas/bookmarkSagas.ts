@@ -7,7 +7,6 @@ import {
 // tslint:enable:no-submodule-imports
 import { StopLocation } from "../../api/trimet/types";
 import { CREATE_STOP_BOOKMARK, REMOVE_STOP_BOOKMARK } from "../constants";
-import { logError } from "./util";
 
 interface BookmarkStopAction {
   payload: {
