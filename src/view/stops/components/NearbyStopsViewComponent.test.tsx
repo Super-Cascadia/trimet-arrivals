@@ -1,4 +1,4 @@
-import { shallow } from "enzyme";
+import { mount, shallow } from "enzyme";
 import React from "react";
 import NearbyStopsViewComponent from "./NearbyStopsViewComponent";
 
@@ -77,6 +77,38 @@ describe("NearbyStopsViewComponent", () => {
           expect(nearbyStops.find("Stops")).toExist();
         });
       });
+    });
+  });
+
+  describe("when the modal is opened", () => {
+    const subject = mount(
+      <NearbyStopsViewComponent
+        loadStopData={undefined}
+        loading={false}
+        stopLocations={undefined}
+        timeOfLastLoad={undefined}
+      />
+    );
+    const instance = subject.instance();
+
+    it("shows the modal", () => {
+      instance.openModal({ foo: "bar" });
+
+      // const modal = subject.find('Modal');
+
+      expect(subject.state().modalOpen).toBe(true);
+      expect(subject.state().routeInfo).toEqual({ foo: "bar" });
+
+      // expect(modal).toExist();
+    });
+
+    it("resets the state when closed", () => {
+      instance.closeModal();
+
+      expect(subject.state().modalOpen).toBe(false);
+      expect(subject.state().routeInfo).toEqual(null);
+
+      // expect(modal).toExist();
     });
   });
 });
