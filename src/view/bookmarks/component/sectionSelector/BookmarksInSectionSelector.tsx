@@ -2,7 +2,7 @@ import chroma from "chroma-js";
 import { map } from "lodash";
 import React from "react";
 import Select from "react-select";
-import { StopLocation } from "../../../api/trimet/types";
+import { StopLocation } from "../../../../api/trimet/types";
 
 function customStyles() {
   return {
