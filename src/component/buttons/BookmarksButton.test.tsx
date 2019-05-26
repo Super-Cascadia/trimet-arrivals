@@ -31,6 +31,30 @@ describe("BookmarksButton", () => {
     });
   });
 
+  describe("when clicked", () => {
+    describe("and a delegate has been provided", () => {
+      const onBookmarkClickSpy = jasmine.createSpy("onBookmarkClickSpy");
+      const stopLocation = {
+        locid: 123
+      };
+
+      const subject = shallow(
+        <BookmarkButton
+          stopLocation={stopLocation}
+          onBookmarkClick={onBookmarkClickSpy}
+          stopIsBookmarked={false}
+        />
+      );
+
+      it("calls the noop delegate", () => {
+        subject.find("button").simulate("click");
+
+        expect(onBookmarkClickSpy).toHaveBeenCalled();
+        expect(onBookmarkClickSpy).toHaveBeenCalledWith({ locid: 123 }, false);
+      });
+    });
+  });
+
   describe("when bookmarked", () => {
     it("is red in color", () => {
       const subject = shallow(

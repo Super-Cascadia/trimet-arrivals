@@ -37,21 +37,17 @@ interface Props {
   ) => void;
 }
 
-const noop = () => {
-  return;
-};
-
 export default function BookmarkButton({
-  onBookmarkClick = noop,
+  onBookmarkClick,
   stopLocation,
   stopIsBookmarked = false
 }: Props) {
+  const onClick =
+    onBookmarkClick &&
+    onBookmarkClick.bind(this, stopLocation, stopIsBookmarked);
   return (
     <div className="bookmark-button-container">
-      <button
-        onClick={onBookmarkClick.bind(this, stopLocation, stopIsBookmarked)}
-        className="bookmark-button"
-      >
+      <button onClick={onClick} className="bookmark-button">
         {bookmarkIcon(stopIsBookmarked)}
       </button>
     </div>
