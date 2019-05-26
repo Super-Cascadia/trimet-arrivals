@@ -1,5 +1,4 @@
 // tslint:disable:no-submodule-imports
-import { isEmpty, keys } from "lodash";
 import { call, put, select } from "redux-saga/effects";
 import {
   removeAllStoredBookmarksInSection,
@@ -18,29 +17,7 @@ import {
   UPDATE_BOOKMARK_SECTION_NAME_INPUT,
   UPDATE_BOOKMARKS_SECTION_CONTENTS
 } from "../constants/bookmarkSections";
-
-export function getNextId({ bookmarkSectionReducer }): number {
-  if (isEmpty(bookmarkSectionReducer.bookmarkSections)) {
-    return 0;
-  }
-
-  const bookmarksByKeys = keys(bookmarkSectionReducer.bookmarkSections);
-  const lastKey = bookmarksByKeys[bookmarksByKeys.length - 1];
-
-  return parseInt(lastKey, 10) + 1;
-}
-
-export function getBookmarkName({ bookmarkSectionReducer }) {
-  return bookmarkSectionReducer.bookmarkInputSectionName;
-}
-
-export function buildBookmarkSection(bookmarkName: string) {
-  return {
-    bookmarkedStops: [],
-    name: bookmarkName,
-    order: 0
-  };
-}
+import { buildBookmarkSection, getBookmarkName, getNextId } from "./util";
 
 interface UpdateSectionInputAction {
   payload: {
