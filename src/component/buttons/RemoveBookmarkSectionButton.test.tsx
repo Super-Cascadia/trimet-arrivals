@@ -35,8 +35,10 @@ describe("RemoveBookmarkSectionButton", () => {
     });
   });
 
-  xdescribe("when clicked ", () => {
+  describe("when clicked ", () => {
     it("dispatches the removeBookmarkFromSection delegate", () => {
+      window.confirm = jest.fn(() => true);
+
       const removeBookmarkSectionSpy = jasmine.createSpy(
         "removeBookmarkSectionSpy"
       );
@@ -51,7 +53,7 @@ describe("RemoveBookmarkSectionButton", () => {
 
       button.simulate("click");
 
-      expect(removeBookmarkSectionSpy).toHaveBeenCalledWith(123);
+      expect(removeBookmarkSectionSpy).toHaveBeenCalled();
     });
   });
 });
