@@ -1,7 +1,7 @@
 import React from "react";
 import BookmarksInSectionSelectorContainer from "../container/BookmarksInSectionSelectorContainer";
-import BookmarkSectionNameControl from "./BookmarkSectionNameControl";
 import "./BookmarkSectionNav.css";
+import BookmarkSectionNameControl from "./sectionName/BookmarkSectionNameControl";
 
 interface BookmarkSectionNavProps {
   name: string;

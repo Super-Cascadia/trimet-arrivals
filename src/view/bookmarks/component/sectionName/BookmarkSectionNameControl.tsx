@@ -1,7 +1,7 @@
 import cx from "classnames";
 import React from "react";
 import FontAwesome from "react-fontawesome";
-import { RemoveBookmarkSectionButton } from "../../../component/buttons/RemoveBookmarkSectionButton";
+import { RemoveBookmarkSectionButton } from "../../../../component/buttons/RemoveBookmarkSectionButton";
 import EditSectionNameInput from "./EditSectionNameInput";
 
 function EditModeToggleButton({ onClick, editMode }) {
