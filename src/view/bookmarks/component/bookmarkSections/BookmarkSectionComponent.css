@@ -2,12 +2,6 @@
     position: relative;
 }
 
-.bookmark-section-remove-button {
-    /* position: absolute; */
-    /* right: 55px; */
-    /* top: 7px; */
-}
-
 ul.bookmark-section-bookmarks {
     list-style: none;
     padding: 0;
@@ -41,5 +35,5 @@ ul.bookmark-section-bookmarks {
 }
 
 .bookmark-section-bookmarks li:last-child .bookmark-stop-wrapper {
-    margin-bottom: 0px;
-}   
+    margin-bottom: 0;
+}
