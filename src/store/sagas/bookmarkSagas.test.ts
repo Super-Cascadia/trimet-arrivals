@@ -10,48 +10,86 @@ import { bookmarkStop, removeStopBookmark } from "./bookmarkSagas";
 
 describe("sagas", () => {
   describe("bookmarkStop", () => {
-    const bookmarkStopData = bookmarkStop({
-      payload: { stopLocation: {} }
+    describe("when an error occurs", () => {
+      it("catches the error", () => {
+        const bookmarkStopDataGenerator = bookmarkStop({
+          payload: { stopLocation: {} }
+        });
+
+        bookmarkStopDataGenerator.next();
+
+        expect(bookmarkStopDataGenerator.throw("fooo").value).toEqual(
+          put({
+            error: "fooo",
+            type: "API_ERROR"
+          })
+        );
+      });
     });
 
-    it("dispatches the load arrivals event", () => {
-      expect(bookmarkStopData.next().value).toEqual(
-        put({
-          payload: {
-            stopLocation: {}
-          },
-          type: CREATE_STOP_BOOKMARK
-        })
-      );
-    });
+    describe("when no error occurs", () => {
+      const bookmarkStopDataGenerator = bookmarkStop({
+        payload: { stopLocation: {} }
+      });
 
-    it("makes a call add the bookmarked stopLocation to local storage", () => {
-      expect(bookmarkStopData.next().value).toEqual(
-        call(storeLocationBookmark, {})
-      );
+      it("dispatches the load arrivals event", () => {
+        expect(bookmarkStopDataGenerator.next().value).toEqual(
+          put({
+            payload: {
+              stopLocation: {}
+            },
+            type: CREATE_STOP_BOOKMARK
+          })
+        );
+      });
+
+      it("makes a call add the bookmarked stopLocation to local storage", () => {
+        expect(bookmarkStopDataGenerator.next().value).toEqual(
+          call(storeLocationBookmark, {})
+        );
+      });
     });
   });
 
   describe("removeStopBookmark", () => {
-    const removeStopBookmarkData = removeStopBookmark({
-      payload: { locationId: 123 }
+    describe("when an error occurs", () => {
+      it("catches the error", () => {
+        const removeStopBookmarkGenerator = removeStopBookmark({
+          payload: { stopLocation: {} }
+        });
+
+        removeStopBookmarkGenerator.next();
+
+        expect(removeStopBookmarkGenerator.throw("fooo").value).toEqual(
+          put({
+            error: "fooo",
+            type: "API_ERROR"
+          })
+        );
+      });
     });
 
-    it("dispatches the remove stop bookmark event", () => {
-      expect(removeStopBookmarkData.next().value).toEqual(
-        put({
-          payload: {
-            locationId: 123
-          },
-          type: REMOVE_STOP_BOOKMARK
-        })
-      );
-    });
+    describe("when no error occurs", () => {
+      const removeStopBookmarkGenerator = removeStopBookmark({
+        payload: { locationId: 123 }
+      });
 
-    it("makes a call to remove the bookmarked stoplocation from local storage", () => {
-      expect(removeStopBookmarkData.next().value).toEqual(
-        call(removeStoredBookmark, 123)
-      );
+      it("dispatches the remove stop bookmark event", () => {
+        expect(removeStopBookmarkGenerator.next().value).toEqual(
+          put({
+            payload: {
+              locationId: 123
+            },
+            type: REMOVE_STOP_BOOKMARK
+          })
+        );
+      });
+
+      it("makes a call to remove the bookmarked stoplocation from local storage", () => {
+        expect(removeStopBookmarkGenerator.next().value).toEqual(
+          call(removeStoredBookmark, 123)
+        );
+      });
     });
   });
 });

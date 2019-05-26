@@ -26,7 +26,7 @@ export function* bookmarkStop(action: BookmarkStopAction) {
 
     yield call(storeLocationBookmark, stopLocation);
   } catch (e) {
-    logError(e);
+    yield put({ type: "API_ERROR", error: e });
   }
 }
 
@@ -47,6 +47,6 @@ export function* removeStopBookmark(action: RemoveStopBookmarkAction) {
 
     yield call(removeStoredBookmark, locationId);
   } catch (e) {
-    logError(e);
+    yield put({ type: "API_ERROR", error: e });
   }
 }
