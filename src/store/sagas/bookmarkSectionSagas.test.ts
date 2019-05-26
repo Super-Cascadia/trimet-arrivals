@@ -53,17 +53,13 @@ describe("bookmarkSectionSagas", () => {
           payload: { name: "foo" }
         });
 
-        const val = {
-          error: "fooo",
-          type: "API_ERROR"
-        };
-
-        expect(createBookmarkSectionGenerator.next().value).toEqual(
-          select(getNextId)
-        );
+        createBookmarkSectionGenerator.next();
 
         expect(createBookmarkSectionGenerator.throw("fooo").value).toEqual(
-          put(val)
+          put({
+            error: "fooo",
+            type: "API_ERROR"
+          })
         );
       });
     });
@@ -111,115 +107,217 @@ describe("bookmarkSectionSagas", () => {
   });
 
   describe("removeBookmarkSection", () => {
-    const removeBookmarkSectionGenerator = removeBookmarkSection({
-      payload: { bookmarkSectionId: 123 }
+    describe("when an error occurs", () => {
+      const removeBookmarkSectionGenerator = removeBookmarkSection({
+        payload: { bookmarkSectionId: 123 }
+      });
+
+      it("dispatches an error event", () => {
+        removeBookmarkSectionGenerator.next();
+
+        expect(removeBookmarkSectionGenerator.throw("fooo").value).toEqual(
+          put({
+            error: "fooo",
+            type: "API_ERROR"
+          })
+        );
+      });
     });
 
-    it("dispatches a remove bookmark section event", () => {
-      expect(removeBookmarkSectionGenerator.next().value).toEqual(
-        put({
-          payload: { bookmarkSectionId: 123 },
-          type: REMOVE_BOOKMARK_SECTION
-        })
-      );
-    });
+    describe("when no error occurs", () => {
+      const removeBookmarkSectionGenerator = removeBookmarkSection({
+        payload: { bookmarkSectionId: 123 }
+      });
+      it("dispatches a remove bookmark section event", () => {
+        expect(removeBookmarkSectionGenerator.next().value).toEqual(
+          put({
+            payload: { bookmarkSectionId: 123 },
+            type: REMOVE_BOOKMARK_SECTION
+          })
+        );
+      });
 
-    it("removes the stored bookmark section from local storage", () => {
-      expect(removeBookmarkSectionGenerator.next().value).toEqual(
-        call(removeStoredBookmarkSection, 123)
-      );
+      it("removes the stored bookmark section from local storage", () => {
+        expect(removeBookmarkSectionGenerator.next().value).toEqual(
+          call(removeStoredBookmarkSection, 123)
+        );
+      });
     });
   });
 
   describe("updateSelectedBookmarkSection", () => {
-    const updateSelectedBookmarkSectionGenerator = updateSelectedBookmarkSection(
-      {
-        payload: { selectedBookmarkSection: 123, stopId: 456 }
-      }
-    );
+    describe("when an error occurs", () => {
+      it("catches the error", () => {
+        const updateSelectedBookmarkSectionGenerator = updateSelectedBookmarkSection(
+          {
+            payload: { selectedBookmarkSection: 123, stopId: 123 }
+          }
+        );
 
-    it("dispatches a remove bookmark section event", () => {
-      expect(updateSelectedBookmarkSectionGenerator.next().value).toEqual(
-        put({
-          payload: { selectedBookmarkSection: 123, stopId: 456 },
-          type: UPDATE_BOOKMARKS_SECTION_CONTENTS
-        })
-      );
+        updateSelectedBookmarkSectionGenerator.next();
+
+        expect(
+          updateSelectedBookmarkSectionGenerator.throw("fooo").value
+        ).toEqual(
+          put({
+            error: "fooo",
+            type: "API_ERROR"
+          })
+        );
+      });
     });
 
-    it("removes the stored bookmark section from local storage", () => {
-      expect(updateSelectedBookmarkSectionGenerator.next().value).toEqual(
-        call(updateStoredBookmarkSection, 123, 456)
+    describe("when no error occurs", () => {
+      const updateSelectedBookmarkSectionGenerator = updateSelectedBookmarkSection(
+        {
+          payload: { selectedBookmarkSection: 123, stopId: 456 }
+        }
       );
+
+      it("dispatches a remove bookmark section event", () => {
+        expect(updateSelectedBookmarkSectionGenerator.next().value).toEqual(
+          put({
+            payload: { selectedBookmarkSection: 123, stopId: 456 },
+            type: UPDATE_BOOKMARKS_SECTION_CONTENTS
+          })
+        );
+      });
+
+      it("removes the stored bookmark section from local storage", () => {
+        expect(updateSelectedBookmarkSectionGenerator.next().value).toEqual(
+          call(updateStoredBookmarkSection, 123, 456)
+        );
+      });
     });
   });
 
   describe("removeBookmarkFromSection", () => {
-    const removeBookmarkFromSectionGenerator = removeBookmarkFromSection({
-      payload: {
-        bookmarkSectionId: 123,
-        stopId: 456
-      }
+    describe("when an error occurs", () => {
+      it("catches the error", () => {
+        const removeBookmarkFromSectionGenerator = removeBookmarkFromSection({
+          payload: { selectedBookmarkSection: 123, stopId: 123 }
+        });
+
+        removeBookmarkFromSectionGenerator.next();
+
+        expect(removeBookmarkFromSectionGenerator.throw("fooo").value).toEqual(
+          put({
+            error: "fooo",
+            type: "API_ERROR"
+          })
+        );
+      });
     });
 
-    it("dispatches a remove bookmark section event", () => {
-      expect(removeBookmarkFromSectionGenerator.next().value).toEqual(
-        put({
-          payload: { bookmarkSectionId: 123, stopId: 456 },
-          type: REMOVE_BOOKMARK_FROM_SECTION
-        })
-      );
-    });
+    describe("when no error occurs", () => {
+      const removeBookmarkFromSectionGenerator = removeBookmarkFromSection({
+        payload: {
+          bookmarkSectionId: 123,
+          stopId: 456
+        }
+      });
 
-    it("removes the stored bookmark section from local storage", () => {
-      expect(removeBookmarkFromSectionGenerator.next().value).toEqual(
-        call(removeStoredBookmarkFromSection, 123, 456)
-      );
+      it("dispatches a remove bookmark section event", () => {
+        expect(removeBookmarkFromSectionGenerator.next().value).toEqual(
+          put({
+            payload: { bookmarkSectionId: 123, stopId: 456 },
+            type: REMOVE_BOOKMARK_FROM_SECTION
+          })
+        );
+      });
+
+      it("removes the stored bookmark section from local storage", () => {
+        expect(removeBookmarkFromSectionGenerator.next().value).toEqual(
+          call(removeStoredBookmarkFromSection, 123, 456)
+        );
+      });
     });
   });
 
   describe("removeAllBookmarksInSection", () => {
-    const removeAllBookmarksInSectionGenerator = removeAllBookmarksInSection({
-      payload: { bookmarkSectionId: 123 }
+    describe("when an error occurs", () => {
+      it("catches the error", () => {
+        const removeAllBookmarksInSectionGenerator = removeAllBookmarksInSection(
+          {
+            payload: { selectedBookmarkSection: 123, stopId: 123 }
+          }
+        );
+
+        removeAllBookmarksInSectionGenerator.next();
+
+        expect(
+          removeAllBookmarksInSectionGenerator.throw("fooo").value
+        ).toEqual(
+          put({
+            error: "fooo",
+            type: "API_ERROR"
+          })
+        );
+      });
     });
 
-    it("dispatches a remove bookmark section event", () => {
-      expect(removeAllBookmarksInSectionGenerator.next().value).toEqual(
-        put({
-          payload: { bookmarkSectionId: 123 },
-          type: REMOVE_ALL_BOOKMARKS_FROM_SECTION
-        })
-      );
-    });
+    describe("when no error occurs", () => {
+      const removeAllBookmarksInSectionGenerator = removeAllBookmarksInSection({
+        payload: { bookmarkSectionId: 123 }
+      });
 
-    it("removes the stored bookmark section from local storage", () => {
-      expect(removeAllBookmarksInSectionGenerator.next().value).toEqual(
-        call(removeAllStoredBookmarksInSection, 123)
-      );
+      it("dispatches a remove bookmark section event", () => {
+        expect(removeAllBookmarksInSectionGenerator.next().value).toEqual(
+          put({
+            payload: { bookmarkSectionId: 123 },
+            type: REMOVE_ALL_BOOKMARKS_FROM_SECTION
+          })
+        );
+      });
+
+      it("removes the stored bookmark section from local storage", () => {
+        expect(removeAllBookmarksInSectionGenerator.next().value).toEqual(
+          call(removeAllStoredBookmarksInSection, 123)
+        );
+      });
     });
   });
 
   describe("updateBookmarkSectionName", () => {
-    const removeAllBookmarksInSectionGenerator = updateBookmarkSectionName({
-      payload: {
-        bookmarkSectionId: 123,
-        bookmarkSectionName: "foo"
-      }
+    describe("when an error occurs", () => {
+      it("catches the error", () => {
+        const updateBookmarkSectionNameGenerator = updateBookmarkSectionName({
+          payload: { selectedBookmarkSection: 123, stopId: 123 }
+        });
+
+        updateBookmarkSectionNameGenerator.next();
+
+        expect(updateBookmarkSectionNameGenerator.throw("fooo").value).toEqual(
+          put({
+            error: "fooo",
+            type: "API_ERROR"
+          })
+        );
+      });
     });
 
-    it("dispatches a remove bookmark section event", () => {
-      expect(removeAllBookmarksInSectionGenerator.next().value).toEqual(
-        put({
-          payload: { bookmarkSectionId: 123, bookmarkSectionName: "foo" },
-          type: UPDATE_BOOKMARK_SECTION_NAME
-        })
-      );
-    });
+    describe("when no error occurs", () => {
+      const updateBookmarkSectionNameGenerator = updateBookmarkSectionName({
+        payload: {
+          bookmarkSectionId: 123,
+          bookmarkSectionName: "foo"
+        }
+      });
 
-    it("removes the stored bookmark section from local storage", () => {
-      expect(removeAllBookmarksInSectionGenerator.next().value).toEqual(
-        call(updateStoredBookmarkSectionName, 123, "foo")
-      );
+      it("dispatches a remove bookmark section event", () => {
+        expect(updateBookmarkSectionNameGenerator.next().value).toEqual(
+          put({
+            payload: { bookmarkSectionId: 123, bookmarkSectionName: "foo" },
+            type: UPDATE_BOOKMARK_SECTION_NAME
+          })
+        );
+      });
+
+      it("removes the stored bookmark section from local storage", () => {
+        expect(updateBookmarkSectionNameGenerator.next().value).toEqual(
+          call(updateStoredBookmarkSectionName, 123, "foo")
+        );
+      });
     });
   });
 });

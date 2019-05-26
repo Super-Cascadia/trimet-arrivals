@@ -18,7 +18,6 @@ import {
   UPDATE_BOOKMARK_SECTION_NAME_INPUT,
   UPDATE_BOOKMARKS_SECTION_CONTENTS
 } from "../constants/bookmarkSections";
-import { logError } from "./util";
 
 export function getNextId({ bookmarkSectionReducer }): number {
   if (isEmpty(bookmarkSectionReducer.bookmarkSections)) {
@@ -86,7 +85,7 @@ export function* removeBookmarkSection(action) {
 
     yield call(removeStoredBookmarkSection, bookmarkSectionId);
   } catch (e) {
-    logError(e);
+    yield put({ type: "API_ERROR", error: e });
   }
 }
 
@@ -101,7 +100,7 @@ export function* updateSelectedBookmarkSection(action) {
 
     yield call(updateStoredBookmarkSection, selectedBookmarkSection, stopId);
   } catch (e) {
-    logError(e);
+    yield put({ type: "API_ERROR", error: e });
   }
 }
 
@@ -116,7 +115,7 @@ export function* removeBookmarkFromSection(action) {
 
     yield call(removeStoredBookmarkFromSection, bookmarkSectionId, stopId);
   } catch (e) {
-    logError(e);
+    yield put({ type: "API_ERROR", error: e });
   }
 }
 
@@ -131,7 +130,7 @@ export function* removeAllBookmarksInSection(action) {
 
     yield call(removeAllStoredBookmarksInSection, bookmarkSectionId);
   } catch (e) {
-    logError(e);
+    yield put({ type: "API_ERROR", error: e });
   }
 }
 
@@ -150,6 +149,6 @@ export function* updateBookmarkSectionName(action) {
       bookmarkSectionName
     );
   } catch (e) {
-    logError(e);
+    yield put({ type: "API_ERROR", error: e });
   }
 }
