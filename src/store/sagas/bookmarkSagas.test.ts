@@ -1,10 +1,10 @@
 // tslint:disable:no-submodule-imports
 import { call, put } from "redux-saga/effects";
+// tslint:enable:no-submodule-imports
 import {
   removeStoredBookmark,
   storeLocationBookmark
 } from "../../api/localstorage/bookmarks.localstorage";
-// tslint:enable:no-submodule-imports
 import { CREATE_STOP_BOOKMARK, REMOVE_STOP_BOOKMARK } from "../constants";
 import { bookmarkStop, removeStopBookmark } from "./bookmarkSagas";
 

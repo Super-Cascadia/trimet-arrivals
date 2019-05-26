@@ -20,8 +20,6 @@ import {
 } from "../constants/bookmarkSections";
 import {
   createBookmarkSection,
-  getBookmarkName,
-  getNextId,
   removeAllBookmarksInSection,
   removeBookmarkFromSection,
   removeBookmarkSection,
@@ -29,6 +27,7 @@ import {
   updateSectionInputName,
   updateSelectedBookmarkSection
 } from "./bookmarkSectionSagas";
+import { getBookmarkName, getNextId } from "./util";
 
 describe("bookmarkSectionSagas", () => {
   describe("updateSectionInputName", () => {
