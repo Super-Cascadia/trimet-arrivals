@@ -33,6 +33,12 @@ function mockStore() {
         123: false
       }
     },
+    bookmarkSectionReducer: {
+      bookmarkSections: {}
+    },
+    bookmarksReducer: {
+      bookmarks: {}
+    },
     stopsReducer: {
       stopLocations: {
         123: {}

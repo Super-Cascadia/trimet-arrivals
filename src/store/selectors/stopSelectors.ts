@@ -3,9 +3,12 @@ import { StopLocation } from "../../api/trimet/types";
 import { RootState } from "../reducers";
 
 const allStopLocations = (state: RootState) => state.stopsReducer.stopLocations;
+
 const stopLocationByLocationId = (state: RootState, locationId: number) =>
   state.stopsReducer.stopLocations[locationId];
+
 const stopsLoading = (state: RootState) => state.stopsReducer.loading;
+
 const stopTimeOfLastLoadReducer = (state: RootState) =>
   state.stopsReducer.timeOfLastLoad;
 

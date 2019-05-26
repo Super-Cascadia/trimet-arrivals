@@ -19,12 +19,14 @@ export default class Stops extends React.Component<Props> {
   ) {
     return map(stopLocations, (stopLocation: StopLocation, key: number) => {
       return (
-        <StopContainer
-          locationId={key}
-          key={key}
-          showArrivals={showArrivals}
-          onRouteIndicatorClick={onRouteIndicatorClick}
-        />
+        <div className="stop-wrapper">
+          <StopContainer
+            locationId={key}
+            key={key}
+            showArrivals={showArrivals}
+            onRouteIndicatorClick={onRouteIndicatorClick}
+          />
+        </div>
       );
     });
   }

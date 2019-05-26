@@ -3,16 +3,14 @@ import { loadStopDataRequest } from "../../../store/action/stopActions";
 import { RootState } from "../../../store/reducers";
 import {
   allStopLocationsSelector,
-  stopsLoadingSelector,
-  timeOfLastLoadSelector
+  stopsLoadingSelector
 } from "../../../store/selectors/stopSelectors";
-import StopsComponent from "../components/StopsComponent";
+import NearbyStopsViewComponent from "../components/NearbyStopsViewComponent";
 
 const mapStateToProps = (state: RootState) => {
   return {
     loading: stopsLoadingSelector(state),
-    stopLocations: allStopLocationsSelector(state),
-    timeOfLastLoad: timeOfLastLoadSelector(state)
+    stopLocations: allStopLocationsSelector(state)
   };
 };
 
@@ -24,9 +22,9 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const StopsContainer = connect(
+const NearbyStopsViewContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(StopsComponent);
+)(NearbyStopsViewComponent);
 
-export default StopsContainer;
+export default NearbyStopsViewContainer;

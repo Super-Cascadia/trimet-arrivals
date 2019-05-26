@@ -10,7 +10,7 @@ interface Props {
   locationId: number;
   loading: boolean;
   showArrivals: boolean;
-  onRouteIndicatorClick: (route: Route) => void;
+  onRouteIndicatorClick?: (route: Route) => void;
 }
 
 const interval = 30000;
@@ -55,14 +55,17 @@ export default class StopComponent extends React.Component<Props> {
           loading={loading}
           showArrivals={showArrivals}
           onRouteIndicatorClick={onRouteIndicatorClick}
-        />
-        <ArrivalsContainer
           locationId={locationId}
-          showArrivals={showArrivals}
-          loadArrivalData={this.loadArrivalData}
-          onRouteIndicatorClick={onRouteIndicatorClick}
-          stopLocation={stopLocation}
         />
+        {showArrivals && (
+          <ArrivalsContainer
+            locationId={locationId}
+            showArrivals={showArrivals}
+            loadArrivalData={this.loadArrivalData}
+            onRouteIndicatorClick={onRouteIndicatorClick}
+            stopLocation={stopLocation}
+          />
+        )}
       </article>
     );
   }

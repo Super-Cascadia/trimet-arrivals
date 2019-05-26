@@ -2,20 +2,18 @@ import React from "react";
 import { Provider } from "react-redux";
 import "./App.css";
 import appStore from "./store/store";
-import StopsContainer from "./view/stops/containers/StopsContainer";
+import ViewContainer from "./view/ViewContainer";
 
 const store = appStore();
 
-class App extends React.Component {
+export default class App extends React.Component {
   public render() {
     return (
       <Provider store={store}>
         <div>
-          <StopsContainer />
+          <ViewContainer />
         </div>
       </Provider>
     );
   }
 }
-
-export default App;

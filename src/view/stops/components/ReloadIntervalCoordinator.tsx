@@ -1,6 +1,6 @@
 import React from "react";
 import { StopLocation } from "../../../api/trimet/types";
-import ReloadButton from "../../../component/ReloadButton";
+import ReloadButton from "../../../component/buttons/ReloadButton";
 import { LoadArrivalData } from "../../../store/action/stopActions";
 import "../Stops.css";
 

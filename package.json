@@ -7,6 +7,7 @@
   "dependencies": {
     "@commitlint/cli": "^7.5.2",
     "@commitlint/config-conventional": "^7.5.0",
+    "@fortawesome/free-solid-svg-icons": "^5.8.1",
     "@types/classnames": "2.2.7",
     "@types/enzyme": "^3.1.18",
     "@types/jasmine-enzyme": "^3.6.5",
@@ -20,9 +21,11 @@
     "@types/react-dom": "16.8.4",
     "@types/react-fontawesome": "1.6.4",
     "@types/react-redux": "7.0.6",
+    "@types/react-select": "^2.0.17",
     "@types/redux": "^3.6.0",
     "@types/redux-thunk": "^2.1.0",
     "@types/superagent": "4.1.1",
+    "chroma-js": "^2.0.3",
     "classnames": "2.2.6",
     "codecov": "^3.2.0",
     "enzyme": "3.9.0",
@@ -38,6 +41,7 @@
     "react-redux": "6.0.1",
     "react-scripts": "^2.1.5",
     "react-test-renderer": "16.8.6",
+    "react-select": "^2.4.3",
     "redux": "4.0.1",
     "redux-saga": "^1.0.2",
     "redux-thunk": "2.3.0",
@@ -46,6 +50,7 @@
     "tslint": "^5.12.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-react": "^4.0.0",
+    "typeface-roboto": "^0.0.54",
     "typescript": "^3.3.3"
   },
   "scripts": {

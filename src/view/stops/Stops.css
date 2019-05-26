@@ -1,21 +1,32 @@
 .stop {
-    background: #F7F9F9;
-    margin-bottom: 15px;
+    background: rgb(255,255,255, 0.80);
     border-radius: 5px;
 }
-  
+
+.stop-wrapper {
+    margin-bottom: 10px;
+}
+
 .stops-header {
     border-radius: 5px 5px 0px 0px;
-    background: #E0D0C1;
-    line-height: 45px;
+    line-height: 35px;
     padding-left: 10px;
     padding-right: 10px;
     position: relative;
+    display: flex;
+}
+
+.stop-info-header {
+    flex: 4
+}
+
+.stops-header.arrivals-hidden {
+    border-radius: 5px 5px 5px 5px;
 }
 
 .stops-header h2 {
     margin: 0px;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 table {

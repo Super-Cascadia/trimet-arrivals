@@ -1,13 +1,13 @@
-import { shallow } from "enzyme";
+import { mount, shallow } from "enzyme";
 import React from "react";
-import StopsComponent from "./StopsComponent";
+import NearbyStopsViewComponent from "./NearbyStopsViewComponent";
 
-describe("StopsComponent", () => {
+describe("NearbyStopsViewComponent", () => {
   describe("by default", () => {
     it("renders without crashing", () => {
       expect(() =>
         shallow(
-          <StopsComponent
+          <NearbyStopsViewComponent
             loadStopData={undefined}
             loading={undefined}
             stopLocations={undefined}
@@ -24,7 +24,7 @@ describe("StopsComponent", () => {
         const loadStopData = jasmine.createSpy("loadStopDataSpy");
 
         const subject = shallow(
-          <StopsComponent
+          <NearbyStopsViewComponent
             loadStopData={loadStopData}
             loading={undefined}
             stopLocations={undefined}
@@ -33,7 +33,7 @@ describe("StopsComponent", () => {
         );
 
         expect(loadStopData).toHaveBeenCalled();
-        expect(loadStopData).toHaveBeenCalledWith(500);
+        expect(loadStopData).toHaveBeenCalledWith(1000);
       });
     });
   });
@@ -41,7 +41,7 @@ describe("StopsComponent", () => {
   describe("when loading", () => {
     it("shows a loading message", () => {
       const subject = shallow(
-        <StopsComponent
+        <NearbyStopsViewComponent
           loadStopData={undefined}
           loading={true}
           stopLocations={undefined}
@@ -59,7 +59,7 @@ describe("StopsComponent", () => {
         123: {}
       };
       const subject = shallow(
-        <StopsComponent
+        <NearbyStopsViewComponent
           loadStopData={undefined}
           loading={false}
           stopLocations={stopLocations}
@@ -73,14 +73,42 @@ describe("StopsComponent", () => {
       });
 
       describe("the nearby stops list", () => {
-        it("has a heading and the time of last load", () => {
-          expect(nearbyStops.find("h1").text()).toBe("Nearby Stops | 12:01pm");
-        });
-
         it("shows Stops", () => {
           expect(nearbyStops.find("Stops")).toExist();
         });
       });
+    });
+  });
+
+  describe("when the modal is opened", () => {
+    const subject = mount(
+      <NearbyStopsViewComponent
+        loadStopData={undefined}
+        loading={false}
+        stopLocations={undefined}
+        timeOfLastLoad={undefined}
+      />
+    );
+    const instance = subject.instance();
+
+    it("shows the modal", () => {
+      instance.openModal({ foo: "bar" });
+
+      // const modal = subject.find('Modal');
+
+      expect(subject.state().modalOpen).toBe(true);
+      expect(subject.state().routeInfo).toEqual({ foo: "bar" });
+
+      // expect(modal).toExist();
+    });
+
+    it("resets the state when closed", () => {
+      instance.closeModal();
+
+      expect(subject.state().modalOpen).toBe(false);
+      expect(subject.state().routeInfo).toEqual(null);
+
+      // expect(modal).toExist();
     });
   });
 });

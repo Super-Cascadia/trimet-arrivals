@@ -11,7 +11,6 @@ interface Props {
   loadStopData: LoadStopData;
   loading: boolean;
   stopLocations: StopLocationsDictionary;
-  timeOfLastLoad: string;
 }
 
 interface State {
@@ -19,7 +18,10 @@ interface State {
   routeInfo: Route;
 }
 
-export default class StopsComponent extends React.Component<Props, State> {
+export default class NearbyStopsViewComponent extends React.Component<
+  Props,
+  State
+> {
   constructor(props) {
     super(props);
 
@@ -36,27 +38,24 @@ export default class StopsComponent extends React.Component<Props, State> {
     const { loadStopData } = this.props;
 
     if (loadStopData) {
-      loadStopData(500);
+      loadStopData(1000);
     }
   }
 
   public render() {
-    const { loading, stopLocations, timeOfLastLoad } = this.props;
+    const { loading, stopLocations } = this.props;
 
     return (
-      <div>
+      <div id="nearby-stops-view-component">
         {loading && <div className="loading-message">Loading...</div>}
         {!loading && stopLocations && (
           <div className="nearby-stops">
             <main>
-              <h1>
-                Nearby Stops | <i>{timeOfLastLoad}</i>
-              </h1>
               <div className="flex-container">
                 <section className="flex-stops">
                   <Stops
                     stopLocations={stopLocations}
-                    showArrivals={true}
+                    showArrivals={false}
                     onRouteIndicatorClick={this.openModal}
                   />
                 </section>
