@@ -82,13 +82,15 @@ export default class BookmarkSectionComponent extends Component<Props, State> {
       name,
       bookmarksInSection,
       id,
-      updateBookmarkSectionName
+      updateBookmarkSectionName,
+      removeBookmarkSection
     } = this.props;
 
     const onUpdateBookmarkSectionName = updateBookmarkSectionName
       ? updateBookmarkSectionName.bind(this, id)
       : undefined;
-    const removeBookmarkSection = this.removeBookmarkSection.bind(this, id);
+    const removeSection =
+      removeBookmarkSection && removeBookmarkSection.bind(this, id);
 
     return (
       <article className="bookmark-section" key={id}>
@@ -96,7 +98,7 @@ export default class BookmarkSectionComponent extends Component<Props, State> {
           name={name}
           toggleEditMode={this.toggleEditMode}
           editMode={this.state.editMode}
-          removeBookmarkSection={removeBookmarkSection}
+          removeBookmarkSection={removeSection}
           updateBookmarkSectionName={onUpdateBookmarkSectionName}
           bookmarkSectionId={id}
         />
@@ -111,9 +113,5 @@ export default class BookmarkSectionComponent extends Component<Props, State> {
     this.setState({
       editMode: !this.state.editMode
     });
-  }
-
-  private removeBookmarkSection(id) {
-    this.props.removeBookmarkSection(id);
   }
 }

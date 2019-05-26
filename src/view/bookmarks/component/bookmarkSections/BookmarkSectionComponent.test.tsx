@@ -102,9 +102,7 @@ describe("BookmarkSectionComponent", () => {
           />
         );
 
-        subject.setState({
-          editMode: true
-        });
+        subject.instance().toggleEditMode();
 
         const stopContainer = subject.find("RemoveBookmarkButton");
 
