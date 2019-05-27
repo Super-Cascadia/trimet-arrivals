@@ -11,6 +11,7 @@ interface Props {
   loadStopData: LoadStopData;
   loading: boolean;
   stopLocations: StopLocationsDictionary;
+  currentLocation: number[];
 }
 
 interface State {
@@ -43,7 +44,7 @@ export default class NearbyStopsViewComponent extends React.Component<
   }
 
   public render() {
-    const { loading, stopLocations } = this.props;
+    const { loading, stopLocations, currentLocation } = this.props;
 
     return (
       <div id="nearby-stops-view-component">
@@ -57,6 +58,7 @@ export default class NearbyStopsViewComponent extends React.Component<
                     stopLocations={stopLocations}
                     showArrivals={false}
                     onRouteIndicatorClick={this.openModal}
+                    currentLocation={currentLocation}
                   />
                 </section>
                 {this.state.modalOpen && (
