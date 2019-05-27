@@ -7,28 +7,6 @@
     margin-bottom: 10px;
 }
 
-.stops-header {
-    border-radius: 5px 5px 0px 0px;
-    line-height: 35px;
-    padding-left: 10px;
-    padding-right: 10px;
-    position: relative;
-    display: flex;
-}
-
-.stop-info-header {
-    flex: 4
-}
-
-.stops-header.arrivals-hidden {
-    border-radius: 5px 5px 5px 5px;
-}
-
-.stops-header h2 {
-    margin: 0px;
-    font-size: 16px;
-}
-
 table {
     width: 100%;
 }
@@ -36,10 +14,6 @@ table {
 table th, table td {
     padding: 10px;
     text-align: left;
-}
-
-.header-router-indicator {
-    margin-right: 10px;
 }
 
 .stops-reload-button {

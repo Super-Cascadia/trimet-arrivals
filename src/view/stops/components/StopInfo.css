@@ -1,0 +1,12 @@
+.header-router-indicator {
+    margin-right: 5px;
+}
+
+.stop-info-header {
+    flex: 4
+}
+
+.serving-label {
+    line-height: 22px;
+    font-size: 14px;
+}
