@@ -88,8 +88,8 @@ export default class NearbyStopsMap extends Component<Props> {
       // create a HTML element for each feature
       const el = document.createElement("div");
 
-      // @ts-ignore
       el.className =
+        // @ts-ignore
         marker && marker.currentLocation === true ? "marker-current" : "marker";
 
       // make a marker for each feature and add to the map
