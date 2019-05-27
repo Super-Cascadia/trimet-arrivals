@@ -4,6 +4,9 @@ import bookmarkSectionReducer, {
   BookmarkSectionReducerState
 } from "./bookmarkSectionReducer";
 import bookmarksReducer, { BookmarksReducerState } from "./bookmarksReducer";
+import currentLocationReducer, {
+  CurrentLocationReducerState
+} from "./currentLocationReducer";
 import stopsReducer, { StopsReducerState } from "./stopsReducer";
 import viewReducer, { ViewReducerState } from "./viewReducer";
 
@@ -13,12 +16,14 @@ export interface RootState {
   viewReducer: ViewReducerState;
   bookmarksReducer: BookmarksReducerState;
   bookmarkSectionReducer: BookmarkSectionReducerState;
+  currentLocationReducer: CurrentLocationReducerState;
 }
 
 const app = combineReducers<RootState>({
   arrivalsReducer,
   bookmarkSectionReducer,
   bookmarksReducer,
+  currentLocationReducer,
   stopsReducer,
   viewReducer
 } as any);

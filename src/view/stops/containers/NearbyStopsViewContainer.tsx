@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import { loadStopDataRequest } from "../../../store/action/stopActions";
 import { RootState } from "../../../store/reducers";
+import { currentLocationSelector } from "../../../store/selectors/locationSelectors";
 import {
   allStopLocationsSelector,
   stopsLoadingSelector
@@ -9,6 +10,7 @@ import NearbyStopsViewComponent from "../components/NearbyStopsViewComponent";
 
 const mapStateToProps = (state: RootState) => {
   return {
+    currentLocation: currentLocationSelector(state),
     loading: stopsLoadingSelector(state),
     stopLocations: allStopLocationsSelector(state)
   };
