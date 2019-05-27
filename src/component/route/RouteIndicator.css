@@ -1,7 +1,7 @@
 .route-indicator {
     background: #1e4d88;
     height: 21px;
-    width: 21px;
+    min-width: 18px;
     vertical-align: middle;
     text-align: center;
     color: white;
@@ -11,29 +11,58 @@
     display: inline-block;
     cursor: pointer;
     border: 2px solid #c25033;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.train-route-indicator {
+    margin-right: 5px;
 }
 
 .route-indicator-green {
     color: black;
     background: green;
+    border: 2px solid green;
 }
 
 .route-indicator-yellow {
-    color: black;    
+    color: black;
     background: yellow;
+    border: 2px solid yellow;
 }
 
 .route-indicator-red {
-    color: black;    
+    color: black;
     background: red;
+    border: 2px solid red;
 }
 
 .route-indicator-blue {
-    color: white;    
+    color: white;
     background: blue;
+    border: 2px solid blue;
 }
 
 .route-indicator-orange {
-    color: black;    
+    color: black;
     background: orange;
+    border: 2px solid orange;
+}
+
+.route-indicator-lightgreen {
+    color: white;
+    background: #99C354;
+    border: 2px solid #99C354;
+}
+
+.route-indicator-pink {
+    color: white;
+    background: #cc3e8b;
+    border: 2px solid #cc3e8b;
+}
+
+.route-indicator-cyan {
+    color: white;
+    background: #3D8FAE;
+    border: 2px solid #3D8FAE;
 }

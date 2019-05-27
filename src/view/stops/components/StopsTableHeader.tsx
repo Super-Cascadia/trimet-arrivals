@@ -3,9 +3,9 @@ import React from "react";
 import { Route, StopLocation } from "../../../api/trimet/types";
 import { LoadArrivalData } from "../../../store/action/stopActions";
 import StopBookmarkControlContainer from "../containers/StopBookmarkControlContainer";
-import "../Stops.css";
 import ReloadIntervalCoordinator from "./ReloadIntervalCoordinator";
 import StopInfo from "./StopInfo";
+import "./StopsTableHeader.css";
 
 interface Props {
   stopLocation: StopLocation;

@@ -7,6 +7,9 @@ import {
   ORANGE_LINE_NUMBER,
   RED_LINE_NUMBER,
   ROUTE_DISPLAY,
+  STREETCAR_A_LOOP,
+  STREETCAR_B_LOOP,
+  STREETCAR_S_LINE,
   YELLOW_LINE_NUMBER
 } from "../../api/trimet/constants";
 import { Route } from "../../api/trimet/types";
@@ -25,18 +28,28 @@ function getRouteDisplay(route: number) {
   if (!routeFound) {
     return route || "-";
   } else {
-    return <FontAwesome name="train" />;
+    return (
+      <span>
+        <FontAwesome name="train" className="train-route-indicator" />
+        <span>{routeFound}</span>
+      </span>
+    );
   }
 }
 
 function getRouteIndicatorClassName(route: number, className: string) {
-  return cx("route-indicator", className, {
+  const style = {
     "route-indicator-blue": route === BLUE_LINE_NUMBER,
+    "route-indicator-cyan": route === STREETCAR_A_LOOP,
     "route-indicator-green": route === GREEN_LINE_NUMBER,
+    "route-indicator-lightgreen": route === STREETCAR_S_LINE,
     "route-indicator-orange": route === ORANGE_LINE_NUMBER,
+    "route-indicator-pink": route === STREETCAR_B_LOOP,
     "route-indicator-red": route === RED_LINE_NUMBER,
     "route-indicator-yellow": route === YELLOW_LINE_NUMBER
-  });
+  };
+
+  return cx("route-indicator", className, style);
 }
 
 export default class RouteIndicator extends React.PureComponent<Props> {

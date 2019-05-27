@@ -16,3 +16,7 @@
 .bookmark-button:hover {
     background: rgb(0,0,0, 0.7);
 }
+
+.bookmark-button-container {
+    line-height: 20px;
+}

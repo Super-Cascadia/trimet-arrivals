@@ -1,0 +1,20 @@
+.stops-header {
+    border-radius: 5px 5px 0px 0px;
+    line-height: 35px;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: relative;
+    display: flex;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.stops-header.arrivals-hidden {
+    border-radius: 5px 5px 5px 5px;
+}
+
+.stops-header h2 {
+    margin: 0px;
+    font-size: 16px;
+    line-height: 22px;
+}
