@@ -56,8 +56,8 @@ describe("StopInfo", () => {
     });
 
     it("shows basic info about the stop", () => {
-      const stopInfo = subject.find(".stop-info");
-      expect(stopInfo.text()).toBe("123456 - hello - NW");
+      const stopInfo = subject.find("h2");
+      expect(stopInfo.text()).toBe("<StopLocationIndicator />hello - NW");
     });
   });
 });

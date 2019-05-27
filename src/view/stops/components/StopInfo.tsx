@@ -37,8 +37,8 @@ export default function StopInfo({ stopLocation, onClick }: Props) {
           {stopLocation.desc} - {stopLocation.dir}
         </span>
       </h2>
+      <span className="serving-label">Routes: </span>
       <span className="route-indicators">
-        <span className="serving-label">Routes: </span>
         {getStopRoutes(stopLocation.route, onClick)}
       </span>
     </div>
