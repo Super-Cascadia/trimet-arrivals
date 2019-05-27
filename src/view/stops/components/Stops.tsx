@@ -4,11 +4,13 @@ import { Route, StopLocation } from "../../../api/trimet/types";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import StopContainer from "../containers/StopContainer";
 import "../Stops.css";
+import NearbyStopsMap from "./NearbyStopsMap";
 
 interface Props {
   stopLocations: StopLocationsDictionary;
   showArrivals: boolean;
   onRouteIndicatorClick: (route: Route) => void;
+  currentLocation: number[];
 }
 
 export default class Stops extends React.Component<Props> {
@@ -32,7 +34,12 @@ export default class Stops extends React.Component<Props> {
   }
 
   public render() {
-    const { stopLocations, showArrivals, onRouteIndicatorClick } = this.props;
+    const {
+      stopLocations,
+      showArrivals,
+      onRouteIndicatorClick,
+      currentLocation
+    } = this.props;
 
     if (!stopLocations) {
       return null;
@@ -40,6 +47,10 @@ export default class Stops extends React.Component<Props> {
 
     return (
       <div className="stops-wrapper">
+        <NearbyStopsMap
+          currentLocation={currentLocation}
+          stopLocations={stopLocations}
+        />
         {Stops.getLocationInfo(
           stopLocations,
           showArrivals,

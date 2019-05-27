@@ -38,3 +38,34 @@ body button {
   border-radius: 5px 5px 5px 5px;
   border-left: none;
 }
+
+.marker {
+  background-image: url('mapbox-icon.png');
+  background-size: cover;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.marker-current {
+  background-image: url('location.png');
+  background-size: cover;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.mapboxgl-popup {
+  max-width: 200px;
+}
+
+.mapboxgl-popup-content {
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.mapboxgl-map {
+  margin-bottom: 10px;
+}
