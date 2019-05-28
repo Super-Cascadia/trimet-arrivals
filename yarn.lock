@@ -1348,10 +1348,10 @@
   version "8.0.51"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.51.tgz#b31d716fb8d58eeb95c068a039b9b6292817d5fb"
 
-"@types/node@11.11.8":
-  version "11.11.8"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.11.8.tgz#ff5e4e7896549e5725cf88d711e8c003984b2413"
-  integrity sha512-87dYasmW2iLSYNTc3WU85taIQb1RBz6KK9w/Hnbkyu3n9xeNd0fbVaPoGMyX1ErGB8PaqNuCtYjpoI9aN6DoCg==
+"@types/node@12.0.3":
+  version "12.0.3"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.3.tgz#5d8d24e0033fc6393efadc85cb59c1f638095c9a"
+  integrity sha512-zkOxCS/fA+3SsdA+9Yun0iANxzhQRiNwTvJSr6N95JhuJ/x27z9G2URx1Jpt3zYFfCGUXZGL5UDxt5eyLE7wgw==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
