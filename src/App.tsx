@@ -1,8 +1,8 @@
 import React from "react";
 import { Provider } from "react-redux";
 import "./App.css";
+import RootAppRoutes from "./routes/RootAppRoutes";
 import appStore from "./store/store";
-import ViewContainer from "./view/ViewContainer";
 
 const store = appStore();
 
@@ -11,7 +11,7 @@ export default class App extends React.Component {
     return (
       <Provider store={store}>
         <div>
-          <ViewContainer />
+          <RootAppRoutes />
         </div>
       </Provider>
     );

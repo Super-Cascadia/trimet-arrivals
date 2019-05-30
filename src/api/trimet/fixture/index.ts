@@ -1,22 +1,42 @@
+import { ArrivalData, ArrivalLocation } from "../interfaces/arrivals";
 import {
-  ArrivalData,
-  ArrivalLocation,
   Direction,
-  Route,
   StopData,
-  StopLocation
-} from "../types";
+  StopLocation,
+  TrimetRoute
+} from "../interfaces/types";
 import { arrival1, arrival2, arrival3 } from "./arrival";
 
 export function arrivalsFixtureData(): Promise<ArrivalData> {
-  const location1: ArrivalLocation = { id: 123 };
+  const location1: ArrivalLocation = {
+    desc: "Description",
+    dir: "direction",
+    id: 123,
+    lat: 0,
+    lng: 0,
 
-  const location2: ArrivalLocation = { id: 456 };
-
-  const location3: ArrivalLocation = { id: 789 };
+    passengerCode: "E"
+  };
+  const location2: ArrivalLocation = {
+    desc: "Description",
+    dir: "direction",
+    id: 456,
+    lat: 0,
+    lng: 0,
+    passengerCode: "E"
+  };
+  const location3: ArrivalLocation = {
+    desc: "Description",
+    dir: "direction",
+    id: 789,
+    lat: 0,
+    lng: 0,
+    passengerCode: "E"
+  };
 
   const arrivalData: ArrivalData = {
     arrival: [arrival1, arrival2, arrival3],
+    detour: [],
     location: [location1, location2, location3],
     queryTime: "123"
   };
@@ -30,7 +50,7 @@ export function stopFixtureData(): Promise<StopData> {
     dir: 465
   };
 
-  const route1: Route = {
+  const route1: TrimetRoute = {
     desc: "string",
     dir: [direction1],
     route: 9101,

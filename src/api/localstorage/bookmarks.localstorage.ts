@@ -1,10 +1,10 @@
 import { omit } from "lodash";
-import { StopLocation } from "../trimet/types";
+import { StopLocation } from "../trimet/interfaces/types";
 import { fetchLocalStorageItemByKey, updateStoredItemByKey } from "./util";
 
 export const BOOKMARKS = "BOOKMARKS";
 
-interface StoredBookmarks {
+export interface StoredBookmarks {
   [locationId: number]: StopLocation;
 }
 
@@ -18,8 +18,9 @@ function updateBookmarks(existingBookmarks) {
 
 export function storeLocationBookmark(stopLocation: StopLocation) {
   const existingBookmarks = fetchStoredBookmarks();
+  const id = stopLocation.locid ? stopLocation.locid : stopLocation.id;
 
-  existingBookmarks[stopLocation.locid] = stopLocation;
+  existingBookmarks[id] = stopLocation;
 
   updateBookmarks(existingBookmarks);
 }

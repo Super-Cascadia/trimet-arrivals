@@ -1,0 +1,21 @@
+.frequent-service-indicator {
+  background: forestgreen;
+  color: white;
+  border-radius: 70px;
+  height: 70px;
+  width: 70px;
+  font-size: 12px;
+  text-align: center;
+  span {
+    vertical-align: middle;
+  }
+}
+
+.frequent-service-indicator.small {
+  border-radius: 40px;
+  height: 40px;
+  width: 40px;
+  font-size: 10px;
+  line-height: 10px;
+  vertical-align: middle;
+}

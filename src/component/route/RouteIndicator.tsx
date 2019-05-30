@@ -1,87 +1,53 @@
-import cx from "classnames";
 import React from "react";
+import { Badge } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
-import {
-  BLUE_LINE_NUMBER,
-  GREEN_LINE_NUMBER,
-  ORANGE_LINE_NUMBER,
-  RED_LINE_NUMBER,
-  ROUTE_DISPLAY,
-  STREETCAR_A_LOOP,
-  STREETCAR_B_LOOP,
-  STREETCAR_CL_LINE_SHUTTLE,
-  STREETCAR_S_LINE,
-  YELLOW_LINE_NUMBER
-} from "../../api/trimet/constants";
-import { Route } from "../../api/trimet/types";
+import { LinkContainer } from "react-router-bootstrap";
+import { ROUTE_DISPLAY } from "../../api/trimet/constants";
+import { TrimetRoute } from "../../api/trimet/interfaces/types";
 import "./RouteIndicator.scss";
+
+const DEFAULT_ROUTE_COLOR = "3D8FAE";
 
 interface Props {
   routeId: number;
-  route: Route;
-  className?: string;
-  onClick: (route: Route) => void;
+  route?: TrimetRoute;
   verbose?: boolean;
+  routeColor?: string;
 }
 
-function getRouteDisplay(route: number, verboseRouteDisplay: boolean) {
-  const routeFound = ROUTE_DISPLAY[route];
+function getRouteDisplay(routeId: number, verboseRouteDisplay: boolean) {
+  const routeFound = ROUTE_DISPLAY[routeId];
 
   if (!routeFound) {
-    if (route) {
+    if (routeId) {
       return (
-        <span>
-          <FontAwesome name="bus" className="train-route-indicator" />
+        <Badge bg="secondary">
+          <FontAwesome name="bus" />
           <span>
-            {route} {verboseRouteDisplay && "Bus"}
+            {routeId} {verboseRouteDisplay && "Bus"}
           </span>
-        </span>
+        </Badge>
       );
     }
-    return route || "-";
+    return routeId || "-";
   } else {
     return (
-      <span>
-        <FontAwesome name="train" className="train-route-indicator" />
-        <span>{routeFound}</span>
-      </span>
+      <Badge bg="secondary">
+        <FontAwesome name="train" />
+        <span className="route-indicator-text">{routeFound}</span>
+      </Badge>
     );
   }
 }
 
-function getRouteIndicatorClassName(route: number, className: string) {
-  const style = {
-    "route-indicator-blue": route === BLUE_LINE_NUMBER,
-    "route-indicator-cyan":
-      route === STREETCAR_A_LOOP || route === STREETCAR_CL_LINE_SHUTTLE,
-    "route-indicator-green": route === GREEN_LINE_NUMBER,
-    "route-indicator-lightgreen": route === STREETCAR_S_LINE,
-    "route-indicator-orange": route === ORANGE_LINE_NUMBER,
-    "route-indicator-pink": route === STREETCAR_B_LOOP,
-    "route-indicator-red": route === RED_LINE_NUMBER,
-    "route-indicator-yellow": route === YELLOW_LINE_NUMBER
-  };
-
-  return cx("route-indicator", className, style);
-}
-
-export default class RouteIndicator extends React.PureComponent<Props> {
-  private onClick: () => void;
-
-  constructor(props) {
-    super(props);
-
-    this.onClick = () => this.props.onClick(this.props.route);
-  }
-
-  public render() {
-    const { routeId, className, verbose } = this.props;
-    const classNames = getRouteIndicatorClassName(routeId, className);
-
-    return (
-      <span className={classNames} onClick={this.onClick}>
-        {getRouteDisplay(routeId, verbose)}
-      </span>
-    );
-  }
+export default function RouteIndicator({
+  routeColor = DEFAULT_ROUTE_COLOR,
+  routeId,
+  verbose
+}: Props) {
+  return (
+    <LinkContainer to={`/lines/${routeId}`}>
+      {getRouteDisplay(routeId, verbose)}
+    </LinkContainer>
+  );
 }

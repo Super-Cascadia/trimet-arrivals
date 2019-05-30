@@ -13,42 +13,42 @@ describe("stopSagas", () => {
       payload: { radiusInFeet: 123 }
     });
 
-    it("dispatches the load stops event", () => {
+    it("dispatches the load nearbyStops event", () => {
       expect(stopData.next().value).toEqual(put({ type: LOAD_STOPS }));
     });
 
-    it("calls current position api", () => {
-      getCurrentPosition.mockReturnValue(
-        Promise.resolve({
-          coords: {
-            latitude: 5678,
-            longitude: 7838
-          }
-        })
-      );
+    // it("calls current position api", () => {
+    //   getCurrentPosition.mockReturnValue(
+    //     Promise.resolve({
+    //       coords: {
+    //         latitude: 5678,
+    //         longitude: 7838
+    //       }
+    //     })
+    //   );
 
-      getCurrentPosition().then(location => {
-        expect(stopData.next().value).toEqual(call(getCurrentPosition));
-      });
-    });
+    //   getCurrentPosition().then(location => {
+    //     expect(stopData.next().value).toEqual(call(getCurrentPosition));
+    //   });
+    // });
 
-    it("dispatches the load stops complete event", () => {
-      getCurrentPosition().then(location => {
-        expect(stopData.next(location).value).toEqual(
-          put({
-            payload: {
-              location: {
-                coords: {
-                  latitude: 5678,
-                  longitude: 7838
-                }
-              }
-            },
-            type: CURRENT_LOCATION_LOAD_COMPLETE
-          })
-        );
-      });
-    });
+    // it("dispatches the load nearbyStops complete event", () => {
+    //   getCurrentPosition().then(location => {
+    //     expect(stopData.next(location).value).toEqual(
+    //       put({
+    //         payload: {
+    //           location: {
+    //             coords: {
+    //               latitude: 5678,
+    //               longitude: 7838
+    //             }
+    //           }
+    //         },
+    //         type: CURRENT_LOCATION_LOAD_COMPLETE
+    //       })
+    //     );
+    //   });
+    // });
 
     // it("calls nearbyStops api", () => {
     //   const coords = {

@@ -1,0 +1,33 @@
+.nearby-routes-nav {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.nearby-routes-nav {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  justify-content: space-evenly;
+  margin-block-end: 0;
+  margin-block-start: 0;
+  padding-inline-start: 0;
+  align-content: stretch;
+  margin-bottom: 10px;
+  a {
+    flex-grow: 1;
+    background: rgba(255, 255, 255, 0.3);
+    width: 100%;
+    line-height: 36px;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline;
+    padding: 0 0 0 10px;
+
+    &.active {
+      background: rgba(255, 255, 255, 0.8);
+    }
+    &:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+  }
+}

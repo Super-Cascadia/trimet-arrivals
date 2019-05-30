@@ -5,7 +5,7 @@ import {
   storeLocationBookmark
 } from "../../api/localstorage/bookmarks.localstorage";
 // tslint:enable:no-submodule-imports
-import { StopLocation } from "../../api/trimet/types";
+import { StopLocation } from "../../api/trimet/interfaces/types";
 import { CREATE_STOP_BOOKMARK, REMOVE_STOP_BOOKMARK } from "../constants";
 
 interface BookmarkStopAction {

@@ -1,4 +1,4 @@
-import { Arrival, BlockPosition } from "../types";
+import { Arrival, BlockPosition } from "../interfaces/arrivals";
 import { trip1 } from "./trip";
 
 const blockPosition: BlockPosition = {
@@ -14,13 +14,14 @@ const blockPosition: BlockPosition = {
   nextLocID: 123,
   nextStopSeq: 123,
   routeNumber: 123,
-  signMesageLong: "123",
   signMessage: "123",
+  signMessageLong: "123",
   trip: [trip1],
   tripID: "string",
   vehicleID: 123
 };
 
+// @ts-ignore
 export const arrival1: Arrival = {
   blockID: 123,
   blockPosition,
@@ -43,6 +44,7 @@ export const arrival1: Arrival = {
   vehicleID: "123"
 };
 
+// @ts-ignore
 export const arrival2: Arrival = {
   blockID: 123,
   blockPosition,
@@ -65,6 +67,7 @@ export const arrival2: Arrival = {
   vehicleID: "123"
 };
 
+// @ts-ignore
 export const arrival3: Arrival = {
   blockID: 123,
   blockPosition,

@@ -1,5 +1,6 @@
 import { isEmpty } from "lodash";
 import React, { Component } from "react";
+import { Button, Form, InputGroup } from "react-bootstrap";
 import "./AddBookmarkSectionControl.css";
 
 interface Props {
@@ -53,26 +54,29 @@ export default class AddBookmarkSectionControl extends Component<Props, State> {
 
     return (
       <div className="add-bookmark-section-control">
-        <form className="add-bookmark-input-form">
+        <Form className="add-bookmark-input-form">
           <div className="add-bookmark-name-input-flex-container">
-            <input
-              type="text"
-              className="add-bookmark-name-input"
-              value={this.state.bookmarkSectionName}
-              placeholder="Bookmark Section Name"
-              onChange={this.onChange}
-            />
+            <InputGroup className="mb-3">
+              <Form.Control
+                type="text"
+                className="add-bookmark-name-input"
+                aria-label="Bookmark Section Name"
+                aria-describedby="basic-addon2"
+                value={this.state.bookmarkSectionName}
+                placeholder="Bookmark Section Name"
+                onChange={this.onChange}
+              />
+              <Button
+                id="button-addon2"
+                variant="primary"
+                onClick={this.onClickAddBookmark}
+                disabled={noTextEntered}
+              >
+                Create
+              </Button>
+            </InputGroup>
           </div>
-          <div className="add-bookmark-button-flex-container">
-            <button
-              onClick={this.onClickAddBookmark}
-              disabled={noTextEntered}
-              className="add-bookmark-button"
-            >
-              Create
-            </button>
-          </div>
-        </form>
+        </Form>
       </div>
     );
   }

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StopLocation } from "../../../../../api/trimet/types";
+import { StopLocation } from "../../../../../api/trimet/interfaces/types";
 import BookmarksInSectionSelector from "./BookmarksInSectionSelector";
 
 interface Props {

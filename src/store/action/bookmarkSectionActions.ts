@@ -1,4 +1,4 @@
-import { StopLocation } from "../../api/trimet/types";
+import { StopLocation } from "../../api/trimet/interfaces/types";
 import {
   BOOKMARK_SECTION_NAME_UPDATE_REQUEST,
   BOOKMARK_SECTION_SELECT_REQUEST,
