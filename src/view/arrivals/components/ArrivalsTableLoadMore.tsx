@@ -1,6 +1,10 @@
 import { Moment } from "moment";
 import React from "react";
-import { Arrival, Route, StopLocation } from "../../../api/trimet/types";
+import { Arrival } from "../../../api/trimet/interfaces/arrivals";
+import {
+  StopLocation,
+  TrimetRoute
+} from "../../../api/trimet/interfaces/types";
 import "./Arrivals.css";
 import ArrivalsTable from "./ArrivalsTable";
 
@@ -9,7 +13,7 @@ interface Props {
   arrivals: Arrival[];
   now: Moment;
   stopLocation: StopLocation;
-  onRouteIndicatorClick: (route: Route) => void;
+  onRouteIndicatorClick: (route: TrimetRoute) => void;
 }
 
 interface State {

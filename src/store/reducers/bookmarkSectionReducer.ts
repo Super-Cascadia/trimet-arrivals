@@ -1,5 +1,5 @@
 import { filter, find, omit, slice } from "lodash";
-import { StopLocation } from "../../api/trimet/types";
+import { StopLocation } from "../../api/trimet/interfaces/types";
 import {
   CREATE_BOOKMARK_SECTION,
   LOAD_BOOKMARK_SECTIONS_COMPLETE,

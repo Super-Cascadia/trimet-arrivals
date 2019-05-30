@@ -22,7 +22,7 @@ export default class BookmarksViewComponent extends React.Component<Props> {
 
     return (
       <div>
-        {/* <h1>Bookmark Sections</h1> */}
+        <h2 className="h4">Collections</h2>
         <AddBookmarkSectionControl
           bookmarkSectionName={bookmarkSectionName}
           createBookmarkSection={createBookmarkSection}

@@ -5,7 +5,11 @@ import {
   BOOKMARK_STOP_REQUEST,
   CHANGE_VIEW_REQUEST,
   INITIAL_LOAD_REQUEST,
+  LOAD_ALL_ROUTES_COMPLETE,
+  LOAD_ALL_ROUTES_DATA_REQUEST,
   LOAD_ARRIVALS_DATA_REQUEST,
+  LOAD_ROUTE_ALERT_DATA_REQUEST,
+  LOAD_ROUTE_DATA_REQUEST,
   LOAD_STOP_DATA_REQUEST,
   REMOVE_BOOKMARK_STOP_REQUEST,
   UPDATE_VIEW_REQUEST
@@ -19,6 +23,7 @@ import {
   REMOVE_BOOKMARK_SECTION_REQUEST,
   UPDATE_BOOKMARK_SECTION_NAME_REQUEST
 } from "../constants/bookmarkSections";
+import { loadRouteAlertData } from "./alertSagas";
 import { loadArrivalData } from "./arrivalSagas";
 import { bookmarkStop, removeStopBookmark } from "./bookmarkSagas";
 import {
@@ -30,6 +35,7 @@ import {
   updateSectionInputName,
   updateSelectedBookmarkSection
 } from "./bookmarkSectionSagas";
+import { loadAllRouteData, loadRouteDataById } from "./routeSagas";
 import { loadStopData, updateNearbyActiveView } from "./stopSagas";
 import { changeView, initialLoad } from "./viewSagas";
 
@@ -66,4 +72,9 @@ export function* rootSaga() {
   );
   // @ts-ignore
   yield takeEvery(UPDATE_VIEW_REQUEST, updateNearbyActiveView);
+  // @ts-ignore
+  yield takeEvery(LOAD_ROUTE_DATA_REQUEST, loadRouteDataById);
+  // @ts-ignore
+  yield takeEvery(LOAD_ROUTE_ALERT_DATA_REQUEST, loadRouteAlertData);
+  yield takeEvery(LOAD_ALL_ROUTES_DATA_REQUEST, loadAllRouteData);
 }

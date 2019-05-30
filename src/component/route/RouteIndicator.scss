@@ -1,7 +1,7 @@
 @import '../../styles/routes';
 
 .route-indicator {
-    background: $bus-blue !important;
+    background: $bus-blue;
     height: 21px;
     min-width: 18px;
     vertical-align: middle;
@@ -17,8 +17,21 @@
     padding-right: 2px;
 }
 
+.route-indicator-schedule-wrapper {
+    //position: absolute;
+    //right: 0;
+    //top: 0;
+    background: #E0D0C1;
+}
+
+
 .train-route-indicator {
     margin-right: 5px;
+    text-shadow: 1px 1px 1px black;
+}
+
+.route-indicator-text {
+    text-shadow: 1px 1px 1px black;
 }
 
 .route-indicator-green {

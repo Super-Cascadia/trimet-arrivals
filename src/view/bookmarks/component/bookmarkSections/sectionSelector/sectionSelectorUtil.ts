@@ -1,6 +1,6 @@
 import chroma from "chroma-js";
 import { map } from "lodash";
-import { StopLocation } from "../../../../../api/trimet/types";
+import { StopLocation } from "../../../../../api/trimet/interfaces/types";
 
 export function customStyles() {
   return {

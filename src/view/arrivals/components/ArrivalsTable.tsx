@@ -1,7 +1,12 @@
 import classNames from "classnames";
 import { Moment } from "moment";
 import React from "react";
-import { Arrival, Route, StopLocation } from "../../../api/trimet/types";
+import { Table } from "react-bootstrap";
+import { Arrival } from "../../../api/trimet/interfaces/arrivals";
+import {
+  StopLocation,
+  TrimetRoute
+} from "../../../api/trimet/interfaces/types";
 import ArrivalRows from "./ArrivalRows";
 import "./Arrivals.css";
 
@@ -9,7 +14,7 @@ interface Props {
   arrivals: Arrival[];
   loading: boolean;
   now: Moment;
-  onRouteIndicatorClick: (route: Route) => void;
+  onRouteIndicatorClick: (route: TrimetRoute) => void;
   stopLocation: StopLocation;
   showMore: boolean;
 }
@@ -34,7 +39,7 @@ export default class ArrivalsTable extends React.Component<Props> {
     });
 
     return (
-      <table className={classes}>
+      <Table>
         <thead>
           <tr>
             <th />
@@ -52,7 +57,7 @@ export default class ArrivalsTable extends React.Component<Props> {
           now={now}
           showAllArrivals={showMore}
         />
-      </table>
+      </Table>
     );
   }
 }

@@ -1,7 +1,11 @@
 import { sortBy } from "lodash";
 import { Moment } from "moment";
 import React from "react";
-import { Arrival, Route, StopLocation } from "../../../api/trimet/types";
+import { Arrival } from "../../../api/trimet/interfaces/arrivals";
+import {
+  StopLocation,
+  TrimetRoute
+} from "../../../api/trimet/interfaces/types";
 import ArrivalRow from "./ArrivalRow";
 import "./Arrivals.css";
 
@@ -9,8 +13,8 @@ function sortArrivalsByEstimatedTime(arrivals: Arrival[]): Arrival[] {
   return sortBy(arrivals, (arrival: Arrival) => arrival.estimated);
 }
 
-function getArrivalRoute(routes: Route[], routeId: number) {
-  return routes.find((route: Route) => route.route === routeId);
+function getArrivalRoute(routes: TrimetRoute[], routeId: number) {
+  return routes.find((route: TrimetRoute) => route.route === routeId);
 }
 
 function getVisibleArrivals(
@@ -23,7 +27,7 @@ function getVisibleArrivals(
 interface Props {
   arrivals: Arrival[];
   now: Moment;
-  onClick: (route: Route) => void;
+  onClick: (route: TrimetRoute) => void;
   stopLocation: StopLocation;
   showAllArrivals: boolean;
 }

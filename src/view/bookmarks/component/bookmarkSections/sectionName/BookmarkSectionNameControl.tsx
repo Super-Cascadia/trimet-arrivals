@@ -1,18 +1,15 @@
 import cx from "classnames";
 import React from "react";
+import { Button, Card } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { RemoveBookmarkSectionButton } from "../../../../../component/buttons/RemoveBookmarkSectionButton";
 import EditSectionNameInput from "./EditSectionNameInput";
 
 function EditModeToggleButton({ onClick, editMode }) {
-  const classNames = cx("group-menu-item", "edit-toggle-button", {
-    enabled: editMode
-  });
-
   return (
-    <button onClick={onClick} className={classNames}>
+    <Button onClick={onClick}>
       <FontAwesome name="edit" />
-    </button>
+    </Button>
   );
 }
 
@@ -32,24 +29,20 @@ export default function BookmarkSectionNameControl({
   updateBookmarkSectionName
 }: Props) {
   return (
-    <div className="bookmark-section-control-wrapper">
-      <div className="bookmark-section-name-wrapper">
-        {editMode && (
-          <EditSectionNameInput
-            sectionName={name}
-            updateBookmarkSectionName={updateBookmarkSectionName}
-          />
-        )}
-        {!editMode && <h3>{name}</h3>}
-      </div>
-      <div className="bookmark-section-edit-controls-wrapper">
-        {editMode && (
-          <RemoveBookmarkSectionButton
-            removeBookmarkSection={removeBookmarkSection}
-          />
-        )}
-        <EditModeToggleButton editMode={editMode} onClick={toggleEditMode} />
-      </div>
-    </div>
+    <Card.Header className="d-flex justify-content-between flex-wrap flex-md-nowrap pt-3 pb-2 mb-3">
+      {editMode && (
+        <EditSectionNameInput
+          sectionName={name}
+          updateBookmarkSectionName={updateBookmarkSectionName}
+        />
+      )}
+      {!editMode && <h3 className="h6">{name}</h3>}
+      {editMode && (
+        <RemoveBookmarkSectionButton
+          removeBookmarkSection={removeBookmarkSection}
+        />
+      )}
+      <EditModeToggleButton editMode={editMode} onClick={toggleEditMode} />
+    </Card.Header>
   );
 }
