@@ -7,42 +7,77 @@ import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 mapboxgl.accessToken =
   "pk.eyJ1IjoiamFtZXNvbm55ZWhvbHQiLCJhIjoiY2p3NWoyamV0MTk1dDQ0cGNmdGZkenViMiJ9.TqDD3r62vlPzVgPnYjocsg";
 
+type LatLngCoords = number[];
+
 interface Props {
-  currentLocation: number[];
+  currentLocation: LatLngCoords;
   stopLocations: StopLocationsDictionary;
 }
 
 export default class NearbyStopsMap extends Component<Props> {
-  private static getStopLocations(stopLocations: StopLocationsDictionary) {
+  private static setPopupsForMarkers(el, marker, mapBoxMap) {
+    // make a marker for each feature and add to the map
+    new mapboxgl.Marker(el)
+      .setLngLat(marker.geometry.coordinates)
+      .addTo(mapBoxMap);
+
+    new mapboxgl.Marker(el)
+      .setLngLat(marker.geometry.coordinates)
+      .setPopup(
+        new mapboxgl.Popup({ offset: 25 }) // add popups
+          .setHTML(
+            "<h3>" +
+              marker.properties.title +
+              "</h3><p>" +
+              marker.properties.description +
+              "</p>"
+          )
+      )
+      .addTo(mapBoxMap);
+  }
+
+  private static setCurrentLocationMarker(
+    mapBoxMap,
+    currentLocation: LatLngCoords
+  ) {
+    mapBoxMap.addLayer({
+      id: "currentlocation",
+      layout: {
+        "icon-image": "rocket-15"
+      },
+      source: {
+        data: {
+          features: [
+            {
+              geometry: {
+                coordinates: currentLocation,
+                type: "Point"
+              },
+              properties: {},
+              type: "Feature"
+            }
+          ],
+          type: "FeatureCollection"
+        },
+        type: "geojson"
+      },
+      type: "symbol"
+    });
+  }
+
+  private static setLocations(stopLocations: StopLocationsDictionary) {
     return map(stopLocations, (stopLocation: StopLocation) => {
       return {
         geometry: {
           coordinates: [stopLocation.lng, stopLocation.lat],
           type: "Point"
         },
-        properties: {
-          description: `${stopLocation.dir} | ${stopLocation.desc}`,
-          title: `${stopLocation.dir} | ${stopLocation.desc}`
-        },
+        properties: {},
         type: "Feature"
       };
     });
   }
 
-  private static getCurrentLocation(currentLocation) {
-    return {
-      currentLocation: true,
-      geometry: {
-        coordinates: currentLocation,
-        type: "Point"
-      },
-      properties: {
-        description: "Map Center",
-        title: "Map Center"
-      },
-      type: "Feature"
-    };
-  }
   private mapContainer: HTMLDivElement;
   private map: mapboxgl.Map;
 
@@ -64,7 +99,7 @@ export default class NearbyStopsMap extends Component<Props> {
     return <div style={style} ref={el => (this.mapContainer = el)} />;
   }
 
-  private initializeMap(currentLocation, stopLocations) {
+  private initializeMap(currentLocation: LatLngCoords, stopLocations) {
     this.map = new mapboxgl.Map({
       center: currentLocation,
       container: this.mapContainer,
@@ -75,41 +110,50 @@ export default class NearbyStopsMap extends Component<Props> {
     this.setMapFeatures(this.map, stopLocations, currentLocation);
   }
 
-  private setMapFeatures(mapBoxMap, stopLocations, currentLocation) {
-    const geojson = {
-      features: [
-        NearbyStopsMap.getCurrentLocation(currentLocation),
-        ...NearbyStopsMap.getStopLocations(stopLocations)
-      ],
-      type: "FeatureCollection"
-    };
+  private setMapFeatures(
+    mapBoxMap,
+    stopLocations,
+    currentLocation: LatLngCoords
+  ) {
+    mapBoxMap.on("load", () => {
+      this.setNearbyStopMarkers(mapBoxMap, stopLocations);
 
-    geojson.features.forEach(marker => {
-      // create a HTML element for each feature
-      const el = document.createElement("div");
+      NearbyStopsMap.setCurrentLocationMarker(mapBoxMap, currentLocation);
+    });
+  }
 
-      el.className =
-        // @ts-ignore
-        marker && marker.currentLocation === true ? "marker-current" : "marker";
+  private setNearbyStopMarkers(
+    mapBoxMap,
+    stopLocations: StopLocationsDictionary
+  ) {
+    mapBoxMap.addLayer({
+      id: "symbols",
+      layout: {
+        "icon-image": "bus-15"
+      },
+      source: {
+        data: {
+          features: NearbyStopsMap.setLocations(stopLocations),
+          type: "FeatureCollection"
+        },
+        type: "geojson"
+      },
+      type: "symbol"
+    });
 
-      // make a marker for each feature and add to the map
-      new mapboxgl.Marker(el)
-        .setLngLat(marker.geometry.coordinates)
-        .addTo(mapBoxMap);
+    // Center the map on the coordinates of any clicked symbol from the 'symbols' layer.
+    mapBoxMap.on("click", "symbols", e => {
+      mapBoxMap.flyTo({ center: e.features[0].geometry.coordinates });
+    });
 
-      new mapboxgl.Marker(el)
-        .setLngLat(marker.geometry.coordinates)
-        .setPopup(
-          new mapboxgl.Popup({ offset: 25 }) // add popups
-            .setHTML(
-              "<h3>" +
-                marker.properties.title +
-                "</h3><p>" +
-                marker.properties.description +
-                "</p>"
-            )
-        )
-        .addTo(mapBoxMap);
+    // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
+    mapBoxMap.on("mouseenter", "symbols", () => {
+      mapBoxMap.getCanvas().style.cursor = "pointer";
+    });
+
+    // Change it back to a pointer when it leaves.
+    mapBoxMap.on("mouseleave", "symbols", () => {
+      mapBoxMap.getCanvas().style.cursor = "";
     });
   }
 }
