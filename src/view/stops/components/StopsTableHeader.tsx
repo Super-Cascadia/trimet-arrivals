@@ -16,41 +16,39 @@ interface Props {
   locationId: number;
 }
 
-export default class StopsTableHeader extends React.Component<Props> {
-  public render() {
-    const {
-      stopLocation,
-      loading,
-      showArrivals,
-      loadArrivalData,
-      onRouteIndicatorClick,
-      locationId
-    } = this.props;
+export default function StopsTableHeader(props: Props) {
+  const {
+    stopLocation,
+    loading,
+    showArrivals,
+    loadArrivalData,
+    onRouteIndicatorClick,
+    locationId
+  } = props;
 
-    if (!stopLocation) {
-      return null;
-    }
-
-    const classNames = cx("stops-header", {
-      "arrivals-hidden": !showArrivals
-    });
-
-    return (
-      <div className={classNames}>
-        <StopInfo stopLocation={stopLocation} onClick={onRouteIndicatorClick} />
-        <div className="stop-control-section">
-          <StopBookmarkControlContainer
-            locationId={locationId}
-            stopLocation={stopLocation}
-          />
-          <ReloadIntervalCoordinator
-            stopLocation={stopLocation}
-            loadArrivalData={loadArrivalData}
-            loading={loading}
-            showArrivals={showArrivals}
-          />
-        </div>
-      </div>
-    );
+  if (!stopLocation) {
+    return null;
   }
+
+  const classNames = cx("stops-header", {
+    "arrivals-hidden": !showArrivals
+  });
+
+  return (
+    <div className={classNames}>
+      <StopInfo stopLocation={stopLocation} onClick={onRouteIndicatorClick} />
+      <div className="stop-control-section">
+        <StopBookmarkControlContainer
+          locationId={locationId}
+          stopLocation={stopLocation}
+        />
+        <ReloadIntervalCoordinator
+          stopLocation={stopLocation}
+          loadArrivalData={loadArrivalData}
+          loading={loading}
+          showArrivals={showArrivals}
+        />
+      </div>
+    </div>
+  );
 }
