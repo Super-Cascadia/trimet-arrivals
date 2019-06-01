@@ -26,6 +26,14 @@ function getRouteDisplay(route: number) {
   const routeFound = ROUTE_DISPLAY[route];
 
   if (!routeFound) {
+    if (route) {
+      return (
+        <span>
+          <FontAwesome name="bus" className="train-route-indicator" />
+          <span>{route}</span>
+        </span>
+      );
+    }
     return route || "-";
   } else {
     return (
