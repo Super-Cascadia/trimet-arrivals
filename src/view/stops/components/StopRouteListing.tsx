@@ -55,7 +55,7 @@ export default class StopRouteListing extends Component<Props, State> {
     super(props);
 
     this.state = {
-      expanded: true
+      expanded: false
     };
 
     this.toggleDetails = this.toggleDetails.bind(this);
