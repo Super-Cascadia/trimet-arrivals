@@ -1,23 +1,8 @@
-import { map } from "lodash";
 import React from "react";
 import { Route, StopLocation } from "../../../api/trimet/types";
-import RouteIndicator from "../../../component/route/RouteIndicator";
 import StopLocationIndicator from "../../../component/stop/StopLocationIndicator";
 import "./StopInfo.css";
-
-function getStopRoutes(routes: Route[], onClick) {
-  return map(routes, (route: Route) => {
-    return (
-      <RouteIndicator
-        key={route.route}
-        routeId={route.route}
-        route={route}
-        onClick={onClick}
-        className="header-router-indicator"
-      />
-    );
-  });
-}
+import StopRouteListing from "./StopRouteListing";
 
 interface Props {
   stopLocation: StopLocation;
@@ -37,10 +22,7 @@ export default function StopInfo({ stopLocation, onClick }: Props) {
           {stopLocation.desc} - {stopLocation.dir}
         </span>
       </h2>
-      <span className="serving-label">Routes: </span>
-      <span className="route-indicators">
-        {getStopRoutes(stopLocation.route, onClick)}
-      </span>
+      <StopRouteListing routes={stopLocation.route} onClick={onClick} />
     </div>
   );
 }
