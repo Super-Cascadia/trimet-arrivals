@@ -10,6 +10,7 @@ export const ORANGE_LINE_NUMBER = 290;
 export const STREETCAR_S_LINE = 196;
 export const STREETCAR_B_LOOP = 195;
 export const STREETCAR_A_LOOP = 194;
+export const STREETCAR_CL_LINE_SHUTTLE = 294;
 
 export const ROUTE_DISPLAY: Routes = {
   [RED_LINE_NUMBER]: "Red",
@@ -19,7 +20,8 @@ export const ROUTE_DISPLAY: Routes = {
   [ORANGE_LINE_NUMBER]: "Orange",
   [STREETCAR_A_LOOP]: " A Loop",
   [STREETCAR_B_LOOP]: "B Loop",
-  [STREETCAR_S_LINE]: "NS Line"
+  [STREETCAR_S_LINE]: "NS Line",
+  [STREETCAR_CL_LINE_SHUTTLE]: "CL Line"
 };
 
 interface Routes {
