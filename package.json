@@ -28,7 +28,7 @@
     "chroma-js": "^2.0.3",
     "classnames": "2.2.6",
     "codecov": "^3.2.0",
-    "enzyme": "3.9.0",
+    "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "^1.9.1",
     "enzyme-matchers": "^7.0.1",
     "font-awesome": "^4.7.0",
