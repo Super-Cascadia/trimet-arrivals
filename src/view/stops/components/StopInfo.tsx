@@ -1,11 +1,12 @@
 import React from "react";
-import { Route, StopLocation } from "../../../api/trimet/types";
+import { Route } from "../../../api/trimet/types";
 import StopLocationIndicator from "../../../component/stop/StopLocationIndicator";
+import { StopLocationWithDistance } from "../../../store/reducers/stopsReducer";
 import "./StopInfo.css";
 import StopRouteListing from "./StopRouteListing";
 
 interface Props {
-  stopLocation: StopLocation;
+  stopLocation: StopLocationWithDistance;
   onClick: (route: Route) => void;
 }
 
@@ -19,8 +20,9 @@ export default function StopInfo({ stopLocation, onClick }: Props) {
       <h2>
         <StopLocationIndicator locationId={stopLocation.locid} />
         <span className="stop-info">
-          {stopLocation.desc} - {stopLocation.dir}
+          {stopLocation.desc} - {stopLocation.dir} -
         </span>
+        <span>{stopLocation.distance} feet away</span>
       </h2>
       <StopRouteListing routes={stopLocation.route} onClick={onClick} />
     </div>

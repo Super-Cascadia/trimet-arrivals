@@ -33,6 +33,7 @@ import { loadStopData } from "./stopSagas";
 import { changeView, initialLoad } from "./viewSagas";
 
 export function* rootSaga() {
+  // @ts-ignore
   yield takeEvery(LOAD_STOP_DATA_REQUEST, loadStopData);
   yield takeEvery(LOAD_ARRIVALS_DATA_REQUEST, loadArrivalData);
   // @ts-ignore

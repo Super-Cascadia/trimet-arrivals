@@ -1,6 +1,12 @@
-import { mapKeys } from "lodash";
+import { getDistance } from "geolib";
+import { map, mapKeys } from "lodash";
 import moment from "moment";
-import { StopData, StopLocation } from "../../api/trimet/types";
+import {
+  Coords,
+  Location,
+  StopData,
+  StopLocation
+} from "../../api/trimet/types";
 import {
   LOAD_ARRIVALS_COMPLETE,
   LOAD_STOP_COMPLETE,
@@ -15,6 +21,8 @@ export interface StopsReducerState {
 
 interface Payload {
   stopData: StopData;
+  radius: number;
+  location: Location;
 }
 
 interface Action {
@@ -26,10 +34,44 @@ export interface StopLocationsDictionary {
   [locationId: number]: StopLocation;
 }
 
-function getStopLocations(
-  stopLocation: StopLocation[]
+export interface StopLocationWithDistance extends StopLocation {
+  distance: number;
+  distanceOrder: number;
+}
+
+function calculateDistance(
+  lng: number,
+  lat: number,
+  currentLocation: Coords
+): number {
+  const stopLocation = { latitude: lat, longitude: lng };
+
+  return getDistance(stopLocation, currentLocation);
+}
+
+function addDistanceToCurrentLocation(
+  stopLocation: StopLocation[],
+  currentLocation: Coords
+): StopLocationWithDistance[] {
+  return map(stopLocation, (location: StopLocation, index) => {
+    return {
+      ...location,
+      distance: calculateDistance(location.lng, location.lat, currentLocation),
+      distanceOrder: index
+    };
+  });
+}
+
+function formatStopLocations(
+  stopLocation: StopLocation[],
+  currentLocation: Coords
 ): StopLocationsDictionary {
-  return mapKeys(stopLocation, (location: StopLocation) => {
+  const stopLocationsWithDistance = addDistanceToCurrentLocation(
+    stopLocation,
+    currentLocation
+  );
+
+  return mapKeys(stopLocationsWithDistance, (location: StopLocation) => {
     return location.locid;
   });
 }
@@ -39,27 +81,42 @@ const initialState = {
   timeOfLastLoad: ""
 };
 
+function getLoadStopCompleteState(action: Action, state) {
+  const { payload } = action;
+  const { location, stopData } = payload;
+  const currentLocation = location.coords;
+  const stopLocations = formatStopLocations(stopData.location, currentLocation);
+
+  return {
+    ...state,
+    loading: false,
+    stopLocations,
+    timeOfLastLoad: moment().format("ddd, h:mm:ss a")
+  };
+}
+
+function getLoadArrivalsCompleteState(state) {
+  return {
+    ...state,
+    timeOfLastLoad: moment().format("ddd, h:mm:ss a")
+  };
+}
+
+function getLoadStopsCompleteState(state) {
+  return {
+    ...state,
+    loading: true
+  };
+}
+
 const stopsReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case LOAD_STOPS:
-      return {
-        ...state,
-        loading: true
-      };
+      return getLoadStopsCompleteState(state);
     case LOAD_STOP_COMPLETE:
-      const stopLocations = getStopLocations(action.payload.stopData.location);
-
-      return {
-        ...state,
-        loading: false,
-        stopLocations,
-        timeOfLastLoad: moment().format("ddd, h:mm:ss a")
-      };
+      return getLoadStopCompleteState(action, state);
     case LOAD_ARRIVALS_COMPLETE:
-      return {
-        ...state,
-        timeOfLastLoad: moment().format("ddd, h:mm:ss a")
-      };
+      return getLoadArrivalsCompleteState(state);
     default:
       return {
         ...state
