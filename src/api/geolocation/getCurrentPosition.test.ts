@@ -1,5 +1,5 @@
 import geoLocateCurrentPosition from "./geoLocateCurrentPosition";
-import { getCurrentPosition } from "./index";
+import getCurrentPosition from "./getCurrentPosition";
 
 jest.mock("./geoLocateCurrentPosition");
 

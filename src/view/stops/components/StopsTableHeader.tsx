@@ -1,14 +1,15 @@
 import cx from "classnames";
 import React from "react";
-import { Route, StopLocation } from "../../../api/trimet/types";
+import { Route } from "../../../api/trimet/types";
 import { LoadArrivalData } from "../../../store/action/stopActions";
+import { StopLocationWithDistance } from "../../../store/reducers/stopsReducer";
 import StopBookmarkControlContainer from "../containers/StopBookmarkControlContainer";
 import ReloadIntervalCoordinator from "./ReloadIntervalCoordinator";
 import StopInfo from "./StopInfo";
 import "./StopsTableHeader.css";
 
 interface Props {
-  stopLocation: StopLocation;
+  stopLocation: StopLocationWithDistance;
   loadArrivalData: LoadArrivalData;
   loading: boolean;
   showArrivals: boolean;

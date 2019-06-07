@@ -1,8 +1,9 @@
 import { createSelector } from "reselect";
 import { RootState } from "../reducers";
 
-const currentLocation = (state: RootState) =>
-  state.currentLocationReducer.coordinates;
+const currentLocation = (state: RootState) => {
+  return state.currentLocationReducer.coordinates;
+};
 
 export const currentLocationSelector = createSelector(
   currentLocation,

@@ -1,10 +1,11 @@
 // tslint:disable:no-submodule-imports
 import { call, put } from "redux-saga/effects";
+import getCurrentPosition from "../../api/geolocation/getCurrentPosition";
 // tslint:enable:no-submodule-imports
-import { getCurrentPosition } from "../../api/geolocation";
-import { getNearbyStops } from "../../api/trimet/stops";
-import { LOAD_STOP_COMPLETE, LOAD_STOPS } from "../constants";
+import { CURRENT_LOCATION_LOAD_COMPLETE, LOAD_STOPS } from "../constants";
 import { loadStopData } from "./stopSagas";
+
+jest.mock("../../api/geolocation/getCurrentPosition");
 
 describe("stopSagas", () => {
   describe("loadStopData", () => {
@@ -17,25 +18,54 @@ describe("stopSagas", () => {
     });
 
     it("calls current position api", () => {
-      expect(stopData.next().value).toEqual(call(getCurrentPosition));
-    });
-
-    it("calls nearbyStops api", () => {
-      const coords = {
-        coords: { latitude: 123, longitude: 123 }
-      };
-      expect(stopData.next(coords).value).toEqual(
-        call(getNearbyStops, coords, 123)
+      getCurrentPosition.mockReturnValue(
+        Promise.resolve({
+          coords: {
+            latitude: 5678,
+            longitude: 7838
+          }
+        })
       );
+
+      getCurrentPosition().then(location => {
+        expect(stopData.next().value).toEqual(call(getCurrentPosition));
+      });
     });
 
     it("dispatches the load stops complete event", () => {
-      expect(stopData.next().value).toEqual(
-        put({
-          payload: {},
-          type: LOAD_STOP_COMPLETE
-        })
-      );
+      getCurrentPosition().then(location => {
+        expect(stopData.next(location).value).toEqual(
+          put({
+            payload: {
+              location: {
+                coords: {
+                  latitude: 5678,
+                  longitude: 7838
+                }
+              }
+            },
+            type: CURRENT_LOCATION_LOAD_COMPLETE
+          })
+        );
+      });
     });
+
+    // it("calls nearbyStops api", () => {
+    //   const coords = {
+    //     coords: { latitude: 123, longitude: 123 }
+    //   };
+    //   expect(stopData.next(coords).value).toEqual(
+    //     call(getNearbyStops, coords, 123)
+    //   );
+    // });
+    //
+    // it("dispatches a LOAD_STOPS_COMPLETE event", () => {
+    //   const coords = {
+    //     coords: { latitude: 123, longitude: 123 }
+    //   };
+    //   expect(stopData.next(coords).value).toEqual(
+    //     call(getNearbyStops, coords, 123)
+    //   );
+    // });
   });
 });

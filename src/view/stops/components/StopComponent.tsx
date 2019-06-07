@@ -1,11 +1,12 @@
 import React from "react";
-import { Route, StopLocation } from "../../../api/trimet/types";
+import { Route } from "../../../api/trimet/types";
+import { StopLocationWithDistance } from "../../../store/reducers/stopsReducer";
 import ArrivalsContainer from "../../arrivals/containers/ArrivalsContainer";
 import "../Stops.css";
 import StopsTableHeader from "./StopsTableHeader";
 
 interface Props {
-  stopLocation: StopLocation;
+  stopLocation: StopLocationWithDistance;
   loadArrivalData: (locationId: number) => TimerHandler;
   locationId: number;
   loading: boolean;

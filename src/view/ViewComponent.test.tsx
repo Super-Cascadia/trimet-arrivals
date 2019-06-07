@@ -7,6 +7,9 @@ import {
   NEARBY_STOPS_VIEW
 } from "../store/reducers/viewReducer";
 import { ProviderMock } from "../test/util";
+
+window.URL.createObjectURL = jest.fn();
+
 import ViewComponent from "./ViewComponent";
 
 const onInitialLoad = () => {
@@ -64,6 +67,9 @@ describe("ViewComponent", () => {
     it("shows the Nearby Stops View", () => {
       function mockStore() {
         const baseState = {
+          currentLocationReducer: {
+            coordinates: undefined
+          },
           stopsReducer: {
             loading: false
           },
@@ -98,6 +104,9 @@ describe("ViewComponent", () => {
     it("shows the Nearby Stops View", () => {
       function mockStore() {
         const baseState = {
+          currentLocationReducer: {
+            coordinates: undefined
+          },
           stopsReducer: {
             loading: false
           },
@@ -150,6 +159,9 @@ describe("ViewComponent", () => {
         const baseState = {
           bookmarkSectionReducer: {
             bookmarkSectionInputName: ""
+          },
+          currentLocationReducer: {
+            coordinates: undefined
           },
           stopsReducer: {
             loading: false

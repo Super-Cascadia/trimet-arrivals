@@ -49,12 +49,22 @@ describe("stopsReducer", () => {
 
     const action = {
       payload: {
+        location: {
+          coords: {
+            latitude: 0,
+            longitude: 0
+          }
+        },
         stopData: {
           location: [
             {
+              lat: 1,
+              lng: 1,
               locid: 123
             },
             {
+              lat: 2,
+              lng: 2,
               locid: 456
             }
           ]
@@ -76,9 +86,17 @@ describe("stopsReducer", () => {
     it("formats the stop locations into a dictionary format", () => {
       expect(result.stopLocations).toEqual({
         123: {
+          distance: 157426,
+          distanceOrder: 0,
+          lat: 1,
+          lng: 1,
           locid: 123
         },
         456: {
+          distance: 314827,
+          distanceOrder: 1,
+          lat: 2,
+          lng: 2,
           locid: 456
         }
       });
