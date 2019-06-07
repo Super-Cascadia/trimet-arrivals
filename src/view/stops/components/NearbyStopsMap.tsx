@@ -1,4 +1,4 @@
-import { map } from "lodash";
+import { isEmpty, map } from "lodash";
 import mapboxgl from "mapbox-gl";
 import React, { Component } from "react";
 import { StopLocation } from "../../../api/trimet/types";
@@ -15,54 +15,35 @@ interface Props {
 }
 
 export default class NearbyStopsMap extends Component<Props> {
-  private static setPopupsForMarkers(el, marker, mapBoxMap) {
-    // make a marker for each feature and add to the map
-    new mapboxgl.Marker(el)
-      .setLngLat(marker.geometry.coordinates)
-      .addTo(mapBoxMap);
-
-    new mapboxgl.Marker(el)
-      .setLngLat(marker.geometry.coordinates)
-      .setPopup(
-        new mapboxgl.Popup({ offset: 25 }) // add popups
-          .setHTML(
-            "<h3>" +
-              marker.properties.title +
-              "</h3><p>" +
-              marker.properties.description +
-              "</p>"
-          )
-      )
-      .addTo(mapBoxMap);
-  }
-
   private static setCurrentLocationMarker(
     mapBoxMap,
     currentLocation: LatLngCoords
   ) {
-    mapBoxMap.addLayer({
-      id: "currentlocation",
-      layout: {
-        "icon-image": "rocket-15"
-      },
-      source: {
-        data: {
-          features: [
-            {
-              geometry: {
-                coordinates: currentLocation,
-                type: "Point"
-              },
-              properties: {},
-              type: "Feature"
-            }
-          ],
-          type: "FeatureCollection"
+    if (currentLocation) {
+      mapBoxMap.addLayer({
+        id: "currentlocation",
+        layout: {
+          "icon-image": "rocket-15"
         },
-        type: "geojson"
-      },
-      type: "symbol"
-    });
+        source: {
+          data: {
+            features: [
+              {
+                geometry: {
+                  coordinates: currentLocation,
+                  type: "Point"
+                },
+                properties: {},
+                type: "Feature"
+              }
+            ],
+            type: "FeatureCollection"
+          },
+          type: "geojson"
+        },
+        type: "symbol"
+      });
+    }
   }
 
   private static setLocations(stopLocations: StopLocationsDictionary) {
@@ -99,7 +80,10 @@ export default class NearbyStopsMap extends Component<Props> {
     return <div style={style} ref={el => (this.mapContainer = el)} />;
   }
 
-  private initializeMap(currentLocation: LatLngCoords, stopLocations) {
+  private initializeMap(
+    currentLocation: LatLngCoords,
+    stopLocations: StopLocationsDictionary
+  ) {
     this.map = new mapboxgl.Map({
       center: currentLocation,
       container: this.mapContainer,
@@ -112,7 +96,7 @@ export default class NearbyStopsMap extends Component<Props> {
 
   private setMapFeatures(
     mapBoxMap,
-    stopLocations,
+    stopLocations: StopLocationsDictionary,
     currentLocation: LatLngCoords
   ) {
     mapBoxMap.on("load", () => {
@@ -126,6 +110,10 @@ export default class NearbyStopsMap extends Component<Props> {
     mapBoxMap,
     stopLocations: StopLocationsDictionary
   ) {
+    if (stopLocations) {
+      return null;
+    }
+
     mapBoxMap.addLayer({
       id: "symbols",
       layout: {

@@ -14,7 +14,7 @@ function portlandGeoLocation(): Promise<Location> {
   return Promise.resolve(location);
 }
 
-export function getCurrentPosition(): Promise<Location> {
+export default function getCurrentPosition(): Promise<Location> {
   if (useDefaultPortlandLocation()) {
     return portlandGeoLocation();
   }
