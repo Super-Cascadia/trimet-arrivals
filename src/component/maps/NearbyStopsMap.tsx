@@ -59,6 +59,52 @@ export default class NearbyStopsMap extends Component<Props> {
     });
   }
 
+  private static setNearbyStopMarkers(
+    mapBoxMap,
+    stopLocations: StopLocationsDictionary
+  ) {
+    mapBoxMap.addLayer({
+      id: "symbols",
+      layout: {
+        "icon-image": "bus-15"
+      },
+      source: {
+        data: {
+          features: NearbyStopsMap.setLocations(stopLocations),
+          type: "FeatureCollection"
+        },
+        type: "geojson"
+      },
+      type: "symbol"
+    });
+
+    // Center the map on the coordinates of any clicked symbol from the 'symbols' layer.
+    mapBoxMap.on("click", "symbols", e => {
+      mapBoxMap.flyTo({ center: e.features[0].geometry.coordinates });
+    });
+
+    // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
+    mapBoxMap.on("mouseenter", "symbols", () => {
+      mapBoxMap.getCanvas().style.cursor = "pointer";
+    });
+
+    // Change it back to a pointer when it leaves.
+    mapBoxMap.on("mouseleave", "symbols", () => {
+      mapBoxMap.getCanvas().style.cursor = "";
+    });
+  }
+
+  private static setMapFeatures(
+    mapBoxMap,
+    stopLocations: StopLocationsDictionary,
+    currentLocation: LatLngCoords
+  ) {
+    mapBoxMap.on("load", () => {
+      NearbyStopsMap.setNearbyStopMarkers(mapBoxMap, stopLocations);
+      NearbyStopsMap.setCurrentLocationMarker(mapBoxMap, currentLocation);
+    });
+  }
+
   private mapContainer: HTMLDivElement;
   private map: mapboxgl.Map;
 
@@ -92,53 +138,6 @@ export default class NearbyStopsMap extends Component<Props> {
       zoom: 15.25
     });
 
-    this.setMapFeatures(this.map, stopLocations, currentLocation);
-  }
-
-  private setMapFeatures(
-    mapBoxMap,
-    stopLocations: StopLocationsDictionary,
-    currentLocation: LatLngCoords
-  ) {
-    mapBoxMap.on("load", () => {
-      this.setNearbyStopMarkers(mapBoxMap, stopLocations);
-
-      NearbyStopsMap.setCurrentLocationMarker(mapBoxMap, currentLocation);
-    });
-  }
-
-  private setNearbyStopMarkers(
-    mapBoxMap,
-    stopLocations: StopLocationsDictionary
-  ) {
-    mapBoxMap.addLayer({
-      id: "symbols",
-      layout: {
-        "icon-image": "bus-15"
-      },
-      source: {
-        data: {
-          features: NearbyStopsMap.setLocations(stopLocations),
-          type: "FeatureCollection"
-        },
-        type: "geojson"
-      },
-      type: "symbol"
-    });
-
-    // Center the map on the coordinates of any clicked symbol from the 'symbols' layer.
-    mapBoxMap.on("click", "symbols", e => {
-      mapBoxMap.flyTo({ center: e.features[0].geometry.coordinates });
-    });
-
-    // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
-    mapBoxMap.on("mouseenter", "symbols", () => {
-      mapBoxMap.getCanvas().style.cursor = "pointer";
-    });
-
-    // Change it back to a pointer when it leaves.
-    mapBoxMap.on("mouseleave", "symbols", () => {
-      mapBoxMap.getCanvas().style.cursor = "";
-    });
+    NearbyStopsMap.setMapFeatures(this.map, stopLocations, currentLocation);
   }
 }
