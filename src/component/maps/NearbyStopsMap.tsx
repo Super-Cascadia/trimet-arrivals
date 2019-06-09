@@ -1,8 +1,8 @@
-import { isEmpty, map } from "lodash";
+import { map } from "lodash";
 import mapboxgl from "mapbox-gl";
 import React, { Component } from "react";
-import { StopLocation } from "../../../api/trimet/types";
-import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
+import { StopLocation } from "../../api/trimet/types";
+import { StopLocationsDictionary } from "../../store/reducers/stopsReducer";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiamFtZXNvbm55ZWhvbHQiLCJhIjoiY2p3NWoyamV0MTk1dDQ0cGNmdGZkenViMiJ9.TqDD3r62vlPzVgPnYjocsg";
@@ -85,6 +85,7 @@ export default class NearbyStopsMap extends Component<Props> {
     stopLocations: StopLocationsDictionary
   ) {
     this.map = new mapboxgl.Map({
+      // @ts-ignore
       center: currentLocation,
       container: this.mapContainer,
       style: "mapbox://styles/mapbox/streets-v9",
@@ -110,10 +111,6 @@ export default class NearbyStopsMap extends Component<Props> {
     mapBoxMap,
     stopLocations: StopLocationsDictionary
   ) {
-    if (stopLocations) {
-      return null;
-    }
-
     mapBoxMap.addLayer({
       id: "symbols",
       layout: {
