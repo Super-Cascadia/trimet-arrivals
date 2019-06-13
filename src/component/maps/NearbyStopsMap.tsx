@@ -110,6 +110,12 @@ export default class NearbyStopsMap extends Component<Props> {
 
   public componentDidMount() {
     this.initializeMap(this.props.currentLocation, this.props.stopLocations);
+
+    fetch("../../scripts/routes/1/1_0.json")
+      .then(response => response.json())
+      // tslint:disable
+      .then(data => console.log(data));
+    // tslint:enable
   }
 
   public componentWillUnmount() {
