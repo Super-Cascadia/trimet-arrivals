@@ -1,7 +1,21 @@
 import { map } from "lodash";
+import mapboxgl from "mapbox-gl";
 import { StopLocation } from "../../../api/trimet/types";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import { LatLngCoords } from "../NearbyStopsMap";
+
+export function mountMapCenteredOnLocation(
+  mapContainer,
+  currentLocation: LatLngCoords
+) {
+  return new mapboxgl.Map({
+    // @ts-ignore
+    center: currentLocation,
+    container: mapContainer,
+    style: "mapbox://styles/mapbox/streets-v9",
+    zoom: 15.25
+  });
+}
 
 export function setCurrentLocationMarker(
   mapBoxMap,
