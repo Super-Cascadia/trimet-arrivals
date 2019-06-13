@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import data from "../../data/1/1_0.json";
 import { StopLocationsDictionary } from "../../store/reducers/stopsReducer";
 import {
+  mountMapCenteredOnLocation,
   setCurrentLocationMarker,
   setNearbyStopMarkers
 } from "./util/mapboxUtils";
@@ -47,13 +48,7 @@ export default class NearbyStopsMap extends Component<Props> {
     console.log(data);
     // tslint:enable
 
-    this.map = new mapboxgl.Map({
-      // @ts-ignore
-      center: currentLocation,
-      container: this.mapContainer,
-      style: "mapbox://styles/mapbox/streets-v9",
-      zoom: 15.25
-    });
+    this.map = mountMapCenteredOnLocation(this.mapContainer, currentLocation);
 
     this.map.on("load", () => {
       setNearbyStopMarkers(this.map, stopLocations);
