@@ -5,7 +5,8 @@ import { StopLocationsDictionary } from "../../store/reducers/stopsReducer";
 import {
   mountMapCenteredOnLocation,
   setCurrentLocationMarker,
-  setNearbyStopMarkers
+  setNearbyStopMarkers,
+  setRoutes
 } from "./util/mapboxUtils";
 
 mapboxgl.accessToken =
@@ -53,6 +54,7 @@ export default class NearbyStopsMap extends Component<Props> {
     this.map.on("load", () => {
       setNearbyStopMarkers(this.map, stopLocations);
       setCurrentLocationMarker(this.map, currentLocation);
+      setRoutes(this.map, stopLocations);
     });
   }
 }

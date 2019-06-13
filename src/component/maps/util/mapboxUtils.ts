@@ -95,3 +95,24 @@ export function setNearbyStopMarkers(
     mapBoxMap.getCanvas().style.cursor = "";
   });
 }
+
+function getRouteGeometry() {
+  return import("../../../data/6/6_0.json");
+}
+
+export function setRoutes(mapBoxMap, stopLocations: StopLocationsDictionary) {
+  const routeIdentifier = "6_0";
+  getRouteGeometry().then(routeGeoJSON => {
+    mapBoxMap.addLayer({
+      id: routeIdentifier,
+      source: {
+        data: {
+          geometry: routeGeoJSON.geometry,
+          type: "Feature"
+        },
+        type: "geojson"
+      },
+      type: "line"
+    });
+  });
+}
