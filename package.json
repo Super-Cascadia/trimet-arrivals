@@ -8,6 +8,7 @@
     "@commitlint/cli": "^7.5.2",
     "@commitlint/config-conventional": "^7.5.0",
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
+    "@mapbox/togeojson": "^0.16.0",
     "@types/classnames": "2.2.7",
     "@types/enzyme": "^3.1.18",
     "@types/geolib": "^2.0.23",
@@ -69,7 +70,8 @@
     "prettier:fix": "prettier --write 'src/**/*.ts*'",
     "tslint": "tslint 'src/**/*.ts*'",
     "tslint:fix": "tslint --fix 'src/**/*.ts*'",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "trimet": "node ./scripts/split_routes.js"
   },
   "jest": {
     "collectCoverageFrom": [
@@ -104,6 +106,7 @@
     "husky": "^2.0.0",
     "lint-staged": "^8.1.4",
     "prettier": "1.17.0",
-    "semantic-release": "^15.13.3"
+    "semantic-release": "^15.13.3",
+    "ts-node": "^8.2.0"
   }
 }
