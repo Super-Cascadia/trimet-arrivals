@@ -100,28 +100,32 @@ function getRouteGeometry() {
   return import("../../../data/6/6_0.json");
 }
 
+function getDirectionsOnRoute(route: Route, routeId: number) {
+  return map(route.dir, (direction: Direction) => {
+    const directionId = direction.dir;
+    return { routeId, directionId };
+  });
+}
+
+function getRoutes(stopLocation) {
+  return reduce(
+    stopLocation.route,
+    (result: any, route: Route) => {
+      const routeId = route.route;
+      const directions = getDirectionsOnRoute(route, routeId);
+
+      return concat(result, directions);
+    },
+    []
+  );
+}
+
 function getRoutesFromStopLocations(stopLocations: StopLocationsDictionary) {
   return reduce(
     stopLocations,
     (routeResult: any, stopLocation) => {
-      const routes = reduce(
-        stopLocation.route,
-        (result: any, route: Route) => {
-          const routeId = route.route;
-
-          const directions = map(route.dir, (direction: Direction) => {
-            const directionId = direction.dir;
-            return { routeId, directionId };
-          });
-
-          return concat(result, directions);
-        },
-        []
-      );
-
-      const concatResult = concat(routeResult, routes);
-
-      return concatResult;
+      const routes = getRoutes(stopLocation);
+      return concat(routeResult, routes);
     },
     []
   );
