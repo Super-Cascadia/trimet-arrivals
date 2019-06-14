@@ -157,6 +157,16 @@ function addMapboxLayer(mapBoxMap, routeIdentifier: string, promise) {
   });
 }
 
+function addRouteLayers(mapBoxMap, returnedPromises: any[]) {
+  each(returnedPromises, promise => {
+    if (!promise.code) {
+      const { route_number, direction } = promise.properties;
+      const routeIdentifier = `${route_number}_${direction}`;
+      addMapboxLayer(mapBoxMap, routeIdentifier, promise);
+    }
+  });
+}
+
 export function setRoutes(mapBoxMap, stopLocations: StopLocationsDictionary) {
   const routes = getRoutesFromStopLocations(stopLocations);
   const promises = [];
@@ -168,13 +178,7 @@ export function setRoutes(mapBoxMap, stopLocations: StopLocationsDictionary) {
 
   Promise.all(promises)
     .then((returnedPromises: any[]) => {
-      each(returnedPromises, promise => {
-        if (!promise.code) {
-          const { route_number, direction } = promise.properties;
-          const routeIdentifier = `${route_number}_${direction}`;
-          addMapboxLayer(mapBoxMap, routeIdentifier, promise);
-        }
-      });
+      addRouteLayers(mapBoxMap, returnedPromises);
     })
     .catch(err => {
       // tslint:disable
