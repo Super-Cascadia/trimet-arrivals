@@ -1,6 +1,6 @@
-import { map } from "lodash";
+import { concat, map, reduce } from "lodash";
 import mapboxgl from "mapbox-gl";
-import { StopLocation } from "../../../api/trimet/types";
+import { Direction, Route, StopLocation } from "../../../api/trimet/types";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import { LatLngCoords } from "../NearbyStopsMap";
 
@@ -100,8 +100,37 @@ function getRouteGeometry() {
   return import("../../../data/6/6_0.json");
 }
 
+function getRoutesFromStopLocations(stopLocations: StopLocationsDictionary) {
+  return reduce(
+    stopLocations,
+    (routeResult: any, stopLocation) => {
+      const routes = reduce(
+        stopLocation.route,
+        (result: any, route: Route) => {
+          const routeId = route.route;
+
+          const directions = map(route.dir, (direction: Direction) => {
+            const directionId = direction.dir;
+            return { routeId, directionId };
+          });
+
+          return concat(result, directions);
+        },
+        []
+      );
+
+      const concatResult = concat(routeResult, routes);
+
+      return concatResult;
+    },
+    []
+  );
+}
+
 export function setRoutes(mapBoxMap, stopLocations: StopLocationsDictionary) {
+  const routes = getRoutesFromStopLocations(stopLocations);
   const routeIdentifier = "6_0";
+
   getRouteGeometry().then(routeGeoJSON => {
     mapBoxMap.addLayer({
       id: routeIdentifier,
