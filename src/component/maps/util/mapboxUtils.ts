@@ -1,4 +1,4 @@
-import { concat, map, reduce } from "lodash";
+import { concat, each, map, reduce } from "lodash";
 import mapboxgl from "mapbox-gl";
 import { Direction, Route, StopLocation } from "../../../api/trimet/types";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
@@ -96,11 +96,7 @@ export function setNearbyStopMarkers(
   });
 }
 
-function getRouteGeometry() {
-  return import("../../../data/6/6_0.json");
-}
-
-function getDirectionsOnRoute(route: Route, routeId: number) {
+function getDirectionsOnRoute(route: Route, routeId: number): RouteDirection[] {
   return map(route.dir, (direction: Direction) => {
     const directionId = direction.dir;
     return { routeId, directionId };
@@ -120,7 +116,14 @@ function getRoutes(stopLocation) {
   );
 }
 
-function getRoutesFromStopLocations(stopLocations: StopLocationsDictionary) {
+interface RouteDirection {
+  routeId: number;
+  directionId: number;
+}
+
+function getRoutesFromStopLocations(
+  stopLocations: StopLocationsDictionary
+): RouteDirection[] {
   return reduce(
     stopLocations,
     (routeResult: any, stopLocation) => {
@@ -131,21 +134,50 @@ function getRoutesFromStopLocations(stopLocations: StopLocationsDictionary) {
   );
 }
 
+function getRouteGeometry(route: RouteDirection) {
+  const { routeId, directionId } = route;
+  return import(
+    `../../../data/${routeId}/${routeId}_${directionId}.json`
+  ).catch(e => {
+    return e;
+  });
+}
+
+function addMapboxLayer(mapBoxMap, routeIdentifier: string, promise) {
+  mapBoxMap.addLayer({
+    id: routeIdentifier,
+    source: {
+      data: {
+        geometry: promise.geometry,
+        type: "Feature"
+      },
+      type: "geojson"
+    },
+    type: "line"
+  });
+}
+
 export function setRoutes(mapBoxMap, stopLocations: StopLocationsDictionary) {
   const routes = getRoutesFromStopLocations(stopLocations);
-  const routeIdentifier = "6_0";
+  const promises = [];
 
-  getRouteGeometry().then(routeGeoJSON => {
-    mapBoxMap.addLayer({
-      id: routeIdentifier,
-      source: {
-        data: {
-          geometry: routeGeoJSON.geometry,
-          type: "Feature"
-        },
-        type: "geojson"
-      },
-      type: "line"
-    });
+  each(routes, (route: RouteDirection) => {
+    const promise = getRouteGeometry(route);
+    promises.push(promise);
   });
+
+  Promise.all(promises)
+    .then((returnedPromises: any[]) => {
+      each(returnedPromises, promise => {
+        if (!promise.code) {
+          const { route_number, direction } = promise.properties;
+          const routeIdentifier = `${route_number}_${direction}`;
+          addMapboxLayer(mapBoxMap, routeIdentifier, promise);
+        }
+      });
+    })
+    .catch(err => {
+      // tslint:disable
+      console.error(err);
+    });
 }
