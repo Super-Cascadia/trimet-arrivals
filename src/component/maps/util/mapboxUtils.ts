@@ -103,10 +103,10 @@ function getDirectionsOnRoute(route: Route, routeId: number): RouteDirection[] {
   });
 }
 
-function getRoutes(stopLocation) {
+function getRoutes(stopLocation: StopLocation): RouteDirection[] {
   return reduce(
     stopLocation.route,
-    (result: any, route: Route) => {
+    (result: RouteDirection[], route: Route) => {
       const routeId = route.route;
       const directions = getDirectionsOnRoute(route, routeId);
 
@@ -126,8 +126,8 @@ function getRoutesFromStopLocations(
 ): RouteDirection[] {
   return reduce(
     stopLocations,
-    (routeResult: any, stopLocation) => {
-      const routes = getRoutes(stopLocation);
+    (routeResult: RouteDirection[], stopLocation: StopLocation) => {
+      const routes: RouteDirection[] = getRoutes(stopLocation);
       return concat(routeResult, routes);
     },
     []
