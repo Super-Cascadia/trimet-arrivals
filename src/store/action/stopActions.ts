@@ -1,8 +1,8 @@
 import {
   LOAD_ARRIVALS_DATA_REQUEST,
-  LOAD_STOP_DATA_REQUEST
+  LOAD_STOP_DATA_REQUEST,
+  UPDATE_VIEW_REQUEST
 } from "../constants";
-import { UPDATE_VIEW } from "../reducers/nearbyViewReducer";
 
 export type LoadStopData = (radiusInFeet: number) => void;
 export type LoadArrivalData = (locationId: number) => void;
@@ -19,5 +19,5 @@ export const loadStopDataRequest = (radiusInFeet: number) => ({
 
 export const changeViewRequest = (view: string) => ({
   payload: { view },
-  type: UPDATE_VIEW
+  type: UPDATE_VIEW_REQUEST
 });
