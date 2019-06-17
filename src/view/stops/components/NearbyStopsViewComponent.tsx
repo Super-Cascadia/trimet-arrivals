@@ -12,7 +12,9 @@ import {
   RouteDirection,
   StopLocationsDictionary
 } from "../../../store/reducers/stopsReducer";
+import { NEARBY_STOPS_VIEW } from "../../../store/reducers/viewReducer";
 import "../Stops.css";
+import Routes from "./Routes";
 import Stops from "./Stops";
 
 interface Props {
@@ -22,6 +24,7 @@ interface Props {
   nearbyRoutes: RouteDirection[];
   currentLocation: number[];
   activeView: string;
+  changeView: (view: string) => void;
 }
 
 interface State {
@@ -43,6 +46,16 @@ export default class NearbyStopsViewComponent extends React.Component<
 
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.showStops = this.showStops.bind(this);
+    this.showRoutes = this.showRoutes.bind(this);
+  }
+
+  public showStops() {
+    this.props.changeView(NEARBY_STOPS_VIEW);
+  }
+
+  public showRoutes() {
+    this.props.changeView(SHOW_NEARBY_ROUTES);
   }
 
   public componentDidMount() {
@@ -75,8 +88,9 @@ export default class NearbyStopsViewComponent extends React.Component<
                     stopLocations={stopLocations}
                     nearbyRoutes={nearbyRoutes}
                   />
+                  {this.getNav()}
                   {activeView === SHOW_NEARBY_ROUTES && (
-                    <span>Routes go here</span>
+                    <Routes nearbyRoutes={nearbyRoutes} />
                   )}
                   {activeView === SHOW_NEARBY_STOPS && (
                     <Stops
@@ -107,6 +121,21 @@ export default class NearbyStopsViewComponent extends React.Component<
       modalOpen: true,
       routeInfo: route
     });
+  }
+
+  private getNav() {
+    return (
+      <nav>
+        <ul>
+          <li>
+            <a onClick={this.showStops}>Stops</a>
+          </li>
+          <li>
+            <a onClick={this.showRoutes}>Routes</a>
+          </li>
+        </ul>
+      </nav>
+    );
   }
 
   private showModal() {
