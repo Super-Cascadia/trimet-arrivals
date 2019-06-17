@@ -1,10 +1,8 @@
 import { each, map } from "lodash";
 import mapboxgl from "mapbox-gl";
 import { StopLocation } from "../../../api/trimet/types";
-import {
-  RouteDirection,
-  StopLocationsDictionary
-} from "../../../store/reducers/stopsReducer";
+import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
+import { RouteDirection } from "../../../store/reducers/util/getRoutesFromStopLocations";
 import { LatLngCoords } from "../NearbyStopsMap";
 
 export function mountMapCenteredOnLocation(
