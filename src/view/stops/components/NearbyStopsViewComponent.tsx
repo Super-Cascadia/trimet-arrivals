@@ -75,17 +75,7 @@ export default class NearbyStopsViewComponent extends React.Component<
                     onRouteIndicatorClick={this.openModal}
                   />
                 </section>
-                {this.state.modalOpen && (
-                  <div className="flex-info">
-                    <aside id="modal-root" className="modal-wrapper" />
-                    <Modal>
-                      <ModalContent
-                        route={this.state.routeInfo}
-                        closeModal={this.closeModal}
-                      />
-                    </Modal>
-                  </div>
-                )}
+                {this.state.modalOpen && this.showModal()}
               </div>
             </main>
           </div>
@@ -106,5 +96,19 @@ export default class NearbyStopsViewComponent extends React.Component<
       modalOpen: true,
       routeInfo: route
     });
+  }
+
+  private showModal() {
+    return (
+      <div className="flex-info">
+        <aside id="modal-root" className="modal-wrapper" />
+        <Modal>
+          <ModalContent
+            route={this.state.routeInfo}
+            closeModal={this.closeModal}
+          />
+        </Modal>
+      </div>
+    );
   }
 }
