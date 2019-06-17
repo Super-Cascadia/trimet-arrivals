@@ -12,7 +12,9 @@ import {
   LOAD_STOP_COMPLETE,
   LOAD_STOPS
 } from "../constants";
-import getRoutesFromStopLocations from "./util/getRoutesFromStopLocations";
+import getRoutesFromStopLocations, {
+  RouteDirection
+} from "./util/getRoutesFromStopLocations";
 
 export interface StopsReducerState {
   loading: boolean;
@@ -82,11 +84,6 @@ const initialState = {
   loading: false,
   timeOfLastLoad: ""
 };
-
-export interface RouteDirection {
-  routeId: number;
-  directionId: number;
-}
 
 function getLoadStopCompleteState(action: Action, state) {
   const { payload } = action;
