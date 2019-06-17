@@ -3,6 +3,7 @@ import { loadStopDataRequest } from "../../../store/action/stopActions";
 import { RootState } from "../../../store/reducers";
 import { currentLocationSelector } from "../../../store/selectors/locationSelectors";
 import {
+  allNearbyRoutesSelector,
   allStopLocationsSelector,
   stopsLoadingSelector
 } from "../../../store/selectors/stopSelectors";
@@ -12,6 +13,7 @@ const mapStateToProps = (state: RootState) => {
   return {
     currentLocation: currentLocationSelector(state),
     loading: stopsLoadingSelector(state),
+    nearbyRoutes: allNearbyRoutesSelector(state),
     stopLocations: allStopLocationsSelector(state)
   };
 };

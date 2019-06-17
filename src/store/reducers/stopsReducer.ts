@@ -1,9 +1,11 @@
 import { getDistance } from "geolib";
-import { map, mapKeys } from "lodash";
+import { concat, map, mapKeys, reduce } from "lodash";
 import moment from "moment";
 import {
   Coords,
+  Direction,
   Location,
+  Route,
   StopData,
   StopLocation
 } from "../../api/trimet/types";
@@ -16,6 +18,7 @@ import {
 export interface StopsReducerState {
   loading: boolean;
   stopLocations: StopLocationsDictionary;
+  nearbyRoutes: RouteDirection[];
   timeOfLastLoad: string;
 }
 
@@ -81,15 +84,55 @@ const initialState = {
   timeOfLastLoad: ""
 };
 
+export interface RouteDirection {
+  routeId: number;
+  directionId: number;
+}
+
+function getDirectionsOnRoute(route: Route, routeId: number): RouteDirection[] {
+  return map(route.dir, (direction: Direction) => {
+    const directionId = direction.dir;
+    return { routeId, directionId };
+  });
+}
+
+function getRoutes(stopLocation: StopLocation): RouteDirection[] {
+  return reduce(
+    stopLocation.route,
+    (result: RouteDirection[], route: Route) => {
+      const routeId = route.route;
+      const directions = getDirectionsOnRoute(route, routeId);
+
+      return concat(result, directions);
+    },
+    []
+  );
+}
+
+function getRoutesFromStopLocations(
+  stopLocations: StopLocationsDictionary
+): RouteDirection[] {
+  return reduce(
+    stopLocations,
+    (routeResult: RouteDirection[], stopLocation: StopLocation) => {
+      const routes: RouteDirection[] = getRoutes(stopLocation);
+      return concat(routeResult, routes);
+    },
+    []
+  );
+}
+
 function getLoadStopCompleteState(action: Action, state) {
   const { payload } = action;
   const { location, stopData } = payload;
   const currentLocation = location.coords;
   const stopLocations = formatStopLocations(stopData.location, currentLocation);
+  const nearbyRoutes = getRoutesFromStopLocations(stopLocations);
 
   return {
     ...state,
     loading: false,
+    nearbyRoutes,
     stopLocations,
     timeOfLastLoad: moment().format("ddd, h:mm:ss a")
   };
