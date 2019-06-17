@@ -8,10 +8,8 @@ import {
   SHOW_NEARBY_ROUTES,
   SHOW_NEARBY_STOPS
 } from "../../../store/reducers/nearbyViewReducer";
-import {
-  RouteDirection,
-  StopLocationsDictionary
-} from "../../../store/reducers/stopsReducer";
+import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
+import { RouteDirection } from "../../../store/reducers/util/getRoutesFromStopLocations";
 import "../Stops.css";
 import Routes from "./Routes";
 import Stops from "./Stops";

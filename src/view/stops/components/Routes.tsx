@@ -1,6 +1,6 @@
 import { map } from "lodash";
 import React from "react";
-import { RouteDirection } from "../../../store/reducers/stopsReducer";
+import { RouteDirection } from "../../../store/reducers/util/getRoutesFromStopLocations";
 
 interface Props {
   nearbyRoutes: RouteDirection[];

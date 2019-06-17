@@ -1,6 +1,11 @@
 import { concat, map, reduce } from "lodash";
 import { Direction, Route, StopLocation } from "../../../api/trimet/types";
-import { RouteDirection, StopLocationsDictionary } from "../stopsReducer";
+import { StopLocationsDictionary } from "../stopsReducer";
+
+export interface RouteDirection {
+  routeId: number;
+  directionId: number;
+}
 
 function getDirectionsOnRoute(route: Route, routeId: number): RouteDirection[] {
   return map(route.dir, (direction: Direction) => {
