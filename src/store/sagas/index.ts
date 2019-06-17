@@ -7,7 +7,8 @@ import {
   INITIAL_LOAD_REQUEST,
   LOAD_ARRIVALS_DATA_REQUEST,
   LOAD_STOP_DATA_REQUEST,
-  REMOVE_BOOKMARK_STOP_REQUEST
+  REMOVE_BOOKMARK_STOP_REQUEST,
+  UPDATE_VIEW_REQUEST
 } from "../constants";
 import {
   BOOKMARK_SECTION_NAME_UPDATE_REQUEST,
@@ -29,7 +30,7 @@ import {
   updateSectionInputName,
   updateSelectedBookmarkSection
 } from "./bookmarkSectionSagas";
-import { loadStopData } from "./stopSagas";
+import { loadStopData, updateNearbyActiveView } from "./stopSagas";
 import { changeView, initialLoad } from "./viewSagas";
 
 export function* rootSaga() {
@@ -63,4 +64,6 @@ export function* rootSaga() {
     UPDATE_BOOKMARK_SECTION_NAME_REQUEST,
     updateBookmarkSectionName
   );
+  // @ts-ignore
+  yield takeEvery(UPDATE_VIEW_REQUEST, updateNearbyActiveView);
 }

@@ -9,6 +9,7 @@ import {
   LOAD_STOP_COMPLETE,
   LOAD_STOPS
 } from "../constants";
+import { UPDATE_VIEW } from "../reducers/nearbyViewReducer";
 
 interface Action {
   payload: {
@@ -28,6 +29,22 @@ export function* loadStopData(action: Action) {
       payload: { stopData, location, radiusInFeet },
       type: LOAD_STOP_COMPLETE
     });
+  } catch (e) {
+    // console.error(e);
+  }
+}
+
+interface UpdateNearbyActiveViewAction {
+  payload: {
+    view: string;
+  };
+}
+
+export function* updateNearbyActiveView(action: UpdateNearbyActiveViewAction) {
+  const activeView = action.payload.view;
+
+  try {
+    yield put({ type: UPDATE_VIEW, payload: { activeView } });
   } catch (e) {
     // console.error(e);
   }

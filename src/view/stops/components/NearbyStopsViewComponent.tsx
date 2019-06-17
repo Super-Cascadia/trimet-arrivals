@@ -12,7 +12,6 @@ import {
   RouteDirection,
   StopLocationsDictionary
 } from "../../../store/reducers/stopsReducer";
-import { NEARBY_STOPS_VIEW } from "../../../store/reducers/viewReducer";
 import "../Stops.css";
 import Routes from "./Routes";
 import Stops from "./Stops";
@@ -51,7 +50,7 @@ export default class NearbyStopsViewComponent extends React.Component<
   }
 
   public showStops() {
-    this.props.changeView(NEARBY_STOPS_VIEW);
+    this.props.changeView(SHOW_NEARBY_STOPS);
   }
 
   public showRoutes() {
