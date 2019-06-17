@@ -8,7 +8,7 @@ import { LOAD_BOOKMARK_SECTIONS_COMPLETE } from "../constants/bookmarkSections";
 import { changeView, initialLoad } from "./viewSagas";
 
 describe("viewSagas", () => {
-  describe("changeView", () => {
+  describe("showStops", () => {
     const changeViewData = changeView({
       payload: { activeView: "foo" }
     });
