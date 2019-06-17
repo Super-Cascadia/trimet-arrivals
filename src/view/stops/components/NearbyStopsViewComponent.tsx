@@ -5,6 +5,10 @@ import Modal from "../../../component/modal/Modal";
 import ModalContent from "../../../component/modal/ModalContent";
 import { LoadStopData } from "../../../store/action/stopActions";
 import {
+  SHOW_NEARBY_ROUTES,
+  SHOW_NEARBY_STOPS
+} from "../../../store/reducers/nearbyViewReducer";
+import {
   RouteDirection,
   StopLocationsDictionary
 } from "../../../store/reducers/stopsReducer";
@@ -17,6 +21,7 @@ interface Props {
   stopLocations: StopLocationsDictionary;
   nearbyRoutes: RouteDirection[];
   currentLocation: number[];
+  activeView: string;
 }
 
 interface State {
@@ -53,7 +58,8 @@ export default class NearbyStopsViewComponent extends React.Component<
       loading,
       stopLocations,
       currentLocation,
-      nearbyRoutes
+      nearbyRoutes,
+      activeView
     } = this.props;
 
     return (
@@ -69,11 +75,16 @@ export default class NearbyStopsViewComponent extends React.Component<
                     stopLocations={stopLocations}
                     nearbyRoutes={nearbyRoutes}
                   />
-                  <Stops
-                    stopLocations={stopLocations}
-                    showArrivals={false}
-                    onRouteIndicatorClick={this.openModal}
-                  />
+                  {activeView === SHOW_NEARBY_ROUTES && (
+                    <span>Routes go here</span>
+                  )}
+                  {activeView === SHOW_NEARBY_STOPS && (
+                    <Stops
+                      stopLocations={stopLocations}
+                      showArrivals={false}
+                      onRouteIndicatorClick={this.openModal}
+                    />
+                  )}
                 </section>
                 {this.state.modalOpen && this.showModal()}
               </div>

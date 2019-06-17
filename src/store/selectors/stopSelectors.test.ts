@@ -7,7 +7,7 @@ import {
 } from "./stopSelectors";
 
 describe("stopSelectors", () => {
-  describe("stopsLoadingSelector", () => {
+  describe("nearbyActiveViewSelector", () => {
     it("selects loading state for all stops", () => {
       const state = {
         stopsReducer: {
