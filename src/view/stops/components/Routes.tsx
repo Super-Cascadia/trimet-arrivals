@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default class Routes extends React.Component<Props> {
-  public getRoutes(routes: RouteDirection[]) {
+  public static getRoutes(routes: RouteDirection[]) {
     return map(routes, (route: RouteDirection) => {
       return (
         <div>
@@ -16,10 +16,11 @@ export default class Routes extends React.Component<Props> {
       );
     });
   }
+
   public render() {
     return (
       <div id="nearby-view-routes">
-        {this.getRoutes(this.props.nearbyRoutes)}
+        {Routes.getRoutes(this.props.nearbyRoutes)}
       </div>
     );
   }
