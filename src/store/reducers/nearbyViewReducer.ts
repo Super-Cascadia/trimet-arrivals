@@ -1,5 +1,6 @@
 export const SHOW_NEARBY_STOPS = "SHOW_NEARBY_STOPS";
 export const SHOW_NEARBY_ROUTES = "SHOW_NEARBY_ROUTES";
+export const UPDATE_VIEW = "UPDATE_VIEW";
 
 const initialState = {
   activeView: SHOW_NEARBY_STOPS
@@ -7,6 +8,9 @@ const initialState = {
 
 interface Action {
   type: string;
+  payload: {
+    activeView: string;
+  };
 }
 
 export interface NearbyReducerState {
@@ -15,15 +19,10 @@ export interface NearbyReducerState {
 
 const nearbyViewReducer = (state = initialState, action: Action) => {
   switch (action.type) {
-    case SHOW_NEARBY_STOPS:
+    case UPDATE_VIEW:
       return {
         ...state,
-        activeView: SHOW_NEARBY_STOPS
-      };
-    case SHOW_NEARBY_ROUTES:
-      return {
-        ...state,
-        activeView: SHOW_NEARBY_ROUTES
+        activeView: action.payload.activeView
       };
     default:
       return {
