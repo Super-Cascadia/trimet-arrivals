@@ -1,7 +1,10 @@
-import { concat, each, map, reduce } from "lodash";
+import { each, map } from "lodash";
 import mapboxgl from "mapbox-gl";
-import { Direction, Route, StopLocation } from "../../../api/trimet/types";
-import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
+import { StopLocation } from "../../../api/trimet/types";
+import {
+  RouteDirection,
+  StopLocationsDictionary
+} from "../../../store/reducers/stopsReducer";
 import { LatLngCoords } from "../NearbyStopsMap";
 
 export function mountMapCenteredOnLocation(
@@ -96,44 +99,6 @@ export function setNearbyStopMarkers(
   });
 }
 
-function getDirectionsOnRoute(route: Route, routeId: number): RouteDirection[] {
-  return map(route.dir, (direction: Direction) => {
-    const directionId = direction.dir;
-    return { routeId, directionId };
-  });
-}
-
-function getRoutes(stopLocation: StopLocation): RouteDirection[] {
-  return reduce(
-    stopLocation.route,
-    (result: RouteDirection[], route: Route) => {
-      const routeId = route.route;
-      const directions = getDirectionsOnRoute(route, routeId);
-
-      return concat(result, directions);
-    },
-    []
-  );
-}
-
-interface RouteDirection {
-  routeId: number;
-  directionId: number;
-}
-
-function getRoutesFromStopLocations(
-  stopLocations: StopLocationsDictionary
-): RouteDirection[] {
-  return reduce(
-    stopLocations,
-    (routeResult: RouteDirection[], stopLocation: StopLocation) => {
-      const routes: RouteDirection[] = getRoutes(stopLocation);
-      return concat(routeResult, routes);
-    },
-    []
-  );
-}
-
 function getRouteGeometry(route: RouteDirection) {
   const { routeId, directionId } = route;
   return import(
@@ -167,11 +132,10 @@ function addRouteLayers(mapBoxMap, returnedPromises: any[]) {
   });
 }
 
-export function setRoutes(mapBoxMap, stopLocations: StopLocationsDictionary) {
-  const routes = getRoutesFromStopLocations(stopLocations);
+export function setRoutes(mapBoxMap, nearbyRoutes: RouteDirection[]) {
   const promises = [];
 
-  each(routes, (route: RouteDirection) => {
+  each(nearbyRoutes, (route: RouteDirection) => {
     const promise = getRouteGeometry(route);
     promises.push(promise);
   });
