@@ -1,9 +1,13 @@
 import React from "react";
 import { Route } from "../../../api/trimet/types";
+import NearbyStopsMap from "../../../component/maps/NearbyStopsMap";
 import Modal from "../../../component/modal/Modal";
 import ModalContent from "../../../component/modal/ModalContent";
 import { LoadStopData } from "../../../store/action/stopActions";
-import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
+import {
+  RouteDirection,
+  StopLocationsDictionary
+} from "../../../store/reducers/stopsReducer";
 import "../Stops.css";
 import Stops from "./Stops";
 
@@ -11,6 +15,7 @@ interface Props {
   loadStopData: LoadStopData;
   loading: boolean;
   stopLocations: StopLocationsDictionary;
+  nearbyRoutes: RouteDirection[];
   currentLocation: number[];
 }
 
@@ -44,7 +49,12 @@ export default class NearbyStopsViewComponent extends React.Component<
   }
 
   public render() {
-    const { loading, stopLocations, currentLocation } = this.props;
+    const {
+      loading,
+      stopLocations,
+      currentLocation,
+      nearbyRoutes
+    } = this.props;
 
     return (
       <div id="nearby-stops-view-component">
@@ -54,11 +64,15 @@ export default class NearbyStopsViewComponent extends React.Component<
             <main>
               <div className="flex-container">
                 <section className="flex-stops">
+                  <NearbyStopsMap
+                    currentLocation={currentLocation}
+                    stopLocations={stopLocations}
+                    nearbyRoutes={nearbyRoutes}
+                  />
                   <Stops
                     stopLocations={stopLocations}
                     showArrivals={false}
                     onRouteIndicatorClick={this.openModal}
-                    currentLocation={currentLocation}
                   />
                 </section>
                 {this.state.modalOpen && (
