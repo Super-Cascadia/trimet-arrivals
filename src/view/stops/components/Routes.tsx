@@ -12,6 +12,7 @@ export default class Routes extends React.Component<Props> {
       return (
         <div>
           {route.routeId} | {route.directionId}
+          {route.routeDescription} | {route.routeDirectionDescription}
         </div>
       );
     });
