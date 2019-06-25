@@ -1,0 +1,87 @@
+@import '../../../styles/routes';
+
+.route-header {
+    background: rgba(255, 255, 255, 0.80);
+    padding: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    line-height: 35px;
+    position: relative;
+    display: flex;
+    margin: 0;
+    cursor: pointer;
+    color: white;
+    border-bottom: 1px solid black;
+
+    .route-indicator {
+        border: none;
+        font-size: 22px;
+        font-weight: bold;
+        text-align: left;
+        border: 0 !important;
+    }
+}
+
+.route-directions-indicator-wrapper {
+    padding: 0;
+    margin: 0;
+    min-width: 120px;
+}
+
+.route-directions-wrapper {
+    font-size: 16px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    line-height: 20px;
+    .route-direction:only-child {
+        line-height: 34px;
+    }
+}
+
+.direction-circle-wrapper {
+    margin-right: 5px;
+}
+
+.nearby-route {
+    background: $bus-blue !important;
+}
+
+.train-route-indicator {
+    margin-right: 5px;
+}
+
+.route-green {
+    background: $green !important;
+}
+
+.route-yellow {
+    background: $yellow !important;
+}
+
+.route-red {
+    background: $red !important;
+}
+
+.route-blue {
+    background: $blue !important;
+}
+
+.route-orange {
+    color: black;
+    background: $orange !important;
+}
+
+.route-lightgreen {
+    background: $light-green !important;
+}
+
+.route-pink {
+    background: $pink !important;
+}
+
+.route-cyan {
+    background: $cyan !important;
+}

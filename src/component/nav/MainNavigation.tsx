@@ -46,7 +46,7 @@ export default function MainNavigation({
       <ul className="view-header">
         <li className={nearbyStopsClass} onClick={updateToNearbyStopsView}>
           <FontAwesome name="map-marker" className="bookmark-icon" />
-          <a>Nearby Stops | {timeOfLastLoad}</a>
+          <a>Nearby | {timeOfLastLoad}</a>
         </li>
         <li className={bookmarksClass} onClick={updateToBookmarksView}>
           <a>
