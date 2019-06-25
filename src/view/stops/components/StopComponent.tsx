@@ -2,7 +2,7 @@ import React from "react";
 import { Route } from "../../../api/trimet/types";
 import { StopLocationWithDistance } from "../../../store/reducers/stopsReducer";
 import ArrivalsContainer from "../../arrivals/containers/ArrivalsContainer";
-import "../Stops.css";
+import "../Stops.scss";
 import StopsTableHeader from "./StopsTableHeader";
 
 interface Props {

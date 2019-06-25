@@ -27,3 +27,26 @@ export const ROUTE_DISPLAY: Routes = {
 interface Routes {
   [routeNumber: number]: string;
 }
+
+export const getRouteColor = (routeId: string) => {
+  switch (parseInt(routeId, 10)) {
+    case RED_LINE_NUMBER:
+      return "red";
+    case BLUE_LINE_NUMBER:
+      return "blue";
+    case GREEN_LINE_NUMBER:
+      return "green";
+    case YELLOW_LINE_NUMBER:
+      return "yellow";
+    case ORANGE_LINE_NUMBER:
+      return "orange";
+    case STREETCAR_B_LOOP:
+      return "#cc3e8b";
+    case STREETCAR_S_LINE:
+      return "#99C354";
+    case STREETCAR_CL_LINE_SHUTTLE || STREETCAR_A_LOOP:
+      return "#3D8FAE";
+    default:
+      return "#1e4d88";
+  }
+};

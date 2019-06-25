@@ -1,4 +1,5 @@
 import { connect } from "react-redux";
+import { onInitialLoadRequest } from "../../../store/action/viewActions";
 import { RootState } from "../../../store/reducers";
 import {
   bookmarkSectionSelectors,
@@ -21,11 +22,17 @@ const mapStateToProps = (state: RootState) => {
   };
 };
 
+const mapDispatchToProps = dispatch => {
+  return {
+    onInitialLoad() {
+      dispatch(onInitialLoadRequest());
+    }
+  };
+};
+
 const BookmarksViewContainer = connect(
   mapStateToProps,
-  // tslint:disable:no-empty
-  () => {}
-  // tslint:enable:no-empty
+  mapDispatchToProps
 )(BookmarksViewComponent);
 
 export default BookmarksViewContainer;

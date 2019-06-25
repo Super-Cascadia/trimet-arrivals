@@ -9,7 +9,7 @@ import MainNavigation from "../../../component/nav/MainNavigation";
 import { LoadStopData } from "../../../store/action/stopActions";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
-import "../Stops.css";
+import "../Stops.scss";
 import NearbyRoutes from "./NearbyRoutes";
 import Stops from "./Stops";
 

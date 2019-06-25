@@ -1,5 +1,9 @@
+#bookmarks-view-container {
+    padding: 10px;
+}
+
 .bookmark-section-message {
-    background: rgb(0,0,0, 0.2);
+    background: rgba(0,0,0, 0.2);
     color: white;
     padding: 10px;
     border-radius: 5px;
@@ -8,7 +12,7 @@
 }
 
 .bookmark-section {
-    background: rgb(0,0,0, 0.10);
+    background: rgba(0,0,0, 0.10);
     padding: 10px;
     border-radius: 5px;
     margin-bottom: 10px;

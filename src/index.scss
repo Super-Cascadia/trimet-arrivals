@@ -8,7 +8,7 @@ body {
 }
 
 .main-view {
-  padding: 10px;
+  padding: 0;
 }
 
 body button {
@@ -22,7 +22,7 @@ body button {
 }
 
 .group-menu-item.enabled {
-  background: rgb(0,0,0, 0.80)
+  background: rgba(0,0,0, 0.80)
 }
 
 .group-menu-item:first-child {
@@ -67,5 +67,5 @@ body button {
 }
 
 .mapboxgl-map {
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 }

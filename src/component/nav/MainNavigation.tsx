@@ -2,7 +2,7 @@ import cx from "classnames";
 import React from "react";
 import FontAwesome from "react-fontawesome";
 import { NavLink } from "react-router-dom";
-import "./MainNavigation.css";
+import "./MainNavigation.scss";
 
 function bookmarkCount(numberOfBookmarks: number) {
   return <>{numberOfBookmarks > 0 && <span>({numberOfBookmarks})</span>}</>;
@@ -30,7 +30,7 @@ export default function MainNavigation({
   return (
     <nav className="top-navigation">
       <ul className="view-header">
-        <NavLink className={nearbyStopsClass} to="/nearby">
+        <NavLink className={nearbyStopsClass} to="/nearby/routes">
           <FontAwesome name="map-marker" className="bookmark-icon" />
           <span>Nearby | {timeOfLastLoad}</span>
         </NavLink>

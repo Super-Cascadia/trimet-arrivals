@@ -1,6 +1,6 @@
 import React from "react";
 import { BookmarkSectionsProps } from "../../../../store/reducers/bookmarkSectionReducer";
-import "../BookmarksViewComponent.css";
+import "../BookmarksViewComponent.scss";
 import AddBookmarkSectionControl from "./AddBookmarkSectionControl";
 import BookmarkSections from "./BookmarkSections";
 

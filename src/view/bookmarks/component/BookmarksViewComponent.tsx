@@ -4,12 +4,13 @@ import { StopLocation } from "../../../api/trimet/types";
 import MainNavigation from "../../../component/nav/MainNavigation";
 import StopContainer from "../../stops/containers/StopContainer";
 import BookmarkSectionsContainer from "../container/BookmarkSectionsContainer";
-import "./BookmarksViewComponent.css";
+import "./BookmarksViewComponent.scss";
 
 interface Props {
   bookmarks: StopLocation[];
   numberOfBookmarks: number;
   timeOfLastLoad: string;
+  onInitialLoad: () => void;
 }
 
 export default class BookmarksViewComponent extends React.Component<Props> {
@@ -35,6 +36,10 @@ export default class BookmarksViewComponent extends React.Component<Props> {
         </div>
       );
     });
+  }
+
+  public componentDidMount() {
+    this.props.onInitialLoad();
   }
 
   public render() {

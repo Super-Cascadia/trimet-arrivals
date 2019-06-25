@@ -3,7 +3,7 @@ import React from "react";
 import { Route, StopLocation } from "../../../api/trimet/types";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import StopContainer from "../containers/StopContainer";
-import "../Stops.css";
+import "../Stops.scss";
 import SubNav from "./SubNav";
 
 interface Props {

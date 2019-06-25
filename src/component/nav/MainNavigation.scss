@@ -10,20 +10,22 @@
 }
 
 .view-header-menu-item {
+    color: black;
     line-height: 30px;
     flex-grow: 1;
     cursor: pointer;
     padding: 10px;
-    background: rgb(255, 255, 255, 0.30);
+    background: rgba(255, 255, 255, 0.30);
     font-weight: bold;
+    text-decoration: none;
 }
 
 .view-header-menu-item.active {
-    background: rgb(255, 255, 255, 0.80);
+    background: rgba(255, 255, 255, 0.80);
 }
 
 .view-header-menu-item:hover {
-    background: rgb(255, 255, 255, 0.50);
+    background: rgba(255, 255, 255, 0.50);
 }
 
 .bookmark-icon {

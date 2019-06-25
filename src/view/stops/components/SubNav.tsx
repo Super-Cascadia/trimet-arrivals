@@ -18,12 +18,8 @@ export default class SubNav extends Component<Props> {
     return (
       <nav className="nearby-routes-nav">
         <ul>
-          <li>
-            <NavLink to={`/nearby/routes`}>Routes ({routeCount})</NavLink>
-          </li>
-          <li>
-            <NavLink to={`/nearby/stops`}>Stops ({stopCount})</NavLink>
-          </li>
+          <NavLink to={`/nearby/routes`}>Routes ({routeCount})</NavLink>
+          <NavLink to={`/nearby/stops`}>Stops ({stopCount})</NavLink>
         </ul>
       </nav>
     );
