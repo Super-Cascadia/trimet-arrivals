@@ -1,10 +1,12 @@
+@import '../../styles/routes';
+
 .route-indicator {
-    background: #1e4d88;
+    background: $bus-blue !important;
     height: 21px;
     min-width: 18px;
     vertical-align: middle;
     text-align: center;
-    color: white;
+    color: white !important;
     font-size: 12px;
     line-height: 22px;
     border-radius: 5px;
@@ -21,48 +23,48 @@
 
 .route-indicator-green {
     color: black;
-    background: green;
-    border: 2px solid green;
+    background: $green !important;
+    border: 2px solid $green !important;
 }
 
 .route-indicator-yellow {
     color: black;
-    background: yellow;
-    border: 2px solid yellow;
+    background: $yellow !important;
+    border: 2px solid $yellow !important;
 }
 
 .route-indicator-red {
     color: black;
-    background: red;
-    border: 2px solid red;
+    background: $red !important;
+    border: 2px solid $red !important;
 }
 
 .route-indicator-blue {
     color: white;
-    background: blue;
-    border: 2px solid blue;
+    background: $blue !important;
+    border: 2px solid $blue !important;
 }
 
 .route-indicator-orange {
     color: black;
-    background: orange;
-    border: 2px solid orange;
+    background: $orange !important;
+    border: 2px solid $orange !important;
 }
 
 .route-indicator-lightgreen {
     color: white;
-    background: #99C354;
-    border: 2px solid #99C354;
+    background: $light-green !important;
+    border: 2px solid $light-green !important;
 }
 
 .route-indicator-pink {
     color: white;
-    background: #cc3e8b;
-    border: 2px solid #cc3e8b;
+    background: $pink !important;
+    border: 2px solid $pink !important;
 }
 
 .route-indicator-cyan {
     color: white;
-    background: #3D8FAE;
-    border: 2px solid #3D8FAE;
+    background: $cyan !important;
+    border: 2px solid $cyan !important;
 }

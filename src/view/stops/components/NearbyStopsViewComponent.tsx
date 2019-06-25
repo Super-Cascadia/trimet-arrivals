@@ -1,3 +1,4 @@
+import { size } from "lodash";
 import React from "react";
 import { Route } from "../../../api/trimet/types";
 import NearbyStopsMap from "../../../component/maps/NearbyStopsMap";
@@ -9,16 +10,17 @@ import {
   SHOW_NEARBY_STOPS
 } from "../../../store/reducers/nearbyViewReducer";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
-import { RouteDirection } from "../../../store/reducers/util/getRoutesFromStopLocations";
+import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
 import "../Stops.css";
-import Routes from "./Routes";
+import NearbyRoutes from "./NearbyRoutes";
 import Stops from "./Stops";
+import SubNav from "./SubNav";
 
 interface Props {
   loadStopData: LoadStopData;
   loading: boolean;
   stopLocations: StopLocationsDictionary;
-  nearbyRoutes: RouteDirection[];
+  nearbyRoutes: RouteDirectionDict;
   currentLocation: number[];
   activeView: string;
   changeView: (view: string) => void;
@@ -43,16 +45,6 @@ export default class NearbyStopsViewComponent extends React.Component<
 
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
-    this.showStops = this.showStops.bind(this);
-    this.showRoutes = this.showRoutes.bind(this);
-  }
-
-  public showStops() {
-    this.props.changeView(SHOW_NEARBY_STOPS);
-  }
-
-  public showRoutes() {
-    this.props.changeView(SHOW_NEARBY_ROUTES);
   }
 
   public componentDidMount() {
@@ -69,8 +61,12 @@ export default class NearbyStopsViewComponent extends React.Component<
       stopLocations,
       currentLocation,
       nearbyRoutes,
-      activeView
+      activeView,
+      changeView
     } = this.props;
+
+    const stopCount = size(stopLocations);
+    const routeCount = size(nearbyRoutes);
 
     return (
       <div id="nearby-stops-view-component">
@@ -85,9 +81,14 @@ export default class NearbyStopsViewComponent extends React.Component<
                     stopLocations={stopLocations}
                     nearbyRoutes={nearbyRoutes}
                   />
-                  {this.getNav()}
+                  <SubNav
+                    changeView={changeView}
+                    activeView={activeView}
+                    stopCount={stopCount}
+                    routeCount={routeCount}
+                  />
                   {activeView === SHOW_NEARBY_ROUTES && (
-                    <Routes nearbyRoutes={nearbyRoutes} />
+                    <NearbyRoutes nearbyRoutes={nearbyRoutes} />
                   )}
                   {activeView === SHOW_NEARBY_STOPS && (
                     <Stops
@@ -118,21 +119,6 @@ export default class NearbyStopsViewComponent extends React.Component<
       modalOpen: true,
       routeInfo: route
     });
-  }
-
-  private getNav() {
-    return (
-      <nav>
-        <ul>
-          <li>
-            <a onClick={this.showStops}>Stops</a>
-          </li>
-          <li>
-            <a onClick={this.showRoutes}>Routes</a>
-          </li>
-        </ul>
-      </nav>
-    );
   }
 
   private showModal() {
