@@ -1,7 +1,10 @@
 import { createSelector } from "reselect";
 import { StopLocation } from "../../api/trimet/types";
 import { RootState } from "../reducers";
-import { RouteDirection } from "../reducers/util/getRoutesFromStopLocations";
+import {
+  RouteDirection,
+  RouteDirectionDict
+} from "../reducers/util/getRoutesFromStopLocations";
 
 const allStopLocations = (state: RootState) => state.stopsReducer.stopLocations;
 const allNearbyRoutes = (state: RootState) => state.stopsReducer.nearbyRoutes;
@@ -26,7 +29,7 @@ export const allStopLocationsSelector = createSelector(
 
 export const allNearbyRoutesSelector = createSelector(
   allNearbyRoutes,
-  (nearbyRoutes: RouteDirection[]) => nearbyRoutes
+  (nearbyRoutes: RouteDirectionDict) => nearbyRoutes
 );
 
 export const timeOfLastLoadSelector = createSelector(

@@ -1,7 +1,7 @@
 import mapboxgl from "mapbox-gl";
 import React, { Component } from "react";
 import { StopLocationsDictionary } from "../../store/reducers/stopsReducer";
-import { RouteDirection } from "../../store/reducers/util/getRoutesFromStopLocations";
+import { RouteDirectionDict } from "../../store/reducers/util/getRoutesFromStopLocations";
 import {
   mountMapCenteredOnLocation,
   setCurrentLocationMarker,
@@ -17,7 +17,7 @@ export type LatLngCoords = number[];
 interface Props {
   currentLocation: LatLngCoords;
   stopLocations: StopLocationsDictionary;
-  nearbyRoutes: RouteDirection[];
+  nearbyRoutes: RouteDirectionDict;
 }
 
 export default class NearbyStopsMap extends Component<Props> {
@@ -46,7 +46,7 @@ export default class NearbyStopsMap extends Component<Props> {
   private initializeMap(
     currentLocation: LatLngCoords,
     stopLocations: StopLocationsDictionary,
-    nearbyRoutes: RouteDirection[]
+    nearbyRoutes: RouteDirectionDict
   ) {
     this.map = mountMapCenteredOnLocation(this.mapContainer, currentLocation);
     this.map.on("load", () => {
