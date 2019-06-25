@@ -1,20 +1,17 @@
 import { size } from "lodash";
 import React from "react";
+import { Route as RouterRoute, Switch } from "react-router-dom";
 import { Route } from "../../../api/trimet/types";
 import NearbyStopsMap from "../../../component/maps/NearbyStopsMap";
 import Modal from "../../../component/modal/Modal";
 import ModalContent from "../../../component/modal/ModalContent";
+import MainNavigation from "../../../component/nav/MainNavigation";
 import { LoadStopData } from "../../../store/action/stopActions";
-import {
-  SHOW_NEARBY_ROUTES,
-  SHOW_NEARBY_STOPS
-} from "../../../store/reducers/nearbyViewReducer";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
 import "../Stops.css";
 import NearbyRoutes from "./NearbyRoutes";
 import Stops from "./Stops";
-import SubNav from "./SubNav";
 
 interface Props {
   loadStopData: LoadStopData;
@@ -22,8 +19,10 @@ interface Props {
   stopLocations: StopLocationsDictionary;
   nearbyRoutes: RouteDirectionDict;
   currentLocation: number[];
-  activeView: string;
-  changeView: (view: string) => void;
+  numberOfBookmarks: number;
+  timeOfLastLoad: string;
+  onInitialLoad: () => void;
+  match: any;
 }
 
 interface State {
@@ -48,6 +47,8 @@ export default class NearbyStopsViewComponent extends React.Component<
   }
 
   public componentDidMount() {
+    this.props.onInitialLoad();
+
     const { loadStopData } = this.props;
 
     if (loadStopData) {
@@ -56,53 +57,15 @@ export default class NearbyStopsViewComponent extends React.Component<
   }
 
   public render() {
-    const {
-      loading,
-      stopLocations,
-      currentLocation,
-      nearbyRoutes,
-      activeView,
-      changeView
-    } = this.props;
-
-    const stopCount = size(stopLocations);
-    const routeCount = size(nearbyRoutes);
+    const { numberOfBookmarks, timeOfLastLoad } = this.props;
 
     return (
-      <div id="nearby-stops-view-component">
-        {loading && <div className="loading-message">Loading...</div>}
-        {!loading && stopLocations && (
-          <div className="nearby-stops">
-            <main>
-              <div className="flex-container">
-                <section className="flex-stops">
-                  <NearbyStopsMap
-                    currentLocation={currentLocation}
-                    stopLocations={stopLocations}
-                    nearbyRoutes={nearbyRoutes}
-                  />
-                  <SubNav
-                    changeView={changeView}
-                    activeView={activeView}
-                    stopCount={stopCount}
-                    routeCount={routeCount}
-                  />
-                  {activeView === SHOW_NEARBY_ROUTES && (
-                    <NearbyRoutes nearbyRoutes={nearbyRoutes} />
-                  )}
-                  {activeView === SHOW_NEARBY_STOPS && (
-                    <Stops
-                      stopLocations={stopLocations}
-                      showArrivals={false}
-                      onRouteIndicatorClick={this.openModal}
-                    />
-                  )}
-                </section>
-                {this.state.modalOpen && this.showModal()}
-              </div>
-            </main>
-          </div>
-        )}
+      <div>
+        <MainNavigation
+          numberOfBookmarks={numberOfBookmarks}
+          timeOfLastLoad={timeOfLastLoad}
+        />
+        <main className="main-view">{this.getNearbyStops()}</main>
       </div>
     );
   }
@@ -119,6 +82,76 @@ export default class NearbyStopsViewComponent extends React.Component<
       modalOpen: true,
       routeInfo: route
     });
+  }
+
+  private getNearbyStops() {
+    const { loading = true, stopLocations } = this.props;
+
+    return (
+      <div id="nearby-stops-view-component">
+        {loading && <div className="loading-message">Loading...</div>}
+        {!loading && stopLocations && this.nearbyStops()}
+      </div>
+    );
+  }
+
+  private nearbyStops() {
+    const { stopLocations, currentLocation, nearbyRoutes } = this.props;
+
+    const stopCount = size(stopLocations);
+    const routeCount = size(nearbyRoutes);
+    /*tslint:disable:jsx-no-lambda*/
+    return (
+      <div className="nearby-stops">
+        <main>
+          <div className="flex-container">
+            <section className="flex-stops">
+              <NearbyStopsMap
+                currentLocation={currentLocation}
+                stopLocations={stopLocations}
+                nearbyRoutes={nearbyRoutes}
+              />
+              <Switch>
+                <RouterRoute
+                  path={`/nearby/routes`}
+                  component={() => (
+                    <NearbyRoutes
+                      nearbyRoutes={nearbyRoutes}
+                      stopCount={stopCount}
+                      routeCount={routeCount}
+                    />
+                  )}
+                />
+                <RouterRoute
+                  path={`/nearby/stops`}
+                  component={() => (
+                    <Stops
+                      stopLocations={stopLocations}
+                      showArrivals={false}
+                      onRouteIndicatorClick={this.openModal}
+                      stopCount={stopCount}
+                      routeCount={routeCount}
+                    />
+                  )}
+                />
+                <RouterRoute
+                  exact={true}
+                  path={`/nearby`}
+                  component={() => (
+                    <NearbyRoutes
+                      nearbyRoutes={nearbyRoutes}
+                      stopCount={stopCount}
+                      routeCount={routeCount}
+                    />
+                  )}
+                />
+              </Switch>
+            </section>
+            {this.state.modalOpen && this.showModal()}
+          </div>
+        </main>
+      </div>
+    );
   }
 
   private showModal() {

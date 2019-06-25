@@ -20,9 +20,12 @@ import {
   RouteDirectionsDict
 } from "../../../store/reducers/util/getRoutesFromStopLocations";
 import "./NearbyRoutes.scss";
+import SubNav from "./SubNav";
 
 interface Props {
   nearbyRoutes: RouteDirectionDict;
+  stopCount: number;
+  routeCount: number;
 }
 
 function getRouteIndicatorClassName(route: number, className: string) {
@@ -82,8 +85,14 @@ export default class NearbyRoutes extends React.Component<Props> {
 
   public render() {
     return (
-      <div id="nearby-view-routes">
-        {NearbyRoutes.getRoutes(this.props.nearbyRoutes)}
+      <div>
+        <SubNav
+          stopCount={this.props.stopCount}
+          routeCount={this.props.routeCount}
+        />
+        <div id="nearby-view-routes">
+          {NearbyRoutes.getRoutes(this.props.nearbyRoutes)}
+        </div>
       </div>
     );
   }

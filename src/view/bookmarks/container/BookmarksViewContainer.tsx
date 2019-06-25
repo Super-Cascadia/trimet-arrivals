@@ -4,14 +4,20 @@ import {
   bookmarkSectionSelectors,
   sectionNameInputSelector
 } from "../../../store/selectors/bookmarkSectionSelectors";
-import { bookmarkedStopLocationsSelector } from "../../../store/selectors/bookmarkSelectors";
+import {
+  bookmarkCountSelector,
+  bookmarkedStopLocationsSelector
+} from "../../../store/selectors/bookmarkSelectors";
+import { timeOfLastLoadSelector } from "../../../store/selectors/stopSelectors";
 import BookmarksViewComponent from "../component/BookmarksViewComponent";
 
 const mapStateToProps = (state: RootState) => {
   return {
     bookmarkSectionName: sectionNameInputSelector(state),
     bookmarkSections: bookmarkSectionSelectors(state),
-    bookmarks: bookmarkedStopLocationsSelector(state)
+    bookmarks: bookmarkedStopLocationsSelector(state),
+    numberOfBookmarks: bookmarkCountSelector(state),
+    timeOfLastLoad: timeOfLastLoadSelector(state)
   };
 };
 

@@ -1,12 +1,15 @@
 import { isEmpty, map } from "lodash";
 import React from "react";
 import { StopLocation } from "../../../api/trimet/types";
+import MainNavigation from "../../../component/nav/MainNavigation";
 import StopContainer from "../../stops/containers/StopContainer";
 import BookmarkSectionsContainer from "../container/BookmarkSectionsContainer";
 import "./BookmarksViewComponent.css";
 
 interface Props {
   bookmarks: StopLocation[];
+  numberOfBookmarks: number;
+  timeOfLastLoad: string;
 }
 
 export default class BookmarksViewComponent extends React.Component<Props> {
@@ -35,16 +38,24 @@ export default class BookmarksViewComponent extends React.Component<Props> {
   }
 
   public render() {
-    const { bookmarks } = this.props;
+    const { bookmarks, numberOfBookmarks, timeOfLastLoad } = this.props;
 
     return (
-      <section id="bookmarks-view-container">
-        <div>
-          <BookmarkSectionsContainer />
-          <h1>Uncategorized Bookmarks</h1>
-          {BookmarksViewComponent.getBookmarkedStops(bookmarks)}
-        </div>
-      </section>
+      <div>
+        <MainNavigation
+          numberOfBookmarks={numberOfBookmarks}
+          timeOfLastLoad={timeOfLastLoad}
+        />
+        <main className="main-view">
+          <section id="bookmarks-view-container">
+            <div>
+              <BookmarkSectionsContainer />
+              <h1>Uncategorized Bookmarks</h1>
+              {BookmarksViewComponent.getBookmarkedStops(bookmarks)}
+            </div>
+          </section>
+        </main>
+      </div>
     );
   }
 }
