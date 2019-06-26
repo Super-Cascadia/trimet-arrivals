@@ -2,7 +2,7 @@ import { size } from "lodash";
 import React, { lazy, Suspense } from "react";
 import { Route, Switch } from "react-router-dom";
 import { Route as TrimetRoute } from "../../../api/trimet/types";
-import LoadIndicator from "../../../component/loadIndicator/LoadIndicator";
+import ComponentLoadIndicator from "../../../component/loadIndicator/ComponentLoadIndicator";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
 
@@ -28,7 +28,7 @@ export default class NearbyLists extends React.Component<Props, State> {
 
     /*tslint:disable:jsx-no-lambda*/
     return (
-      <Suspense fallback={LoadIndicator}>
+      <Suspense fallback={ComponentLoadIndicator()}>
         <Switch>
           <Route
             path={`/nearby/routes`}

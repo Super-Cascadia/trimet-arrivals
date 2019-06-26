@@ -4,6 +4,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background: gold;
+}
+
+.map-indicator {
+  min-height: 400px;
+  background: #99C354;
+}
+
+.component-indicator {
+  min-height: 100px;
+  background: #cc3e8b;
 }
 
 .load-logo {

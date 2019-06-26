@@ -1,7 +1,7 @@
 import { isEmpty, map } from "lodash";
 import React, { lazy, Suspense } from "react";
 import { StopLocation } from "../../../api/trimet/types";
-import LoadIndicator from "../../../component/loadIndicator/LoadIndicator";
+import ComponentLoadIndicator from "../../../component/loadIndicator/ComponentLoadIndicator";
 import "./BookmarksViewComponent.scss";
 
 const StopContainer = lazy(() =>
@@ -42,7 +42,7 @@ export default class BookmarksViewComponent extends React.Component<Props> {
 
       return (
         <div className="bookmark-stop-wrapper">
-          <Suspense fallback={LoadIndicator}>
+          <Suspense fallback={ComponentLoadIndicator()}>
             <StopContainer
               key={locationId}
               locationId={locationId}
@@ -70,7 +70,7 @@ export default class BookmarksViewComponent extends React.Component<Props> {
         <main className="main-view">
           <section id="bookmarks-view-container">
             <div>
-              <Suspense fallback={LoadIndicator}>
+              <Suspense fallback={ComponentLoadIndicator()}>
                 <BookmarkSectionsContainer />
               </Suspense>
               <h1>Uncategorized Bookmarks</h1>

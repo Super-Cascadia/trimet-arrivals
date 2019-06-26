@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import "./App.css";
-import LoadIndicator from "./component/loadIndicator/LoadIndicator";
+import RouteLoadIndicator from "./component/loadIndicator/RouteLoadIndicator";
 import appStore from "./store/store";
 
 const store = appStore();
@@ -24,7 +24,7 @@ export default class App extends React.Component {
     return (
       <Provider store={store}>
         <Router basename={process.env.PUBLIC_URL}>
-          <Suspense fallback={LoadIndicator}>
+          <Suspense fallback={RouteLoadIndicator()}>
             <Switch>
               <Route exact={true} path="/" component={Home} />
               <Route path="/nearby" component={NearbyStopsViewContainer} />

@@ -1,6 +1,6 @@
 import { isEmpty, map } from "lodash";
 import React, { lazy, Suspense } from "react";
-import LoadIndicator from "../../../../component/loadIndicator/LoadIndicator";
+import ComponentLoadIndicator from "../../../../component/loadIndicator/ComponentLoadIndicator";
 import {
   BookmarkSectionProps,
   BookmarkSectionsProps
@@ -25,7 +25,7 @@ export default function BookmarkSections({ bookmarkSections }: Props) {
   }
 
   return (
-    <Suspense fallback={LoadIndicator}>
+    <Suspense fallback={ComponentLoadIndicator()}>
       <div className="bookmark-section-list">
         {map(
           bookmarkSections,

@@ -30,6 +30,10 @@ export default function MainNavigation({
   return (
     <nav className="top-navigation">
       <ul className="view-header">
+        <NavLink to="/" className="view-header-menu-item">
+          <FontAwesome name="home" className="bookmark-icon" />
+          <span>Home</span>
+        </NavLink>
         <NavLink className={nearbyStopsClass} to="/nearby/routes">
           <FontAwesome name="map-marker" className="bookmark-icon" />
           <span>Nearby | {timeOfLastLoad}</span>

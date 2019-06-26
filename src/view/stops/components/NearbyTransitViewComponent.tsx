@@ -1,6 +1,7 @@
-import /* webpackChunkName: "React" */ React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 import { Route } from "../../../api/trimet/types";
-import LoadIndicator from "../../../component/loadIndicator/LoadIndicator";
+import ComponentLoadIndicator from "../../../component/loadIndicator/ComponentLoadIndicator";
+import MapLoadIndicator from "../../../component/loadIndicator/MapLoadIndicator";
 import Modal from "../../../component/modal/Modal";
 import ModalContent from "../../../component/modal/ModalContent";
 import { LoadStopData } from "../../../store/action/stopActions";
@@ -99,7 +100,7 @@ export default class NearbyTransitViewComponent extends React.Component<
     return (
       <main className="main-view">
         <div id="nearby-stops-view-component">
-          {loading && <LoadIndicator />}
+          {loading && <ComponentLoadIndicator />}
           {!loading && stopLocations && this.nearbyStops()}
         </div>
       </main>
@@ -115,14 +116,14 @@ export default class NearbyTransitViewComponent extends React.Component<
         <main>
           <div className="flex-container">
             <section className="flex-stops">
-              <Suspense fallback={LoadIndicator}>
+              <Suspense fallback={MapLoadIndicator()}>
                 <NearbyStopsMap
                   currentLocation={currentLocation}
                   stopLocations={stopLocations}
                   nearbyRoutes={nearbyRoutes}
                 />
               </Suspense>
-              <Suspense fallback={LoadIndicator}>
+              <Suspense fallback={ComponentLoadIndicator()}>
                 <NearbyLists
                   stopLocations={stopLocations}
                   openModal={this.openModal}
