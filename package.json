@@ -4,6 +4,7 @@
   "repository": "https://github.com/wintermuted/how-fucked-is-the-max.git",
   "author": "Jameson Nyeholt <jameson.nyeholt@gmail.com>",
   "license": "MIT",
+  "homepage" : "http://wintermuted.github.io/trimet-arrivals",
   "dependencies": {
     "@commitlint/cli": "^7.5.2",
     "@commitlint/config-conventional": "^7.5.0",

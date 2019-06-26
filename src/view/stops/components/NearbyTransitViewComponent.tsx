@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import /* webpackChunkName: "React" */ React, { lazy, Suspense } from "react";
 import { Route } from "../../../api/trimet/types";
 import LoadIndicator from "../../../component/loadIndicator/LoadIndicator";
 import Modal from "../../../component/modal/Modal";
