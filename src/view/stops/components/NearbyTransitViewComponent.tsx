@@ -100,7 +100,6 @@ export default class NearbyTransitViewComponent extends React.Component<
     return (
       <main className="main-view">
         <div id="nearby-stops-view-component">
-          {loading && <ComponentLoadIndicator />}
           {!loading && stopLocations && this.nearbyStops()}
         </div>
       </main>

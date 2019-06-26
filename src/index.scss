@@ -1,3 +1,5 @@
+@import './styles/routes.scss';
+
 body {
   margin: 0;
   font-family: 'Roboto', Helvetica, Arial, sans-serif;
@@ -6,6 +8,14 @@ body {
   background-size: cover;
   background-attachment: fixed;
 }
+
+//button {
+//  //background: darkgrey !important;
+//  //color: white;
+//  font-size: 14px;
+//  padding: 2px !important;
+//  border-radius: 5px;
+//}
 
 .main-view {
   padding: 0;
