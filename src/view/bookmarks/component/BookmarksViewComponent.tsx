@@ -1,10 +1,24 @@
 import { isEmpty, map } from "lodash";
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { StopLocation } from "../../../api/trimet/types";
-import MainNavigation from "../../../component/nav/MainNavigation";
-import StopContainer from "../../stops/containers/StopContainer";
-import BookmarkSectionsContainer from "../container/BookmarkSectionsContainer";
+import LoadIndicator from "../../../component/loadIndicator/LoadIndicator";
 import "./BookmarksViewComponent.scss";
+
+const StopContainer = lazy(() =>
+  import(
+    /* webpackChunkName: "StopContainer" */ "../../stops/containers/StopContainer"
+  )
+);
+const BookmarkSectionsContainer = lazy(() =>
+  import(
+    /* webpackChunkName: "BookmarkSectionsContainer" */ "../container/BookmarkSectionsContainer"
+  )
+);
+const MainNavigation = lazy(() =>
+  import(
+    /* webpackChunkName: "MainNavigation" */ "../../../component/nav/MainNavigation"
+  )
+);
 
 interface Props {
   bookmarks: StopLocation[];
@@ -28,11 +42,13 @@ export default class BookmarksViewComponent extends React.Component<Props> {
 
       return (
         <div className="bookmark-stop-wrapper">
-          <StopContainer
-            key={locationId}
-            locationId={locationId}
-            showArrivals={false}
-          />
+          <Suspense fallback={LoadIndicator}>
+            <StopContainer
+              key={locationId}
+              locationId={locationId}
+              showArrivals={false}
+            />
+          </Suspense>
         </div>
       );
     });
@@ -54,7 +70,9 @@ export default class BookmarksViewComponent extends React.Component<Props> {
         <main className="main-view">
           <section id="bookmarks-view-container">
             <div>
-              <BookmarkSectionsContainer />
+              <Suspense fallback={LoadIndicator}>
+                <BookmarkSectionsContainer />
+              </Suspense>
               <h1>Uncategorized Bookmarks</h1>
               {BookmarksViewComponent.getBookmarkedStops(bookmarks)}
             </div>

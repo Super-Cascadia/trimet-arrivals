@@ -1,6 +1,21 @@
-import React from "react";
-import MainNavigation from "../component/nav/MainNavigation";
+import React, { lazy } from "react";
+
+const MainNavigation = lazy(() =>
+  import(
+    /* webpackChunkName: "MainNavigation" */ "../component/nav/MainNavigation"
+  )
+);
+const LoadIndicator = lazy(() =>
+  import(
+    /* webpackChunkName: "LoadIndicator" */ "../component/loadIndicator/LoadIndicator"
+  )
+);
 
 export default function Home() {
-  return <MainNavigation />;
+  return (
+    <div>
+      <MainNavigation />
+      <LoadIndicator />
+    </div>
+  );
 }

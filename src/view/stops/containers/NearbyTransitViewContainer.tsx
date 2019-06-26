@@ -10,7 +10,7 @@ import {
   stopsLoadingSelector,
   timeOfLastLoadSelector
 } from "../../../store/selectors/stopSelectors";
-import NearbyStopsViewComponent from "../components/NearbyStopsViewComponent";
+import NearbyTransitViewComponent from "../components/NearbyTransitViewComponent";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -34,9 +34,9 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const NearbyStopsViewContainer = connect(
+const NearbyTransitViewContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(NearbyStopsViewComponent);
+)(NearbyTransitViewComponent);
 
-export default NearbyStopsViewContainer;
+export default NearbyTransitViewContainer;

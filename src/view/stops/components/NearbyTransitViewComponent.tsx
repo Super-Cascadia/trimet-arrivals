@@ -1,17 +1,26 @@
-import { size } from "lodash";
-import React from "react";
-import { Route as RouterRoute, Switch } from "react-router-dom";
+import React, { lazy, Suspense } from "react";
 import { Route } from "../../../api/trimet/types";
-import NearbyStopsMap from "../../../component/maps/NearbyStopsMap";
+import LoadIndicator from "../../../component/loadIndicator/LoadIndicator";
 import Modal from "../../../component/modal/Modal";
 import ModalContent from "../../../component/modal/ModalContent";
-import MainNavigation from "../../../component/nav/MainNavigation";
 import { LoadStopData } from "../../../store/action/stopActions";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
 import "../Stops.scss";
-import NearbyRoutes from "./NearbyRoutes";
-import Stops from "./Stops";
+
+const NearbyStopsMap = lazy(() =>
+  import(
+    /* webpackChunkName: "NearbyStopsMap" */ "../../../component/maps/NearbyStopsMap"
+  )
+);
+const MainNavigation = lazy(() =>
+  import(
+    /* webpackChunkName: "MainNavigation" */ "../../../component/nav/MainNavigation"
+  )
+);
+const NearbyLists = lazy(() =>
+  import(/* webpackChunkName: "NearbyLists" */ "./NearbyLists")
+);
 
 interface Props {
   loadStopData: LoadStopData;
@@ -30,7 +39,7 @@ interface State {
   routeInfo: Route;
 }
 
-export default class NearbyStopsViewComponent extends React.Component<
+export default class NearbyTransitViewComponent extends React.Component<
   Props,
   State
 > {
@@ -65,7 +74,7 @@ export default class NearbyStopsViewComponent extends React.Component<
           numberOfBookmarks={numberOfBookmarks}
           timeOfLastLoad={timeOfLastLoad}
         />
-        <main className="main-view">{this.getNearbyStops()}</main>
+        {this.getNearbyStops()}
       </div>
     );
   }
@@ -88,64 +97,38 @@ export default class NearbyStopsViewComponent extends React.Component<
     const { loading = true, stopLocations } = this.props;
 
     return (
-      <div id="nearby-stops-view-component">
-        {loading && <div className="loading-message">Loading...</div>}
-        {!loading && stopLocations && this.nearbyStops()}
-      </div>
+      <main className="main-view">
+        <div id="nearby-stops-view-component">
+          {loading && <LoadIndicator />}
+          {!loading && stopLocations && this.nearbyStops()}
+        </div>
+      </main>
     );
   }
 
   private nearbyStops() {
     const { stopLocations, currentLocation, nearbyRoutes } = this.props;
 
-    const stopCount = size(stopLocations);
-    const routeCount = size(nearbyRoutes);
     /*tslint:disable:jsx-no-lambda*/
     return (
       <div className="nearby-stops">
         <main>
           <div className="flex-container">
             <section className="flex-stops">
-              <NearbyStopsMap
-                currentLocation={currentLocation}
-                stopLocations={stopLocations}
-                nearbyRoutes={nearbyRoutes}
-              />
-              <Switch>
-                <RouterRoute
-                  path={`/nearby/routes`}
-                  component={() => (
-                    <NearbyRoutes
-                      nearbyRoutes={nearbyRoutes}
-                      stopCount={stopCount}
-                      routeCount={routeCount}
-                    />
-                  )}
+              <Suspense fallback={LoadIndicator}>
+                <NearbyStopsMap
+                  currentLocation={currentLocation}
+                  stopLocations={stopLocations}
+                  nearbyRoutes={nearbyRoutes}
                 />
-                <RouterRoute
-                  path={`/nearby/stops`}
-                  component={() => (
-                    <Stops
-                      stopLocations={stopLocations}
-                      showArrivals={false}
-                      onRouteIndicatorClick={this.openModal}
-                      stopCount={stopCount}
-                      routeCount={routeCount}
-                    />
-                  )}
+              </Suspense>
+              <Suspense fallback={LoadIndicator}>
+                <NearbyLists
+                  stopLocations={stopLocations}
+                  openModal={this.openModal}
+                  nearbyRoutes={nearbyRoutes}
                 />
-                <RouterRoute
-                  exact={true}
-                  path={`/nearby`}
-                  component={() => (
-                    <NearbyRoutes
-                      nearbyRoutes={nearbyRoutes}
-                      stopCount={stopCount}
-                      routeCount={routeCount}
-                    />
-                  )}
-                />
-              </Switch>
+              </Suspense>
             </section>
             {this.state.modalOpen && this.showModal()}
           </div>

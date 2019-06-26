@@ -3,7 +3,7 @@ import React from "react";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import thunk from "redux-thunk";
 import { ProviderMock } from "../../../test/util";
-import NearbyStopsViewContainer from "./NearbyStopsViewContainer";
+import NearbyTransitViewContainer from "./NearbyTransitViewContainer";
 
 jest.mock("mapbox-gl");
 
@@ -62,13 +62,13 @@ function mockStore() {
   );
 }
 
-describe("NearbyStopsViewContainer", () => {
+describe("NearbyTransitViewContainer", () => {
   describe("by default", () => {
     it("renders without crashing", () => {
       expect(() =>
         shallow(
           <ProviderMock>
-            <NearbyStopsViewContainer />
+            <NearbyTransitViewContainer />
           </ProviderMock>
         )
       ).not.toThrow();
@@ -78,12 +78,12 @@ describe("NearbyStopsViewContainer", () => {
   describe("when provided a valid stopsReducer", () => {
     const subject = mount(
       <ProviderMock store={mockStore()}>
-        <NearbyStopsViewContainer />
+        <NearbyTransitViewContainer />
       </ProviderMock>
     );
 
     it("hands off props to the StopComponent", () => {
-      const stopComponent = subject.find("NearbyStopsViewComponent");
+      const stopComponent = subject.find("NearbyTransitViewComponent");
       // @ts-ignore
       expect(stopComponent).toExist();
       // @ts-ignore

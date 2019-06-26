@@ -1,11 +1,15 @@
 import { isEmpty, map } from "lodash";
-import React from "react";
+import React, { lazy, Suspense } from "react";
+import LoadIndicator from "../../../../component/loadIndicator/LoadIndicator";
 import {
   BookmarkSectionProps,
   BookmarkSectionsProps
 } from "../../../../store/reducers/bookmarkSectionReducer";
-import BookmarkSectionContainer from "../../container/BookmarkSectionContainer";
 import "./BookmarkSections.css";
+
+const BookmarkSectionContainer = lazy(() =>
+  import("../../container/BookmarkSectionContainer")
+);
 
 interface Props {
   bookmarkSections: BookmarkSectionsProps;
@@ -21,13 +25,15 @@ export default function BookmarkSections({ bookmarkSections }: Props) {
   }
 
   return (
-    <div className="bookmark-section-list">
-      {map(
-        bookmarkSections,
-        (bookmarkSection: BookmarkSectionProps, id: number) => {
-          return <BookmarkSectionContainer bookmarkSectionId={id} />;
-        }
-      )}
-    </div>
+    <Suspense fallback={LoadIndicator}>
+      <div className="bookmark-section-list">
+        {map(
+          bookmarkSections,
+          (bookmarkSection: BookmarkSectionProps, id: number) => {
+            return <BookmarkSectionContainer bookmarkSectionId={id} />;
+          }
+        )}
+      </div>
+    </Suspense>
   );
 }

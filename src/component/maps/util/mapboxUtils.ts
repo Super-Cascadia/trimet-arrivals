@@ -104,6 +104,7 @@ export function setNearbyStopMarkers(
 
 function getRouteGeometry(routeId: string, directionId: string) {
   return import(
+    /* webpackChunkName: "trimetRouteGeoJSON" */
     `../../../data/${routeId}/${routeId}_${directionId}.json`
   ).catch(e => {
     return e;
