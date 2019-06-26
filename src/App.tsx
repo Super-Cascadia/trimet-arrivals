@@ -23,7 +23,7 @@ export default class App extends React.Component {
   public render() {
     return (
       <Provider store={store}>
-        <Router>
+        <Router basename={process.env.PUBLIC_URL}>
           <Suspense fallback={LoadIndicator}>
             <Switch>
               <Route exact={true} path="/" component={Home} />
