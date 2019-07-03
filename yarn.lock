@@ -1275,10 +1275,10 @@
   resolved "https://registry.yarnpkg.com/@types/cheerio/-/cheerio-0.22.10.tgz#780d552467824be4a241b29510a7873a7432c4a6"
   integrity sha512-fOM/Jhv51iyugY7KOBZz2ThfT1gwvsGCfWxpLpZDgkGjpEO4Le9cld07OdskikLjDUQJ43dzDaVRSFwQlpdqVg==
 
-"@types/classnames@2.2.7":
-  version "2.2.7"
-  resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.7.tgz#fb68cc9be8487e6ea5b13700e759bfbab7e0fefd"
-  integrity sha512-rzOhiQ55WzAiFgXRtitP/ZUT8iVNyllEpylJ5zHzR4vArUvMB39GTk+Zon/uAM0JxEFAWnwsxC2gH8s+tZ3Myg==
+"@types/classnames@2.2.8":
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.8.tgz#17139e1e1104203572caa4368f6796f6225b70b4"
+  integrity sha512-3UrLzPnz8u+MMXuJTF++389IfLSQUbl5F3ry9WCxva0BKG5H/oo5NuPRXk+HrpPU1+5pVHSWhnVWRzIaFQ7QuQ==
 
 "@types/cookiejar@*":
   version "2.1.1"
@@ -1437,10 +1437,10 @@
   dependencies:
     redux "*"
 
-"@types/superagent@4.1.1":
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/@types/superagent/-/superagent-4.1.1.tgz#61f0b43d7db93a3c286c124512b7c228183c32fa"
-  integrity sha512-NetXrraTWPcdGG6IwYJhJ5esUGx8AYNiozbc1ENWEsF6BsD4JmNODJczI6Rm1xFPVp6HZESds9YCfqz4zIsM6A==
+"@types/superagent@4.1.2":
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@types/superagent/-/superagent-4.1.2.tgz#4dc15508734c794453650d62f0c7b7ca9404a317"
+  integrity sha512-GISrJnl+eZSzkVdsP2bXARXaroe/qKTwl/7v/d7bHP4OhlZKKIExcvQexwTDWHGtalHSLVuM78/Ri54laoOFfQ==
   dependencies:
     "@types/cookiejar" "*"
     "@types/node" "*"
