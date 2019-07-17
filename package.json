@@ -50,7 +50,7 @@
     "tslint": "^5.12.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-react": "^4.0.0",
-    "typeface-roboto": "^0.0.54",
+    "typeface-roboto": "^0.0.75",
     "typescript": "^3.3.3"
   },
   "scripts": {
