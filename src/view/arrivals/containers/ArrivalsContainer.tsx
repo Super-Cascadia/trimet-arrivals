@@ -29,9 +29,8 @@ const mapStateToProps = (state: RootState, props: Props) => {
   };
 };
 
-const ArrivalsContainer = connect(
-  mapStateToProps,
-  () => ({})
-)(ArrivalsComponent);
+const ArrivalsContainer = connect(mapStateToProps, () => ({}))(
+  ArrivalsComponent
+);
 
 export default ArrivalsContainer;
