@@ -114,7 +114,7 @@ describe("StopComponent", () => {
         const stopComponent = subject.find("StopComponent");
 
         expect(stopComponent).toExist();
-        expect(stopComponent.instance().refreshInterval).toBe(2);
+        expect(stopComponent.instance().refreshInterval).toBe(3);
       });
 
       xdescribe("and the refresh interval expires", () => {
