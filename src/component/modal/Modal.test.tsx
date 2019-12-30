@@ -33,6 +33,8 @@ describe("Modal", () => {
       const modalContent = subject.find(".modal-content");
       expect(modalContent).toExist();
       expect(modalContent.text()).toBe("Hello world");
+
+      subject.unmount();
     });
   });
 
