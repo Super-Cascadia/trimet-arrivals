@@ -47,9 +47,7 @@ describe("MainNavigation", () => {
       });
 
       it("has a label with he last updated time", () => {
-        expect(nearbyStops.text()).toEqual(
-          "<FontAwesome />Nearby Stops | 123123123"
-        );
+        expect(nearbyStops.text()).toEqual("<FontAwesome />Nearby | 123123123");
       });
     });
 

@@ -74,7 +74,7 @@ describe("NearbyStopsViewComponent", () => {
 
       describe("the nearby stops list", () => {
         it("shows Stops", () => {
-          expect(nearbyStops.find("Stops")).toExist();
+          expect(nearbyStops.find(".nearby-stops")).toExist();
         });
       });
     });

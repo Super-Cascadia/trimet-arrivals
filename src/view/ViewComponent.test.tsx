@@ -70,6 +70,9 @@ describe("ViewComponent", () => {
           currentLocationReducer: {
             coordinates: undefined
           },
+          nearbyReducer: {
+            activeView: "SHOW_NEARBY_ROUTES"
+          },
           stopsReducer: {
             loading: false
           },
@@ -106,6 +109,9 @@ describe("ViewComponent", () => {
         const baseState = {
           currentLocationReducer: {
             coordinates: undefined
+          },
+          nearbyReducer: {
+            activeView: "SHOW_NEARBY_ROUTES"
           },
           stopsReducer: {
             loading: false
@@ -162,6 +168,9 @@ describe("ViewComponent", () => {
           },
           currentLocationReducer: {
             coordinates: undefined
+          },
+          nearbyReducer: {
+            activeView: "SHOW_NEARBY_ROUTES"
           },
           stopsReducer: {
             loading: false

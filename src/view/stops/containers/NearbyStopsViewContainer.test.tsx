@@ -44,6 +44,9 @@ function mockStore() {
     currentLocationReducer: {
       coordinates: undefined
     },
+    nearbyReducer: {
+      activeView: "SHOW_NEARBY_ROUTES"
+    },
     stopsReducer: {
       loading: false,
       stopLocations: {
