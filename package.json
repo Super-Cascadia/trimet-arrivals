@@ -96,7 +96,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "husky": "^3.0.0",
+    "husky": "^4.0.2",
     "lint-staged": "^9.5.0",
     "prettier": "1.19.1",
     "semantic-release": "^15.13.3"
