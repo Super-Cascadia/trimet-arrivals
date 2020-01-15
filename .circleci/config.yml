@@ -38,7 +38,7 @@ jobs:
       - run: yarn tslint
 
       # run tests!
-      - run: yarn test --coverage
+      - run: CI=true yarn test --coverage
 
       # send coverage
       - run: yarn codecov
