@@ -1,8 +1,5 @@
 import { connect } from "react-redux";
-import {
-  changeViewRequest,
-  loadStopDataRequest
-} from "../../../store/action/stopActions";
+import { loadStopDataRequest } from "../../../store/action/stopActions";
 import { RootState } from "../../../store/reducers";
 import { currentLocationSelector } from "../../../store/selectors/locationSelectors";
 import { nearbyActiveViewSelector } from "../../../store/selectors/nearbyViewSelector";
@@ -27,9 +24,6 @@ const mapDispatchToProps = dispatch => {
   return {
     loadStopData(radiusInFeet: number): void {
       dispatch(loadStopDataRequest(radiusInFeet));
-    },
-    changeView(view: string): void {
-      dispatch(changeViewRequest(view));
     }
   };
 };
