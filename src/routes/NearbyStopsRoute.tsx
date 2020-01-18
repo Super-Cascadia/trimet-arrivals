@@ -1,6 +1,20 @@
 import React from "react";
-import NearbyStopsViewContainer from "../view/stops/containers/NearbyStopsViewContainer";
+import { StopLocationsDictionary } from "../store/reducers/stopsReducer";
+import Stops from "../view/stops/components/Stops";
 
-export default function NearbyStopsRoute() {
-  return <NearbyStopsViewContainer />;
+interface Props {
+  stopLocations: StopLocationsDictionary;
+}
+
+export default function NearbyStopsRoute({ stopLocations }: Props) {
+  // tslint:disable-next-line:no-empty
+  const onRouteIndicatorClick = () => {};
+
+  return (
+    <Stops
+      stopLocations={stopLocations}
+      showArrivals={false}
+      onRouteIndicatorClick={onRouteIndicatorClick}
+    />
+  );
 }

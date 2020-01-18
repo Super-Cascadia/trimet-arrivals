@@ -1,5 +1,5 @@
 import React from "react";
-import { Route } from "../../../api/trimet/types";
+import { TrimetRoute } from "../../../api/trimet/types";
 import { StopLocationWithDistance } from "../../../store/reducers/stopsReducer";
 import ArrivalsContainer from "../../arrivals/containers/ArrivalsContainer";
 import "../Stops.css";
@@ -11,7 +11,7 @@ interface Props {
   locationId: number;
   loading: boolean;
   showArrivals: boolean;
-  onRouteIndicatorClick?: (route: Route) => void;
+  onRouteIndicatorClick?: (route: TrimetRoute) => void;
 }
 
 const interval = 30000;

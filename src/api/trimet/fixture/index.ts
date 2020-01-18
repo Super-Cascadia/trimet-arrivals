@@ -2,9 +2,9 @@ import {
   ArrivalData,
   ArrivalLocation,
   Direction,
-  Route,
   StopData,
-  StopLocation
+  StopLocation,
+  TrimetRoute
 } from "../types";
 import { arrival1, arrival2, arrival3 } from "./arrival";
 
@@ -30,7 +30,7 @@ export function stopFixtureData(): Promise<StopData> {
     dir: 465
   };
 
-  const route1: Route = {
+  const route1: TrimetRoute = {
     desc: "string",
     dir: [direction1],
     route: 9101,

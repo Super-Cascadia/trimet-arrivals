@@ -12,7 +12,7 @@ export interface Direction {
   dir: number;
 }
 
-export interface Route {
+export interface TrimetRoute {
   desc: string;
   route: number;
   type: string;
@@ -25,7 +25,7 @@ export interface StopLocation {
   lat: number;
   lng: number;
   locid: number;
-  route: Route[];
+  route: TrimetRoute[];
 }
 
 export interface StopData {

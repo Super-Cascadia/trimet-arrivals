@@ -1,6 +1,6 @@
 import { shallow } from "enzyme";
 import React from "react";
-import { Route } from "../../api/trimet/types";
+import { TrimetRoute } from "../../api/trimet/types";
 import ModalContent from "./ModalContent";
 
 describe("ModalContent", () => {
@@ -26,7 +26,7 @@ describe("ModalContent", () => {
 
   describe("when route information is provided", () => {
     it("shows the route data in the section", () => {
-      const route: Route = {
+      const route: TrimetRoute = {
         desc: "string",
         dir: [
           {

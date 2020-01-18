@@ -1,6 +1,6 @@
 import cx from "classnames";
 import React from "react";
-import { Route } from "../../../api/trimet/types";
+import { TrimetRoute } from "../../../api/trimet/types";
 import { LoadArrivalData } from "../../../store/action/stopActions";
 import { StopLocationWithDistance } from "../../../store/reducers/stopsReducer";
 import StopBookmarkControlContainer from "../containers/StopBookmarkControlContainer";
@@ -13,7 +13,7 @@ interface Props {
   loadArrivalData: LoadArrivalData;
   loading: boolean;
   showArrivals: boolean;
-  onRouteIndicatorClick: (route: Route) => void;
+  onRouteIndicatorClick: (route: TrimetRoute) => void;
   locationId: number;
 }
 

@@ -1,6 +1,6 @@
 import { shallow } from "enzyme";
 import React from "react";
-import { Route } from "../../api/trimet/types";
+import { TrimetRoute } from "../../api/trimet/types";
 import RouteIndicator from "./RouteIndicator";
 
 describe("RouteIndicator", () => {
@@ -67,7 +67,7 @@ describe("RouteIndicator", () => {
   describe("when the route indicator", () => {
     describe("is clicked", () => {
       const onClick = jasmine.createSpy("onClick");
-      const route: Route = {
+      const route: TrimetRoute = {
         desc: ""
       };
       const subject = shallow(

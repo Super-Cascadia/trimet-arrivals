@@ -13,14 +13,14 @@ import {
   STREETCAR_S_LINE,
   YELLOW_LINE_NUMBER
 } from "../../api/trimet/constants";
-import { Route } from "../../api/trimet/types";
+import { TrimetRoute } from "../../api/trimet/types";
 import "./RouteIndicator.scss";
 
 interface Props {
   routeId: number;
-  route: Route;
+  route: TrimetRoute;
   className?: string;
-  onClick: (route: Route) => void;
+  onClick: (route: TrimetRoute) => void;
   verbose?: boolean;
 }
 

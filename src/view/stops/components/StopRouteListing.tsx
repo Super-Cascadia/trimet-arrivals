@@ -1,11 +1,11 @@
 import { map, split } from "lodash";
 import React, { Component } from "react";
-import { Route } from "../../../api/trimet/types";
+import { TrimetRoute } from "../../../api/trimet/types";
 import RouteIndicator from "../../../component/route/RouteIndicator";
 import "./StopRouteListing.css";
 
-function getSimpleRouteList(routes: Route[], onClick) {
-  return map(routes, (route: Route) => {
+function getSimpleRouteList(routes: TrimetRoute[], onClick) {
+  return map(routes, (route: TrimetRoute) => {
     return (
       <RouteIndicator
         key={route.route}
@@ -18,8 +18,8 @@ function getSimpleRouteList(routes: Route[], onClick) {
   });
 }
 
-function getDetailedRouteList(routes: Route[], onClick) {
-  return map(routes, (route: Route) => {
+function getDetailedRouteList(routes: TrimetRoute[], onClick) {
+  return map(routes, (route: TrimetRoute) => {
     const description = split(route.desc, "-")[1];
 
     return (
@@ -42,8 +42,8 @@ function getDetailedRouteList(routes: Route[], onClick) {
 }
 
 interface Props {
-  routes: Route[];
-  onClick: (route: Route) => void;
+  routes: TrimetRoute[];
+  onClick: (route: TrimetRoute) => void;
 }
 
 interface State {

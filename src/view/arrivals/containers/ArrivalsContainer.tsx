@@ -1,6 +1,6 @@
 import moment from "moment";
 import { connect } from "react-redux";
-import { Route } from "../../../api/trimet/types";
+import { TrimetRoute } from "../../../api/trimet/types";
 import { LoadArrivalData } from "../../../store/action/stopActions";
 import { RootState } from "../../../store/reducers";
 import {
@@ -13,7 +13,7 @@ interface Props {
   locationId: number;
   showArrivals: boolean;
   loadArrivalData: LoadArrivalData;
-  onRouteIndicatorClick: (route: Route) => void;
+  onRouteIndicatorClick: (route: TrimetRoute) => void;
 }
 
 const mapStateToProps = (state: RootState, props: Props) => {

@@ -1,20 +1,15 @@
 import { size } from "lodash";
 import React from "react";
-import { Route } from "../../../api/trimet/types";
+import { TrimetRoute } from "../../../api/trimet/types";
 import NearbyStopsMap from "../../../component/maps/NearbyStopsMap";
 import Modal from "../../../component/modal/Modal";
 import ModalContent from "../../../component/modal/ModalContent";
+import NearbySubRoutes from "../../../routes/NearbySubRoutes";
 import { LoadStopData } from "../../../store/action/stopActions";
-import {
-  SHOW_NEARBY_ROUTES,
-  SHOW_NEARBY_STOPS
-} from "../../../store/reducers/nearbyViewReducer";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
+import NearbySubNav from "../../nearby/components/NearbySubNav";
 import "../Stops.css";
-import NearbyRoutes from "./NearbyRoutes";
-import Stops from "./Stops";
-import SubNav from "./SubNav";
 
 interface Props {
   loadStopData: LoadStopData;
@@ -28,7 +23,7 @@ interface Props {
 
 interface State {
   modalOpen: boolean;
-  routeInfo: Route;
+  routeInfo: TrimetRoute;
 }
 
 export default class NearbyStopsViewComponent extends React.Component<
@@ -60,9 +55,7 @@ export default class NearbyStopsViewComponent extends React.Component<
       loading,
       stopLocations,
       currentLocation,
-      nearbyRoutes,
-      activeView,
-      changeView
+      nearbyRoutes
     } = this.props;
 
     const stopCount = size(stopLocations);
@@ -81,22 +74,11 @@ export default class NearbyStopsViewComponent extends React.Component<
                     stopLocations={stopLocations}
                     nearbyRoutes={nearbyRoutes}
                   />
-                  <SubNav
-                    changeView={changeView}
-                    activeView={activeView}
-                    stopCount={stopCount}
-                    routeCount={routeCount}
+                  <NearbySubNav stopCount={stopCount} routeCount={routeCount} />
+                  <NearbySubRoutes
+                    nearbyRoutes={nearbyRoutes}
+                    stopLocations={stopLocations}
                   />
-                  {activeView === SHOW_NEARBY_ROUTES && (
-                    <NearbyRoutes nearbyRoutes={nearbyRoutes} />
-                  )}
-                  {activeView === SHOW_NEARBY_STOPS && (
-                    <Stops
-                      stopLocations={stopLocations}
-                      showArrivals={false}
-                      onRouteIndicatorClick={this.openModal}
-                    />
-                  )}
                 </section>
                 {this.state.modalOpen && this.showModal()}
               </div>
@@ -114,7 +96,7 @@ export default class NearbyStopsViewComponent extends React.Component<
     });
   }
 
-  public openModal(route: Route) {
+  public openModal(route: TrimetRoute) {
     this.setState({
       modalOpen: true,
       routeInfo: route

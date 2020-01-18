@@ -1,5 +1,9 @@
 import { concat, each, map, reduce, sortBy } from "lodash";
-import { Direction, Route, StopLocation } from "../../../api/trimet/types";
+import {
+  Direction,
+  StopLocation,
+  TrimetRoute
+} from "../../../api/trimet/types";
 import { StopLocationsDictionary } from "../stopsReducer";
 
 export interface RouteDirection {
@@ -9,7 +13,10 @@ export interface RouteDirection {
   routeDirectionDescription: string;
 }
 
-function getDirectionsOnRoute(route: Route, routeId: number): RouteDirection[] {
+function getDirectionsOnRoute(
+  route: TrimetRoute,
+  routeId: number
+): RouteDirection[] {
   return map(route.dir, (direction: Direction) => {
     const routeDescription = route.desc;
     const directionId = direction.dir;
@@ -27,7 +34,7 @@ function getDirectionsOnRoute(route: Route, routeId: number): RouteDirection[] {
 function getRoutes(stopLocation: StopLocation): RouteDirection[] {
   return reduce(
     stopLocation.route,
-    (result: RouteDirection[], route: Route) => {
+    (result: RouteDirection[], route: TrimetRoute) => {
       const routeId = route.route;
       const directions = getDirectionsOnRoute(route, routeId);
 
@@ -73,7 +80,7 @@ export interface RouteDirectionDict {
   [routeId: number]: RouteAndRouteDirections;
 }
 
-function createInitialRoute(route: Route): RouteAndRouteDirections {
+function createInitialRoute(route: TrimetRoute): RouteAndRouteDirections {
   const routeDirection = route.dir[0];
 
   return {
