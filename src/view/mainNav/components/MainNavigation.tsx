@@ -5,7 +5,7 @@ import {
   BOOKMARKS_VIEW,
   NEARBY_STOPS_VIEW
 } from "../../../store/reducers/viewReducer";
-import "./MainNavigation.css";
+import "./MainNavigation.scss";
 
 function bookmarkCount(numberOfBookmarks: number) {
   return <>{numberOfBookmarks > 0 && <span>({numberOfBookmarks})</span>}</>;

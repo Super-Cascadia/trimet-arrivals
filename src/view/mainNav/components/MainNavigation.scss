@@ -1,0 +1,28 @@
+.view-header {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  justify-content: space-evenly;
+  margin-block-end: 0;
+  margin-block-start: 0;
+  padding-inline-start: 0;
+  align-content: stretch;
+  a {
+    line-height: 30px;
+    flex-grow: 1;
+    cursor: pointer;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    font-weight: bold;
+
+    &.active {
+      background: rgba(255, 255, 255, 0.8);
+    }
+    &:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+    .bookmark-icon {
+      margin-right: 8px;
+    }
+  }
+}

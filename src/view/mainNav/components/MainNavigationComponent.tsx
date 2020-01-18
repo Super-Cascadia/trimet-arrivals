@@ -1,5 +1,4 @@
 import React from "react";
-import { NEARBY_STOPS_VIEW } from "../../../store/reducers/viewReducer";
 import MainNavigationRoute from "./MainNavigationRoute";
 
 interface Props {
@@ -21,7 +20,6 @@ export default class MainNavigationComponent extends React.Component<Props> {
         <MainNavigationRoute
           numberOfBookmarks={numberOfBookmarks}
           timeOfLastLoad={timeOfLastLoad}
-          activeView={NEARBY_STOPS_VIEW}
         />
       </div>
     );
