@@ -10,7 +10,7 @@ import { ProviderMock } from "../test/util";
 
 window.URL.createObjectURL = jest.fn();
 
-import ViewComponent from "./ViewComponent";
+import MainNavigationComponent from "./MainNavigationComponent";
 
 const onInitialLoad = () => {
   return;
@@ -32,12 +32,12 @@ function createViewReducerStore(baseState) {
   );
 }
 
-describe("ViewComponent", () => {
+describe("MainNavigationComponent", () => {
   describe("by default", () => {
     it("renders without errors", () => {
       expect(() =>
         shallow(
-          <ViewComponent
+          <MainNavigationComponent
             activeView={undefined}
             updateView={undefined}
             numberOfBookmarks={undefined}
@@ -50,7 +50,7 @@ describe("ViewComponent", () => {
 
     it("shows navigation", () => {
       const subject = shallow(
-        <ViewComponent
+        <MainNavigationComponent
           activeView={undefined}
           updateView={undefined}
           numberOfBookmarks={undefined}
@@ -86,7 +86,7 @@ describe("ViewComponent", () => {
 
       const subject = mount(
         <ProviderMock store={mockStore()}>
-          <ViewComponent
+          <MainNavigationComponent
             activeView={undefined}
             updateView={undefined}
             numberOfBookmarks={undefined}
@@ -126,7 +126,7 @@ describe("ViewComponent", () => {
 
       const subject = mount(
         <ProviderMock store={mockStore()}>
-          <ViewComponent
+          <MainNavigationComponent
             activeView={NEARBY_STOPS_VIEW}
             updateView={undefined}
             numberOfBookmarks={undefined}
@@ -193,7 +193,7 @@ describe("ViewComponent", () => {
 
       const subject = mount(
         <ProviderMock store={mockStore()}>
-          <ViewComponent
+          <MainNavigationComponent
             activeView={BOOKMARKS_VIEW}
             updateView={undefined}
             numberOfBookmarks={undefined}

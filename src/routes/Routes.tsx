@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import ViewContainer from "../view/ViewContainer";
+import MainNavigationContainer from "../view/MainNavigationContainer";
 import BookmarkRoute from "./BookmarkRoute";
 import NearbyRoute from "./NearbyRoute";
 
 export default function Routes() {
   return (
     <Router>
-      <ViewContainer />
+      <MainNavigationContainer />
       <main className="main-view">
         <Switch>
           <Route exact={true} path="/">

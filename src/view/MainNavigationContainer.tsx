@@ -3,7 +3,7 @@ import { onInitialLoadRequest } from "../store/action/viewActions";
 import { RootState } from "../store/reducers";
 import { bookmarkCountSelector } from "../store/selectors/bookmarkSelectors";
 import { timeOfLastLoadSelector } from "../store/selectors/stopSelectors";
-import ViewComponent from "./ViewComponent";
+import MainNavigationComponent from "./MainNavigationComponent";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -20,9 +20,9 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const ViewContainer = connect(
+const MainNavigationContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(ViewComponent);
+)(MainNavigationComponent);
 
-export default ViewContainer;
+export default MainNavigationContainer;

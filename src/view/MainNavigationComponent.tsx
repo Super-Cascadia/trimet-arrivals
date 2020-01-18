@@ -8,7 +8,7 @@ interface Props {
   onInitialLoad: () => void;
 }
 
-export default class ViewComponent extends React.Component<Props> {
+export default class MainNavigationComponent extends React.Component<Props> {
   public componentDidMount(): void {
     this.props.onInitialLoad();
   }
