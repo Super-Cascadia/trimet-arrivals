@@ -1,13 +1,7 @@
 import React from "react";
 import { Link, Route, Switch, useRouteMatch } from "react-router-dom";
-
-function NearbyStopsRoute() {
-  return <div>Stops</div>;
-}
-
-function NearbyRoutesRoute() {
-  return <div>Nearby Routes</div>;
-}
+import NearbyRoutesRoute from "./NearbyRoutesRoute";
+import NearbyStopsRoute from "./NearbyStopsRoute";
 
 export default function NearbyRoute() {
   const { path, url } = useRouteMatch();
@@ -17,10 +11,10 @@ export default function NearbyRoute() {
       <h2>Nearby</h2>
       <ul>
         <li>
-          <Link to={`${url}/stops`}>Stops</Link>
+          <Link to={`${url}/routes`}>Routes</Link>
         </li>
         <li>
-          <Link to={`${url}/routes`}>Routes</Link>
+          <Link to={`${url}/stops`}>Stops</Link>
         </li>
       </ul>
 

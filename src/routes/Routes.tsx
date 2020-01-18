@@ -11,7 +11,7 @@ export default function Routes() {
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/nearby">Nearby</Link>
+          <Link to="/nearby/routes">Nearby</Link>
         </li>
         <li>
           <Link to="/bookmarks">Bookmarks</Link>
