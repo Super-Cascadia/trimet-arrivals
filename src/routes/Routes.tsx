@@ -19,7 +19,7 @@ export default function Routes() {
       </ul>
       <Switch>
         <Route exact={true} path="/">
-          <NearbyRoute />
+          Home
         </Route>
         <Route path="/nearby">
           <NearbyRoute />
