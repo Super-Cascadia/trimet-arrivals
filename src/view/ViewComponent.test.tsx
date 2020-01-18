@@ -59,7 +59,7 @@ describe("ViewComponent", () => {
         />
       );
 
-      const mainNav = subject.find("MainNavigation");
+      const mainNav = subject.find("MainNavigationRoute");
 
       expect(mainNav).toExist();
     });
