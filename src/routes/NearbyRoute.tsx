@@ -22,11 +22,11 @@ export default function NearbyRoute() {
         <Route exact={true} path={path}>
           <NearbyStopsRoute />
         </Route>
-        <Route path={`${path}/stops`}>
-          <NearbyStopsRoute />
-        </Route>
         <Route path={`${path}/routes`}>
           <NearbyRoutesRoute />
+        </Route>
+        <Route path={`${path}/stops`}>
+          <NearbyStopsRoute />
         </Route>
       </Switch>
     </div>
