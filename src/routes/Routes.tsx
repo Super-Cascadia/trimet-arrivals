@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import MainNavigationContainer from "../view/MainNavigationContainer";
+import MainNavigationContainer from "../view/mainNav/containers/MainNavigationContainer";
 import BookmarkRoute from "./BookmarkRoute";
 import NearbyRoute from "./NearbyRoute";
 

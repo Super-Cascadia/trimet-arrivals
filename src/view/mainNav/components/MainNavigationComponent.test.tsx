@@ -5,8 +5,8 @@ import thunk from "redux-thunk";
 import {
   BOOKMARKS_VIEW,
   NEARBY_STOPS_VIEW
-} from "../store/reducers/viewReducer";
-import { ProviderMock } from "../test/util";
+} from "../../../store/reducers/viewReducer";
+import { ProviderMock } from "../../../test/util";
 
 window.URL.createObjectURL = jest.fn();
 

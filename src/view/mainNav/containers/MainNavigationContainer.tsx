@@ -1,9 +1,9 @@
 import { connect } from "react-redux";
-import { onInitialLoadRequest } from "../store/action/viewActions";
-import { RootState } from "../store/reducers";
-import { bookmarkCountSelector } from "../store/selectors/bookmarkSelectors";
-import { timeOfLastLoadSelector } from "../store/selectors/stopSelectors";
-import MainNavigationComponent from "./MainNavigationComponent";
+import { onInitialLoadRequest } from "../../../store/action/viewActions";
+import { RootState } from "../../../store/reducers";
+import { bookmarkCountSelector } from "../../../store/selectors/bookmarkSelectors";
+import { timeOfLastLoadSelector } from "../../../store/selectors/stopSelectors";
+import MainNavigationComponent from "../components/MainNavigationComponent";
 
 const mapStateToProps = (state: RootState) => {
   return {

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import {
   BOOKMARKS_VIEW,
   NEARBY_STOPS_VIEW
-} from "../../store/reducers/viewReducer";
+} from "../../../store/reducers/viewReducer";
 import "./MainNavigation.css";
 
 function bookmarkCount(numberOfBookmarks: number) {

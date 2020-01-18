@@ -1,6 +1,6 @@
 import React from "react";
-import MainNavigationRoute from "../component/nav/MainNavigationRoute";
-import { NEARBY_STOPS_VIEW } from "../store/reducers/viewReducer";
+import { NEARBY_STOPS_VIEW } from "../../../store/reducers/viewReducer";
+import MainNavigationRoute from "./MainNavigationRoute";
 
 interface Props {
   numberOfBookmarks: number;
