@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useRouteMatch } from "react-router-dom";
+import "./NearbySubNav.scss";
 
 interface Props {
   stopCount: number;
