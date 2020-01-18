@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { NavLink, useRouteMatch } from "react-router-dom";
 import "./NearbySubNav.scss";
 
 interface Props {
@@ -12,14 +12,8 @@ export default function NearbySubNav({ stopCount, routeCount }: Props) {
 
   return (
     <nav className="nearby-routes-nav">
-      <ul>
-        <li>
-          <Link to={`${url}/routes`}>Routes ({routeCount})</Link>
-        </li>
-        <li>
-          <Link to={`${url}/stops`}>Stops ({stopCount})</Link>
-        </li>
-      </ul>
+      <NavLink to={`${url}/routes`}>Routes ({routeCount})</NavLink>
+      <NavLink to={`${url}/stops`}>Stops ({stopCount})</NavLink>
     </nav>
   );
 }
