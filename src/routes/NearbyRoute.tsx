@@ -1,23 +1,15 @@
 import React from "react";
-import { Link, Route, Switch, useRouteMatch } from "react-router-dom";
+import { Route, Switch, useRouteMatch } from "react-router-dom";
+import NearbySubNav from "../view/nearby/components/NearbySubNav";
 import NearbyRoutesRoute from "./NearbyRoutesRoute";
 import NearbyStopsRoute from "./NearbyStopsRoute";
 
 export default function NearbyRoute() {
-  const { path, url } = useRouteMatch();
+  const { path } = useRouteMatch();
 
   return (
     <div>
-      <h2>Nearby</h2>
-      <ul>
-        <li>
-          <Link to={`${url}/routes`}>Routes</Link>
-        </li>
-        <li>
-          <Link to={`${url}/stops`}>Stops</Link>
-        </li>
-      </ul>
-
+      <NearbySubNav />
       <Switch>
         <Route exact={true} path={path}>
           <NearbyStopsRoute />
