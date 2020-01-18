@@ -1,6 +1,7 @@
 import cx from "classnames";
 import React from "react";
 import FontAwesome from "react-fontawesome";
+import { Link } from "react-router-dom";
 import {
   BOOKMARKS_VIEW,
   NEARBY_STOPS_VIEW
@@ -13,7 +14,6 @@ function bookmarkCount(numberOfBookmarks: number) {
 
 interface Props {
   activeView: string;
-  updateView: (activeView: string) => void;
   numberOfBookmarks: number;
   timeOfLastLoad: string;
 }
@@ -21,7 +21,6 @@ interface Props {
 export default function MainNavigationRoute({
   activeView = NEARBY_STOPS_VIEW,
   numberOfBookmarks = 0,
-  updateView,
   timeOfLastLoad
 }: Props) {
   const nearbyStopsClass = cx({
@@ -36,23 +35,23 @@ export default function MainNavigationRoute({
     "view-header-menu-item": true
   });
 
-  const updateToBookmarksView =
-    updateView && updateView.bind(this, BOOKMARKS_VIEW);
-  const updateToNearbyStopsView =
-    updateView && updateView.bind(this, NEARBY_STOPS_VIEW);
-
   return (
     <nav className="top-navigation">
       <ul className="view-header">
-        <li className={nearbyStopsClass} onClick={updateToNearbyStopsView}>
-          <FontAwesome name="map-marker" className="bookmark-icon" />
-          <a>Nearby | {timeOfLastLoad}</a>
+        <li className="view-header-menu-item">
+          <Link to="/">Home</Link>
         </li>
-        <li className={bookmarksClass} onClick={updateToBookmarksView}>
-          <a>
+        <li className={nearbyStopsClass}>
+          <Link to="/nearby/routes">
+            <FontAwesome name="map-marker" className="bookmark-icon" />
+            Nearby | {timeOfLastLoad}
+          </Link>
+        </li>
+        <li className={bookmarksClass}>
+          <Link to="/bookmarks">
             <FontAwesome name="bookmark" className="bookmark-icon" />
             Bookmarks {bookmarkCount(numberOfBookmarks)}
-          </a>
+          </Link>
         </li>
       </ul>
     </nav>

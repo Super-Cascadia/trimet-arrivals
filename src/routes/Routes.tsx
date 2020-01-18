@@ -1,22 +1,18 @@
 import React from "react";
-import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import MainNavigationRoute from "../component/nav/MainNavigationRoute";
+import { NEARBY_STOPS_VIEW } from "../store/reducers/viewReducer";
 import BookmarkRoute from "./BookmarkRoute";
 import NearbyRoute from "./NearbyRoute";
 
 export default function Routes() {
   return (
     <Router>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/nearby/routes">Nearby</Link>
-        </li>
-        <li>
-          <Link to="/bookmarks">Bookmarks</Link>
-        </li>
-      </ul>
+      <MainNavigationRoute
+        activeView={NEARBY_STOPS_VIEW}
+        numberOfBookmarks={1}
+        timeOfLastLoad={"123"}
+      />
       <Switch>
         <Route exact={true} path="/">
           Home
