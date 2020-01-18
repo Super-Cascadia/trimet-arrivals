@@ -1,7 +1,7 @@
 import React from "react";
 import FontAwesome from "react-fontawesome";
 import { NavLink } from "react-router-dom";
-import "./MainNavigation.scss";
+import "./MainNavigationRoute.scss";
 
 function bookmarkCount(numberOfBookmarks: number) {
   return <>{numberOfBookmarks > 0 && <span>({numberOfBookmarks})</span>}</>;

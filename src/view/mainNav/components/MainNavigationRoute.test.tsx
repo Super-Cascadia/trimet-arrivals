@@ -1,15 +1,13 @@
 import { shallow } from "enzyme";
 import * as React from "react";
-import MainNavigation from "./MainNavigation";
+import MainNavigationRoute from "./MainNavigationRoute";
 
-describe("MainNavigation", () => {
+describe("MainNavigationRoute", () => {
   describe("by default", () => {
     it("renders with no errors", () => {
       expect(() =>
         shallow(
-          <MainNavigation
-            activeView={undefined}
-            updateView={undefined}
+          <MainNavigationRoute
             numberOfBookmarks={undefined}
             timeOfLastLoad={undefined}
           />
@@ -19,9 +17,7 @@ describe("MainNavigation", () => {
 
     it("has two headings", () => {
       const subject = shallow(
-        <MainNavigation
-          activeView={undefined}
-          updateView={undefined}
+        <MainNavigationRoute
           numberOfBookmarks={undefined}
           timeOfLastLoad={undefined}
         />
@@ -32,9 +28,7 @@ describe("MainNavigation", () => {
 
     describe("Nearby Stops heading", () => {
       const subject = shallow(
-        <MainNavigation
-          activeView={undefined}
-          updateView={undefined}
+        <MainNavigationRoute
           numberOfBookmarks={undefined}
           timeOfLastLoad={"123123123"}
         />
@@ -53,12 +47,7 @@ describe("MainNavigation", () => {
 
     describe("Bookmarks Heading", () => {
       const subject = shallow(
-        <MainNavigation
-          activeView={undefined}
-          updateView={undefined}
-          numberOfBookmarks={1}
-          timeOfLastLoad={undefined}
-        />
+        <MainNavigationRoute numberOfBookmarks={1} timeOfLastLoad={undefined} />
       );
 
       const bookmarks = subject.find(".bookmarks");
