@@ -16,8 +16,6 @@ interface Props {
   loading: boolean;
   stopLocations: StopLocationsDictionary;
   nearbyRoutes: RouteDirectionDict;
-  activeView: string;
-  changeView: (view: string) => void;
 }
 
 interface State {
@@ -62,10 +60,7 @@ export default class NearbyViewComponent extends React.Component<Props, State> {
                 <section className="flex-stops">
                   <NearbyMapContainer />
                   <NearbySubNav stopCount={stopCount} routeCount={routeCount} />
-                  <NearbySubRoutes
-                    nearbyRoutes={nearbyRoutes}
-                    stopLocations={stopLocations}
-                  />
+                  <NearbySubRoutes stopLocations={stopLocations} />
                 </section>
                 {this.state.modalOpen && this.showModal()}
               </div>
