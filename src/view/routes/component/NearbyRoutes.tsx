@@ -48,13 +48,16 @@ export default class NearbyRoutes extends React.Component<Props> {
         "route-header"
       );
 
+      // tslint:disable-next-line:no-empty
+      const onClick = () => {};
+
       return (
         <div className={classNames}>
           <h3 className="route-directions-indicator-wrapper">
             <RouteIndicator
               routeId={route.routeInfo.id}
               route={undefined}
-              onClick={undefined}
+              onClick={onClick}
               verbose={true}
             />
           </h3>
