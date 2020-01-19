@@ -7,7 +7,7 @@ import NearbySubRoutes from "../../../routes/NearbySubRoutes";
 import { LoadStopData } from "../../../store/action/stopActions";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
-import NearbyStopsMap from "./NearbyStopsMap";
+import NearbyMap from "./NearbyMap";
 import NearbySubNav from "./NearbySubNav";
 import "./NearbyViewComponent.scss";
 
@@ -66,7 +66,7 @@ export default class NearbyViewComponent extends React.Component<Props, State> {
             <main>
               <div className="flex-container">
                 <section className="flex-stops">
-                  <NearbyStopsMap
+                  <NearbyMap
                     currentLocation={currentLocation}
                     stopLocations={stopLocations}
                     nearbyRoutes={nearbyRoutes}

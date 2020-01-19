@@ -6,7 +6,7 @@ import {
   RouteAndRouteDirections,
   RouteDirectionDict
 } from "../../../store/reducers/util/getRoutesFromStopLocations";
-import { LatLngCoords } from "../components/NearbyStopsMap";
+import { LatLngCoords } from "../components/NearbyMap";
 
 export function mountMapCenteredOnLocation(
   mapContainer,

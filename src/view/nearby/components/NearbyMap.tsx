@@ -20,7 +20,7 @@ interface Props {
   nearbyRoutes: RouteDirectionDict;
 }
 
-export default class NearbyStopsMap extends Component<Props> {
+export default class NearbyMap extends Component<Props> {
   private mapContainer: HTMLDivElement;
   private map: mapboxgl.Map;
 
