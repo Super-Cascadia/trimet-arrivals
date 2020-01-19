@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
-import NearbyRoutesContainer from "../view/routes/container/NearbyRoutesContainer";
+import NearbyRoutesContainer from "../view/nearbyRoutes/container/NearbyRoutesContainer";
 import StopsContainer from "../view/stops/containers/StopsContainer";
 
 export default function NearbySubRoutes() {
