@@ -8,8 +8,8 @@ import NearbySubRoutes from "../../../routes/NearbySubRoutes";
 import { LoadStopData } from "../../../store/action/stopActions";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
-import NearbySubNav from "../../nearby/components/NearbySubNav";
-import "../Stops.css";
+import "../../stops/Stops.css";
+import NearbySubNav from "./NearbySubNav";
 
 interface Props {
   loadStopData: LoadStopData;
