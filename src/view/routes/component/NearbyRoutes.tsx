@@ -1,7 +1,6 @@
 import cx from "classnames";
 import { map } from "lodash";
 import React from "react";
-import FontAwesome from "react-fontawesome";
 import {
   BLUE_LINE_NUMBER,
   GREEN_LINE_NUMBER,
@@ -16,10 +15,10 @@ import {
 import RouteIndicator from "../../../component/route/RouteIndicator";
 import {
   RouteAndRouteDirections,
-  RouteDirectionDict,
-  RouteDirectionsDict
+  RouteDirectionDict
 } from "../../../store/reducers/util/getRoutesFromStopLocations";
 import "./NearbyRoutes.scss";
+import RouteDirections from "./RouteDirections";
 
 interface Props {
   nearbyRoutes: RouteDirectionDict;
@@ -59,23 +58,8 @@ export default class NearbyRoutes extends React.Component<Props> {
               verbose={true}
             />
           </h3>
-          <ul className="route-directions-wrapper">
-            {NearbyRoutes.routeDirections(route.routeDirections)}
-          </ul>
+          <RouteDirections directions={route.routeDirections} />
         </div>
-      );
-    });
-  }
-
-  public static routeDirections(routeDirections: RouteDirectionsDict) {
-    return map(routeDirections, (routeDirection, directionId) => {
-      return (
-        <li className="route-direction">
-          <span className="direction-circle-wrapper">
-            <FontAwesome name="arrow-circle-right" />
-          </span>
-          <span>{routeDirection.description}</span>
-        </li>
       );
     });
   }

@@ -19,7 +19,7 @@ export default function NearbySubRoutes({
   return (
     <Switch>
       <Route exact={true} path={path}>
-        <NearbyStopsRoute stopLocations={stopLocations} />
+        <NearbyRoutesRoute nearbyRoutes={nearbyRoutes} />
       </Route>
       <Route path={`${path}/routes`}>
         <NearbyRoutesRoute nearbyRoutes={nearbyRoutes} />
