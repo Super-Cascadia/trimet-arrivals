@@ -1,4 +1,3 @@
-import { size } from "lodash";
 import React from "react";
 import { TrimetRoute } from "../../../api/trimet/types";
 import Modal from "../../../component/modal/Modal";
@@ -6,16 +5,14 @@ import ModalContent from "../../../component/modal/ModalContent";
 import NearbySubRoutes from "../../../routes/NearbySubRoutes";
 import { LoadStopData } from "../../../store/action/stopActions";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
-import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
 import NearbyMapContainer from "../containers/NearbyMapContainer";
-import NearbySubNav from "./NearbySubNav";
+import NearbySubNavContainer from "../containers/NearbySubNavContainer";
 import "./NearbyViewComponent.scss";
 
 interface Props {
   loadStopData: LoadStopData;
   loading: boolean;
   stopLocations: StopLocationsDictionary;
-  nearbyRoutes: RouteDirectionDict;
 }
 
 interface State {
@@ -45,10 +42,7 @@ export default class NearbyViewComponent extends React.Component<Props, State> {
   }
 
   public render() {
-    const { loading, stopLocations, nearbyRoutes } = this.props;
-
-    const stopCount = size(stopLocations);
-    const routeCount = size(nearbyRoutes);
+    const { loading, stopLocations } = this.props;
 
     return (
       <div id="nearby-stops-view-component">
@@ -59,7 +53,7 @@ export default class NearbyViewComponent extends React.Component<Props, State> {
               <div className="flex-container">
                 <section className="flex-stops">
                   <NearbyMapContainer />
-                  <NearbySubNav stopCount={stopCount} routeCount={routeCount} />
+                  <NearbySubNavContainer />
                   <NearbySubRoutes />
                 </section>
                 {this.state.modalOpen && this.showModal()}
