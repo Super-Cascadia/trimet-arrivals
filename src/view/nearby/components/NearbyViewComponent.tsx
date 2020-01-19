@@ -60,7 +60,7 @@ export default class NearbyViewComponent extends React.Component<Props, State> {
                 <section className="flex-stops">
                   <NearbyMapContainer />
                   <NearbySubNav stopCount={stopCount} routeCount={routeCount} />
-                  <NearbySubRoutes stopLocations={stopLocations} />
+                  <NearbySubRoutes />
                 </section>
                 {this.state.modalOpen && this.showModal()}
               </div>

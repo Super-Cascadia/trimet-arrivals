@@ -7,23 +7,20 @@ import StopContainer from "../containers/StopContainer";
 
 interface Props {
   stopLocations: StopLocationsDictionary;
-  showArrivals: boolean;
-  onRouteIndicatorClick: (route: TrimetRoute) => void;
 }
 
 export default class Stops extends React.Component<Props> {
-  public static getLocationInfo(
-    stopLocations: StopLocationsDictionary,
-    showArrivals: boolean,
-    onRouteIndicatorClick
-  ) {
+  public static getLocationInfo(stopLocations: StopLocationsDictionary) {
+    // tslint:disable-next-line:no-empty
+    const onRouteIndicatorClick = () => {};
+
     return map(stopLocations, (stopLocation: StopLocation, key: number) => {
       return (
         <div className="stop-wrapper">
           <StopContainer
             locationId={key}
             key={key}
-            showArrivals={showArrivals}
+            showArrivals={false}
             onRouteIndicatorClick={onRouteIndicatorClick}
           />
         </div>
@@ -32,7 +29,7 @@ export default class Stops extends React.Component<Props> {
   }
 
   public render() {
-    const { stopLocations, showArrivals, onRouteIndicatorClick } = this.props;
+    const { stopLocations } = this.props;
 
     if (!stopLocations) {
       return null;
@@ -40,11 +37,7 @@ export default class Stops extends React.Component<Props> {
 
     return (
       <div className="stops-wrapper">
-        {Stops.getLocationInfo(
-          stopLocations,
-          showArrivals,
-          onRouteIndicatorClick
-        )}
+        {Stops.getLocationInfo(stopLocations)}
       </div>
     );
   }

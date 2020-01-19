@@ -1,14 +1,9 @@
 import React from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
-import { StopLocationsDictionary } from "../store/reducers/stopsReducer";
 import NearbyRoutesRoute from "./NearbyRoutesRoute";
 import NearbyStopsRoute from "./NearbyStopsRoute";
 
-interface Props {
-  stopLocations: StopLocationsDictionary;
-}
-
-export default function NearbySubRoutes({ stopLocations }: Props) {
+export default function NearbySubRoutes() {
   const { path } = useRouteMatch();
 
   return (
@@ -20,7 +15,7 @@ export default function NearbySubRoutes({ stopLocations }: Props) {
         <NearbyRoutesRoute />
       </Route>
       <Route path={`${path}/stops`}>
-        <NearbyStopsRoute stopLocations={stopLocations} />
+        <NearbyStopsRoute />
       </Route>
     </Switch>
   );
