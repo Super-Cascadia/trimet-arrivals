@@ -8,7 +8,7 @@ import {
 
 describe("stopSelectors", () => {
   describe("nearbyActiveViewSelector", () => {
-    it("selects loading state for all stops", () => {
+    it("selects loading state for all nearbyStops", () => {
       const state = {
         stopsReducer: {
           loading: true

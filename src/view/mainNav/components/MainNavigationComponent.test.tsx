@@ -97,7 +97,9 @@ describe("MainNavigationComponent", () => {
       );
 
       const mainView = subject.find(".main-view");
-      const nearbyStopsView = mainView.find("#nearby-stops-view-component");
+      const nearbyStopsView = mainView.find(
+        "#nearby-nearbyStops-view-component"
+      );
 
       expect(nearbyStopsView).toExist();
     });
@@ -137,7 +139,9 @@ describe("MainNavigationComponent", () => {
       );
 
       const mainView = subject.find(".main-view");
-      const nearbyStopsView = mainView.find("#nearby-stops-view-component");
+      const nearbyStopsView = mainView.find(
+        "#nearby-nearbyStops-view-component"
+      );
 
       expect(nearbyStopsView).toExist();
     });

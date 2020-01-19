@@ -34,9 +34,9 @@ describe("MainNavigationRoute", () => {
         />
       );
 
-      const nearbyStops = subject.find(".nearby-stops");
+      const nearbyStops = subject.find(".nearby-nearbyStops");
 
-      it("has a Nearby stops heading", () => {
+      it("has a Nearby nearbyStops heading", () => {
         expect(nearbyStops).toExist();
       });
 

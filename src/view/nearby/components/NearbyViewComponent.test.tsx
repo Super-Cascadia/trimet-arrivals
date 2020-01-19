@@ -66,15 +66,15 @@ describe("NearbyViewComponent", () => {
           currentLocation={undefined}
         />
       );
-      const nearbyStops = subject.find(".nearby-stops");
+      const nearbyStops = subject.find(".nearby-nearbyStops");
 
-      it("shows nearby stops", () => {
+      it("shows nearby nearbyStops", () => {
         expect(nearbyStops).toExist();
       });
 
-      describe("the nearby stops list", () => {
+      describe("the nearby nearbyStops list", () => {
         it("shows Stops", () => {
-          expect(nearbyStops.find(".nearby-stops")).toExist();
+          expect(nearbyStops.find(".nearby-nearbyStops")).toExist();
         });
       });
     });

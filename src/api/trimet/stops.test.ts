@@ -18,7 +18,7 @@ describe("getNearbyStops", () => {
   });
 
   describe("when fixture data is enabled", () => {
-    it("retuns fixture data for stops", done => {
+    it("retuns fixture data for nearbyStops", done => {
       process.env.REACT_APP_USE_FIXTURE = "true";
 
       const location = {
@@ -36,7 +36,7 @@ describe("getNearbyStops", () => {
   });
 
   describe("when fixture data is not enabled", () => {
-    it("fetches trimet data from stops", done => {
+    it("fetches trimet data from nearbyStops", done => {
       const location = {
         coords: {
           latitude: 123,

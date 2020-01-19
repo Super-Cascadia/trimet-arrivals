@@ -3,7 +3,7 @@ import viewReducer, { BOOKMARKS_VIEW, NEARBY_STOPS_VIEW } from "./viewReducer";
 
 describe("bookmarkSectionReducer", () => {
   describe("by default", () => {
-    it("by default the active view is the nearby stops view", () => {
+    it("by default the active view is the nearby nearbyStops view", () => {
       const initialState = viewReducer(undefined, {});
       expect(initialState.activeView).toEqual(NEARBY_STOPS_VIEW);
     });

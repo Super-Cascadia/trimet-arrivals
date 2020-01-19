@@ -51,7 +51,7 @@ describe("BookmarkSectionComponent", () => {
     });
   });
 
-  describe("when the bookmark section has bookmarked stops", () => {
+  describe("when the bookmark section has bookmarked nearbyStops", () => {
     const bookmarksInSection = [{}];
 
     it("each bookmarked stop has a StopContainer", () => {

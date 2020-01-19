@@ -13,7 +13,7 @@ describe("stopSagas", () => {
       payload: { radiusInFeet: 123 }
     });
 
-    it("dispatches the load stops event", () => {
+    it("dispatches the load nearbyStops event", () => {
       expect(stopData.next().value).toEqual(put({ type: LOAD_STOPS }));
     });
 
@@ -32,7 +32,7 @@ describe("stopSagas", () => {
       });
     });
 
-    it("dispatches the load stops complete event", () => {
+    it("dispatches the load nearbyStops complete event", () => {
       getCurrentPosition().then(location => {
         expect(stopData.next(location).value).toEqual(
           put({

@@ -22,11 +22,11 @@ describe("Stops", () => {
         <Stops stopLocations={stopLocations} showArrivals={undefined} />
       );
 
-      const stops = subject.find(".stops-wrapper");
+      const stops = subject.find(".nearbyStops-wrapper");
       expect(stops).toExist();
-      // expect(stops.children().length).toBe(2);
-      // expect(stops.html()).toBe('foo')
-      // expect(stops.childAt(1).name()).toBe("Connect(StopComponent)");
+      // expect(nearbyStops.children().length).toBe(2);
+      // expect(nearbyStops.html()).toBe('foo')
+      // expect(nearbyStops.childAt(1).name()).toBe("Connect(StopComponent)");
     });
   });
 });

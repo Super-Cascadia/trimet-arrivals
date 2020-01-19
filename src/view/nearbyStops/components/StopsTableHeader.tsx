@@ -31,7 +31,7 @@ export default function StopsTableHeader(props: Props) {
     return null;
   }
 
-  const classNames = cx("stops-header", {
+  const classNames = cx("nearbyStops-header", {
     "arrivals-hidden": !showArrivals
   });
 
