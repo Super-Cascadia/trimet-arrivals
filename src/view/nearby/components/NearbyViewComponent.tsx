@@ -7,7 +7,7 @@ import NearbySubRoutes from "../../../routes/NearbySubRoutes";
 import { LoadStopData } from "../../../store/action/stopActions";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
-import NearbyMap from "./NearbyMap";
+import NearbyMapContainer from "../containers/NearbyMapContainer";
 import NearbySubNav from "./NearbySubNav";
 import "./NearbyViewComponent.scss";
 
@@ -16,7 +16,6 @@ interface Props {
   loading: boolean;
   stopLocations: StopLocationsDictionary;
   nearbyRoutes: RouteDirectionDict;
-  currentLocation: number[];
   activeView: string;
   changeView: (view: string) => void;
 }
@@ -48,12 +47,7 @@ export default class NearbyViewComponent extends React.Component<Props, State> {
   }
 
   public render() {
-    const {
-      loading,
-      stopLocations,
-      currentLocation,
-      nearbyRoutes
-    } = this.props;
+    const { loading, stopLocations, nearbyRoutes } = this.props;
 
     const stopCount = size(stopLocations);
     const routeCount = size(nearbyRoutes);
@@ -66,11 +60,7 @@ export default class NearbyViewComponent extends React.Component<Props, State> {
             <main>
               <div className="flex-container">
                 <section className="flex-stops">
-                  <NearbyMap
-                    currentLocation={currentLocation}
-                    stopLocations={stopLocations}
-                    nearbyRoutes={nearbyRoutes}
-                  />
+                  <NearbyMapContainer />
                   <NearbySubNav stopCount={stopCount} routeCount={routeCount} />
                   <NearbySubRoutes
                     nearbyRoutes={nearbyRoutes}
