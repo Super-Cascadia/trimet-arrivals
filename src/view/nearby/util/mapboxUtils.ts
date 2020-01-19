@@ -4,10 +4,9 @@ import { StopLocation } from "../../../api/trimet/types";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import {
   RouteAndRouteDirections,
-  RouteDirection,
   RouteDirectionDict
 } from "../../../store/reducers/util/getRoutesFromStopLocations";
-import { LatLngCoords } from "../NearbyStopsMap";
+import { LatLngCoords } from "../components/NearbyStopsMap";
 
 export function mountMapCenteredOnLocation(
   mapContainer,

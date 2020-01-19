@@ -1,13 +1,13 @@
 import { size } from "lodash";
 import React from "react";
 import { TrimetRoute } from "../../../api/trimet/types";
-import NearbyStopsMap from "../../../component/maps/NearbyStopsMap";
 import Modal from "../../../component/modal/Modal";
 import ModalContent from "../../../component/modal/ModalContent";
 import NearbySubRoutes from "../../../routes/NearbySubRoutes";
 import { LoadStopData } from "../../../store/action/stopActions";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
+import NearbyStopsMap from "./NearbyStopsMap";
 import NearbySubNav from "./NearbySubNav";
 import "./NearbyViewComponent.scss";
 

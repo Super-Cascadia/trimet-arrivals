@@ -1,13 +1,13 @@
 import mapboxgl from "mapbox-gl";
 import React, { Component } from "react";
-import { StopLocationsDictionary } from "../../store/reducers/stopsReducer";
-import { RouteDirectionDict } from "../../store/reducers/util/getRoutesFromStopLocations";
+import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
+import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
 import {
   mountMapCenteredOnLocation,
   setCurrentLocationMarker,
   setNearbyStopMarkers,
   setRoutes
-} from "./util/mapboxUtils";
+} from "../util/mapboxUtils";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiamFtZXNvbm55ZWhvbHQiLCJhIjoiY2p3NWoyamV0MTk1dDQ0cGNmdGZkenViMiJ9.TqDD3r62vlPzVgPnYjocsg";
