@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
-import NearbyRoutesRoute from "./NearbyRoutesRoute";
-import NearbyStopsRoute from "./NearbyStopsRoute";
+import NearbyRoutesContainer from "../view/routes/container/NearbyRoutesContainer";
+import StopsContainer from "../view/stops/containers/StopsContainer";
 
 export default function NearbySubRoutes() {
   const { path } = useRouteMatch();
@@ -9,13 +9,13 @@ export default function NearbySubRoutes() {
   return (
     <Switch>
       <Route exact={true} path={path}>
-        <NearbyRoutesRoute />
+        <NearbyRoutesContainer />
       </Route>
       <Route path={`${path}/routes`}>
-        <NearbyRoutesRoute />
+        <NearbyRoutesContainer />
       </Route>
       <Route path={`${path}/stops`}>
-        <NearbyStopsRoute />
+        <StopsContainer />
       </Route>
     </Switch>
   );
