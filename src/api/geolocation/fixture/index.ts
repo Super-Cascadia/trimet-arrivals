@@ -1,4 +1,4 @@
-import { Location } from "../../trimet/types";
+import { Location } from "../../trimet/interfaces/types";
 
 export function geoLocationFixtureData(): Promise<Location> {
   return Promise.resolve({

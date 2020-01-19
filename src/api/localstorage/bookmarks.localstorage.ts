@@ -1,5 +1,5 @@
 import { omit } from "lodash";
-import { StopLocation } from "../trimet/types";
+import { StopLocation } from "../trimet/interfaces/types";
 import { fetchLocalStorageItemByKey, updateStoredItemByKey } from "./util";
 
 export const BOOKMARKS = "BOOKMARKS";

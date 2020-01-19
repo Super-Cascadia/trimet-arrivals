@@ -1,4 +1,4 @@
-import { Location } from "../trimet/types";
+import { Location } from "../trimet/interfaces/types";
 import { fixtureEnabled, useDefaultPortlandLocation } from "../util";
 import { geoLocationFixtureData } from "./fixture";
 import geoLocateCurrentPosition from "./geoLocateCurrentPosition";

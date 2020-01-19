@@ -1,6 +1,6 @@
 import cx from "classnames";
 import React from "react";
-import { TrimetRoute } from "../../../api/trimet/types";
+import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import { LoadArrivalData } from "../../../store/action/stopActions";
 import { StopLocationWithDistance } from "../../../store/reducers/stopsReducer";
 import StopBookmarkControlContainer from "../containers/StopBookmarkControlContainer";

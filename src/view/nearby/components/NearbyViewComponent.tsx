@@ -1,5 +1,5 @@
 import React from "react";
-import { TrimetRoute } from "../../../api/trimet/types";
+import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import Modal from "../../../component/modal/Modal";
 import ModalContent from "../../../component/modal/ModalContent";
 import NearbySubRoutes from "../../../routes/NearbySubRoutes";

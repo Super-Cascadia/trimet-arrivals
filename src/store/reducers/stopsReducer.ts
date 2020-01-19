@@ -6,7 +6,7 @@ import {
   Location,
   StopData,
   StopLocation
-} from "../../api/trimet/types";
+} from "../../api/trimet/interfaces/types";
 import {
   LOAD_ARRIVALS_COMPLETE,
   LOAD_STOP_COMPLETE,

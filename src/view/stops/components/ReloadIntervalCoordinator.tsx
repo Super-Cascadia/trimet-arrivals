@@ -1,5 +1,5 @@
 import React from "react";
-import { StopLocation } from "../../../api/trimet/types";
+import { StopLocation } from "../../../api/trimet/interfaces/types";
 import ReloadButton from "../../../component/buttons/ReloadButton";
 import { LoadArrivalData } from "../../../store/action/stopActions";
 import "../../nearby/components/NearbyViewComponent.scss";

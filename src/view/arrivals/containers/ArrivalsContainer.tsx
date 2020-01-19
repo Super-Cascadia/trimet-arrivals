@@ -1,6 +1,6 @@
 import moment from "moment";
 import { connect } from "react-redux";
-import { TrimetRoute } from "../../../api/trimet/types";
+import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import { LoadArrivalData } from "../../../store/action/stopActions";
 import { RootState } from "../../../store/reducers";
 import {

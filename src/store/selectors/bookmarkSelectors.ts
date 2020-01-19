@@ -1,6 +1,6 @@
 import { isEmpty, map } from "lodash";
 import { createSelector } from "reselect";
-import { StopLocation } from "../../api/trimet/types";
+import { StopLocation } from "../../api/trimet/interfaces/types";
 import { RootState } from "../reducers";
 import { StopLocations } from "../reducers/bookmarksReducer";
 

@@ -5,7 +5,7 @@ import {
   StopData,
   StopLocation,
   TrimetRoute
-} from "../types";
+} from "../interfaces/types";
 import { arrival1, arrival2, arrival3 } from "./arrival";
 
 export function arrivalsFixtureData(): Promise<ArrivalData> {

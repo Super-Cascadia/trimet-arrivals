@@ -1,6 +1,7 @@
 import cx from "classnames";
 import { map } from "lodash";
 import React from "react";
+import { NavLink } from "react-router-dom";
 import {
   BLUE_LINE_NUMBER,
   GREEN_LINE_NUMBER,
@@ -43,10 +44,8 @@ function getRouteIndicatorClassName(route: number, className: string) {
 export default class NearbyRoutes extends React.Component<Props> {
   public static getRoutes(routes: RouteDirectionDict) {
     return map(routes, (route: RouteAndRouteDirections) => {
-      const classNames = getRouteIndicatorClassName(
-        route.routeInfo.id,
-        "route-header"
-      );
+      const routeId = route.routeInfo.id;
+      const classNames = getRouteIndicatorClassName(routeId, "route-header");
 
       // tslint:disable-next-line:no-empty
       const onClick = () => {};
@@ -54,14 +53,16 @@ export default class NearbyRoutes extends React.Component<Props> {
       return (
         <div className={classNames}>
           <h3 className="route-directions-indicator-wrapper">
-            <RouteIndicator
-              routeId={route.routeInfo.id}
-              route={undefined}
-              onClick={onClick}
-              verbose={true}
-            />
+            <NavLink to={`/nearby/routes/${routeId}`}>
+              <RouteIndicator
+                routeId={routeId}
+                route={undefined}
+                onClick={onClick}
+                verbose={true}
+              />
+            </NavLink>
+            <RouteDirections directions={route.routeDirections} />
           </h3>
-          <RouteDirections directions={route.routeDirections} />
         </div>
       );
     });

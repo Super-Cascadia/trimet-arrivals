@@ -3,7 +3,7 @@ import {
   Direction,
   StopLocation,
   TrimetRoute
-} from "../../../api/trimet/types";
+} from "../../../api/trimet/interfaces/types";
 import { StopLocationsDictionary } from "../stopsReducer";
 
 export interface RouteDirection {

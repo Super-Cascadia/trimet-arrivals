@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { Arrival } from "../../api/trimet/types";
+import { Arrival } from "../../api/trimet/interfaces/types";
 import { RootState } from "../reducers";
 
 const arrivalsAtStopLoadingState = (state: RootState, locationId: number) =>

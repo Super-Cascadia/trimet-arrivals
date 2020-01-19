@@ -1,5 +1,5 @@
+import { StopData } from "./interfaces/types";
 import { getNearbyStops } from "./stops";
-import { StopData } from "./types";
 
 jest.mock("./util", () => {
   return {

@@ -1,6 +1,6 @@
 import { map, split } from "lodash";
 import React, { Component } from "react";
-import { TrimetRoute } from "../../../api/trimet/types";
+import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import RouteIndicator from "../../../component/route/RouteIndicator";
 import "./StopRouteListing.css";
 

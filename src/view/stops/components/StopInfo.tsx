@@ -1,5 +1,5 @@
 import React from "react";
-import { TrimetRoute } from "../../../api/trimet/types";
+import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import StopLocationIndicator from "../../../component/stop/StopLocationIndicator";
 import { StopLocationWithDistance } from "../../../store/reducers/stopsReducer";
 import "./StopInfo.css";

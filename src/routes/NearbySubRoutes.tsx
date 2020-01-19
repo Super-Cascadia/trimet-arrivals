@@ -11,6 +11,9 @@ export default function NearbySubRoutes() {
       <Route exact={true} path={path}>
         <NearbyRoutesContainer />
       </Route>
+      <Route path={`${path}/routes/:id`}>
+        <h1>Nearby Route by ID</h1>
+      </Route>
       <Route path={`${path}/routes`}>
         <NearbyRoutesContainer />
       </Route>

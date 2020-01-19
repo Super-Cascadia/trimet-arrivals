@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { StopLocation } from "../../../api/trimet/types";
+import { StopLocation } from "../../../api/trimet/interfaces/types";
 import {
   bookmarkStopRequest,
   removeStopBookmarkRequest

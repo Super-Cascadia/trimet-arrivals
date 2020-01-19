@@ -1,6 +1,6 @@
 import { isEmpty, map } from "lodash";
 import React from "react";
-import { StopLocation } from "../../../api/trimet/types";
+import { StopLocation } from "../../../api/trimet/interfaces/types";
 import StopContainer from "../../stops/containers/StopContainer";
 import BookmarkSectionsContainer from "../container/BookmarkSectionsContainer";
 import "./BookmarksViewComponent.css";

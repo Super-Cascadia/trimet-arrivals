@@ -1,6 +1,6 @@
 import { shallow } from "enzyme";
 import React from "react";
-import { TrimetRoute } from "../../api/trimet/types";
+import { TrimetRoute } from "../../api/trimet/interfaces/types";
 import RouteIndicator from "./RouteIndicator";
 
 describe("RouteIndicator", () => {

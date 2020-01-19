@@ -1,5 +1,5 @@
 import { getArrivals } from "./arrivals";
-import { ArrivalData } from "./types";
+import { ArrivalData } from "./interfaces/types";
 
 jest.mock("./util", () => {
   return {

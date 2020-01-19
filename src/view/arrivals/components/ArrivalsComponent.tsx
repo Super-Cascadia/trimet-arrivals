@@ -1,6 +1,10 @@
 import { Moment } from "moment";
 import React from "react";
-import { Arrival, StopLocation, TrimetRoute } from "../../../api/trimet/types";
+import {
+  Arrival,
+  StopLocation,
+  TrimetRoute
+} from "../../../api/trimet/interfaces/types";
 import { LoadArrivalData } from "../../../store/action/stopActions";
 import "../Arrivals.css";
 import ArrivalsTableLoadMore from "./ArrivalsTableLoadMore";

@@ -1,7 +1,7 @@
 import { fixtureEnabled } from "../util";
 import { API, BASE_URL } from "./constants";
 import { arrivalsFixtureData } from "./fixture";
-import { ArrivalData } from "./types";
+import { ArrivalData } from "./interfaces/types";
 import { getTrimetData } from "./util";
 
 const ARRIVALS_BASE_URL = `${BASE_URL}V2/arrivals/`;

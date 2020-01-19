@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { StopLocation } from "../../api/trimet/types";
+import { StopLocation } from "../../api/trimet/interfaces/types";
 import { RootState } from "../reducers";
 import {
   RouteDirection,

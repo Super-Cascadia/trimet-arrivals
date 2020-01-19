@@ -1,4 +1,4 @@
-import { Trip } from "../types";
+import { Trip } from "../interfaces/types";
 
 export const trip1: Trip = {
   desc: "string",

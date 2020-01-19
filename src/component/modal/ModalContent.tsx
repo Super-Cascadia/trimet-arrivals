@@ -1,6 +1,6 @@
 import React from "react";
 import FontAwesome from "react-fontawesome";
-import { Direction, TrimetRoute } from "../../api/trimet/types";
+import { Direction, TrimetRoute } from "../../api/trimet/interfaces/types";
 
 interface Props {
   route: TrimetRoute;

@@ -1,5 +1,5 @@
 import { omitBy } from "lodash";
-import { StopLocation } from "../../api/trimet/types";
+import { StopLocation } from "../../api/trimet/interfaces/types";
 import {
   CREATE_STOP_BOOKMARK,
   LOAD_BOOKMARKS_COMPLETE,

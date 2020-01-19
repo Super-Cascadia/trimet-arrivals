@@ -1,7 +1,11 @@
 import classNames from "classnames";
 import { Moment } from "moment";
 import React from "react";
-import { Arrival, StopLocation, TrimetRoute } from "../../../api/trimet/types";
+import {
+  Arrival,
+  StopLocation,
+  TrimetRoute
+} from "../../../api/trimet/interfaces/types";
 import ArrivalRows from "./ArrivalRows";
 import "./Arrivals.css";
 

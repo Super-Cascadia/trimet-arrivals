@@ -13,7 +13,7 @@ import {
   STREETCAR_S_LINE,
   YELLOW_LINE_NUMBER
 } from "../../api/trimet/constants";
-import { TrimetRoute } from "../../api/trimet/types";
+import { TrimetRoute } from "../../api/trimet/interfaces/types";
 import "./RouteIndicator.scss";
 
 interface Props {

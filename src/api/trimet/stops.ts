@@ -1,7 +1,7 @@
 import { fixtureEnabled } from "../util";
 import { API, BASE_URL } from "./constants";
 import { stopFixtureData } from "./fixture";
-import { Location, StopData } from "./types";
+import { Location, StopData } from "./interfaces/types";
 import { getTrimetData } from "./util";
 
 const STOPS_BASE_URL = `${BASE_URL}V1/stops/`;

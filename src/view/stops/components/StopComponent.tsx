@@ -1,5 +1,5 @@
 import React from "react";
-import { TrimetRoute } from "../../../api/trimet/types";
+import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import { StopLocationWithDistance } from "../../../store/reducers/stopsReducer";
 import ArrivalsContainer from "../../arrivals/containers/ArrivalsContainer";
 import "../../nearby/components/NearbyViewComponent.scss";
