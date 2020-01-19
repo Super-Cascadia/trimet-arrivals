@@ -1,13 +1,13 @@
 import { mount, shallow } from "enzyme";
 import React from "react";
-import NearbyStopsViewComponent from "./NearbyStopsViewComponent";
+import NearbyViewComponent from "./NearbyViewComponent";
 
-describe("NearbyStopsViewComponent", () => {
+describe("NearbyViewComponent", () => {
   describe("by default", () => {
     it("renders without crashing", () => {
       expect(() =>
         shallow(
-          <NearbyStopsViewComponent
+          <NearbyViewComponent
             loadStopData={undefined}
             loading={undefined}
             stopLocations={undefined}
@@ -24,7 +24,7 @@ describe("NearbyStopsViewComponent", () => {
         const loadStopData = jasmine.createSpy("loadStopDataSpy");
 
         const subject = shallow(
-          <NearbyStopsViewComponent
+          <NearbyViewComponent
             loadStopData={loadStopData}
             loading={undefined}
             stopLocations={undefined}
@@ -41,7 +41,7 @@ describe("NearbyStopsViewComponent", () => {
   describe("when loading", () => {
     it("shows a loading message", () => {
       const subject = shallow(
-        <NearbyStopsViewComponent
+        <NearbyViewComponent
           loadStopData={undefined}
           loading={true}
           stopLocations={undefined}
@@ -59,7 +59,7 @@ describe("NearbyStopsViewComponent", () => {
         123: {}
       };
       const subject = shallow(
-        <NearbyStopsViewComponent
+        <NearbyViewComponent
           loadStopData={undefined}
           loading={false}
           stopLocations={stopLocations}
@@ -82,7 +82,7 @@ describe("NearbyStopsViewComponent", () => {
 
   describe("when the modal is opened", () => {
     const subject = mount(
-      <NearbyStopsViewComponent
+      <NearbyViewComponent
         loadStopData={undefined}
         loading={false}
         stopLocations={undefined}

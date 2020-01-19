@@ -1,6 +1,6 @@
 import React from "react";
-import NearbyStopsViewContainer from "../view/nearby/containers/NearbyStopsViewContainer";
+import NearbyViewContainer from "../view/nearby/containers/NearbyViewContainer";
 
 export default function NearbyRoute() {
-  return <NearbyStopsViewContainer />;
+  return <NearbyViewContainer />;
 }

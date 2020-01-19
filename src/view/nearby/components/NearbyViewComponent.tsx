@@ -8,8 +8,8 @@ import NearbySubRoutes from "../../../routes/NearbySubRoutes";
 import { LoadStopData } from "../../../store/action/stopActions";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
-import "../../stops/Stops.css";
 import NearbySubNav from "./NearbySubNav";
+import "./Stops.css";
 
 interface Props {
   loadStopData: LoadStopData;
@@ -26,10 +26,7 @@ interface State {
   routeInfo: TrimetRoute;
 }
 
-export default class NearbyStopsViewComponent extends React.Component<
-  Props,
-  State
-> {
+export default class NearbyViewComponent extends React.Component<Props, State> {
   constructor(props) {
     super(props);
 

@@ -3,7 +3,7 @@ import React from "react";
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import thunk from "redux-thunk";
 import { ProviderMock } from "../../../test/util";
-import NearbyStopsViewContainer from "./NearbyStopsViewContainer";
+import NearbyViewContainer from "./NearbyViewContainer";
 
 jest.mock("mapbox-gl");
 
@@ -65,13 +65,13 @@ function mockStore() {
   );
 }
 
-describe("NearbyStopsViewContainer", () => {
+describe("NearbyViewContainer", () => {
   describe("by default", () => {
     it("renders without crashing", () => {
       expect(() =>
         shallow(
           <ProviderMock>
-            <NearbyStopsViewContainer />
+            <NearbyViewContainer />
           </ProviderMock>
         )
       ).not.toThrow();
@@ -81,7 +81,7 @@ describe("NearbyStopsViewContainer", () => {
   describe("when provided a valid stopsReducer", () => {
     const subject = mount(
       <ProviderMock store={mockStore()}>
-        <NearbyStopsViewContainer />
+        <NearbyViewContainer />
       </ProviderMock>
     );
 

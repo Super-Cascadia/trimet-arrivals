@@ -2,17 +2,15 @@ import { connect } from "react-redux";
 import { loadStopDataRequest } from "../../../store/action/stopActions";
 import { RootState } from "../../../store/reducers";
 import { currentLocationSelector } from "../../../store/selectors/locationSelectors";
-import { nearbyActiveViewSelector } from "../../../store/selectors/nearbyViewSelector";
 import {
   allNearbyRoutesSelector,
   allStopLocationsSelector,
   stopsLoadingSelector
 } from "../../../store/selectors/stopSelectors";
-import NearbyStopsViewComponent from "../components/NearbyStopsViewComponent";
+import NearbyViewComponent from "../components/NearbyViewComponent";
 
 const mapStateToProps = (state: RootState) => {
   return {
-    activeView: nearbyActiveViewSelector(state),
     currentLocation: currentLocationSelector(state),
     loading: stopsLoadingSelector(state),
     nearbyRoutes: allNearbyRoutesSelector(state),
@@ -28,9 +26,9 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const NearbyStopsViewContainer = connect(
+const NearbyViewContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(NearbyStopsViewComponent);
+)(NearbyViewComponent);
 
-export default NearbyStopsViewContainer;
+export default NearbyViewContainer;
