@@ -9,7 +9,7 @@ import { LoadStopData } from "../../../store/action/stopActions";
 import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
 import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
 import NearbySubNav from "./NearbySubNav";
-import "./Stops.css";
+import "./NearbyViewComponent.scss";
 
 interface Props {
   loadStopData: LoadStopData;
