@@ -16,8 +16,3 @@ export const loadStopDataRequest = (radiusInFeet: number) => ({
   payload: { radiusInFeet },
   type: LOAD_STOP_DATA_REQUEST
 });
-
-export const changeViewRequest = (view: string) => ({
-  payload: { view },
-  type: UPDATE_VIEW_REQUEST
-});

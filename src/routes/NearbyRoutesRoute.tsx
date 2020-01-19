@@ -1,6 +1,6 @@
 import React from "react";
 import { RouteDirectionDict } from "../store/reducers/util/getRoutesFromStopLocations";
-import NearbyRoutes from "../view/stops/components/NearbyRoutes";
+import NearbyRoutes from "../view/routes/component/NearbyRoutes";
 
 interface Props {
   nearbyRoutes: RouteDirectionDict;
