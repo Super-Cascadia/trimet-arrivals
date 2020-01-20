@@ -1,7 +1,6 @@
 import {
   LOAD_ARRIVALS_DATA_REQUEST,
-  LOAD_STOP_DATA_REQUEST,
-  UPDATE_VIEW_REQUEST
+  LOAD_STOP_DATA_REQUEST
 } from "../constants";
 
 export type LoadStopData = (radiusInFeet: number) => void;

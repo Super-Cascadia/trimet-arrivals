@@ -1,7 +1,7 @@
 import { Moment } from "moment";
 import React from "react";
+import { Arrival } from "../../../api/trimet/interfaces/arrivals";
 import {
-  Arrival,
   StopLocation,
   TrimetRoute
 } from "../../../api/trimet/interfaces/types";

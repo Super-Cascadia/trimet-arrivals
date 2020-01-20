@@ -1,5 +1,5 @@
 import { groupBy } from "lodash";
-import { Arrival, ArrivalData } from "../../api/trimet/interfaces/types";
+import { Arrival, ArrivalData } from "../../api/trimet/interfaces/arrivals";
 import { LOAD_ARRIVALS, LOAD_ARRIVALS_COMPLETE } from "../constants";
 
 export interface StopLoadingState {

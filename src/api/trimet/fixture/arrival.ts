@@ -1,4 +1,4 @@
-import { Arrival, BlockPosition } from "../interfaces/types";
+import { Arrival, BlockPosition } from "../interfaces/arrivals";
 import { trip1 } from "./trip";
 
 const blockPosition: BlockPosition = {

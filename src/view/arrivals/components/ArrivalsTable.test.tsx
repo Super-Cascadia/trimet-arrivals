@@ -1,6 +1,6 @@
 import { mount, shallow } from "enzyme";
 import React from "react";
-import { Arrival, StopLocation } from "../../../api/trimet/interfaces/types";
+import { StopLocation } from "../../../api/trimet/interfaces/types";
 import ArrivalsTable from "./ArrivalsTable";
 
 describe("ArrivalsTable", () => {

@@ -1,6 +1,5 @@
+import { ArrivalData, ArrivalLocation } from "../interfaces/arrivals";
 import {
-  ArrivalData,
-  ArrivalLocation,
   Direction,
   StopData,
   StopLocation,
