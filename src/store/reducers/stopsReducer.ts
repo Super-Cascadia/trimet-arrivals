@@ -12,15 +12,10 @@ import {
   LOAD_STOP_COMPLETE,
   LOAD_STOPS
 } from "../constants";
-import {
-  getRoutesFromStops,
-  RouteDirectionDict
-} from "./util/getRoutesFromStopLocations";
 
 export interface StopsReducerState {
   loading: boolean;
   stopLocations: StopLocationsDictionary;
-  nearbyRoutes: RouteDirectionDict;
   timeOfLastLoad: string;
 }
 
@@ -91,12 +86,10 @@ function getLoadStopCompleteState(action: Action, state) {
   const { location, stopData } = payload;
   const currentLocation = location.coords;
   const stopLocations = formatStopLocations(stopData.location, currentLocation);
-  const nearbyRoutes = getRoutesFromStops(stopLocations);
 
   return {
     ...state,
     loading: false,
-    nearbyRoutes,
     stopLocations,
     timeOfLastLoad: moment().format("ddd, h:mm:ss a")
   };

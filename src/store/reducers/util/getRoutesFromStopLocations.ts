@@ -1,63 +1,6 @@
-import { concat, each, map, reduce, sortBy } from "lodash";
-import {
-  Direction,
-  StopLocation,
-  TrimetRoute
-} from "../../../api/trimet/interfaces/types";
+import { each, reduce } from "lodash";
+import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import { StopLocationsDictionary } from "../stopsReducer";
-
-export interface RouteDirection {
-  routeId: number;
-  directionId: number;
-  routeDescription: string;
-  routeDirectionDescription: string;
-}
-
-function getDirectionsOnRoute(
-  route: TrimetRoute,
-  routeId: number
-): RouteDirection[] {
-  return map(route.dir, (direction: Direction) => {
-    const routeDescription = route.desc;
-    const directionId = direction.dir;
-    const routeDirectionDescription = direction.desc;
-
-    return {
-      directionId,
-      routeDescription,
-      routeDirectionDescription,
-      routeId
-    };
-  });
-}
-
-function getRoutes(stopLocation: StopLocation): RouteDirection[] {
-  return reduce(
-    stopLocation.route,
-    (result: RouteDirection[], route: TrimetRoute) => {
-      const routeId = route.route;
-      const directions = getDirectionsOnRoute(route, routeId);
-
-      return concat(result, directions);
-    },
-    []
-  );
-}
-
-export default function getRoutesFromStopLocations(
-  stopLocations: StopLocationsDictionary
-): RouteDirection[] {
-  const results = reduce(
-    stopLocations,
-    (routeResult: RouteDirection[], stopLocation: StopLocation) => {
-      const routes: RouteDirection[] = getRoutes(stopLocation);
-      return concat(routeResult, routes);
-    },
-    []
-  );
-
-  return sortBy(results, routeDirection => routeDirection.routeId);
-}
 
 export interface RouteDirectionsDict {
   [id: number]: {
