@@ -1,6 +1,6 @@
 import mapboxgl from "mapbox-gl";
 import React, { Component } from "react";
-import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
+import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
 import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
 import {
   mountMapCenteredOnLocation,

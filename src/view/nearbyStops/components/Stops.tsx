@@ -1,7 +1,7 @@
 import { map } from "lodash";
 import React from "react";
 import { StopLocation } from "../../../api/trimet/interfaces/types";
-import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
+import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
 import "../../nearby/components/NearbyViewComponent.scss";
 import StopContainer from "../containers/StopContainer";
 

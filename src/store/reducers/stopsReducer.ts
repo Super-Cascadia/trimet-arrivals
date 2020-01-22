@@ -1,17 +1,13 @@
-import { getDistance } from "geolib";
-import { map, mapKeys } from "lodash";
 import moment from "moment";
-import {
-  Coords,
-  Location,
-  StopData,
-  StopLocation
-} from "../../api/trimet/interfaces/types";
+import { Location, StopData } from "../../api/trimet/interfaces/types";
 import {
   LOAD_ARRIVALS_COMPLETE,
   LOAD_STOP_COMPLETE,
   LOAD_STOPS
 } from "../constants";
+import formatStopLocations, {
+  StopLocationsDictionary
+} from "./util/formatStopLocations";
 
 export interface StopsReducerState {
   loading: boolean;
@@ -28,52 +24,6 @@ interface Payload {
 interface Action {
   payload?: Payload;
   type: string;
-}
-
-export interface StopLocationsDictionary {
-  [locationId: number]: StopLocation;
-}
-
-export interface StopLocationWithDistance extends StopLocation {
-  distance: number;
-  distanceOrder: number;
-}
-
-function calculateDistance(
-  lng: number,
-  lat: number,
-  currentLocation: Coords
-): number {
-  const stopLocation = { latitude: lat, longitude: lng };
-
-  return getDistance(stopLocation, currentLocation);
-}
-
-function addDistanceToCurrentLocation(
-  stopLocation: StopLocation[],
-  currentLocation: Coords
-): StopLocationWithDistance[] {
-  return map(stopLocation, (location: StopLocation, index) => {
-    return {
-      ...location,
-      distance: calculateDistance(location.lng, location.lat, currentLocation),
-      distanceOrder: index
-    };
-  });
-}
-
-export function formatStopLocations(
-  stopLocation: StopLocation[],
-  currentLocation: Coords
-): StopLocationsDictionary {
-  const stopLocationsWithDistance = addDistanceToCurrentLocation(
-    stopLocation,
-    currentLocation
-  );
-
-  return mapKeys(stopLocationsWithDistance, (location: StopLocation) => {
-    return location.locid;
-  });
 }
 
 const initialState = {

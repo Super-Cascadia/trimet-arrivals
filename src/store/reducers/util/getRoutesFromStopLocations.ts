@@ -1,6 +1,6 @@
 import { each, reduce } from "lodash";
 import { TrimetRoute } from "../../../api/trimet/interfaces/types";
-import { StopLocationsDictionary } from "../stopsReducer";
+import { StopLocationsDictionary } from "./formatStopLocations";
 
 export interface RouteDirectionsDict {
   [id: number]: {

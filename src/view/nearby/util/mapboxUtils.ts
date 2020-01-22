@@ -1,7 +1,7 @@
 import { each, map } from "lodash";
 import mapboxgl from "mapbox-gl";
 import { StopLocation } from "../../../api/trimet/interfaces/types";
-import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
+import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
 import {
   RouteAndRouteDirections,
   RouteDirectionDict

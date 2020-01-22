@@ -4,7 +4,7 @@ import Modal from "../../../component/modal/Modal";
 import ModalContent from "../../../component/modal/ModalContent";
 import NearbySubRoutes from "../../../routes/NearbySubRoutes";
 import { LoadStopData } from "../../../store/action/stopActions";
-import { StopLocationsDictionary } from "../../../store/reducers/stopsReducer";
+import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
 import NearbyMapContainer from "../containers/NearbyMapContainer";
 import NearbySubNavContainer from "../containers/NearbySubNavContainer";
 import "./NearbyViewComponent.scss";

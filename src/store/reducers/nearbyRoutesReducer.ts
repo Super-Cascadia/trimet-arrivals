@@ -1,6 +1,6 @@
 import { Location, StopData } from "../../api/trimet/interfaces/types";
 import { LOAD_STOP_COMPLETE } from "../constants";
-import { formatStopLocations } from "./stopsReducer";
+import formatStopLocations from "./util/formatStopLocations";
 import {
   getRoutesFromStops,
   RouteDirectionDict

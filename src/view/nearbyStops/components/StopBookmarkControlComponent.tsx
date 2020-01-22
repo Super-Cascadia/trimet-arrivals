@@ -4,7 +4,7 @@ import BookmarkButton, {
   BookmarkSectionClick
 } from "../../../component/buttons/BookmarksButton";
 import { BookmarkSectionsProps } from "../../../store/reducers/bookmarkSectionReducer";
-import { StopLocationWithDistance } from "../../../store/reducers/stopsReducer";
+import { StopLocationWithDistance } from "../../../store/reducers/util/formatStopLocations";
 
 interface Props {
   stopLocation: StopLocationWithDistance;

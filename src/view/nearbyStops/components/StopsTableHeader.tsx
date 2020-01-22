@@ -2,7 +2,7 @@ import cx from "classnames";
 import React from "react";
 import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import { LoadArrivalData } from "../../../store/action/stopActions";
-import { StopLocationWithDistance } from "../../../store/reducers/stopsReducer";
+import { StopLocationWithDistance } from "../../../store/reducers/util/formatStopLocations";
 import StopBookmarkControlContainer from "../containers/StopBookmarkControlContainer";
 import ReloadIntervalCoordinator from "./ReloadIntervalCoordinator";
 import StopInfo from "./StopInfo";
