@@ -25,7 +25,7 @@ interface Props {
   nearbyRoutes: RouteDirectionDict;
 }
 
-function getRouteIndicatorClassName(route: number, className: string) {
+export function getRouteIndicatorClassName(route: number, className: string) {
   const style = {
     "route-blue": route === BLUE_LINE_NUMBER,
     "route-cyan":

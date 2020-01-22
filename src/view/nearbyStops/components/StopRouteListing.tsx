@@ -2,7 +2,7 @@ import { map, split } from "lodash";
 import React, { Component } from "react";
 import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import RouteIndicator from "../../../component/route/RouteIndicator";
-import "./StopRouteListing.css";
+import "./StopRouteListing.scss";
 
 function getSimpleRouteList(routes: TrimetRoute[], onClick) {
   return map(routes, (route: TrimetRoute) => {

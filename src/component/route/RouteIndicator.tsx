@@ -24,21 +24,21 @@ interface Props {
   verbose?: boolean;
 }
 
-function getRouteDisplay(route: number, verboseRouteDisplay: boolean) {
-  const routeFound = ROUTE_DISPLAY[route];
+function getRouteDisplay(routeId: number, verboseRouteDisplay: boolean) {
+  const routeFound = ROUTE_DISPLAY[routeId];
 
   if (!routeFound) {
-    if (route) {
+    if (routeId) {
       return (
         <span>
           <FontAwesome name="bus" className="train-route-indicator" />
           <span>
-            {route} {verboseRouteDisplay && "Bus"}
+            {routeId} {verboseRouteDisplay && "Bus"}
           </span>
         </span>
       );
     }
-    return route || "-";
+    return routeId || "-";
   } else {
     return (
       <span>

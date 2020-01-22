@@ -1,4 +1,4 @@
-interface RouteDirectionStop {
+export interface RouteDirectionStop {
   lng: number;
   tp: boolean;
   dir: string;
@@ -8,13 +8,13 @@ interface RouteDirectionStop {
   desc: string;
 }
 
-interface RouteStopDirection {
+export interface RouteStopDirection {
   stop: RouteDirectionStop[];
   dir: number;
   desc: string;
 }
 
-interface Route {
+export interface Route {
   routeColor: string;
   route: number;
   id: number;

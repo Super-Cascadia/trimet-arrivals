@@ -8,6 +8,7 @@ import currentLocationReducer, {
   CurrentLocationReducerState
 } from "./currentLocationReducer";
 import nearbyViewReducer, { NearbyReducerState } from "./nearbyViewReducer";
+import routeReducer, { RouteReducerState } from "./routeReducer";
 import stopsReducer, { StopsReducerState } from "./stopsReducer";
 import viewReducer, { ViewReducerState } from "./viewReducer";
 
@@ -19,6 +20,7 @@ export interface RootState {
   bookmarkSectionReducer: BookmarkSectionReducerState;
   currentLocationReducer: CurrentLocationReducerState;
   nearbyReducer: NearbyReducerState;
+  routeReducer: RouteReducerState;
 }
 
 const app = combineReducers<RootState>({
@@ -27,6 +29,7 @@ const app = combineReducers<RootState>({
   bookmarksReducer,
   currentLocationReducer,
   nearbyReducer: nearbyViewReducer,
+  routeReducer,
   stopsReducer,
   viewReducer
 } as any);

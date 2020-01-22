@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import { loadRouteDataRequest } from "../../../store/action/routeActions";
 import { RootState } from "../../../store/reducers";
+import { routeSelector } from "../../../store/selectors/routeSelectors";
 import NearbyRouteDetail from "../components/NearbyRouteDetail";
 
 interface Props {
@@ -8,8 +9,11 @@ interface Props {
 }
 
 const mapStateToProps = (state: RootState, props: Props) => {
+  const id = props.id;
+
   return {
-    ...props
+    ...props,
+    route: routeSelector(state, id)
   };
 };
 

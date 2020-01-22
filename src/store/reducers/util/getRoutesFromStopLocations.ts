@@ -113,7 +113,7 @@ function addDirectionToRoute(
   }
 }
 
-export function getRoutesFromStops2(
+export function getRoutesFromStops(
   stopLocations: StopLocationsDictionary
 ): RouteDirectionDict {
   return reduce(

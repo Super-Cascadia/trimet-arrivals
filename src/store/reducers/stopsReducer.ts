@@ -13,7 +13,7 @@ import {
   LOAD_STOPS
 } from "../constants";
 import {
-  getRoutesFromStops2,
+  getRoutesFromStops,
   RouteDirectionDict
 } from "./util/getRoutesFromStopLocations";
 
@@ -91,7 +91,7 @@ function getLoadStopCompleteState(action: Action, state) {
   const { location, stopData } = payload;
   const currentLocation = location.coords;
   const stopLocations = formatStopLocations(stopData.location, currentLocation);
-  const nearbyRoutes = getRoutesFromStops2(stopLocations);
+  const nearbyRoutes = getRoutesFromStops(stopLocations);
 
   return {
     ...state,
