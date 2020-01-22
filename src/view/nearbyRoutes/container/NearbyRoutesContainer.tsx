@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { loadStopDataRequest } from "../../../store/action/stopActions";
 import { RootState } from "../../../store/reducers";
-import { allNearbyRoutesSelector } from "../../../store/selectors/stopSelectors";
+import { allNearbyRoutesSelector } from "../../../store/selectors/nearbyRoutesSelectors";
 import NearbyRoutes from "../component/NearbyRoutes";
 
 const mapStateToProps = (state: RootState) => {

@@ -67,7 +67,7 @@ function addDistanceToCurrentLocation(
   });
 }
 
-function formatStopLocations(
+export function formatStopLocations(
   stopLocation: StopLocation[],
   currentLocation: Coords
 ): StopLocationsDictionary {

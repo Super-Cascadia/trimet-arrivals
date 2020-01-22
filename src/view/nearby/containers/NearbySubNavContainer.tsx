@@ -1,10 +1,8 @@
 import { size } from "lodash";
 import { connect } from "react-redux";
 import { RootState } from "../../../store/reducers";
-import {
-  allNearbyRoutesSelector,
-  allStopLocationsSelector
-} from "../../../store/selectors/stopSelectors";
+import { allNearbyRoutesSelector } from "../../../store/selectors/nearbyRoutesSelectors";
+import { allStopLocationsSelector } from "../../../store/selectors/stopSelectors";
 import NearbySubNav from "../components/NearbySubNav";
 
 const mapStateToProps = (state: RootState) => {
