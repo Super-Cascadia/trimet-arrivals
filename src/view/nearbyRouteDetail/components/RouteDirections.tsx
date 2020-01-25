@@ -23,6 +23,7 @@ export default class RouteDirections extends React.Component<Props> {
 
     return (
       <div className="route-directions-stops-wrapper">
+        <h3>Route Stops</h3>
         {RouteDirections.getRouteDirections(route.dir)}
       </div>
     );

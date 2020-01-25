@@ -4,6 +4,7 @@ import { Route } from "../../../api/trimet/interfaces/routes";
 import RouteIndicator from "../../../component/route/RouteIndicator";
 import { getRouteIndicatorClassName } from "../../nearbyRoutes/component/NearbyRoutes";
 import "./NearbyRouteDetail.scss";
+import RouteAlerts from "./RouteAlerts";
 import RouteDirections from "./RouteDirections";
 
 interface Props {
@@ -16,13 +17,14 @@ interface Props {
 
 export default class NearbyRouteDetail extends React.Component<Props> {
   public componentDidMount(): void {
-    const { id } = this.props;
-    this.props.loadRouteData(id);
-    this.props.loadAlertData(id);
+    const { id, loadAlertData, loadRouteData } = this.props;
+
+    loadRouteData(id);
+    loadAlertData(id);
   }
 
   public render() {
-    const { route } = this.props;
+    const { route, id, alerts } = this.props;
 
     if (!route) {
       return <div>Loading</div>;
@@ -44,6 +46,7 @@ export default class NearbyRouteDetail extends React.Component<Props> {
             className="header-router-indicator"
           />
         </div>
+        <RouteAlerts id={id} alerts={alerts} />
         <RouteDirections route={route} />
       </div>
     );
