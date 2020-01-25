@@ -10,14 +10,39 @@ interface Props {
   direction: RouteStopDirection;
 }
 
-export default class RouteDirection extends React.Component<Props> {
+interface State {
+  open: boolean;
+}
+
+export default class RouteDirection extends React.Component<Props, State> {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      open: false
+    };
+
+    this.toggleOpenState = this.toggleOpenState.bind(this);
+  }
+
+  public toggleOpenState() {
+    const { open } = this.state;
+    this.setState({ open: !open });
+  }
+
   public render() {
     const { direction } = this.props;
+    const { open } = this.state;
 
     return (
       <div>
-        <div className="route-directions-header">{direction.desc}</div>
-        <ul>{this.getRouteDirectionStops(direction.stop)}</ul>
+        <div className="route-directions-header">
+          {direction.desc}
+          <button onClick={this.toggleOpenState}>
+            {open ? "Close" : "Open"}
+          </button>
+        </div>
+        {open && <ul>{this.getRouteDirectionStops(direction.stop)}</ul>}
       </div>
     );
   }
