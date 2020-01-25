@@ -1,14 +1,9 @@
-import _ from "lodash";
 import React from "react";
-import {
-  Route,
-  RouteDirectionStop,
-  RouteStopDirection
-} from "../../../api/trimet/interfaces/routes";
-import RouteDescription from "../../../component/route/RouteDescription";
+import { Route } from "../../../api/trimet/interfaces/routes";
 import RouteIndicator from "../../../component/route/RouteIndicator";
 import { getRouteIndicatorClassName } from "../../nearbyRoutes/component/NearbyRoutes";
 import "./NearbyRouteDetail.scss";
+import RouteDirections from "./RouteDirections";
 
 interface Props {
   id: number;
@@ -44,33 +39,8 @@ export default class NearbyRouteDetail extends React.Component<Props> {
             className="header-router-indicator"
           />
         </div>
-        <div className="route-directions-stops-wrapper">
-          {this.getRouteDirections(route.dir)}
-        </div>
+        <RouteDirections route={route} />
       </div>
     );
-  }
-
-  public getRouteDirectionStops(stops: RouteDirectionStop[]) {
-    return _.map(stops, stop => {
-      return (
-        <li>
-          {stop.desc}
-          {stop.locid}
-          {stop.dir}
-        </li>
-      );
-    });
-  }
-
-  private getRouteDirections(directions: RouteStopDirection[]) {
-    return _.map(directions, (direction: RouteStopDirection) => {
-      return (
-        <div>
-          <div className="route-directions-header">{direction.desc}</div>
-          <ul>{this.getRouteDirectionStops(direction.stop)}</ul>
-        </div>
-      );
-    });
   }
 }
