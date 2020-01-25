@@ -1,4 +1,5 @@
 import React from "react";
+import { Alert } from "../../../api/trimet/interfaces/alertsData";
 import { Route } from "../../../api/trimet/interfaces/routes";
 import RouteIndicator from "../../../component/route/RouteIndicator";
 import { getRouteIndicatorClassName } from "../../nearbyRoutes/component/NearbyRoutes";
@@ -8,12 +9,16 @@ import RouteDirections from "./RouteDirections";
 interface Props {
   id: number;
   loadRouteData: (id: number) => {};
+  loadAlertData: (id: number) => {};
   route: Route;
+  alerts: Alert[];
 }
 
 export default class NearbyRouteDetail extends React.Component<Props> {
   public componentDidMount(): void {
-    this.props.loadRouteData(this.props.id);
+    const { id } = this.props;
+    this.props.loadRouteData(id);
+    this.props.loadAlertData(id);
   }
 
   public render() {

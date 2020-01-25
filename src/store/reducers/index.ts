@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import alertDataReducer, { AlertDataReducerState } from "./alertDataReducer";
 import arrivalsReducer, { ArrivalsReducerState } from "./arrivalsReducer";
 import bookmarkSectionReducer, {
   BookmarkSectionReducerState
@@ -16,6 +17,7 @@ import stopsReducer, { StopsReducerState } from "./stopsReducer";
 import viewReducer, { ViewReducerState } from "./viewReducer";
 
 export interface RootState {
+  alertDataReducer: AlertDataReducerState;
   stopsReducer: StopsReducerState;
   arrivalsReducer: ArrivalsReducerState;
   viewReducer: ViewReducerState;
@@ -28,6 +30,7 @@ export interface RootState {
 }
 
 const app = combineReducers<RootState>({
+  alertDataReducer,
   arrivalsReducer,
   bookmarkSectionReducer,
   bookmarksReducer,

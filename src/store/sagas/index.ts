@@ -6,6 +6,7 @@ import {
   CHANGE_VIEW_REQUEST,
   INITIAL_LOAD_REQUEST,
   LOAD_ARRIVALS_DATA_REQUEST,
+  LOAD_ROUTE_ALERT_DATA_REQUEST,
   LOAD_ROUTE_DATA_REQUEST,
   LOAD_STOP_DATA_REQUEST,
   REMOVE_BOOKMARK_STOP_REQUEST,
@@ -20,6 +21,7 @@ import {
   REMOVE_BOOKMARK_SECTION_REQUEST,
   UPDATE_BOOKMARK_SECTION_NAME_REQUEST
 } from "../constants/bookmarkSections";
+import { loadRouteAlertData } from "./alertSagas";
 import { loadArrivalData } from "./arrivalSagas";
 import { bookmarkStop, removeStopBookmark } from "./bookmarkSagas";
 import {
@@ -70,4 +72,6 @@ export function* rootSaga() {
   yield takeEvery(UPDATE_VIEW_REQUEST, updateNearbyActiveView);
   // @ts-ignore
   yield takeEvery(LOAD_ROUTE_DATA_REQUEST, loadRouteData);
+  // @ts-ignore
+  yield takeEvery(LOAD_ROUTE_ALERT_DATA_REQUEST, loadRouteAlertData);
 }
