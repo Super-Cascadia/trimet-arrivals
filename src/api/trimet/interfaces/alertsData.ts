@@ -5,7 +5,7 @@ export interface Alert {
   info_link_url: string;
   end: number;
   system_wide_flag: boolean;
-  id: number; // stopId
+  id: number;
   header_text: string;
   begin: number;
   desc: string;

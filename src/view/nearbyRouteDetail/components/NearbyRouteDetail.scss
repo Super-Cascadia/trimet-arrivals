@@ -1,9 +1,25 @@
 .route-directions-stops-wrapper {
   background: white;
+  padding: 10px;
+  h3 {
+    margin-top: 0px;
+  }
 }
 
 .route-directions-header {
-  background: grey;
+  background: lightgray;
   line-height: 30px;
   padding-left: 5px;
+}
+
+.route-alerts-wrapper {
+  background: yellow;
+  padding: 10px;
+  ul {
+    list-style: none;
+    padding-inline-start: 10px;
+  }
+  h3 {
+    margin-top: 0px;
+  }
 }

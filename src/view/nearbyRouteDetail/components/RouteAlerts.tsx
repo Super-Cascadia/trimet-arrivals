@@ -23,7 +23,7 @@ export default class RouteAlerts extends React.Component<Props> {
     }
 
     return (
-      <div>
+      <div className="route-alerts-wrapper">
         <h3>Alerts</h3>
         <ul>{getAlerts(alerts)}</ul>
       </div>
