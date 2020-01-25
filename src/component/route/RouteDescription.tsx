@@ -8,7 +8,6 @@ export default function RouteDescription({ description }: Props) {
   return (
     <span className="route-description">
       <span>{description}</span>
-      <span className="route-description-divider">-</span>
     </span>
   );
 }
