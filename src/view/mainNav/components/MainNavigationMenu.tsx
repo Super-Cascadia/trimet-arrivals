@@ -1,3 +1,5 @@
+import { faRoute } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import FontAwesome from "react-fontawesome";
 import { NavLink } from "react-router-dom";
@@ -18,10 +20,17 @@ export default function MainNavigationMenu({
 }: Props) {
   return (
     <nav className="top-navigation view-header">
-      <NavLink to="/">Home</NavLink>
+      <NavLink to="/">
+        <FontAwesome name="home" className="bookmark-icon" />
+        Home
+      </NavLink>
       <NavLink to="/nearby/routes">
         <FontAwesome name="map-marker" className="bookmark-icon" />
-        Nearby | {timeOfLastLoad}
+        Nearby
+      </NavLink>
+      <NavLink to="/lines">
+        <FontAwesomeIcon icon={faRoute} className="bookmark-icon" />
+        Lines
       </NavLink>
       <NavLink to="/bookmarks">
         <FontAwesome name="bookmark" className="bookmark-icon" />

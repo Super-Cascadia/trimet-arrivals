@@ -38,8 +38,6 @@ describe("MainNavigationComponent", () => {
       expect(() =>
         shallow(
           <MainNavigationComponent
-            activeView={undefined}
-            updateView={undefined}
             numberOfBookmarks={undefined}
             timeOfLastLoad={undefined}
             onInitialLoad={onInitialLoad}
@@ -51,8 +49,6 @@ describe("MainNavigationComponent", () => {
     it("shows navigation", () => {
       const subject = shallow(
         <MainNavigationComponent
-          activeView={undefined}
-          updateView={undefined}
           numberOfBookmarks={undefined}
           timeOfLastLoad={undefined}
           onInitialLoad={onInitialLoad}
@@ -87,8 +83,6 @@ describe("MainNavigationComponent", () => {
       const subject = mount(
         <ProviderMock store={mockStore()}>
           <MainNavigationComponent
-            activeView={undefined}
-            updateView={undefined}
             numberOfBookmarks={undefined}
             timeOfLastLoad={undefined}
             onInitialLoad={onInitialLoad}
@@ -129,8 +123,6 @@ describe("MainNavigationComponent", () => {
       const subject = mount(
         <ProviderMock store={mockStore()}>
           <MainNavigationComponent
-            activeView={NEARBY_STOPS_VIEW}
-            updateView={undefined}
             numberOfBookmarks={undefined}
             timeOfLastLoad={undefined}
             onInitialLoad={onInitialLoad}
@@ -198,8 +190,6 @@ describe("MainNavigationComponent", () => {
       const subject = mount(
         <ProviderMock store={mockStore()}>
           <MainNavigationComponent
-            activeView={BOOKMARKS_VIEW}
-            updateView={undefined}
             numberOfBookmarks={undefined}
             timeOfLastLoad={undefined}
             onInitialLoad={onInitialLoad}
