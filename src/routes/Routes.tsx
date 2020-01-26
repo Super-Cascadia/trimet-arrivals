@@ -16,6 +16,9 @@ export default function Routes() {
           <Route path="/nearby">
             <NearbyViewContainer />
           </Route>
+          <Route path="/lines">
+            <BookmarksViewContainer />
+          </Route>
           <Route path="/bookmarks">
             <BookmarksViewContainer />
           </Route>

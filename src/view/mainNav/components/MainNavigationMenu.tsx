@@ -1,7 +1,7 @@
 import React from "react";
 import FontAwesome from "react-fontawesome";
 import { NavLink } from "react-router-dom";
-import "./MainNavigationRoute.scss";
+import "./MainNavigationMenu.scss";
 
 function bookmarkCount(numberOfBookmarks: number) {
   return <>{numberOfBookmarks > 0 && <span>({numberOfBookmarks})</span>}</>;
@@ -12,7 +12,7 @@ interface Props {
   timeOfLastLoad: string;
 }
 
-export default function MainNavigationRoute({
+export default function MainNavigationMenu({
   numberOfBookmarks = 0,
   timeOfLastLoad
 }: Props) {

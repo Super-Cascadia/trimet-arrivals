@@ -1,5 +1,5 @@
 import React from "react";
-import MainNavigationRoute from "./MainNavigationRoute";
+import MainNavigationMenu from "./MainNavigationMenu";
 
 interface Props {
   numberOfBookmarks: number;
@@ -17,7 +17,7 @@ export default class MainNavigationComponent extends React.Component<Props> {
 
     return (
       <div>
-        <MainNavigationRoute
+        <MainNavigationMenu
           numberOfBookmarks={numberOfBookmarks}
           timeOfLastLoad={timeOfLastLoad}
         />
