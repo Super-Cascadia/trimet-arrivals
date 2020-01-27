@@ -8,11 +8,13 @@ import bookmarksReducer, { BookmarksReducerState } from "./bookmarksReducer";
 import currentLocationReducer, {
   CurrentLocationReducerState
 } from "./currentLocationReducer";
+import routeDataReducer, {
+  RouteDataReducerState
+} from "./data/routeDataReducer";
 import nearbyRoutesReducer, {
   NearbyRoutesReducerState
 } from "./nearbyRoutesReducer";
 import nearbyViewReducer, { NearbyReducerState } from "./nearbyViewReducer";
-import routeReducer, { RouteReducerState } from "./routeReducer";
 import stopsReducer, { StopsReducerState } from "./stopsReducer";
 import viewReducer, { ViewReducerState } from "./viewReducer";
 
@@ -25,7 +27,7 @@ export interface RootState {
   bookmarkSectionReducer: BookmarkSectionReducerState;
   currentLocationReducer: CurrentLocationReducerState;
   nearbyReducer: NearbyReducerState;
-  routeReducer: RouteReducerState;
+  routeDataReducer: RouteDataReducerState;
   nearbyRoutesReducer: NearbyRoutesReducerState;
 }
 
@@ -37,7 +39,7 @@ const app = combineReducers<RootState>({
   currentLocationReducer,
   nearbyReducer: nearbyViewReducer,
   nearbyRoutesReducer,
-  routeReducer,
+  routeDataReducer,
   stopsReducer,
   viewReducer
 } as any);

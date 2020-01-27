@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import BookmarksViewContainer from "../view/bookmarks/container/BookmarksViewContainer";
+import LinesViewContainer from "../view/lines/container/LinesViewContainer";
 import MainNavigationContainer from "../view/mainNav/containers/MainNavigationContainer";
 import NearbyViewContainer from "../view/nearby/containers/NearbyViewContainer";
 
@@ -17,7 +18,7 @@ export default function Routes() {
             <NearbyViewContainer />
           </Route>
           <Route path="/lines">
-            <BookmarksViewContainer />
+            <LinesViewContainer />
           </Route>
           <Route path="/bookmarks">
             <BookmarksViewContainer />

@@ -3,7 +3,7 @@ import { loadRouteAlertDataRequest } from "../../../store/action/alertActions";
 import { loadRouteDataRequest } from "../../../store/action/routeActions";
 import { RootState } from "../../../store/reducers";
 import { alertSelector } from "../../../store/selectors/alertSelectors";
-import { routeSelector } from "../../../store/selectors/routeSelectors";
+import { routeSelector } from "../../../store/selectors/data/routeDataSelectors";
 import NearbyRouteDetail from "../components/NearbyRouteDetail";
 
 interface Props {
