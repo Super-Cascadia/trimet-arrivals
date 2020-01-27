@@ -2,7 +2,7 @@ import React from "react";
 import { Alert } from "../../../api/trimet/interfaces/alertsData";
 import { Route } from "../../../api/trimet/interfaces/routes";
 import RouteIndicator from "../../../component/route/RouteIndicator";
-import { getRouteIndicatorClassName } from "../../nearbyRoutes/component/NearbyRoutes";
+import { getRouteIndicatorClassName } from "../../../component/route/RouteListItem";
 import "./NearbyRouteDetail.scss";
 import RouteAlerts from "./RouteAlerts";
 import RouteDirections from "./RouteDirections";
