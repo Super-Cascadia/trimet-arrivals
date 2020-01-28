@@ -2,10 +2,7 @@ import { connect } from "react-redux";
 import { loadStopDataRequest } from "../../../store/action/stopActions";
 import { RootState } from "../../../store/reducers";
 import { currentLocationSelector } from "../../../store/selectors/locationSelectors";
-import {
-  allNearbyRouteIdsSelector,
-  allNearbyRoutesSelector
-} from "../../../store/selectors/nearbyRoutesSelectors";
+import { allNearbyRouteIdsSelector } from "../../../store/selectors/nearbyRoutesSelectors";
 import { allStopLocationsSelector } from "../../../store/selectors/stopSelectors";
 import NearbyMap from "../components/NearbyMap";
 
