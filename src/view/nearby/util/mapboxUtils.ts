@@ -2,10 +2,8 @@ import { each, map } from "lodash";
 import mapboxgl from "mapbox-gl";
 import { StopLocation } from "../../../api/trimet/interfaces/types";
 import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
-import {
-  RouteAndRouteDirections,
-  RouteDirectionDict
-} from "../../../store/reducers/util/getRoutesFromStopLocations";
+import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
+import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
 import { LatLngCoords } from "../components/NearbyMap";
 
 export function mountMapCenteredOnLocation(
@@ -100,7 +98,7 @@ export function setNearbyStopMarkers(
   });
 }
 
-function getRouteGeometry(routeId: string, directionId: string) {
+function getRouteGeometry(routeId: string, directionId: number) {
   return import(
     `../../../data/${routeId}/${routeId}_${directionId}.json`
   ).catch(e => {
@@ -127,16 +125,17 @@ function addRouteLayers(mapBoxMap, returnedPromises: any[]) {
     if (!promise.code) {
       const { route_number, direction } = promise.properties;
       const routeIdentifier = `${route_number}_${direction}`;
+
       addMapboxLayer(mapBoxMap, routeIdentifier, promise);
     }
   });
 }
 
-export function setRoutes(mapBoxMap, nearbyRoutes: RouteDirectionDict) {
+export function setRoutes(mapBoxMap, nearbyRouteIds: NearbyRoutesDictionary) {
   const promises = [];
 
-  each(nearbyRoutes, (route: RouteAndRouteDirections, routeId) => {
-    each(route.routeDirections, (routeDirection, directionId) => {
+  each(nearbyRouteIds, (route, routeId) => {
+    each(route.directions, directionId => {
       const promise = getRouteGeometry(routeId, directionId);
       promises.push(promise);
     });

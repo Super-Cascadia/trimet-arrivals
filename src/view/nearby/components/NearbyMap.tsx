@@ -1,7 +1,7 @@
 import mapboxgl from "mapbox-gl";
 import React, { Component } from "react";
 import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
-import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
+import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
 import {
   mountMapCenteredOnLocation,
   setCurrentLocationMarker,
@@ -17,7 +17,7 @@ export type LatLngCoords = number[];
 interface Props {
   currentLocation: LatLngCoords;
   stopLocations: StopLocationsDictionary;
-  nearbyRoutes: RouteDirectionDict;
+  nearbyRouteIds: NearbyRoutesDictionary;
 }
 
 export default class NearbyMap extends Component<Props> {
@@ -25,8 +25,8 @@ export default class NearbyMap extends Component<Props> {
   private map: mapboxgl.Map;
 
   public componentDidMount() {
-    const { currentLocation, stopLocations, nearbyRoutes } = this.props;
-    this.initializeMap(currentLocation, stopLocations, nearbyRoutes);
+    const { currentLocation, stopLocations, nearbyRouteIds } = this.props;
+    this.initializeMap(currentLocation, stopLocations, nearbyRouteIds);
   }
 
   public componentWillUnmount() {
@@ -46,13 +46,13 @@ export default class NearbyMap extends Component<Props> {
   private initializeMap(
     currentLocation: LatLngCoords,
     stopLocations: StopLocationsDictionary,
-    nearbyRoutes: RouteDirectionDict
+    nearbyRouteIds: NearbyRoutesDictionary
   ) {
     this.map = mountMapCenteredOnLocation(this.mapContainer, currentLocation);
     this.map.on("load", () => {
       setNearbyStopMarkers(this.map, stopLocations);
       setCurrentLocationMarker(this.map, currentLocation);
-      setRoutes(this.map, nearbyRoutes);
+      setRoutes(this.map, nearbyRouteIds);
     });
   }
 }

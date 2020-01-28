@@ -2,14 +2,17 @@ import { connect } from "react-redux";
 import { loadStopDataRequest } from "../../../store/action/stopActions";
 import { RootState } from "../../../store/reducers";
 import { currentLocationSelector } from "../../../store/selectors/locationSelectors";
-import { allNearbyRoutesSelector } from "../../../store/selectors/nearbyRoutesSelectors";
+import {
+  allNearbyRouteIdsSelector,
+  allNearbyRoutesSelector
+} from "../../../store/selectors/nearbyRoutesSelectors";
 import { allStopLocationsSelector } from "../../../store/selectors/stopSelectors";
 import NearbyMap from "../components/NearbyMap";
 
 const mapStateToProps = (state: RootState) => {
   return {
     currentLocation: currentLocationSelector(state),
-    nearbyRoutes: allNearbyRoutesSelector(state),
+    nearbyRouteIds: allNearbyRouteIdsSelector(state),
     stopLocations: allStopLocationsSelector(state)
   };
 };

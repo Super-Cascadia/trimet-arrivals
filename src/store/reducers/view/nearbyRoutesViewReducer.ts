@@ -7,14 +7,14 @@ import {
 } from "../../../api/trimet/interfaces/types";
 import { LOAD_STOP_COMPLETE } from "../../constants";
 
-interface NearbyRoutesStateDictionary {
+export interface NearbyRoutesDictionary {
   [routeId: number]: {
     directions: number[];
   };
 }
 
 export interface NearbyRoutesViewReducerState {
-  nearbyRoutes: NearbyRoutesStateDictionary;
+  nearbyRoutes: NearbyRoutesDictionary;
 }
 
 const initialState = {
@@ -32,7 +32,7 @@ interface Action {
   type: string;
 }
 
-function getRouteIdsFromStops(stopData: StopData): NearbyRoutesStateDictionary {
+function getRouteIdsFromStops(stopData: StopData): NearbyRoutesDictionary {
   const allRoutes = _.map(stopData.location, (stop: StopLocation) => {
     return stop.route;
   });
@@ -51,7 +51,7 @@ function getRouteIdsFromStops(stopData: StopData): NearbyRoutesStateDictionary {
       return {
         ...acc,
         [key]: {
-          directions: _.sortedUniq(mappedDirections)
+          directions: _.sortBy(_.uniq(mappedDirections))
         }
       };
     },
