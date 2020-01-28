@@ -11,11 +11,14 @@ import currentLocationReducer, {
 import routeDataReducer, {
   RouteDataReducerState
 } from "./data/routeDataReducer";
-import nearbyRoutesReducer, {
-  NearbyRoutesReducerState
-} from "./nearbyRoutesReducer";
 import nearbyViewReducer, { NearbyReducerState } from "./nearbyViewReducer";
 import stopsReducer, { StopsReducerState } from "./stopsReducer";
+import nearbyRoutesDataReducer, {
+  NearbyRoutesDataReducerState
+} from "./view/nearbyRoutesDataReducer";
+import nearbyRoutesViewReducer, {
+  NearbyRoutesViewReducerState
+} from "./view/nearbyRoutesViewReducer";
 import viewReducer, { ViewReducerState } from "./viewReducer";
 
 export interface RootState {
@@ -28,7 +31,8 @@ export interface RootState {
   currentLocationReducer: CurrentLocationReducerState;
   nearbyReducer: NearbyReducerState;
   routeDataReducer: RouteDataReducerState;
-  nearbyRoutesReducer: NearbyRoutesReducerState;
+  nearbyRoutesDataReducer: NearbyRoutesDataReducerState;
+  nearbyRoutesViewReducer: NearbyRoutesViewReducerState;
 }
 
 const app = combineReducers<RootState>({
@@ -37,8 +41,9 @@ const app = combineReducers<RootState>({
   bookmarkSectionReducer,
   bookmarksReducer,
   currentLocationReducer,
-  nearbyReducer: nearbyViewReducer,
-  nearbyRoutesReducer,
+  nearbyRoutesDataReducer,
+  nearbyRoutesViewReducer,
+  nearbyViewReducer,
   routeDataReducer,
   stopsReducer,
   viewReducer

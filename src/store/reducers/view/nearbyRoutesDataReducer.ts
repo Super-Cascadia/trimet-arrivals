@@ -1,12 +1,12 @@
-import { Location, StopData } from "../../api/trimet/interfaces/types";
-import { LOAD_STOP_COMPLETE } from "../constants";
-import formatStopLocations from "./util/formatStopLocations";
+import { Location, StopData } from "../../../api/trimet/interfaces/types";
+import { LOAD_STOP_COMPLETE } from "../../constants";
+import formatStopLocations from "../util/formatStopLocations";
 import {
   getRoutesFromStops,
   RouteDirectionDict
-} from "./util/getRoutesFromStopLocations";
+} from "../util/getRoutesFromStopLocations";
 
-export interface NearbyRoutesReducerState {
+export interface NearbyRoutesDataReducerState {
   nearbyRoutes: RouteDirectionDict;
 }
 
@@ -38,7 +38,7 @@ function getLoadStopCompleteState(action: Action, state) {
   };
 }
 
-const nearbyRoutesReducer = (state = initialState, action: Action) => {
+const nearbyRoutesDataReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case LOAD_STOP_COMPLETE:
       return getLoadStopCompleteState(action, state);
@@ -49,4 +49,4 @@ const nearbyRoutesReducer = (state = initialState, action: Action) => {
   }
 };
 
-export default nearbyRoutesReducer;
+export default nearbyRoutesDataReducer;

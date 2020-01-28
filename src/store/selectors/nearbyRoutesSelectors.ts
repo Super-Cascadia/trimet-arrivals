@@ -3,7 +3,7 @@ import { RootState } from "../reducers";
 import { RouteDirectionDict } from "../reducers/util/getRoutesFromStopLocations";
 
 const allNearbyRoutes = (state: RootState) =>
-  state.nearbyRoutesReducer.nearbyRoutes;
+  state.nearbyRoutesDataReducer.nearbyRoutes;
 
 export const allNearbyRoutesSelector = createSelector(
   allNearbyRoutes,
