@@ -132,6 +132,47 @@ const streetCarALoop = {
   type: "S"
 };
 
+function getRouteData(id) {
+  id = parseInt(id, 10);
+
+  switch (id) {
+    case 1:
+      return route1;
+    case 2:
+      return route2;
+    case 3:
+      return route3;
+    case 4:
+      return route4;
+    case BLUE_LINE_NUMBER:
+      return blueLine;
+    case RED_LINE_NUMBER:
+      return redLine;
+    case GREEN_LINE_NUMBER:
+      return greenLine;
+    case YELLOW_LINE_NUMBER:
+      return yellowLine;
+    case ORANGE_LINE_NUMBER:
+      return orangeLine;
+    case STREETCAR_S_LINE:
+      return streetCarSLine;
+    case STREETCAR_A_LOOP:
+      return yellowLine;
+    case STREETCAR_B_LOOP:
+      return streetCarBLoop;
+    default:
+      return {};
+  }
+}
+
+export function routeFixtureById(id: number): Promise<RouteDataResultSet> {
+  const routeData = getRouteData(id);
+
+  return Promise.resolve({
+    route: [routeData as Route]
+  });
+}
+
 export function allRoutesFixtureData(): Promise<RouteDataResultSet> {
   const routeData = {
     route: [

@@ -5,9 +5,15 @@ import "./LineDetailView.scss";
 
 interface Props {
   route: Route;
+  id: number;
+  loadRouteData: (id: number) => {};
 }
 
 export default class LinesViewComponent extends React.Component<Props> {
+  public componentDidMount(): void {
+    this.props.loadRouteData(this.props.id);
+  }
+
   public render() {
     const { route } = this.props;
 

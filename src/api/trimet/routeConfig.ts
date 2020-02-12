@@ -1,6 +1,6 @@
 import { fixtureEnabled } from "../util";
 import { API, BASE_URL } from "./constants";
-import { allRoutesFixtureData } from "./fixture/allRoutes";
+import { allRoutesFixtureData, routeFixtureById } from "./fixture/allRoutes";
 import { RouteData, RouteDataResultSet } from "./interfaces/routes";
 import { getTrimetData } from "./util";
 
@@ -14,10 +14,14 @@ function getAllRoutesUrl(): string {
   return `${ROUTE_BASE_URL}json/true/dir/true/${API}`;
 }
 
-export async function getRouteById(id: number): Promise<RouteData> {
+export async function getRouteById(id: number): Promise<RouteDataResultSet> {
+  if (fixtureEnabled()) {
+    return routeFixtureById(id);
+  }
+
   const request = getRouteByIdUrl(id);
 
-  return getTrimetData<RouteData>(request);
+  return getTrimetData<RouteDataResultSet>(request);
 }
 
 export async function getAllRoutes(): Promise<RouteDataResultSet> {
