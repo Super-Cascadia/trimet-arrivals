@@ -42,7 +42,7 @@ export default function RouteListItem({ route }: { route: Route }) {
   return (
     <div className={classNames}>
       <h3 className="route-directions-indicator-wrapper">
-        <NavLink to={`/nearby/routes/${routeId}`}>
+        <NavLink to={`/lines/${routeId}`}>
           <RouteIndicator
             routeId={routeId}
             route={undefined}

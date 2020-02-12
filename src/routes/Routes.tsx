@@ -17,6 +17,7 @@ export default function Routes() {
           <Route path="/nearby">
             <NearbyViewContainer />
           </Route>
+          <Route path="/lines/:id">I'm a specific line!</Route>
           <Route path="/lines">
             <LinesViewContainer />
           </Route>
