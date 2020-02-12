@@ -32,7 +32,7 @@ function getRouteDisplay(routeId: number, verboseRouteDisplay: boolean) {
       return (
         <span>
           <FontAwesome name="bus" className="train-route-indicator" />
-          <span>
+          <span className="route-indicator-text">
             {routeId} {verboseRouteDisplay && "Bus"}
           </span>
         </span>
@@ -43,7 +43,7 @@ function getRouteDisplay(routeId: number, verboseRouteDisplay: boolean) {
     return (
       <span>
         <FontAwesome name="train" className="train-route-indicator" />
-        <span>{routeFound}</span>
+        <span className="route-indicator-text">{routeFound}</span>
       </span>
     );
   }
