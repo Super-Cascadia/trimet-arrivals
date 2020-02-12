@@ -1,0 +1,22 @@
+.route-detail-information-pane {
+  width: 100%;
+  height: 100px;
+}
+
+.route-detail-pane {
+  background-color: rgba(#E0D0C1, 0.90);
+  > div {
+    padding: 10px;
+    width: 100%;
+  }
+}
+
+.route-detail-map {
+  width: 100%;
+  height: 300px;
+}
+
+.route-details-stops {
+  width: 100%;
+  height: 100px;
+}

@@ -1,10 +1,12 @@
 import { connect } from "react-redux";
 import { RootState } from "../../../store/reducers";
+import { routeSelector } from "../../../store/selectors/data/routeDataSelectors";
 import LineDetailView from "../component/LineDetailView";
 
 const mapStateToProps = (state: RootState, props) => {
   return {
-    ...props
+    ...props,
+    route: routeSelector(state, props.id)
   };
 };
 
