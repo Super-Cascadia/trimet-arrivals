@@ -36,18 +36,20 @@ export default class LinesViewComponent extends React.Component<Props> {
           <br />
           <strong>Areas served:</strong>
         </CollapsiblePane>
-        <section>
-          <h2>Route Map</h2>
-          <article className="route-detail-pane route-detail-map" />
-        </section>
-        <section>
-          <h2>Route Stops</h2>
-          <article className="route-detail-pane route-detail-stops">
-            <div>
-              <p>Stop information goes here</p>
-            </div>
-          </article>
-        </section>
+        <CollapsiblePane
+          className="route-detail-map"
+          title={"Route Map"}
+          open={true}
+        >
+          <p>Map goes here</p>
+        </CollapsiblePane>
+        <CollapsiblePane
+          className="route-detail-stops"
+          title="Route Stops"
+          open={true}
+        >
+          <p>Stop information goes here</p>
+        </CollapsiblePane>
       </div>
     );
   }
