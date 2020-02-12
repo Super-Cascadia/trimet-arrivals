@@ -1,9 +1,21 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useParams
+} from "react-router-dom";
 import BookmarksViewContainer from "../view/bookmarks/container/BookmarksViewContainer";
+import LineDetailViewContainer from "../view/lineDetail/container/LineDetailViewContainer";
 import LinesViewContainer from "../view/lines/container/LinesViewContainer";
 import MainNavigationContainer from "../view/mainNav/containers/MainNavigationContainer";
 import NearbyViewContainer from "../view/nearby/containers/NearbyViewContainer";
+
+function LineDetailViewRouter() {
+  const { id } = useParams();
+
+  return <LineDetailViewContainer id={id} />;
+}
 
 export default function Routes() {
   return (
@@ -17,7 +29,9 @@ export default function Routes() {
           <Route path="/nearby">
             <NearbyViewContainer />
           </Route>
-          <Route path="/lines/:id">I'm a specific line!</Route>
+          <Route path="/lines/:id">
+            <LineDetailViewRouter />
+          </Route>
           <Route path="/lines">
             <LinesViewContainer />
           </Route>
