@@ -1,4 +1,5 @@
 import React from "react";
+import "./CollapsiblePane.scss";
 
 interface Props {
   className: string;
@@ -13,7 +14,7 @@ interface State {
 export default class CollapsiblePane extends React.Component<Props, State> {
   private static getPaneContents(className, children) {
     return (
-      <article className={`route-detail-pane ${className}`}>
+      <article className={`${className}`}>
         <div>{children}</div>
       </article>
     );
@@ -40,13 +41,15 @@ export default class CollapsiblePane extends React.Component<Props, State> {
     const { open } = this.state;
 
     return (
-      <section>
-        <h2>
-          {title}{" "}
-          <button onClick={this.handleToggleClick}>
-            {open ? "Hide" : "Show"}
-          </button>
-        </h2>
+      <section className="collapsible-pane">
+        <header>
+          <h2>
+            {title}{" "}
+            <button onClick={this.handleToggleClick}>
+              {open ? "Hide" : "Show"}
+            </button>
+          </h2>
+        </header>
         {open && CollapsiblePane.getPaneContents(className, children)}
       </section>
     );

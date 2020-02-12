@@ -1,0 +1,21 @@
+.collapsible-pane {
+  header {
+    background-color: rgba(#fff8e4, 0.90);
+    margin-top: 20px;
+    h2 {
+      margin: 0;
+      margin-left: 5px;
+      line-height: 36px;
+    }
+  }
+
+  article {
+    background-color: rgba(#E0D0C1, 0.90);
+    > div {
+      padding: 10px;
+      width: 100%;
+    }
+  }
+
+}
+

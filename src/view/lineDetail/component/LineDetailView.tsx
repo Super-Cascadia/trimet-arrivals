@@ -27,7 +27,7 @@ export default class LinesViewComponent extends React.Component<Props> {
         <RouteListItem route={route} />
         <CollapsiblePane
           className="route-detail-information-pane"
-          title="Route Information"
+          title="Information"
           open={true}
         >
           <strong>Hours of Operation:</strong> 5:00 AM - 12:00 PM
@@ -36,16 +36,12 @@ export default class LinesViewComponent extends React.Component<Props> {
           <br />
           <strong>Areas served:</strong>
         </CollapsiblePane>
-        <CollapsiblePane
-          className="route-detail-map"
-          title={"Route Map"}
-          open={true}
-        >
+        <CollapsiblePane className="route-detail-map" title={"Map"} open={true}>
           <p>Map goes here</p>
         </CollapsiblePane>
         <CollapsiblePane
           className="route-detail-stops"
-          title="Route Stops"
+          title="Stops"
           open={true}
         >
           <p>Stop information goes here</p>
