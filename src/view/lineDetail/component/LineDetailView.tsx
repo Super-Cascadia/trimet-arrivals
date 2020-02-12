@@ -1,6 +1,7 @@
 import React from "react";
 import { Route } from "../../../api/trimet/interfaces/routes";
 import RouteListItem from "../../../component/route/RouteListItem";
+import CollapsiblePane from "./CollapsiblePane";
 import "./LineDetailView.scss";
 
 interface Props {
@@ -24,20 +25,17 @@ export default class LinesViewComponent extends React.Component<Props> {
     return (
       <div id="lines-detail-view">
         <RouteListItem route={route} />
-        <section>
-          <h2>Route Information</h2>
-          <article className="route-detail-pane route-detail-information-pane">
-            <div>
-              <p>
-                <strong>Hours of Operation:</strong> 5:00 AM - 12:00 PM
-                <br />
-                <strong>Connections:</strong>
-                <br />
-                <strong>Areas served:</strong>
-              </p>
-            </div>
-          </article>
-        </section>
+        <CollapsiblePane
+          className="route-detail-information-pane"
+          title="Route Information"
+          open={true}
+        >
+          <strong>Hours of Operation:</strong> 5:00 AM - 12:00 PM
+          <br />
+          <strong>Connections:</strong>
+          <br />
+          <strong>Areas served:</strong>
+        </CollapsiblePane>
         <section>
           <h2>Route Map</h2>
           <article className="route-detail-pane route-detail-map" />
