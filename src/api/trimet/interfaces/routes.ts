@@ -24,8 +24,10 @@ export interface Route {
   routeSortOrder: number;
 }
 
+export interface RouteDataResultSet {
+  route: Route[];
+}
+
 export interface RouteData {
-  resultSet: {
-    route: Route[];
-  };
+  resultSet: RouteDataResultSet;
 }

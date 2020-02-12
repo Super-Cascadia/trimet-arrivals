@@ -1,23 +1,23 @@
 import { map } from "lodash";
 import React from "react";
 import FontAwesome from "react-fontawesome";
-import { RouteDirectionsDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
+import { RouteStopDirection } from "../../../api/trimet/interfaces/routes";
 
-function routeDirections(directions: RouteDirectionsDict) {
-  return map(directions, (routeDirection, directionId) => {
+function routeDirections(directions: RouteStopDirection[]) {
+  return map(directions, routeDirection => {
     return (
       <li className="route-direction">
         <span className="direction-circle-wrapper">
           <FontAwesome name="arrow-circle-right" />
         </span>
-        <span>{routeDirection.description}</span>
+        <span>{routeDirection.desc}</span>
       </li>
     );
   });
 }
 
 interface Prop {
-  directions: RouteDirectionsDict;
+  directions: RouteStopDirection[];
 }
 
 export default function RouteDirections({ directions }: Prop) {

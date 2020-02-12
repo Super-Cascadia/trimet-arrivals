@@ -1,19 +1,17 @@
 import { map } from "lodash";
 import React from "react";
+import { Route } from "../../../api/trimet/interfaces/routes";
 import RouteListItem from "../../../component/route/RouteListItem";
-import {
-  RouteAndRouteDirections,
-  RouteDirectionDict
-} from "../../../store/reducers/util/getRoutesFromStopLocations";
+import { RouteDataDictionary } from "../../../store/reducers/data/routeDataReducer";
 import "./NearbyRoutes.scss";
 
 interface Props {
-  nearbyRoutes: RouteDirectionDict;
+  nearbyRoutes: RouteDataDictionary;
 }
 
 export default class NearbyRoutes extends React.Component<Props> {
-  public static getRoutes(routes: RouteDirectionDict) {
-    return map(routes, (route: RouteAndRouteDirections) => {
+  public static getRoutes(routes: RouteDataDictionary) {
+    return map(routes, (route: Route) => {
       return <RouteListItem route={route} />;
     });
   }

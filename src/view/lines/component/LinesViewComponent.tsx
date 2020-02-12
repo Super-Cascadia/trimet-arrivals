@@ -10,11 +10,11 @@ interface Props {
 }
 
 export default class LinesViewComponent extends React.Component<Props> {
-  // private static getRoutes(routes: RouteDataDictionary) {
-  //   return _.map(routes, (route: Route) => {
-  //     return <RouteListItem route={route}/>
-  //   })
-  // }
+  private static getRoutes(routes: RouteDataDictionary) {
+    return _.map(routes, (route: Route) => {
+      return <RouteListItem route={route} />;
+    });
+  }
 
   public componentDidMount(): void {
     this.props.loadAllRoutes();
@@ -27,8 +27,6 @@ export default class LinesViewComponent extends React.Component<Props> {
       return "Loading...";
     }
 
-    return (
-      <div id="lines-view">{/*{LinesViewComponent.getRoutes(routes)}*/}</div>
-    );
+    return <div id="lines-view">{LinesViewComponent.getRoutes(routes)}</div>;
   }
 }

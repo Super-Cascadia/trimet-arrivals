@@ -12,7 +12,7 @@ import {
   STREETCAR_S_LINE,
   YELLOW_LINE_NUMBER
 } from "../../api/trimet/constants";
-import { RouteAndRouteDirections } from "../../store/reducers/util/getRoutesFromStopLocations";
+import { Route } from "../../api/trimet/interfaces/routes";
 import RouteDirections from "../../view/nearbyRoutes/component/RouteDirections";
 import RouteIndicator from "./RouteIndicator";
 
@@ -32,12 +32,8 @@ export function getRouteIndicatorClassName(route: number, className: string) {
   return cx("nearby-route", className, style);
 }
 
-export default function RouteListItem({
-  route
-}: {
-  route: RouteAndRouteDirections;
-}) {
-  const routeId = route.routeInfo.id;
+export default function RouteListItem({ route }: { route: Route }) {
+  const routeId = route.id;
   const classNames = getRouteIndicatorClassName(routeId, "route-header");
 
   // tslint:disable-next-line:no-empty
@@ -54,7 +50,7 @@ export default function RouteListItem({
             verbose={true}
           />
         </NavLink>
-        <RouteDirections directions={route.routeDirections} />
+        <RouteDirections directions={route.dir} />
       </h3>
     </div>
   );

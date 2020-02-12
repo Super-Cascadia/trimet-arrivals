@@ -1,20 +1,25 @@
+import _ from "lodash";
 import { createSelector } from "reselect";
 import { RootState } from "../reducers";
-import { RouteDirectionDict } from "../reducers/util/getRoutesFromStopLocations";
+import { RouteDataDictionary } from "../reducers/data/routeDataReducer";
 import { NearbyRoutesDictionary } from "../reducers/view/nearbyRoutesViewReducer";
 
-const allNearbyRoutes = (state: RootState) =>
-  state.nearbyRoutesDataReducer.nearbyRoutes;
+const getAllRoutes = (state: RootState) => state.routeDataReducer.routes;
 
-const allNearbyRoutIds = (state: RootState) =>
+const getAllNearbyRouteIds = (state: RootState) =>
   state.nearbyRoutesViewReducer.nearbyRoutes;
 
 export const allNearbyRoutesSelector = createSelector(
-  allNearbyRoutes,
-  (nearbyRoutes: RouteDirectionDict) => nearbyRoutes
+  getAllRoutes,
+  getAllNearbyRouteIds,
+  (allRoutes: RouteDataDictionary, nearbyRoutes: NearbyRoutesDictionary) => {
+    return _.map(nearbyRoutes, (nearbyRoute, key) => {
+      return allRoutes[key];
+    });
+  }
 );
 
 export const allNearbyRouteIdsSelector = createSelector(
-  allNearbyRoutIds,
+  getAllNearbyRouteIds,
   (nearbyRoutes: NearbyRoutesDictionary) => nearbyRoutes
 );

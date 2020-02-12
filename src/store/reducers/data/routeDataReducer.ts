@@ -1,6 +1,10 @@
 import _ from "lodash";
 import { Route } from "../../../api/trimet/interfaces/routes";
-import { LOAD_ALL_ROUTES_COMPLETE, LOAD_ROUTE_COMPLETE } from "../../constants";
+import {
+  LOAD_ALL_ROUTES_COMPLETE,
+  LOAD_ROUTE_COMPLETE,
+  LOAD_STOP_COMPLETE
+} from "../../constants";
 
 export interface RouteDataDictionary {
   [id: number]: Route;
@@ -71,8 +75,19 @@ function loadAllRoutesComplete(
   };
 }
 
-const routeDataReducer = (state = initialState, action) => {
+function handleLoadStopComplete(state, action) {
+  return {
+    ...state
+  };
+}
+
+const routeDataReducer = (
+  state: RouteDataReducerState = initialState,
+  action
+) => {
   switch (action.type) {
+    case LOAD_STOP_COMPLETE:
+      return handleLoadStopComplete(state, action);
     case LOAD_ALL_ROUTES_COMPLETE:
       return loadAllRoutesComplete(state, action);
     case LOAD_ROUTE_COMPLETE:
