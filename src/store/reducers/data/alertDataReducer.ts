@@ -1,5 +1,5 @@
-import { Alert, AlertsData } from "../../api/trimet/interfaces/alertsData";
-import { LOAD_ROUTE_ALERTS_COMPLETE } from "../constants";
+import { Alert, AlertsData } from "../../../api/trimet/interfaces/alertsData";
+import { LOAD_ROUTE_ALERTS_COMPLETE } from "../../constants";
 
 export interface AlertDataReducerState {
   routeAlerts: {

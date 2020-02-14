@@ -1,11 +1,13 @@
 import { connect } from "react-redux";
 import { loadArrivalDataRequest } from "../../../store/action/stopActions";
 import { RootState } from "../../../store/reducers";
+import { arrivalsSelector } from "../../../store/selectors/data/arrivalsDataSelectors";
 import StopLocationView from "../component/StopLocationView";
 
 const mapStateToProps = (state: RootState, props) => {
   return {
-    ...props
+    ...props,
+    arrivals: arrivalsSelector(state, props.locationId)
   };
 };
 
