@@ -1,14 +1,14 @@
 import _ from "lodash";
 import React from "react";
 import {
-  Route,
-  RouteStopDirection
+  RouteStopDirection,
+  TrimetRoute
 } from "../../../api/trimet/interfaces/routes";
 import "./NearbyRouteDetail.scss";
 import RouteDirection from "./RouteDirection";
 
 interface Props {
-  route: Route;
+  route: TrimetRoute;
 }
 
 export default class RouteDirections extends React.Component<Props> {

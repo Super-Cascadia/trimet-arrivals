@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Route } from "../../../api/trimet/interfaces/routes";
+import { TrimetRoute } from "../../../api/trimet/interfaces/routes";
 import {
   LOAD_ALL_ROUTES_COMPLETE,
   LOAD_ROUTE_COMPLETE,
@@ -7,7 +7,7 @@ import {
 } from "../../constants";
 
 export interface RouteDataDictionary {
-  [id: number]: Route;
+  [id: number]: TrimetRoute;
 }
 
 export interface RouteDataReducerState {
@@ -26,7 +26,7 @@ interface Action {
 interface LoadRouteCompleteAction extends Action {
   type: string;
   payload: {
-    route: Route;
+    route: TrimetRoute;
     id: number;
   };
 }
@@ -48,12 +48,12 @@ function loadRouteComplete(
 interface LoadAllRoutesCompleteAction extends Action {
   type: string;
   payload: {
-    routes: Route[];
+    routes: TrimetRoute[];
   };
 }
 
-function createRoutesDictionary(routes: Route[]): RouteDataDictionary {
-  return _.mapKeys(routes, (route: Route) => {
+function createRoutesDictionary(routes: TrimetRoute[]): RouteDataDictionary {
+  return _.mapKeys(routes, (route: TrimetRoute) => {
     return route.id;
   });
 }

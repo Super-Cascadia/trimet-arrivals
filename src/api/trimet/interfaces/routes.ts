@@ -14,7 +14,7 @@ export interface RouteStopDirection {
   desc: string;
 }
 
-export interface Route {
+export interface TrimetRoute {
   routeColor: string;
   route: number;
   id: number;
@@ -25,7 +25,7 @@ export interface Route {
 }
 
 export interface RouteDataResultSet {
-  route: Route[];
+  route: TrimetRoute[];
 }
 
 export interface RouteData {

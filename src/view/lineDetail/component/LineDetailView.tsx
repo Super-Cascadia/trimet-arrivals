@@ -1,11 +1,11 @@
 import React from "react";
-import { Route } from "../../../api/trimet/interfaces/routes";
+import { TrimetRoute } from "../../../api/trimet/interfaces/routes";
 import RouteListItem from "../../../component/route/RouteListItem";
 import CollapsiblePane from "./CollapsiblePane";
 import "./LineDetailView.scss";
 
 interface Props {
-  route: Route;
+  route: TrimetRoute;
   id: number;
   loadRouteData: (id: number) => {};
 }
@@ -19,7 +19,7 @@ export default class LinesViewComponent extends React.Component<Props> {
     const { route } = this.props;
 
     if (!route) {
-      return "Loading Route data...";
+      return "Loading TrimetRoute data...";
     }
 
     return (

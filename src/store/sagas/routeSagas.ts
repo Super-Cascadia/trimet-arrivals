@@ -1,6 +1,6 @@
 // tslint:disable:no-submodule-imports
 import { call, put } from "redux-saga/effects";
-import { Route } from "../../api/trimet/interfaces/routes";
+import { TrimetRoute } from "../../api/trimet/interfaces/routes";
 import { getAllRoutes, getRouteById } from "../../api/trimet/routeConfig";
 import {
   LOAD_ALL_ROUTES_COMPLETE,
@@ -19,7 +19,7 @@ export function* loadRouteDataById(action: LoadByIdAction) {
 
   try {
     yield put({ type: LOAD_ROUTE_DATA, payload: { id } });
-    const { route }: { route: Route[] } = yield call(getRouteById, id);
+    const { route }: { route: TrimetRoute[] } = yield call(getRouteById, id);
     yield put({
       payload: { route, id },
       type: LOAD_ROUTE_COMPLETE

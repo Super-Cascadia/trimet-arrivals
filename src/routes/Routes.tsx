@@ -32,6 +32,9 @@ export default function Routes() {
           <Route path="/lines/:id">
             <LineDetailViewRouter />
           </Route>
+          <Route path="/lines/:id">
+            <LineDetailViewRouter />
+          </Route>
           <Route path="/lines">
             <LinesViewContainer />
           </Route>

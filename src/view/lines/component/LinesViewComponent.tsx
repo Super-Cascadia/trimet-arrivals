@@ -1,6 +1,7 @@
 import { filter, isEmpty, map } from "lodash";
 import React from "react";
-import { Route } from "../../../api/trimet/interfaces/routes";
+import { Route, Switch, useRouteMatch } from "react-router-dom";
+import { TrimetRoute } from "../../../api/trimet/interfaces/routes";
 import RouteListItem from "../../../component/route/RouteListItem";
 import { RouteDataDictionary } from "../../../store/reducers/data/routeDataReducer";
 
@@ -9,9 +10,24 @@ interface Props {
   routes: RouteDataDictionary;
 }
 
+function LinesViewSubRoutes() {
+  const { path } = useRouteMatch();
+
+  return (
+    <Switch>
+      <Route exact={true} path={path}>
+        Show all routes
+      </Route>
+      <Route path={`${path}/max`}>Show max Routes</Route>
+      <Route path={`${path}/streetcar`}>Show max Routes</Route>
+      <Route path={`${path}/bus`}>Show max Routes</Route>
+    </Switch>
+  );
+}
+
 export default class LinesViewComponent extends React.Component<Props> {
   private static getRoutes(routes: RouteDataDictionary) {
-    return map(routes, (route: Route) => {
+    return map(routes, (route: TrimetRoute) => {
       return <RouteListItem route={route} />;
     });
   }
@@ -28,7 +44,7 @@ export default class LinesViewComponent extends React.Component<Props> {
     }
 
     const busLines = filter(routes, route => route.type === "B");
-    const maxLines = filter(routes, route => route.type === "T");
+    const maxLines = filter(routes, route => route.type === "R");
     const streetCarLines = filter(routes, route => route.type === "S");
 
     return (
@@ -39,6 +55,7 @@ export default class LinesViewComponent extends React.Component<Props> {
         {LinesViewComponent.getRoutes(streetCarLines)}
         <h1>Bus Lines</h1>
         {LinesViewComponent.getRoutes(busLines)}
+        <LinesViewSubRoutes />
       </div>
     );
   }

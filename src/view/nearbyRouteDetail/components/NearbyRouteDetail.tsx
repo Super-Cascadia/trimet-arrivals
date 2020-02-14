@@ -1,6 +1,6 @@
 import React from "react";
 import { Alert } from "../../../api/trimet/interfaces/alertsData";
-import { Route } from "../../../api/trimet/interfaces/routes";
+import { TrimetRoute } from "../../../api/trimet/interfaces/routes";
 import RouteIndicator from "../../../component/route/RouteIndicator";
 import { getRouteIndicatorClassName } from "../../../component/route/RouteListItem";
 import "./NearbyRouteDetail.scss";
@@ -11,7 +11,7 @@ interface Props {
   id: number;
   loadRouteData: (id: number) => {};
   loadAlertData: (id: number) => {};
-  route: Route;
+  route: TrimetRoute;
   alerts: Alert[];
 }
 

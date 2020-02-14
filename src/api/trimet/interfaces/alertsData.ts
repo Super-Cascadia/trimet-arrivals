@@ -1,7 +1,7 @@
-import { Route } from "./routes";
+import { TrimetRoute } from "./routes";
 
 export interface Alert {
-  route: Route[];
+  route: TrimetRoute[];
   info_link_url: string;
   end: number;
   system_wide_flag: boolean;
