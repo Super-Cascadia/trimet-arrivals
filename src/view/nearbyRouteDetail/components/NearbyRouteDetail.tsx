@@ -32,11 +32,13 @@ export default class NearbyRouteDetail extends React.Component<Props> {
 
     // tslint:disable-next-line:no-empty
     const foo = () => {};
-    const classNames = getRouteIndicatorClassName(route.id, "route-header");
 
     return (
       <div>
-        <div className={classNames}>
+        <div
+          className="route-header nearby-route"
+          style={{ backgroundColor: `#${route.routeColor}` }}
+        >
           <RouteIndicator
             key={route.route}
             routeId={route.route}

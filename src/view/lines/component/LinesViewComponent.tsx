@@ -1,4 +1,4 @@
-import { filter, isEmpty, map } from "lodash";
+import { filter, includes, isEmpty, map } from "lodash";
 import React from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
 import { TrimetRoute } from "../../../api/trimet/interfaces/routes";
@@ -43,9 +43,31 @@ export default class LinesViewComponent extends React.Component<Props> {
       return "Loading...";
     }
 
+    const WES = 203;
+    const AREIAL_TRAM = 208;
+    const STREET_CAR_ONE = 193;
+    const STREET_CAR_TWO = 194;
+    const STREET_CAR_THREE = 195;
+
     const busLines = filter(routes, route => route.type === "B");
-    const maxLines = filter(routes, route => route.type === "R");
-    const streetCarLines = filter(routes, route => route.type === "S");
+    const maxLines = filter(routes, route => {
+      return (
+        route.type === "R" &&
+        !includes([WES, AREIAL_TRAM, STREET_CAR_ONE, 194, 195], route.id)
+      );
+    });
+    const streetCarLines = filter(routes, route => {
+      return (
+        route.type === "R" &&
+        includes([STREET_CAR_ONE, STREET_CAR_TWO, STREET_CAR_THREE], route.id)
+      );
+    });
+    const aerialTram = filter(routes, route => {
+      return route.type === "R" && includes([AREIAL_TRAM], route.id);
+    });
+    const wesCommuterRail = filter(routes, route => {
+      return route.type === "R" && includes([WES], route.id);
+    });
 
     return (
       <div id="lines-view">
@@ -53,6 +75,10 @@ export default class LinesViewComponent extends React.Component<Props> {
         {LinesViewComponent.getRoutes(maxLines)}
         <h1>Street Car Lines</h1>
         {LinesViewComponent.getRoutes(streetCarLines)}
+        <h1>Aerial Tram</h1>
+        {LinesViewComponent.getRoutes(aerialTram)}
+        <h1>WES Commuter Rail</h1>
+        {LinesViewComponent.getRoutes(wesCommuterRail)}
         <h1>Bus Lines</h1>
         {LinesViewComponent.getRoutes(busLines)}
         <LinesViewSubRoutes />

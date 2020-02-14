@@ -34,14 +34,12 @@ export function getRouteIndicatorClassName(route: number, className: string) {
 
 export default function RouteListItem({ route }: { route: TrimetRoute }) {
   const routeId = route.id;
-  const classNames = getRouteIndicatorClassName(routeId, "route-header");
-
   // tslint:disable-next-line:no-empty
   const onClick = () => {};
 
   return (
     <div
-      className={classNames}
+      className="route-header nearby-route"
       style={{ backgroundColor: `#${route.routeColor}` }}
     >
       <h3 className="route-directions-indicator-wrapper">
@@ -51,10 +49,11 @@ export default function RouteListItem({ route }: { route: TrimetRoute }) {
             route={undefined}
             onClick={onClick}
             verbose={true}
+            routeColor={route.routeColor}
           />
         </NavLink>
-        <RouteDirections directions={route.dir} />
       </h3>
+      <RouteDirections directions={route.dir} />
     </div>
   );
 }

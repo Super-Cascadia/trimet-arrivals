@@ -22,6 +22,7 @@ interface Props {
   className?: string;
   onClick: (route: TrimetRoute) => void;
   verbose?: boolean;
+  routeColor?: string;
 }
 
 function getRouteDisplay(routeId: number, verboseRouteDisplay: boolean) {
@@ -75,11 +76,14 @@ export default class RouteIndicator extends React.PureComponent<Props> {
   }
 
   public render() {
-    const { routeId, className, verbose } = this.props;
-    const classNames = getRouteIndicatorClassName(routeId, className);
+    const { routeId, className, verbose, routeColor = "3D8FAE" } = this.props;
 
     return (
-      <span className={classNames} onClick={this.onClick}>
+      <span
+        className="route-indicator"
+        onClick={this.onClick}
+        style={{ backgroundColor: `#${routeColor}` }}
+      >
         {getRouteDisplay(routeId, verbose)}
       </span>
     );
