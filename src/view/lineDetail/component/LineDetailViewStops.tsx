@@ -1,5 +1,6 @@
 import { map } from "lodash";
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   RouteDirectionStop,
   RouteStopDirection,
@@ -12,6 +13,17 @@ interface Props {
 }
 
 export default class LineDetailViewStops extends React.Component<Props> {
+  private static getRouteDirectionStops(stops: RouteDirectionStop[]) {
+    return map(stops, stop => {
+      return (
+        <li>
+          <Link to={`/stop/${stop.locid}`}>
+            {stop.locid} - {stop.desc} - {stop.dir}
+          </Link>
+        </li>
+      );
+    });
+  }
   public render() {
     const { route } = this.props;
 
@@ -32,18 +44,10 @@ export default class LineDetailViewStops extends React.Component<Props> {
         <div>
           <header>
             <h3>{routeDirection.desc}</h3>
-            {this.getRouteDirectionStops(routeDirection.stop)}
+            <ul>
+              {LineDetailViewStops.getRouteDirectionStops(routeDirection.stop)}
+            </ul>
           </header>
-        </div>
-      );
-    });
-  }
-
-  private getRouteDirectionStops(stops: RouteDirectionStop[]) {
-    return map(stops, stop => {
-      return (
-        <div>
-          {stop.locid} - {stop.desc} - {stop.dir}
         </div>
       );
     });

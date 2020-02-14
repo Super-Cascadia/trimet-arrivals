@@ -10,11 +10,18 @@ import LineDetailViewContainer from "../view/lineDetail/container/LineDetailView
 import LinesViewContainer from "../view/lines/container/LinesViewContainer";
 import MainNavigationContainer from "../view/mainNav/containers/MainNavigationContainer";
 import NearbyViewContainer from "../view/nearby/containers/NearbyViewContainer";
+import StopLocationViewContainer from "../view/stop/container/StopLocationViewContainer";
 
 function LineDetailViewRouter() {
   const { id } = useParams();
 
   return <LineDetailViewContainer id={id} />;
+}
+
+function StopLocationViewRouter() {
+  const { id } = useParams();
+
+  return <StopLocationViewContainer locationId={id} />;
 }
 
 export default function Routes() {
@@ -32,8 +39,8 @@ export default function Routes() {
           <Route path="/lines/:id">
             <LineDetailViewRouter />
           </Route>
-          <Route path="/lines/:id">
-            <LineDetailViewRouter />
+          <Route path="/stop/:id">
+            <StopLocationViewRouter />
           </Route>
           <Route path="/lines">
             <LinesViewContainer />
