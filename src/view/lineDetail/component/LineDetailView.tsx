@@ -3,6 +3,7 @@ import { TrimetRoute } from "../../../api/trimet/interfaces/routes";
 import RouteListItem from "../../../component/route/RouteListItem";
 import CollapsiblePane from "./CollapsiblePane";
 import "./LineDetailView.scss";
+import LineDetailViewStops from "./LineDetailViewStops";
 
 interface Props {
   route: TrimetRoute;
@@ -45,6 +46,7 @@ export default class LinesViewComponent extends React.Component<Props> {
           open={true}
         >
           <p>Stop information goes here</p>
+          <LineDetailViewStops route={route} />
         </CollapsiblePane>
       </div>
     );

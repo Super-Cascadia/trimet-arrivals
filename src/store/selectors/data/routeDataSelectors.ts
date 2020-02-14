@@ -11,6 +11,7 @@ export const routeSelector = createSelector(
   routeById,
   (route: TrimetRoute) => route
 );
+
 export const allRoutesSelector = createSelector(
   allRoutes,
   (routes: TrimetRoute[]) => routes
