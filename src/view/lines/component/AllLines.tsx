@@ -66,15 +66,15 @@ export function AllLines({ routes }: { routes: RouteDataDictionary }) {
 
   return (
     <div>
-      <h2>Max Lines</h2>
+      <h2>Max Light Rail</h2>
       {getRoutes(maxLines)}
-      <h2>Street Car Lines</h2>
+      <h2>Portland Street Car</h2>
       {getRoutes(streetCarLines)}
-      <h2>Aerial Tram</h2>
+      <h2>OHSU Aerial Tram</h2>
       {getRoutes(aerialTram)}
       <h2>WES Commuter Rail</h2>
       {getRoutes(wesCommuterRail)}
-      <h2>Bus Lines</h2>
+      <h2>Bus</h2>
       {getRoutes(busLines)}
     </div>
   );
