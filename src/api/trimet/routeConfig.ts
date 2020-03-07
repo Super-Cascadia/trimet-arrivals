@@ -11,7 +11,7 @@ function getRouteByIdUrl(id: number): string {
 }
 
 function getAllRoutesUrl(): string {
-  return `${ROUTE_BASE_URL}json/true/dir/true/${API}`;
+  return `${ROUTE_BASE_URL}json/true/dir/true/stops/true/${API}`;
 }
 
 export async function getRouteById(id: number): Promise<RouteDataResultSet> {
