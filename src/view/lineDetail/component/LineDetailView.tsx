@@ -45,7 +45,6 @@ export default class LinesViewComponent extends React.Component<Props> {
           title="Stops"
           open={true}
         >
-          <p>Stop information goes here</p>
           <LineDetailViewStops route={route} />
         </CollapsiblePane>
       </div>

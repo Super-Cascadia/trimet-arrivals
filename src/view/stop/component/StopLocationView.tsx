@@ -1,13 +1,10 @@
 import { map } from "lodash";
-import moment from "moment";
 import React from "react";
-import { Arrival, ArrivalData } from "../../../api/trimet/interfaces/arrivals";
-import { TrimetRoute } from "../../../api/trimet/interfaces/types";
+import { Arrival } from "../../../api/trimet/interfaces/arrivals";
 import {
   TrimetArrivalData,
   TrimetLocation
 } from "../../../store/reducers/data/arrivalsDataReducer";
-import ArrivalRow from "../../arrivals/components/ArrivalRow";
 import CollapsiblePane from "../../lineDetail/component/CollapsiblePane";
 import ArrivalRowContainer from "../container/ArrivalRowContainer";
 
@@ -15,10 +12,6 @@ interface Props {
   loadArrivalData: (locationId: number) => void;
   locationId: number;
   arrivals: TrimetArrivalData;
-}
-
-function getArrivalRoute(routes: TrimetRoute[], routeId: number) {
-  return routes.find((route: TrimetRoute) => route.route === routeId);
 }
 
 export default class StopLocationView extends React.Component<Props> {

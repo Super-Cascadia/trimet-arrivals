@@ -4,16 +4,10 @@ import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import RouteIndicator from "../../../component/route/RouteIndicator";
 import "./StopRouteListing.scss";
 
-function getSimpleRouteList(routes: TrimetRoute[], onClick) {
+function getSimpleRouteList(routes: TrimetRoute[]) {
   return map(routes, (route: TrimetRoute) => {
     return (
-      <RouteIndicator
-        key={route.route}
-        routeId={route.route}
-        route={route}
-        onClick={onClick}
-        className="header-router-indicator"
-      />
+      <RouteIndicator key={route.route} routeId={route.route} route={route} />
     );
   });
 }
@@ -24,13 +18,7 @@ function getDetailedRouteList(routes: TrimetRoute[], onClick) {
 
     return (
       <li className="route-detail-list-item">
-        <RouteIndicator
-          key={route.route}
-          routeId={route.route}
-          route={route}
-          onClick={onClick}
-          className="header-router-indicator"
-        />
+        <RouteIndicator key={route.route} routeId={route.route} route={route} />
         <span className="route-description">
           <span>{description}</span>
           <span className="route-description-divider">-</span>
@@ -85,9 +73,7 @@ export default class StopRouteListing extends Component<Props, State> {
     return (
       <div>
         <span className="serving-label">Routes: </span>
-        <span className="route-indicators">
-          {getSimpleRouteList(routes, onClick)}
-        </span>
+        <span className="route-indicators">{getSimpleRouteList(routes)}</span>
         <button onClick={this.toggleDetails}>Details</button>
       </div>
     );

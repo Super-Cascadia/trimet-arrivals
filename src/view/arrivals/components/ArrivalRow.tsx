@@ -37,7 +37,6 @@ export default class ArrivalRow extends React.Component<Props> {
       routeId,
       shortSign,
       now,
-      onRouteIndicatorClick,
       route
     } = this.props;
     const scheduledMoment = moment(scheduled);
@@ -47,11 +46,7 @@ export default class ArrivalRow extends React.Component<Props> {
     return (
       <tr>
         <td className="route-indicator-column">
-          <RouteIndicator
-            routeId={routeId}
-            onClick={onRouteIndicatorClick}
-            route={route}
-          />
+          <RouteIndicator routeId={routeId} route={route} />
         </td>
         <td className="short-sign">{shortSign}</td>
         <td>

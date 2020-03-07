@@ -30,9 +30,6 @@ export default class NearbyRouteDetail extends React.Component<Props> {
       return <div>Loading</div>;
     }
 
-    // tslint:disable-next-line:no-empty
-    const foo = () => {};
-
     return (
       <div>
         <div
@@ -43,9 +40,7 @@ export default class NearbyRouteDetail extends React.Component<Props> {
             key={route.route}
             routeId={route.route}
             route={undefined}
-            onClick={foo}
             verbose={true}
-            className="header-router-indicator"
           />
         </div>
         <RouteAlerts id={id} alerts={alerts} />

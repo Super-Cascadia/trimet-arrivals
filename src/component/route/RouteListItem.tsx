@@ -47,7 +47,6 @@ export default function RouteListItem({ route }: { route: TrimetRoute }) {
           <RouteIndicator
             routeId={routeId}
             route={undefined}
-            onClick={onClick}
             verbose={true}
             routeColor={route.routeColor}
           />

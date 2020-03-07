@@ -71,15 +71,15 @@ export default class LinesViewComponent extends React.Component<Props> {
 
     return (
       <div id="lines-view">
-        <h1>Max Lines</h1>
+        <h2>Max Lines</h2>
         {LinesViewComponent.getRoutes(maxLines)}
-        <h1>Street Car Lines</h1>
+        <h2>Street Car Lines</h2>
         {LinesViewComponent.getRoutes(streetCarLines)}
-        <h1>Aerial Tram</h1>
+        <h2>Aerial Tram</h2>
         {LinesViewComponent.getRoutes(aerialTram)}
-        <h1>WES Commuter Rail</h1>
+        <h2>WES Commuter Rail</h2>
         {LinesViewComponent.getRoutes(wesCommuterRail)}
-        <h1>Bus Lines</h1>
+        <h2>Bus Lines</h2>
         {LinesViewComponent.getRoutes(busLines)}
         <LinesViewSubRoutes />
       </div>
