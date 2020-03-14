@@ -4,6 +4,7 @@ import FontAwesome from "react-fontawesome";
 import { NavLink } from "react-router-dom";
 import { LinesViewSubRoutes } from "../../../routes/LinesSubRoutes";
 import { RouteDataDictionary } from "../../../store/reducers/data/routeDataReducer";
+import "./LinesViewComponent.scss";
 
 interface Props {
   loadAllRoutes: () => {};
@@ -13,7 +14,7 @@ interface Props {
 export default class LinesViewComponent extends React.Component<Props> {
   private static getRouteNav() {
     return (
-      <nav className="nearby-routes-nav">
+      <nav className="nearby-routes-nav lines-view-nav">
         <NavLink to="/lines">
           <FontAwesome className="route" name="route" />
           All
@@ -36,7 +37,7 @@ export default class LinesViewComponent extends React.Component<Props> {
         </NavLink>
         <NavLink to="/lines/tram">
           <FontAwesome className="tram" name="tram" />
-          Aerial Tram
+          Tram
         </NavLink>
       </nav>
     );

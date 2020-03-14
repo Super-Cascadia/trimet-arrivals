@@ -7,7 +7,7 @@ export function MaxLines({ routes }: { routes: RouteDataDictionary }) {
   const lines = getMaxLines(routes);
 
   return (
-    <div>
+    <div className="line-detail-view-wrapper">
       <h2>
         <FontAwesome className="train" name="train" />
         Max Light Rail

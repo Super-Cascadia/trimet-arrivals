@@ -7,7 +7,7 @@ export function StreetCarLines({ routes }: { routes: RouteDataDictionary }) {
   const streetCarLines = getStreetCarLines(routes);
 
   return (
-    <div>
+    <div className="line-detail-view-wrapper">
       <h2>
         <FontAwesome className="train" name="train" />
         Portland Street Car

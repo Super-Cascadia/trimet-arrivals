@@ -7,12 +7,11 @@ export function WES({ routes }: { routes: RouteDataDictionary }) {
   const wesCommuterRail = getWesCommuterRail(routes);
 
   return (
-    <div>
+    <div className="line-detail-view-wrapper">
       <h2>
         <FontAwesome className="subway" name="subway" />
         WES Commuter Rail
       </h2>
-      <br />
       {getRoutes(wesCommuterRail)}
     </div>
   );

@@ -7,12 +7,11 @@ export function AerialTram({ routes }: { routes: RouteDataDictionary }) {
   const aerialTram = getAerialTram(routes);
 
   return (
-    <div>
+    <div className="line-detail-view-wrapper">
       <h2>
         <FontAwesome className="tram" name="tram" />
         OHSU Aerial Tram
       </h2>
-      <br />
       {getRoutes(aerialTram)}
     </div>
   );

@@ -8,7 +8,7 @@ export function BusLines({ routes }: { routes: RouteDataDictionary }) {
   const busLines = getBusLines(routes);
 
   return (
-    <div>
+    <div className="line-detail-view-wrapper">
       <h2>
         <FontAwesome className="bus" name="bus" />
         Max Bus

@@ -65,7 +65,7 @@ export function AllLines({ routes }: { routes: RouteDataDictionary }) {
   const wesCommuterRail = getWesCommuterRail(routes);
 
   return (
-    <div>
+    <div className="line-detail-view-wrapper">
       <h2>Max Light Rail</h2>
       {getRoutes(maxLines)}
       <h2>Portland Street Car</h2>
