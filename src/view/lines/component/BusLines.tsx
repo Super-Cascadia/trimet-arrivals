@@ -1,4 +1,5 @@
 import React from "react";
+import FontAwesome from "react-fontawesome";
 import { RouteDataDictionary } from "../../../store/reducers/data/routeDataReducer";
 import CollapsiblePane from "../../lineDetail/component/CollapsiblePane";
 import { getBusLines, getRoutes } from "./AllLines";
@@ -8,7 +9,10 @@ export function BusLines({ routes }: { routes: RouteDataDictionary }) {
 
   return (
     <div>
-      <h2>Bus Lines</h2>
+      <h2>
+        <FontAwesome className="bus" name="bus" />
+        Max Bus
+      </h2>
       <CollapsiblePane
         className="route-detail-information-pane"
         title="Schedule"

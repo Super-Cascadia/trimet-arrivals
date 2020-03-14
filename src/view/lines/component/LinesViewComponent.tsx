@@ -1,5 +1,6 @@
 import { isEmpty } from "lodash";
 import React from "react";
+import FontAwesome from "react-fontawesome";
 import { NavLink } from "react-router-dom";
 import { LinesViewSubRoutes } from "../../../routes/LinesSubRoutes";
 import { RouteDataDictionary } from "../../../store/reducers/data/routeDataReducer";
@@ -12,13 +13,31 @@ interface Props {
 export default class LinesViewComponent extends React.Component<Props> {
   private static getRouteNav() {
     return (
-      <nav>
-        <NavLink to="/lines">All</NavLink>
-        <NavLink to="/lines/max">Max</NavLink>
-        <NavLink to="/lines/streetcar">Streetcar</NavLink>
-        <NavLink to="/lines/bus">Bus</NavLink>
-        <NavLink to="/lines/wes">WES Rail</NavLink>
-        <NavLink to="/lines/tram">Aerial Tram</NavLink>
+      <nav className="nearby-routes-nav">
+        <NavLink to="/lines">
+          <FontAwesome className="route" name="route" />
+          All
+        </NavLink>
+        <NavLink to="/lines/max">
+          <FontAwesome className="train" name="train" />
+          Max
+        </NavLink>
+        <NavLink to="/lines/streetcar">
+          <FontAwesome className="train" name="train" />
+          Streetcar
+        </NavLink>
+        <NavLink to="/lines/bus">
+          <FontAwesome className="bus" name="bus" />
+          Bus
+        </NavLink>
+        <NavLink to="/lines/wes">
+          <FontAwesome className="subway" name="subway" />
+          WES
+        </NavLink>
+        <NavLink to="/lines/tram">
+          <FontAwesome className="tram" name="tram" />
+          Aerial Tram
+        </NavLink>
       </nav>
     );
   }
