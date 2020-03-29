@@ -1,5 +1,6 @@
 import React from "react";
 import { TrimetRoute } from "../../../api/trimet/interfaces/routes";
+import FrequentServiceIndicator from "../../../component/route/FrequentServiceIndicator";
 import RouteListItem from "../../../component/route/RouteListItem";
 import {
   LineScheduleInfo,
@@ -15,24 +16,10 @@ interface Props {
   loadRouteData: (id: number) => {};
 }
 
-function getFrequentService(frequentService: boolean) {
-  if (!frequentService) {
-    return null;
-  }
-
-  return (
-    <div className="frequent-service-indicator">
-      Frequent
-      <br />
-      Service
-    </div>
-  );
-}
-
 function getScheduleContent(schedule: LineScheduleInfo) {
   return (
     <>
-      {getFrequentService(schedule.frequentService)}
+      <FrequentServiceIndicator frequentService={schedule.frequentService} />
       <strong>Hours of Operation:</strong> 5:00 AM - 12:00 PM
       <br />
       <strong>Connections:</strong>
