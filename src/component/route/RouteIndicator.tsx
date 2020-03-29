@@ -1,12 +1,11 @@
-import { get } from "lodash";
 import React from "react";
 import FontAwesome from "react-fontawesome";
 import { Link } from "react-router-dom";
 import { ROUTE_DISPLAY } from "../../api/trimet/constants";
 import { TrimetRoute } from "../../api/trimet/interfaces/types";
-import { maxLightRail } from "../../data/trimet/schedules/maxLightRail";
-import FrequentServiceIndicator from "./FrequentServiceIndicator";
 import "./RouteIndicator.scss";
+
+const DEFAULT_ROUTE_COLOR = "3D8FAE";
 
 interface Props {
   routeId: number;
@@ -40,18 +39,8 @@ function getRouteDisplay(routeId: number, verboseRouteDisplay: boolean) {
   }
 }
 
-function getFrequentServiceIndicator(routeId: number) {
-  const frequentService = get(
-    maxLightRail,
-    `[${routeId}].frequentService`,
-    false
-  );
-
-  return <FrequentServiceIndicator frequentService={frequentService} />;
-}
-
 export default function RouteIndicator(props: Props) {
-  const { routeId, verbose, routeColor = "3D8FAE" } = props;
+  const { routeId, verbose, routeColor = DEFAULT_ROUTE_COLOR } = props;
 
   return (
     <Link to={`/lines/${routeId}`}>
@@ -60,7 +49,6 @@ export default function RouteIndicator(props: Props) {
         style={{ backgroundColor: `#${routeColor}` }}
       >
         {getRouteDisplay(routeId, verbose)}
-        {getFrequentServiceIndicator(routeId)}
       </span>
     </Link>
   );

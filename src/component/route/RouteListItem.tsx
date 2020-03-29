@@ -1,4 +1,5 @@
 import cx from "classnames";
+import { get } from "lodash";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import {
@@ -13,7 +14,9 @@ import {
   YELLOW_LINE_NUMBER
 } from "../../api/trimet/constants";
 import { TrimetRoute } from "../../api/trimet/interfaces/routes";
+import { maxLightRail } from "../../data/trimet/schedules/maxLightRail";
 import RouteDirections from "../../view/nearbyRoutes/component/RouteDirections";
+import FrequentServiceIndicator from "./FrequentServiceIndicator";
 import RouteIndicator from "./RouteIndicator";
 
 export function getRouteIndicatorClassName(route: number, className: string) {
@@ -32,6 +35,23 @@ export function getRouteIndicatorClassName(route: number, className: string) {
   return cx("nearby-route", className, style);
 }
 
+function getFrequentServiceIndicator(routeId: number) {
+  const frequentService = get(
+    maxLightRail,
+    `[${routeId}].frequentService`,
+    false
+  );
+
+  return (
+    <div className="route-indicator-schedule-wrapper">
+      <FrequentServiceIndicator
+        small={true}
+        frequentService={frequentService}
+      />
+    </div>
+  );
+}
+
 export default function RouteListItem({ route }: { route: TrimetRoute }) {
   const routeId = route.id;
   // tslint:disable-next-line:no-empty
@@ -42,17 +62,20 @@ export default function RouteListItem({ route }: { route: TrimetRoute }) {
       className="route-header nearby-route"
       style={{ backgroundColor: `#${route.routeColor}` }}
     >
-      <h3 className="route-directions-indicator-wrapper">
-        <NavLink to={`/lines/${routeId}`}>
-          <RouteIndicator
-            routeId={routeId}
-            route={undefined}
-            verbose={true}
-            routeColor={route.routeColor}
-          />
-        </NavLink>
-      </h3>
-      <RouteDirections directions={route.dir} />
+      <div>
+        <h3 className="route-directions-indicator-wrapper">
+          <NavLink to={`/lines/${routeId}`}>
+            <RouteIndicator
+              routeId={routeId}
+              route={undefined}
+              verbose={true}
+              routeColor={route.routeColor}
+            />
+          </NavLink>
+        </h3>
+        <RouteDirections directions={route.dir} />
+      </div>
+      {getFrequentServiceIndicator(routeId)}
     </div>
   );
 }

@@ -114,22 +114,22 @@ export const maxLightRail: ScheduleDictionary = {
     twentyFourHourService: false
   },
   [RED_LINE_NUMBER]: {
-    frequentService: false,
+    frequentService: true,
     schedules: {},
     twentyFourHourService: false
   },
   [GREEN_LINE_NUMBER]: {
-    frequentService: false,
+    frequentService: true,
     schedules: {},
     twentyFourHourService: false
   },
   [YELLOW_LINE_NUMBER]: {
-    frequentService: false,
+    frequentService: true,
     schedules: {},
     twentyFourHourService: false
   },
   [ORANGE_LINE_NUMBER]: {
-    frequentService: false,
+    frequentService: true,
     schedules: {},
     twentyFourHourService: false
   }
