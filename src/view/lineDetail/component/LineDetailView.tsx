@@ -1,6 +1,10 @@
 import React from "react";
 import { TrimetRoute } from "../../../api/trimet/interfaces/routes";
 import RouteListItem from "../../../component/route/RouteListItem";
+import {
+  LineScheduleInfo,
+  maxLightRail
+} from "../../../data/trimet/schedules/maxLightRail";
 import CollapsiblePane from "./CollapsiblePane";
 import "./LineDetailView.scss";
 import LineDetailViewStops from "./LineDetailViewStops";
@@ -11,31 +15,56 @@ interface Props {
   loadRouteData: (id: number) => {};
 }
 
+function getFrequentService(frequentService: boolean) {
+  if (!frequentService) {
+    return null;
+  }
+
+  return (
+    <div className="frequent-service-indicator">
+      Frequent
+      <br />
+      Service
+    </div>
+  );
+}
+
+function getScheduleContent(schedule: LineScheduleInfo) {
+  return (
+    <>
+      {getFrequentService(schedule.frequentService)}
+      <strong>Hours of Operation:</strong> 5:00 AM - 12:00 PM
+      <br />
+      <strong>Connections:</strong>
+      <br />
+      <strong>Areas served:</strong>
+    </>
+  );
+}
+
 export default class LinesViewComponent extends React.Component<Props> {
   public componentDidMount(): void {
     this.props.loadRouteData(this.props.id);
   }
 
   public render() {
-    const { route } = this.props;
+    const { route, id } = this.props;
 
     if (!route) {
       return "Loading TrimetRoute data...";
     }
+
+    const routeSchedule = maxLightRail[id];
 
     return (
       <div id="lines-detail-view">
         <RouteListItem route={route} />
         <CollapsiblePane
           className="route-detail-information-pane"
-          title="Information"
+          title="Schedule"
           open={true}
         >
-          <strong>Hours of Operation:</strong> 5:00 AM - 12:00 PM
-          <br />
-          <strong>Connections:</strong>
-          <br />
-          <strong>Areas served:</strong>
+          {getScheduleContent(routeSchedule)}
         </CollapsiblePane>
         <CollapsiblePane className="route-detail-map" title={"Map"} open={true}>
           <p>Map goes here</p>

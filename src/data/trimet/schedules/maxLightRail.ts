@@ -6,7 +6,7 @@ import {
   YELLOW_LINE_NUMBER
 } from "../../../api/trimet/constants";
 
-interface DirectionSchedule {
+export interface DirectionSchedule {
   id: number;
   serviceRange: string[];
   detailTimeFrames: Array<{
@@ -15,11 +15,11 @@ interface DirectionSchedule {
   }>;
 }
 
-interface DaySchedule {
+export interface DaySchedule {
   directions: DirectionSchedule[];
 }
 
-interface LineSchedule {
+export interface LineSchedule {
   regular?: {
     monFri?: DaySchedule;
     saturday?: DaySchedule;
@@ -28,19 +28,19 @@ interface LineSchedule {
   holidays?: {};
 }
 
-interface LineScheduleInfo {
+export interface LineScheduleInfo {
   frequentService: boolean;
   twentyFourHourService: boolean;
   schedules?: LineSchedule;
 }
 
-interface ScheduleDictionary {
+export interface ScheduleDictionary {
   [lineNumber: number]: LineScheduleInfo;
 }
 
 export const maxLightRail: ScheduleDictionary = {
   [BLUE_LINE_NUMBER]: {
-    frequentService: false,
+    frequentService: true,
     schedules: {
       regular: {
         monFri: {

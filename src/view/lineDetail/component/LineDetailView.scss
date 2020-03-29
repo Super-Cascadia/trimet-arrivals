@@ -12,3 +12,17 @@
   width: 100%;
   height: 100px;
 }
+
+.frequent-service-indicator {
+  background: forestgreen;
+  color: white;
+  border-radius: 70px;
+  height: 70px;
+  width: 70px;
+  font-size: 12px;
+  text-align: center;
+  span {
+    vertical-align: middle;
+  }
+}
+
