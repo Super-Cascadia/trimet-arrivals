@@ -27,7 +27,7 @@
     "@types/superagent": "4.1.4",
     "chroma-js": "^2.0.3",
     "classnames": "2.2.6",
-    "codecov": "^3.7.1",
+    "codecov": "^3.8.3",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
     "enzyme-matchers": "^7.0.1",
