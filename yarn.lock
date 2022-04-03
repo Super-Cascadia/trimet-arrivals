@@ -1426,10 +1426,10 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jasmine-enzyme@^7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@types/jasmine-enzyme/-/jasmine-enzyme-7.0.0.tgz#c67e63173a8c004118ad6dd0b72b57090c2a2021"
-  integrity sha512-eu1W4ByvtdUZOekPuX54RTgJQIIm5eVfzZBcRD+D42FFh/S3abM1heWJBpsJ/7mzJoJFeEQ6OWY3Pgl9H26AhA==
+"@types/jasmine-enzyme@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@types/jasmine-enzyme/-/jasmine-enzyme-7.0.1.tgz#f1e3cbabe554505006a0fd9c1c389eb2de7d5514"
+  integrity sha512-QUVu6zeiFodnavtZwzSW3hvaFoxe+xPIXolyXe1lGBhDY1w0uS6XpC6hRwq047kLjLJqJ5W5ACeMzRpZuP+fNg==
   dependencies:
     "@types/jasmine" "*"
     "@types/react" "*"
