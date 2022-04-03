@@ -1,0 +1,24 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "13:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: husky
+    versions:
+    - 5.2.0
+  - dependency-name: react-test-renderer
+    versions:
+    - 16.13.0
+  - dependency-name: js-yaml
+    versions:
+    - 3.14.1
+  - dependency-name: https-proxy-agent
+    versions:
+    - 2.2.4
+  - dependency-name: "@types/react-dom"
+    versions:
+    - 17.0.2
