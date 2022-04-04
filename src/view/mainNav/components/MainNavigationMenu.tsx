@@ -1,4 +1,5 @@
-import { faRoute } from "@fortawesome/free-solid-svg-icons";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { faRoute, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import FontAwesome from "react-fontawesome";
@@ -29,7 +30,7 @@ export default function MainNavigationMenu({
         Nearby
       </NavLink>
       <NavLink to="/lines">
-        <FontAwesomeIcon icon={faRoute} className="bookmark-icon" />
+        <FontAwesomeIcon icon={faRoute as IconProp} className="bookmark-icon" />
         Lines
       </NavLink>
       <NavLink to="/bookmarks">

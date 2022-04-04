@@ -7,7 +7,7 @@ import "../../nearby/components/NearbyViewComponent.scss";
 type Event = React.MouseEvent<HTMLElement>;
 
 interface Props {
-  stopLocation: StopLocation;
+  stopLocation?: StopLocation;
   loadArrivalData: LoadArrivalData;
   loading: boolean;
   showArrivals: boolean;

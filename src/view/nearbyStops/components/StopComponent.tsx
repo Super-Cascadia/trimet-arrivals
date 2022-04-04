@@ -6,7 +6,7 @@ import "../../nearby/components/NearbyViewComponent.scss";
 import StopsTableHeader from "./StopsTableHeader";
 
 interface Props {
-  stopLocation: StopLocationWithDistance;
+  stopLocation?: StopLocationWithDistance;
   loadArrivalData: (locationId: number) => TimerHandler;
   locationId: number;
   loading: boolean;

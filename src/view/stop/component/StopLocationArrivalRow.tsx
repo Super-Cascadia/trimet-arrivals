@@ -5,7 +5,7 @@ import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import ArrivalRow from "../../arrivals/components/ArrivalRow";
 
 interface Props {
-  locationId: number;
+  locationId?: number;
   arrival: Arrival;
   route: TrimetRoute;
 }
