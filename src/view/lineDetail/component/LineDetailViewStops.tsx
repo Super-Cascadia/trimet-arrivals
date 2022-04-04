@@ -1,55 +1,94 @@
-import { map } from "lodash";
+import { filter, flatten, includes, isEmpty, map, mapKeys } from "lodash";
 import React from "react";
+import { Col, Row, Table } from "react-bootstrap";
+import FontAwesome from "react-fontawesome";
 import { Link } from "react-router-dom";
+import { Alert } from "../../../api/trimet/interfaces/alertsData";
 import {
   RouteDirectionStop,
   RouteStopDirection,
   TrimetRoute
 } from "../../../api/trimet/interfaces/routes";
+import Loading from "../../loading/Loading";
 import "./LineDetailView.scss";
+
+function getRouteDirectionStops(
+  stops: RouteDirectionStop[],
+  stopsWithAlerts: number[]
+) {
+  return map(stops, stop => {
+    const stopHasAlert = includes(stopsWithAlerts, stop.locid);
+
+    return (
+      <tr>
+        <td>
+          <Link to={`/stop/${stop.locid}`}>
+            <small>{stop.locid}</small>
+          </Link>
+        </td>
+        <td>
+          <small>{stop.desc}</small>
+        </td>
+        <td>
+          <small>{stop.dir}</small>
+        </td>
+        <td>
+          {stopHasAlert && (
+            <span>
+              <FontAwesome name="bell-exclamation" /> Alerts
+            </span>
+          )}
+        </td>
+      </tr>
+    );
+  });
+}
+
+function getRouteDirections(
+  routeDirections: RouteStopDirection[],
+  stopsWithAlerts: number[]
+) {
+  return map(routeDirections, routeDirection => {
+    return (
+      <Col>
+        <header>
+          <h3 className="h6">{routeDirection.desc}</h3>
+          <Table striped={true} bordered={true} hover={true} size="sm">
+            <thead>
+              <tr>
+                <td>Stop ID</td>
+                <td>Name</td>
+                <td>Direction</td>
+                <td>Alerts</td>
+              </tr>
+            </thead>
+            <tbody>
+              {getRouteDirectionStops(routeDirection.stop, stopsWithAlerts)}
+            </tbody>
+          </Table>
+        </header>
+      </Col>
+    );
+  });
+}
 
 interface Props {
   route: TrimetRoute;
+  alertsData: Alert[];
 }
 
-export default class LineDetailViewStops extends React.Component<Props> {
-  private static getRouteDirectionStops(stops: RouteDirectionStop[]) {
-    return map(stops, stop => {
-      return (
-        <li>
-          <Link to={`/stop/${stop.locid}`}>
-            {stop.locid} - {stop.desc} - {stop.dir}
-          </Link>
-        </li>
-      );
-    });
-  }
-  public render() {
-    const { route } = this.props;
+export default function LineDetailViewStops(props: Props) {
+  const { route, alertsData } = props;
 
-    if (!route.dir) {
-      return "Loading TrimetRoute data...";
-    }
-
-    return (
-      <div id="line-detail-view-stops">
-        {this.getRouteDirections(route.dir)}
-      </div>
-    );
+  if (!route.dir) {
+    return <Loading />;
   }
 
-  public getRouteDirections(routeDirections: RouteStopDirection[]) {
-    return map(routeDirections, routeDirection => {
-      return (
-        <div>
-          <header>
-            <h3>{routeDirection.desc}</h3>
-            <ul>
-              {LineDetailViewStops.getRouteDirectionStops(routeDirection.stop)}
-            </ul>
-          </header>
-        </div>
-      );
-    });
-  }
+  const mappedAlerts = flatten(
+    map(alertsData, (alert: Alert) =>
+      map(alert.location, location => location.id)
+    )
+  );
+
+  return <Row>{getRouteDirections(route.dir, mappedAlerts)}</Row>;
 }

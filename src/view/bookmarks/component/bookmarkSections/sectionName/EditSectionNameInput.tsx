@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Form } from "react-bootstrap";
 
 interface Props {
   sectionName: string;
@@ -33,11 +34,11 @@ export default class EditSectionNameInput extends Component<Props, State> {
 
   public render() {
     return (
-      <input
+      <Form.Control
         type="text"
         value={this.state.sectionName}
         onChange={this.onChange}
-        className="edit-section-name-input"
+        className="mb-2 mb-md-0 edit-section-name-input"
       />
     );
   }

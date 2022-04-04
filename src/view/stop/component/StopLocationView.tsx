@@ -1,76 +1,101 @@
-import { map } from "lodash";
-import React from "react";
-import { Arrival } from "../../../api/trimet/interfaces/arrivals";
-import {
-  TrimetArrivalData,
-  TrimetLocation
-} from "../../../store/reducers/data/arrivalsDataReducer";
-import CollapsiblePane from "../../lineDetail/component/CollapsiblePane";
-import ArrivalRowContainer from "../container/ArrivalRowContainer";
+import { sortBy, uniq } from "lodash";
+import React, { useEffect, useState } from "react";
+import { Card, Col, Container, Row } from "react-bootstrap";
+import { getAlertsByLocationId } from "../../../api/trimet/alerts";
+import { getArrivals } from "../../../api/trimet/arrivals";
+import { Alert, AlertsData } from "../../../api/trimet/interfaces/alertsData";
+import { ArrivalData } from "../../../api/trimet/interfaces/arrivals";
+import { StopLocation } from "../../../api/trimet/interfaces/types";
+import Map, { LatLngCoords } from "../../../component/map/Map";
+import { AlertsCard } from "../../lineDetail/component/AlertsCard";
+import Loading from "../../loading/Loading";
+import StopLocationArrivals from "./StopLocationArrivals";
+import StopLocationArrivalsTableNav from "./StopLocationArrivalsTableNav";
+import StopLocationHeader from "./StopLocationHeader";
+import LocationInfoPane from "./StopLocationInfoPane";
+
+export type OnBookmarkClick = (
+  stopLocation: StopLocation,
+  stopIsBookmarked: boolean
+) => void;
 
 interface Props {
-  loadArrivalData: (locationId: number) => void;
+  stopIsBookmarked: boolean;
+  onBookmarkClick: OnBookmarkClick;
   locationId: number;
-  arrivals: TrimetArrivalData;
 }
 
-export default class StopLocationView extends React.Component<Props> {
-  private static getLocationInfoPane(
-    location: TrimetLocation,
-    arrivals: TrimetArrivalData
-  ) {
-    return (
-      <CollapsiblePane className={undefined} title={"Info"} open={true}>
-        <ul>
-          <li>Direction: {location.dir}</li>
-          <li>Queried: {arrivals.queryTime}</li>
-          <li>
-            Lat / Lng: {location.lat} / {location.lng}
-          </li>
-          <li>Passenger Code: {location.passengerCode}</li>
-        </ul>
-      </CollapsiblePane>
-    );
-  }
+interface MapCardParams {
+  coordinates: number[];
+}
 
-  private static getArrivals(arrivals: Arrival[]) {
-    return map(arrivals, arrival => {
-      return <ArrivalRowContainer arrival={arrival} />;
+function MapCard({ coordinates }: MapCardParams) {
+  return (
+    <Card>
+      <Card.Header as="h5">Map</Card.Header>
+      <Card.Body>
+        <Card.Text>
+          <Map currentLocation={coordinates} />
+        </Card.Text>
+      </Card.Body>
+    </Card>
+  );
+}
+
+export default function StopLocationView(props: Props) {
+  const { onBookmarkClick, stopIsBookmarked, locationId } = props;
+  const [arrivalData, setArrivalData] = useState<ArrivalData>(undefined);
+  const [alertsData, setAlertsData] = useState<Alert[]>(undefined);
+
+  useEffect(() => {
+    const locIDs = locationId.toString(10);
+    getArrivals(locIDs, 45).then(results => {
+      setArrivalData(results);
     });
+
+    getAlertsByLocationId(locationId).then((result: AlertsData) => {
+      setAlertsData(result.alert);
+    });
+  }, []);
+
+  if (!arrivalData) {
+    return <Loading />;
   }
 
-  public componentDidMount(): void {
-    this.props.loadArrivalData(this.props.locationId);
-  }
+  const location = arrivalData.location[0];
+  const routes = sortBy(
+    uniq(arrivalData.arrival.map(arrival => arrival.route))
+  );
 
-  public render() {
-    const arrivals = this.props.arrivals;
-
-    if (!arrivals) {
-      return "Loading Arrival Data...";
-    }
-
-    const location = arrivals.location[0];
-
-    return (
-      <div>
-        <header>
-          <h2>
-            {location.id} - {location.desc}
-          </h2>
-        </header>
-        {StopLocationView.getLocationInfoPane(location, arrivals)}
-        <CollapsiblePane className={undefined} title={"Map"} open={true}>
-          <p>Map goes here</p>
-        </CollapsiblePane>
-        <CollapsiblePane className={undefined} title={"Arrivals"} open={true}>
-          <div className="arrivals-wrapper">
-            <table className="arrivals-table">
-              <tbody>{StopLocationView.getArrivals(arrivals.arrival)}</tbody>
-            </table>
-          </div>
-        </CollapsiblePane>
-      </div>
-    );
-  }
+  const coordinates: LatLngCoords = [location.lng, location.lat];
+  return (
+    <Container fluid={true}>
+      {/*<br />*/}
+      <Row>
+        <StopLocationHeader
+          location={location}
+          onBookmarkClick={onBookmarkClick}
+          stopIsBookmarked={stopIsBookmarked}
+        />
+      </Row>
+      <br />
+      <Row>
+        <Col md="3">
+          <LocationInfoPane arrivalData={arrivalData} />
+          <br />
+          <AlertsCard alertsData={alertsData} />
+        </Col>
+        <Col md="9">
+          <StopLocationArrivalsTableNav
+            routes={routes}
+            locationId={location.id}
+          />
+          <br />
+          <StopLocationArrivals arrivalData={arrivalData} />
+          <br />
+          <MapCard coordinates={coordinates} />
+        </Col>
+      </Row>
+    </Container>
+  );
 }

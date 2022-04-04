@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import { Moment } from "moment";
 import React from "react";
+import { Table } from "react-bootstrap";
 import { Arrival } from "../../../api/trimet/interfaces/arrivals";
 import {
   StopLocation,
@@ -38,7 +39,7 @@ export default class ArrivalsTable extends React.Component<Props> {
     });
 
     return (
-      <table className={classes}>
+      <Table>
         <thead>
           <tr>
             <th />
@@ -56,7 +57,7 @@ export default class ArrivalsTable extends React.Component<Props> {
           now={now}
           showAllArrivals={showMore}
         />
-      </table>
+      </Table>
     );
   }
 }

@@ -16,12 +16,10 @@ export default class MainNavigationComponent extends React.Component<Props> {
     const { numberOfBookmarks, timeOfLastLoad } = this.props;
 
     return (
-      <div>
-        <MainNavigationMenu
-          numberOfBookmarks={numberOfBookmarks}
-          timeOfLastLoad={timeOfLastLoad}
-        />
-      </div>
+      <MainNavigationMenu
+        numberOfBookmarks={numberOfBookmarks}
+        timeOfLastLoad={timeOfLastLoad}
+      />
     );
   }
 }

@@ -44,6 +44,8 @@ export default function formatStopLocations(
   );
 
   return mapKeys(stopLocationsWithDistance, (location: StopLocation) => {
-    return location.locid;
+    const id = location.locid ? location.locid : location.id;
+
+    return id;
   });
 }

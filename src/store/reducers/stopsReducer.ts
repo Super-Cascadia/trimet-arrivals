@@ -1,4 +1,5 @@
 import moment from "moment";
+import { ArrivalData } from "../../api/trimet/interfaces/arrivals";
 import { Location, StopData } from "../../api/trimet/interfaces/types";
 import {
   LOAD_ARRIVALS_COMPLETE,
@@ -16,9 +17,10 @@ export interface StopsReducerState {
 }
 
 interface Payload {
-  stopData: StopData;
+  stopData?: StopData;
   radius: number;
-  location: Location;
+  location?: Location;
+  arrivalData?: ArrivalData;
 }
 
 interface Action {
@@ -26,12 +28,13 @@ interface Action {
   type: string;
 }
 
-const initialState = {
+const initialState: StopsReducerState = {
   loading: false,
+  stopLocations: {},
   timeOfLastLoad: ""
 };
 
-function getLoadStopCompleteState(action: Action, state) {
+function getLoadStopCompleteState(action: Action, state: StopsReducerState) {
   const { payload } = action;
   const { location, stopData } = payload;
   const currentLocation = location.coords;
@@ -45,9 +48,24 @@ function getLoadStopCompleteState(action: Action, state) {
   };
 }
 
-function getLoadArrivalsCompleteState(state) {
+function getLoadArrivalsCompleteState(
+  action: Action,
+  state: StopsReducerState
+) {
+  const { payload } = action;
+
+  const { arrivalData } = payload;
+  const location = arrivalData.location;
+  const currentLocation = {
+    latitude: location[0].lat,
+    longitude: location[0].lng
+  };
+
+  const stopLocations = formatStopLocations(location, currentLocation);
+
   return {
     ...state,
+    stopLocations,
     timeOfLastLoad: moment().format("ddd, h:mm:ss a")
   };
 }
@@ -66,7 +84,7 @@ const stopsReducer = (state = initialState, action: Action) => {
     case LOAD_STOP_COMPLETE:
       return getLoadStopCompleteState(action, state);
     case LOAD_ARRIVALS_COMPLETE:
-      return getLoadArrivalsCompleteState(state);
+      return getLoadArrivalsCompleteState(action, state);
     default:
       return {
         ...state

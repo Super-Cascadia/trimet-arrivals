@@ -1,8 +1,17 @@
-import { filter, includes, map } from "lodash";
-import React from "react";
-import { TrimetRoute } from "../../../api/trimet/interfaces/routes";
+import { filter, includes, isEmpty, map } from "lodash";
+import React, { useEffect, useState } from "react";
+import { Container, Row } from "react-bootstrap";
+import {
+  RouteDataResultSet,
+  TrimetRoute
+} from "../../../api/trimet/interfaces/routes";
+import { getAllRoutes } from "../../../api/trimet/routeConfig";
 import RouteListItem from "../../../component/route/RouteListItem";
-import { RouteDataDictionary } from "../../../store/reducers/data/routeDataReducer";
+import {
+  createRoutesDictionary,
+  RouteDataDictionary
+} from "../../../store/reducers/data/routeDataReducer";
+import Loading from "../../loading/Loading";
 
 const WES = 203;
 const AREIAL_TRAM = 208;
@@ -57,25 +66,48 @@ export function getRoutes(routes: TrimetRoute[]) {
   });
 }
 
-export function AllLines({ routes }: { routes: RouteDataDictionary }) {
+export function AllLines() {
+  const [routes, setRoutes] = useState({});
+
+  useEffect(() => {
+    getAllRoutes().then((data: RouteDataResultSet) => {
+      const routesDictionary = createRoutesDictionary(data.route);
+      setRoutes(routesDictionary);
+    });
+  }, []);
+
+  if (isEmpty(routes)) {
+    return <Loading />;
+  }
+
   const busLines = getBusLines(routes);
   const maxLines = getMaxLines(routes);
   const streetCarLines = getStreetCarLines(routes);
-  const aerialTram = getAerialTram(routes);
   const wesCommuterRail = getWesCommuterRail(routes);
 
   return (
-    <div className="line-detail-view-wrapper">
-      <h2>Max Light Rail</h2>
-      {getRoutes(maxLines)}
-      <h2>Portland Street Car</h2>
-      {getRoutes(streetCarLines)}
-      <h2>OHSU Aerial Tram</h2>
-      {getRoutes(aerialTram)}
-      <h2>WES Commuter Rail</h2>
-      {getRoutes(wesCommuterRail)}
-      <h2>Bus</h2>
-      {getRoutes(busLines)}
-    </div>
+    <Container fluid={true}>
+      <div className="line-detail-view-wrapper">
+        <h2>Max Light Rail</h2>
+        <Row xs={1} md={4} className="g-4">
+          {getRoutes(maxLines)}
+        </Row>
+        <br />
+        <h2>Portland Street Car</h2>
+        <Row xs={1} md={4} className="g-4">
+          {getRoutes(streetCarLines)}
+        </Row>
+        <br />
+        <h2>WES Commuter Rail</h2>
+        <Row xs={1} md={4} className="g-4">
+          {getRoutes(wesCommuterRail)}
+        </Row>
+        <br />
+        <h2>Bus</h2>
+        <Row xs={1} md={4} className="g-4">
+          {getRoutes(busLines)}
+        </Row>
+      </div>
+    </Container>
   );
 }

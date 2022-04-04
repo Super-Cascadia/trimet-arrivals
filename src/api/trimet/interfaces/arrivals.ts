@@ -20,13 +20,26 @@ export interface Arrival {
   blockPosition: BlockPosition;
   estimated: number;
   shortSign: string;
+  inCongestion: boolean;
 }
 
 export interface ArrivalLocation {
+  lng: number;
+  passengerCode: string;
   id: number;
+  dir: string;
+  lat: number;
+  desc: string;
+}
+
+export interface Detour {
+  feet: number;
+  blockId: number;
+  route: number;
 }
 
 export interface ArrivalData {
+  detour: Detour[];
   arrival: Arrival[];
   location: ArrivalLocation[];
   queryTime: string;
@@ -46,7 +59,7 @@ export interface BlockPosition {
   nextStopSeq: number;
   routeNumber: number;
   signMessage: string;
-  signMesageLong: string;
+  signMessageLong: string;
   tripID: string;
   vehicleID: number;
   trip: Trip[];

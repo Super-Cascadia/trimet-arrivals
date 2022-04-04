@@ -12,10 +12,13 @@ interface Props {
 }
 
 const mapStateToProps = (state: RootState, props: Props) => {
+  const stopLocation = stopLocationSelector(state, props.locationId);
+  const loading = arrivalsLoadingSelector(state, props.locationId);
+
   return {
     ...props,
-    loading: arrivalsLoadingSelector(state, props.locationId),
-    stopLocation: stopLocationSelector(state, props.locationId)
+    loading,
+    stopLocation
   };
 };
 

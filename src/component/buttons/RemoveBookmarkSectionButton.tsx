@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 
 interface RemoveBookmarkSectionButtonProps {
@@ -15,12 +16,11 @@ export const RemoveBookmarkSectionButton = ({
   removeBookmarkSection
 }: RemoveBookmarkSectionButtonProps) => {
   return (
-    <button
-      className="close-button group-menu-item"
+    <Button
       onClick={confirmDeletion.bind(this, removeBookmarkSection)}
       title="Remove Bookmark Section"
     >
       <FontAwesome name="times-circle" />
-    </button>
+    </Button>
   );
 };

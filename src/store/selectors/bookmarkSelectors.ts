@@ -6,8 +6,10 @@ import { StopLocations } from "../reducers/bookmarksReducer";
 
 export const selectBookmarks = (state: RootState) =>
   state.bookmarksReducer.bookmarks;
-const selectBookmarkedStop = (state: RootState, locationId: number) =>
-  state.bookmarksReducer.bookmarks[locationId];
+
+const selectBookmarkedStop = (state: RootState, locationId: number) => {
+  return state.bookmarksReducer.bookmarks[locationId];
+};
 
 export const bookmarkedStopLocationsSelector = createSelector(
   selectBookmarks,

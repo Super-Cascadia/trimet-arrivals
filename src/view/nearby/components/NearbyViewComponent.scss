@@ -42,3 +42,9 @@ table th, table td {
     margin-left: 5px;
     font-size: 16px;
 }
+
+.scrollarea {
+    overflow-y: auto;
+    height: 85vh;
+    max-height: 85vh;
+}

@@ -6,17 +6,12 @@ import LineDetailView from "../component/LineDetailView";
 
 const mapStateToProps = (state: RootState, props) => {
   return {
-    ...props,
-    route: routeSelector(state, props.id)
+    ...props
   };
 };
 
 const mapDispatchToProps = dispatch => {
-  return {
-    loadRouteData(id: number) {
-      dispatch(loadRouteDataRequest(id));
-    }
-  };
+  return {};
 };
 
 const LineDetailViewContainer = connect(

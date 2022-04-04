@@ -6,7 +6,7 @@ import "../../nearby/components/NearbyViewComponent.scss";
 import StopsTableHeader from "./StopsTableHeader";
 
 interface Props {
-  stopLocation: StopLocationWithDistance;
+  stopLocation?: StopLocationWithDistance;
   loadArrivalData: (locationId: number) => TimerHandler;
   locationId: number;
   loading: boolean;
@@ -24,6 +24,10 @@ export default class StopComponent extends React.Component<Props> {
     super(props);
 
     this.loadArrivalData = (locId: number) => this.loadArrivals(locId);
+  }
+
+  public componentDidMount() {
+    this.props.loadArrivalData(this.props.locationId);
   }
 
   public loadAndSetInterval(locationId: number) {
