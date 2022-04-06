@@ -11,6 +11,7 @@ import {
   Row,
   Table
 } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { getSytemAlerts } from "../../api/trimet/alerts";
 
 function getStopClosureTable(locations) {
@@ -27,7 +28,9 @@ function getStopClosureTable(locations) {
         {locations.map(loc => {
           return (
             <tr key={loc.id}>
-              <td>{loc.id}</td>
+              <td>
+                <Link to={`/stop/${loc.id}`}>{loc.id}</Link>
+              </td>
               <td>{loc.desc}</td>
               <td>{loc.dir}</td>
             </tr>
@@ -48,11 +51,13 @@ function getRouteAlertTable(routes) {
         </tr>
       </thead>
       <tbody>
-        {routes.map(location => {
+        {routes.map(route => {
           return (
-            <tr key={location.id}>
-              <td>{location.id}</td>
-              <td>{location.desc}</td>
+            <tr key={route.id}>
+              <td>
+                <Link to={`/lines/${route.id}`}>{route.id}</Link>
+              </td>
+              <td>{route.desc}</td>
             </tr>
           );
         })}
@@ -65,7 +70,7 @@ function getImpactedRoutes(routes) {
   return routes.map(route => {
     return (
       <Badge bg="primary" key={route.id}>
-        {route.desc}
+        {route.id}
       </Badge>
     );
   });
@@ -103,6 +108,17 @@ function getSystemAlertsCard(systemAlertsData) {
   );
 }
 
+function getHeader(alert) {
+  const startDate = moment(alert.begin).format("MM-DD-YY");
+  const endDate = alert.end ? moment(alert.end).format("MM-DD-YY") : undefined;
+
+  return (
+    <>
+      {startDate} to {endDate ? endDate : "Unknown"}
+    </>
+  );
+}
+
 function getAllAlertsCard(alertsData) {
   return (
     <Card>
@@ -116,9 +132,8 @@ function getAllAlertsCard(alertsData) {
                 <Accordion.Header>
                   {alert.location && <Badge bg="warning">Stop Closure</Badge>}
                   {alert.route && getImpactedRoutes(alert.route)}
-                  {alert.id} - {alert.header_text} -{" "}
-                  {moment(alert.begin).format("MM-DD-YY")} to{" "}
-                  {moment(alert.end).format("MM-DD-YY")}
+                  {alert.id} - {alert.header_text}
+                  {getHeader(alert)}
                 </Accordion.Header>
                 <Accordion.Body>
                   {alert.desc}
@@ -164,8 +179,8 @@ function Home() {
     <Container>
       <br />
       <Row>
-        <Col>{getInfoCard()}</Col>
-        <Col>
+        <Col md={6}>{getInfoCard()}</Col>
+        <Col md={6}>
           {getSystemAlertsCard(systemAlertsData)}
           <br />
           {getAllAlertsCard(alertsData)}
