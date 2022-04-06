@@ -13,3 +13,7 @@ export async function getAlertsByRouteId(id: number): Promise<AlertsData> {
 
   return getTrimetData<AlertsData>(request);
 }
+
+export async function getSytemAlerts(): Promise<AlertsData> {
+  return getTrimetData<AlertsData>(`${ALERTS_BASE_URL}json/true/${API}`);
+}

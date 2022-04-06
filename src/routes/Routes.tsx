@@ -6,6 +6,7 @@ import {
   useParams
 } from "react-router-dom";
 import BookmarksViewContainer from "../view/bookmarks/container/BookmarksViewContainer";
+import Home from "../view/home/Home";
 import LinesViewContainer from "../view/lines/container/LinesViewContainer";
 import MainNavigationContainer from "../view/mainNav/containers/MainNavigationContainer";
 import NearbyViewContainer from "../view/nearby/containers/NearbyViewContainer";
@@ -24,7 +25,7 @@ export default function Routes() {
       <main className="main-view">
         <Switch>
           <Route exact={true} path="/">
-            Home
+            <Home />
           </Route>
           <Route path="/nearby">
             <NearbyViewContainer />

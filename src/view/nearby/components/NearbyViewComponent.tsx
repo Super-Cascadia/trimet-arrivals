@@ -1,4 +1,5 @@
 import React from "react";
+import { Spinner } from "react-bootstrap";
 import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import Modal from "../../../component/modal/Modal";
 import ModalContent from "../../../component/modal/ModalContent";
@@ -46,7 +47,11 @@ export default class NearbyViewComponent extends React.Component<Props, State> {
 
     return (
       <div id="nearby-stops-view-component">
-        {loading && <div className="loading-message">Loading...</div>}
+        {loading && (
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        )}
         {!loading && stopLocations && (
           <div className="nearby-stops">
             <main>

@@ -1,5 +1,6 @@
 import { map } from "lodash";
 import React from "react";
+import { Col, Container, Row, Table } from "react-bootstrap";
 import { Arrival } from "../../../api/trimet/interfaces/arrivals";
 import {
   TrimetArrivalData,
@@ -53,24 +54,30 @@ export default class StopLocationView extends React.Component<Props> {
     const location = arrivals.location[0];
 
     return (
-      <div>
+      <Container>
         <header>
           <h2>
             {location.id} - {location.desc}
           </h2>
         </header>
-        {StopLocationView.getLocationInfoPane(location, arrivals)}
-        <CollapsiblePane className={undefined} title={"Map"} open={true}>
-          <p>Map goes here</p>
-        </CollapsiblePane>
-        <CollapsiblePane className={undefined} title={"Arrivals"} open={true}>
-          <div className="arrivals-wrapper">
-            <table className="arrivals-table">
+        <br />
+        <Row>
+          <Col>{StopLocationView.getLocationInfoPane(location, arrivals)}</Col>
+          <Col>
+            <CollapsiblePane className={undefined} title={"Map"} open={true}>
+              <p>Map goes here</p>
+            </CollapsiblePane>
+          </Col>
+        </Row>
+        <br />
+        <Row>
+          <Col>
+            <Table striped={true} bordered={true} hover={true} size="lg">
               <tbody>{StopLocationView.getArrivals(arrivals.arrival)}</tbody>
-            </table>
-          </div>
-        </CollapsiblePane>
-      </div>
+            </Table>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }

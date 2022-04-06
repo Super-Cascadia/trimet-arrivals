@@ -1,9 +1,6 @@
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faRoute, IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import FontAwesome from "react-fontawesome";
-import { NavLink } from "react-router-dom";
+import { Container, Nav, Navbar } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 import "./MainNavigationMenu.scss";
 
 function bookmarkCount(numberOfBookmarks: number) {
@@ -20,23 +17,24 @@ export default function MainNavigationMenu({
   timeOfLastLoad
 }: Props) {
   return (
-    <nav className="top-navigation view-header">
-      <NavLink to="/">
-        <FontAwesome name="home" className="bookmark-icon" />
-        Home
-      </NavLink>
-      <NavLink to="/nearby/routes">
-        <FontAwesome name="map-marker" className="bookmark-icon" />
-        Nearby
-      </NavLink>
-      <NavLink to="/lines">
-        <FontAwesomeIcon icon={faRoute as IconProp} className="bookmark-icon" />
-        Lines
-      </NavLink>
-      <NavLink to="/bookmarks">
-        <FontAwesome name="bookmark" className="bookmark-icon" />
-        Bookmarks {bookmarkCount(numberOfBookmarks)}
-      </NavLink>
-    </nav>
+    <Navbar bg="dark" variant="dark">
+      <Container>
+        <Navbar.Brand href="#home">Trimet Arrivals</Navbar.Brand>
+        <Nav className="me-auto">
+          <LinkContainer to="/">
+            <a className="nav-link">Home</a>
+          </LinkContainer>
+          <LinkContainer to="/nearby/routes">
+            <a className="nav-link">Nearby</a>
+          </LinkContainer>
+          <LinkContainer to="/lines">
+            <a className="nav-link">Lines</a>
+          </LinkContainer>
+          <LinkContainer to="/bookmarks">
+            <a className="nav-link">Bookmarks</a>
+          </LinkContainer>
+        </Nav>
+      </Container>
+    </Navbar>
   );
 }

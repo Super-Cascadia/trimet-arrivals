@@ -1,4 +1,5 @@
 import React from "react";
+import { Container, Row } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { RouteDataDictionary } from "../../../store/reducers/data/routeDataReducer";
 import CollapsiblePane from "../../lineDetail/component/CollapsiblePane";
@@ -8,7 +9,7 @@ export function BusLines({ routes }: { routes: RouteDataDictionary }) {
   const busLines = getBusLines(routes);
 
   return (
-    <div className="line-detail-view-wrapper">
+    <Container>
       <h2>
         <FontAwesome className="bus" name="bus" />
         Max Bus
@@ -24,7 +25,9 @@ export function BusLines({ routes }: { routes: RouteDataDictionary }) {
         </p>
       </CollapsiblePane>
       <br />
-      {getRoutes(busLines)}
-    </div>
+      <Row xs={1} md={4} className="g-4">
+        {getRoutes(busLines)}
+      </Row>
+    </Container>
   );
 }

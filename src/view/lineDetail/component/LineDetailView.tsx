@@ -1,4 +1,5 @@
 import React from "react";
+import { Col, Container, Row } from "react-bootstrap";
 import { TrimetRoute } from "../../../api/trimet/interfaces/routes";
 import FrequentServiceIndicator from "../../../component/route/FrequentServiceIndicator";
 import RouteListItem from "../../../component/route/RouteListItem";
@@ -44,26 +45,46 @@ export default class LinesViewComponent extends React.Component<Props> {
     const routeSchedule = maxLightRail[id];
 
     return (
-      <div id="lines-detail-view">
-        <RouteListItem route={route} />
-        <CollapsiblePane
-          className="route-detail-information-pane"
-          title="Schedule"
-          open={true}
-        >
-          {getScheduleContent(routeSchedule)}
-        </CollapsiblePane>
-        <CollapsiblePane className="route-detail-map" title={"Map"} open={true}>
-          <p>Map goes here</p>
-        </CollapsiblePane>
-        <CollapsiblePane
-          className="route-detail-stops"
-          title="Stops"
-          open={true}
-        >
-          <LineDetailViewStops route={route} />
-        </CollapsiblePane>
-      </div>
+      <Container>
+        <Row>
+          <Col>
+            <RouteListItem route={route} />
+          </Col>
+        </Row>
+        <br />
+        <Row>
+          <Col>
+            <CollapsiblePane
+              className="route-detail-information-pane"
+              title="Schedule"
+              open={true}
+            >
+              {getScheduleContent(routeSchedule)}
+            </CollapsiblePane>
+          </Col>
+          <Col>
+            <CollapsiblePane
+              className="route-detail-map"
+              title={"Map"}
+              open={true}
+            >
+              <p>Map goes here</p>
+            </CollapsiblePane>
+          </Col>
+        </Row>
+        <br />
+        <Row>
+          <Col>
+            <CollapsiblePane
+              className="route-detail-stops"
+              title="Stops"
+              open={true}
+            >
+              <LineDetailViewStops route={route} />
+            </CollapsiblePane>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }

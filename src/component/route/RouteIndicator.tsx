@@ -1,4 +1,5 @@
 import React from "react";
+import { Badge } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { Link } from "react-router-dom";
 import { ROUTE_DISPLAY } from "../../api/trimet/constants";
@@ -20,21 +21,21 @@ function getRouteDisplay(routeId: number, verboseRouteDisplay: boolean) {
   if (!routeFound) {
     if (routeId) {
       return (
-        <span>
-          <FontAwesome name="bus" className="train-route-indicator" />
-          <span className="route-indicator-text">
+        <Badge bg="secondary">
+          <FontAwesome name="bus" />
+          <span>
             {routeId} {verboseRouteDisplay && "Bus"}
           </span>
-        </span>
+        </Badge>
       );
     }
     return routeId || "-";
   } else {
     return (
-      <span>
-        <FontAwesome name="train" className="train-route-indicator" />
+      <Badge bg="secondary">
+        <FontAwesome name="train" />
         <span className="route-indicator-text">{routeFound}</span>
-      </span>
+      </Badge>
     );
   }
 }
@@ -43,13 +44,6 @@ export default function RouteIndicator(props: Props) {
   const { routeId, verbose, routeColor = DEFAULT_ROUTE_COLOR } = props;
 
   return (
-    <Link to={`/lines/${routeId}`}>
-      <span
-        className="route-indicator"
-        style={{ backgroundColor: `#${routeColor}` }}
-      >
-        {getRouteDisplay(routeId, verbose)}
-      </span>
-    </Link>
+    <Link to={`/lines/${routeId}`}>{getRouteDisplay(routeId, verbose)}</Link>
   );
 }

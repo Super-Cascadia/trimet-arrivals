@@ -1,6 +1,7 @@
 import cx from "classnames";
 import { get } from "lodash";
 import React from "react";
+import { Card, Col } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import {
   BLUE_LINE_NUMBER,
@@ -15,7 +16,6 @@ import {
 } from "../../api/trimet/constants";
 import { TrimetRoute } from "../../api/trimet/interfaces/routes";
 import { maxLightRail } from "../../data/trimet/schedules/maxLightRail";
-import RouteDirections from "../../view/nearbyRoutes/component/RouteDirections";
 import FrequentServiceIndicator from "./FrequentServiceIndicator";
 import RouteIndicator from "./RouteIndicator";
 
@@ -57,25 +57,50 @@ export default function RouteListItem({ route }: { route: TrimetRoute }) {
   // tslint:disable-next-line:no-empty
   const onClick = () => {};
 
+  const bg = color => {
+    // console.log("color", color, route);
+    switch (color) {
+      case "D81526":
+        return "danger";
+      case "084C8D":
+        return "primary";
+      case "F8C213":
+        return "warning";
+      case "008852":
+        return "success";
+      case "F58220":
+        return "secondary";
+      case "0093B2":
+        return "info";
+      case "000000":
+        return "dark";
+      case "CE0F69":
+        return "light";
+      case "84BD00":
+        return "light";
+      default:
+        return "light";
+    }
+  };
+
   return (
-    <div
-      className="route-header nearby-route"
-      style={{ backgroundColor: `#${route.routeColor}` }}
-    >
-      <div>
-        <h3 className="route-directions-indicator-wrapper">
-          <NavLink to={`/lines/${routeId}`}>
-            <RouteIndicator
-              routeId={routeId}
-              route={undefined}
-              verbose={true}
-              routeColor={route.routeColor}
-            />
-          </NavLink>
-        </h3>
-        <RouteDirections directions={route.dir} />
-      </div>
-      {getFrequentServiceIndicator(routeId)}
-    </div>
+    <Col>
+      <Card bg={bg(route.routeColor)}>
+        <Card.Body>
+          <Card.Title>
+            <NavLink to={`/lines/${routeId}`}>
+              <RouteIndicator
+                routeId={routeId}
+                route={undefined}
+                verbose={true}
+                routeColor={route.routeColor}
+              />
+            </NavLink>
+            {route.route}
+          </Card.Title>
+          <Card.Text>{route.desc}</Card.Text>
+        </Card.Body>
+      </Card>
+    </Col>
   );
 }

@@ -1,5 +1,6 @@
 import { filter, includes, map } from "lodash";
 import React from "react";
+import { Container, Row } from "react-bootstrap";
 import { TrimetRoute } from "../../../api/trimet/interfaces/routes";
 import RouteListItem from "../../../component/route/RouteListItem";
 import { RouteDataDictionary } from "../../../store/reducers/data/routeDataReducer";
@@ -65,17 +66,33 @@ export function AllLines({ routes }: { routes: RouteDataDictionary }) {
   const wesCommuterRail = getWesCommuterRail(routes);
 
   return (
-    <div className="line-detail-view-wrapper">
-      <h2>Max Light Rail</h2>
-      {getRoutes(maxLines)}
-      <h2>Portland Street Car</h2>
-      {getRoutes(streetCarLines)}
-      <h2>OHSU Aerial Tram</h2>
-      {getRoutes(aerialTram)}
-      <h2>WES Commuter Rail</h2>
-      {getRoutes(wesCommuterRail)}
-      <h2>Bus</h2>
-      {getRoutes(busLines)}
-    </div>
+    <Container>
+      <div className="line-detail-view-wrapper">
+        <h2>Max Light Rail</h2>
+        <Row xs={1} md={4} className="g-4">
+          {getRoutes(maxLines)}
+        </Row>
+        <br />
+        <h2>Portland Street Car</h2>
+        <Row xs={1} md={4} className="g-4">
+          {getRoutes(streetCarLines)}
+        </Row>
+        <br />
+        <h2>OHSU Aerial Tram</h2>
+        <Row xs={1} md={4} className="g-4">
+          {getRoutes(aerialTram)}
+        </Row>
+        <br />
+        <h2>WES Commuter Rail</h2>
+        <Row xs={1} md={4} className="g-4">
+          {getRoutes(wesCommuterRail)}
+        </Row>
+        <br />
+        <h2>Bus</h2>
+        <Row xs={1} md={4} className="g-4">
+          {getRoutes(busLines)}
+        </Row>
+      </div>
+    </Container>
   );
 }

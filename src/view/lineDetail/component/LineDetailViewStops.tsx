@@ -1,5 +1,6 @@
 import { map } from "lodash";
 import React from "react";
+import { Col, Row, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import {
   RouteDirectionStop,
@@ -16,11 +17,13 @@ export default class LineDetailViewStops extends React.Component<Props> {
   private static getRouteDirectionStops(stops: RouteDirectionStop[]) {
     return map(stops, stop => {
       return (
-        <li>
-          <Link to={`/stop/${stop.locid}`}>
-            {stop.locid} - {stop.desc} - {stop.dir}
-          </Link>
-        </li>
+        <tr>
+          <td>
+            <Link to={`/stop/${stop.locid}`}>{stop.locid}</Link>
+          </td>
+          <td>{stop.desc}</td>
+          <td>{stop.dir}</td>
+        </tr>
       );
     });
   }
@@ -31,24 +34,31 @@ export default class LineDetailViewStops extends React.Component<Props> {
       return "Loading TrimetRoute data...";
     }
 
-    return (
-      <div id="line-detail-view-stops">
-        {this.getRouteDirections(route.dir)}
-      </div>
-    );
+    return <Row>{this.getRouteDirections(route.dir)}</Row>;
   }
 
   public getRouteDirections(routeDirections: RouteStopDirection[]) {
     return map(routeDirections, routeDirection => {
       return (
-        <div>
+        <Col>
           <header>
             <h3>{routeDirection.desc}</h3>
-            <ul>
-              {LineDetailViewStops.getRouteDirectionStops(routeDirection.stop)}
-            </ul>
+            <Table striped={true} bordered={true} hover={true} size="lg">
+              <thead>
+                <tr>
+                  <td>Stop ID</td>
+                  <td>Name</td>
+                  <td>Direction</td>
+                </tr>
+              </thead>
+              <tbody>
+                {LineDetailViewStops.getRouteDirectionStops(
+                  routeDirection.stop
+                )}
+              </tbody>
+            </Table>
           </header>
-        </div>
+        </Col>
       );
     });
   }
