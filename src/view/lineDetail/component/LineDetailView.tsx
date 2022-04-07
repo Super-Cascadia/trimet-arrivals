@@ -20,7 +20,9 @@ interface Props {
 function getScheduleContent(schedule: LineScheduleInfo) {
   return (
     <>
-      <FrequentServiceIndicator frequentService={schedule.frequentService} />
+      {schedule && schedule.frequentService && (
+        <FrequentServiceIndicator frequentService={schedule.frequentService} />
+      )}
       <strong>Hours of Operation:</strong> 5:00 AM - 12:00 PM
       <br />
       <strong>Connections:</strong>

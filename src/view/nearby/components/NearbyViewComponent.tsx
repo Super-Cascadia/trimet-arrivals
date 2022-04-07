@@ -6,6 +6,7 @@ import ModalContent from "../../../component/modal/ModalContent";
 import NearbySubRoutes from "../../../routes/NearbySubRoutes";
 import { LoadStopData } from "../../../store/action/stopActions";
 import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
+import Loading from "../../loading/Loading";
 import NearbyMapContainer from "../containers/NearbyMapContainer";
 import NearbySubNavContainer from "../containers/NearbySubNavContainer";
 import "./NearbyViewComponent.scss";
@@ -47,11 +48,7 @@ export default class NearbyViewComponent extends React.Component<Props, State> {
 
     return (
       <div id="nearby-stops-view-component">
-        {loading && (
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        )}
+        {loading && <Loading />}
         {!loading && stopLocations && (
           <div className="nearby-stops">
             <main>

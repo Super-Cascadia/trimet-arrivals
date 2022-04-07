@@ -7,6 +7,7 @@ import {
   RouteStopDirection,
   TrimetRoute
 } from "../../../api/trimet/interfaces/routes";
+import Loading from "../../loading/Loading";
 import "./LineDetailView.scss";
 
 interface Props {
@@ -31,7 +32,7 @@ export default class LineDetailViewStops extends React.Component<Props> {
     const { route } = this.props;
 
     if (!route.dir) {
-      return "Loading TrimetRoute data...";
+      return <Loading />;
     }
 
     return <Row>{this.getRouteDirections(route.dir)}</Row>;

@@ -5,6 +5,7 @@ import FontAwesome from "react-fontawesome";
 import { LinkContainer } from "react-router-bootstrap";
 import { LinesViewSubRoutes } from "../../../routes/LinesSubRoutes";
 import { RouteDataDictionary } from "../../../store/reducers/data/routeDataReducer";
+import Loading from "../../loading/Loading";
 import "./LinesViewComponent.scss";
 
 interface Props {
@@ -78,13 +79,7 @@ export default class LinesViewComponent extends React.Component<Props> {
     const { routes } = this.props;
 
     if (isEmpty(routes)) {
-      return (
-        <Container>
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-        </Container>
-      );
+      return <Loading />;
     }
 
     return (
