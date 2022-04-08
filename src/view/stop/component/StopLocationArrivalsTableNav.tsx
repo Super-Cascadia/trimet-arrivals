@@ -2,6 +2,8 @@ import React from "react";
 import { Nav } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { LinkContainer } from "react-router-bootstrap";
+import { useRouteMatch } from "react-router-dom";
+import RouteIndicator from "../../../component/route/RouteIndicator";
 
 interface Props {
   routes: number[];
@@ -9,10 +11,12 @@ interface Props {
 }
 
 function StopLocationArrivalsTableNav({ routes, locationId }: Props) {
+  const { url } = useRouteMatch();
+
   return (
     <Nav fill={true} variant="tabs">
       <Nav.Item>
-        <LinkContainer to="/">
+        <LinkContainer to={url}>
           <a className="nav-link">
             <FontAwesome className="route" name="route" />
             All
@@ -22,10 +26,9 @@ function StopLocationArrivalsTableNav({ routes, locationId }: Props) {
       {routes.map(route => {
         return (
           <Nav.Item key={route}>
-            <LinkContainer to={`/stop/${locationId}`}>
+            <LinkContainer to={`${url}/route/${route}`}>
               <a className="nav-link">
-                <FontAwesome className="train" name="train" />
-                {route}
+                <RouteIndicator routeId={route} />
               </a>
             </LinkContainer>
           </Nav.Item>

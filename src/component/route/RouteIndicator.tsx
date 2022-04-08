@@ -10,7 +10,7 @@ const DEFAULT_ROUTE_COLOR = "3D8FAE";
 
 interface Props {
   routeId: number;
-  route: TrimetRoute;
+  route?: TrimetRoute;
   verbose?: boolean;
   routeColor?: string;
 }

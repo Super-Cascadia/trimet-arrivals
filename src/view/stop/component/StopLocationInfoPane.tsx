@@ -1,5 +1,6 @@
 import React from "react";
 import { Badge } from "react-bootstrap";
+import RouteIndicator from "../../../component/route/RouteIndicator";
 import {
   TrimetArrivalData,
   TrimetLocation
@@ -27,7 +28,7 @@ function LocationInfoPane({
         <li>
           <strong>Serving Routes</strong>{" "}
           {routes.map(routeId => (
-            <Badge key={routeId}>{routeId}</Badge>
+            <RouteIndicator key={routeId} routeId={routeId} />
           ))}
         </li>
         <li>

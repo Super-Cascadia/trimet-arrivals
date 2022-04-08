@@ -1,9 +1,9 @@
 import { sortBy, uniq } from "lodash";
 import React from "react";
-import { Col, Container, Nav, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { TrimetArrivalData } from "../../../store/reducers/data/arrivalsDataReducer";
 import CollapsiblePane from "../../lineDetail/component/CollapsiblePane";
-import StopLocationArrivalsTable from "./StopLocationArrivalsTable";
+import StopLocationArrivals from "./StopLocationArrivals";
 import StopLocationArrivalsTableNav from "./StopLocationArrivalsTableNav";
 import LocationInfoPane from "./StopLocationInfoPane";
 
@@ -66,7 +66,7 @@ export default class StopLocationView extends React.Component<Props> {
         <br />
         <Row>
           <Col>
-            <StopLocationArrivalsTable arrivals={arrivals} />
+            <StopLocationArrivals arrivals={arrivals} />
           </Col>
         </Row>
       </Container>

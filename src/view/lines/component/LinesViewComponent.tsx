@@ -1,6 +1,6 @@
 import { isEmpty } from "lodash";
 import React from "react";
-import { Container, Nav, Spinner } from "react-bootstrap";
+import { Container, Nav } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { LinkContainer } from "react-router-bootstrap";
 import { LinesViewSubRoutes } from "../../../routes/LinesSubRoutes";
