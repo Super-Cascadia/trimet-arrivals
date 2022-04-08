@@ -1,5 +1,6 @@
 import { isEmpty, map } from "lodash";
 import React, { Component } from "react";
+import { Card } from "react-bootstrap";
 import { StopLocation } from "../../../../api/trimet/interfaces/types";
 import { RemoveBookmarkButton } from "../../../../component/buttons/RemoveBookmarkButton";
 import StopContainer from "../../../nearbyStops/containers/StopContainer";
@@ -93,7 +94,7 @@ export default class BookmarkSectionComponent extends Component<Props, State> {
       removeBookmarkSection && removeBookmarkSection.bind(this, id);
 
     return (
-      <article className="bookmark-section" key={id}>
+      <Card key={id}>
         <BookmarkSectionNav
           name={name}
           toggleEditMode={this.toggleEditMode}
@@ -105,7 +106,7 @@ export default class BookmarkSectionComponent extends Component<Props, State> {
         <ul className="bookmark-section-bookmarks">
           {this.getBookmarksInSection(bookmarksInSection, id)}
         </ul>
-      </article>
+      </Card>
     );
   }
 
