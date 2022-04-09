@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch, useParams, useRouteMatch } from "react-router-dom";
 import NearbyRouteDetailContainer from "../view/nearbyRouteDetail/containers/NearbyRouteDetailContainer";
 import NearbyRoutesContainer from "../view/nearbyRoutes/container/NearbyRoutesContainer";
-import StopsContainer from "../view/nearbyStops/containers/StopsContainer";
+import NearbyStopsContainer from "../view/nearbyStops/containers/NearbyStopsContainer";
 
 function NearbyRouteDetailRouter() {
   const { id } = useParams();
@@ -25,7 +25,7 @@ export default function NearbySubRoutes() {
         <NearbyRoutesContainer />
       </Route>
       <Route path={`${path}/stops`}>
-        <StopsContainer />
+        <NearbyStopsContainer />
       </Route>
     </Switch>
   );

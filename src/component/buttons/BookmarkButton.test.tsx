@@ -1,6 +1,6 @@
 import { shallow } from "enzyme";
 import * as React from "react";
-import BookmarkButton from "./BookmarksButton";
+import BookmarkButton from "./BookmarkButton";
 
 describe("BookmarksButton", () => {
   // describe("by default", () => {

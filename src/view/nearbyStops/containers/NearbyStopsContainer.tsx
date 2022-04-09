@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { RootState } from "../../../store/reducers";
 import { allStopLocationsSelector } from "../../../store/selectors/stopSelectors";
-import Stops from "../components/Stops";
+import NearbyStops from "../components/NearbyStops";
 
 const mapStateToProps = (state: RootState) => {
   return {
@@ -13,6 +13,9 @@ const mapDispatchToProps = dispatch => {
   return {};
 };
 
-const StopsContainer = connect(mapStateToProps, mapDispatchToProps)(Stops);
+const NearbyStopsContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NearbyStops);
 
-export default StopsContainer;
+export default NearbyStopsContainer;

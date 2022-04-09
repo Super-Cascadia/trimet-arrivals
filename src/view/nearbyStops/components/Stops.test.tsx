@@ -1,12 +1,12 @@
 import { shallow } from "enzyme";
 import React from "react";
-import Stops from "./Stops";
+import NearbyStops from "./NearbyStops";
 
-describe("Stops", () => {
+describe("NearbyStops", () => {
   describe("by default", () => {
     // it("renders without crashing", () => {
     //   expect(() =>
-    //     shallow(<Stops stopLocations={undefined} showArrivals={undefined} />)
+    //     shallow(<NearbyStops stopLocations={undefined} showArrivals={undefined} />)
     //   ).not.toThrow();
     // });
   });
@@ -19,7 +19,7 @@ describe("Stops", () => {
       };
 
       // const subject = shallow(
-      //   <Stops stopLocations={stopLocations} showArrivals={undefined} />
+      //   <NearbyStops stopLocations={stopLocations} showArrivals={undefined} />
       // );
 
       // const stops = subject.find(".nearbyStops-wrapper");

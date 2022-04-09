@@ -26,7 +26,7 @@ describe("MainNavigationMenu", () => {
       expect(subject.find("li").length).toBe(2);
     });
 
-    describe("Nearby Stops heading", () => {
+    describe("Nearby NearbyStops heading", () => {
       const subject = shallow(
         <MainNavigationMenu
           numberOfBookmarks={undefined}

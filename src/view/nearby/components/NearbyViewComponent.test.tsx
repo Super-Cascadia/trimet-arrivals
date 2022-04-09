@@ -65,7 +65,7 @@ describe("NearbyViewComponent", () => {
   //       expect(nearbyStops).toExist();
   //     });
   //     describe("the nearby nearbyStops list", () => {
-  //       it("shows Stops", () => {
+  //       it("shows NearbyStops", () => {
   //         expect(nearbyStops.find(".nearby-nearbyStops")).toExist();
   //       });
   //     });

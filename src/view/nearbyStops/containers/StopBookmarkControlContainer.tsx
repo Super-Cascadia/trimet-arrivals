@@ -1,14 +1,12 @@
 import { connect } from "react-redux";
 import { StopLocation } from "../../../api/trimet/interfaces/types";
+import BookmarkButton from "../../../component/buttons/BookmarkButton";
 import {
   bookmarkStopRequest,
   removeStopBookmarkRequest
 } from "../../../store/action/bookmarkActions";
-import { bookmarkSectionSelectRequest } from "../../../store/action/bookmarkSectionActions";
 import { RootState } from "../../../store/reducers";
-import { bookmarkSectionSelectors } from "../../../store/selectors/bookmarkSectionSelectors";
 import { stopIsBookmarkedSelector } from "../../../store/selectors/bookmarkSelectors";
-import StopBookmarkControlComponent from "../components/StopBookmarkControlComponent";
 
 interface Props {
   locationId: number;
@@ -17,7 +15,6 @@ interface Props {
 const mapStateToProps = (state: RootState, props: Props) => {
   return {
     ...props,
-    bookmarkSections: bookmarkSectionSelectors(state),
     stopIsBookmarked: stopIsBookmarkedSelector(state, props.locationId)
   };
 };
@@ -30,12 +27,6 @@ const mapDispatchToProps = dispatch => {
       } else {
         dispatch(bookmarkStopRequest(stopLocation));
       }
-    },
-    onBookmarkSectionSelect(
-      bookmarkSectionId: number,
-      stopLocation: StopLocation
-    ) {
-      dispatch(bookmarkSectionSelectRequest(bookmarkSectionId, stopLocation));
     }
   };
 };
@@ -43,6 +34,6 @@ const mapDispatchToProps = dispatch => {
 const StopBookmarkControlContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(StopBookmarkControlComponent);
+)(BookmarkButton);
 
 export default StopBookmarkControlContainer;

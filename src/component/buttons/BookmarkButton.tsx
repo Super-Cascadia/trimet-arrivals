@@ -2,10 +2,13 @@ import React from "react";
 import { Button } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { StopLocation } from "../../api/trimet/interfaces/types";
-import { BookmarkSectionsProps } from "../../store/reducers/bookmarkSectionReducer";
-import "./BookmarksButton.css";
+import "./BookmarkButton.css";
 
-function bookmarkIcon(stopIsBookmarked: boolean) {
+interface BookmarkIconParams {
+  stopIsBookmarked: boolean;
+}
+
+function BookmarkIcon({ stopIsBookmarked }: BookmarkIconParams) {
   if (stopIsBookmarked) {
     const style = {
       color: "red"
@@ -29,17 +32,10 @@ export type BookmarkClick = (
   stopIsBookmarked: boolean
 ) => void;
 
-export type BookmarkSectionClick = (
-  selectedBookmarkSection: number,
-  stopLocation: StopLocation
-) => void;
-
 interface Props {
   stopLocation: StopLocation;
   onBookmarkClick: BookmarkClick;
   stopIsBookmarked: boolean;
-  bookmarkSections: BookmarkSectionsProps;
-  onBookmarkSectionSelect: BookmarkSectionClick;
 }
 
 export default function BookmarkButton({
@@ -52,7 +48,7 @@ export default function BookmarkButton({
     onBookmarkClick.bind(this, stopLocation, stopIsBookmarked);
   return (
     <Button onClick={onClick} className="bookmark-button">
-      {bookmarkIcon(stopIsBookmarked)}
+      <BookmarkIcon stopIsBookmarked={stopIsBookmarked} />
     </Button>
   );
 }

@@ -60,7 +60,7 @@ describe("MainNavigationComponent", () => {
       expect(mainNav).toExist();
     });
 
-    it("shows the Nearby Stops View", () => {
+    it("shows the Nearby NearbyStops View", () => {
       function mockStore() {
         const baseState = {
           currentLocationReducer: {
@@ -99,8 +99,8 @@ describe("MainNavigationComponent", () => {
     });
   });
 
-  describe("the Nearby Stops View is selected", () => {
-    it("shows the Nearby Stops View", () => {
+  describe("the Nearby NearbyStops View is selected", () => {
+    it("shows the Nearby NearbyStops View", () => {
       function mockStore() {
         const baseState = {
           currentLocationReducer: {
