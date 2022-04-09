@@ -1,5 +1,8 @@
 import React from "react";
-import { NavLink, useRouteMatch } from "react-router-dom";
+import { Nav } from "react-bootstrap";
+import FontAwesome from "react-fontawesome";
+import { LinkContainer } from "react-router-bootstrap";
+import { useRouteMatch } from "react-router-dom";
 import "./NearbySubNav.scss";
 
 interface Props {
@@ -11,9 +14,23 @@ export default function NearbySubNav({ stopCount, routeCount }: Props) {
   const { url } = useRouteMatch();
 
   return (
-    <nav className="nearby-routes-nav">
-      <NavLink to={`${url}/routes`}>Routes ({routeCount})</NavLink>
-      <NavLink to={`${url}/stops`}>Stops ({stopCount})</NavLink>
-    </nav>
+    <Nav fill={true} variant="tabs">
+      <Nav.Item>
+        <LinkContainer to={`${url}/routes`}>
+          <a className="nav-link">
+            <FontAwesome className="route" name="route" />
+            Routes ({routeCount})
+          </a>
+        </LinkContainer>
+      </Nav.Item>
+      <Nav.Item>
+        <LinkContainer to={`${url}/stops`}>
+          <a className="nav-link">
+            <FontAwesome className="route" name="route" />
+            Stops ({stopCount})
+          </a>
+        </LinkContainer>
+      </Nav.Item>
+    </Nav>
   );
 }

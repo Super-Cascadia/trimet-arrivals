@@ -1,5 +1,5 @@
 import React from "react";
-import { Spinner } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import Modal from "../../../component/modal/Modal";
 import ModalContent from "../../../component/modal/ModalContent";
@@ -46,24 +46,27 @@ export default class NearbyViewComponent extends React.Component<Props, State> {
   public render() {
     const { loading, stopLocations } = this.props;
 
+    if (loading) {
+      return <Loading />;
+    }
+
     return (
-      <div id="nearby-stops-view-component">
-        {loading && <Loading />}
+      <Container>
         {!loading && stopLocations && (
-          <div className="nearby-stops">
-            <main>
-              <div className="flex-container">
-                <section className="flex-stops">
-                  <NearbyMapContainer />
-                  <NearbySubNavContainer />
-                  <NearbySubRoutes />
-                </section>
-                {this.state.modalOpen && this.showModal()}
-              </div>
-            </main>
-          </div>
+          <Row className="nearby-stops">
+            <div className="flex-container">
+              <section className="flex-stops">
+                <NearbyMapContainer />
+                <br />
+                <br />
+                <NearbySubNavContainer />
+                <NearbySubRoutes />
+              </section>
+              {this.state.modalOpen && this.showModal()}
+            </div>
+          </Row>
         )}
-      </div>
+      </Container>
     );
   }
 

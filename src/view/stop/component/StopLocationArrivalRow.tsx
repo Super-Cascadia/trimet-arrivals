@@ -3,6 +3,7 @@ import React from "react";
 import { Arrival } from "../../../api/trimet/interfaces/arrivals";
 import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import ArrivalRow from "../../arrivals/components/ArrivalRow";
+import Loading from "../../loading/Loading";
 
 interface Props {
   locationId?: number;
@@ -15,7 +16,7 @@ export default class StopLocationView extends React.Component<Props> {
     const { arrival, route } = this.props;
 
     if (!arrival) {
-      return "Loading Arrival Row...";
+      return <Loading />;
     }
 
     return (

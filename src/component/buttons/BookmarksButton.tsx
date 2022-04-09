@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { StopLocation } from "../../api/trimet/interfaces/types";
 import { BookmarkSectionsProps } from "../../store/reducers/bookmarkSectionReducer";
@@ -50,10 +51,8 @@ export default function BookmarkButton({
     onBookmarkClick &&
     onBookmarkClick.bind(this, stopLocation, stopIsBookmarked);
   return (
-    <div className="bookmark-button-container">
-      <button onClick={onClick} className="bookmark-button">
-        {bookmarkIcon(stopIsBookmarked)}
-      </button>
-    </div>
+    <Button onClick={onClick} className="bookmark-button">
+      {bookmarkIcon(stopIsBookmarked)}
+    </Button>
   );
 }
