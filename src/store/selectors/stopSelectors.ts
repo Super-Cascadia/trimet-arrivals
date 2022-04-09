@@ -4,8 +4,11 @@ import { RootState } from "../reducers";
 
 const allStopLocations = (state: RootState) => state.stopsReducer.stopLocations;
 
-const stopLocationByLocationId = (state: RootState, locationId: number) =>
-  state.stopsReducer.stopLocations[locationId];
+const stopLocationByLocationId = (state: RootState, locationId: number) => {
+  return state.stopsReducer.stopLocations
+    ? state.stopsReducer.stopLocations[locationId]
+    : null;
+};
 
 const stopsLoading = (state: RootState) => state.stopsReducer.loading;
 
