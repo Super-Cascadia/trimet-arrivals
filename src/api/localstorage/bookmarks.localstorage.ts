@@ -18,8 +18,9 @@ function updateBookmarks(existingBookmarks) {
 
 export function storeLocationBookmark(stopLocation: StopLocation) {
   const existingBookmarks = fetchStoredBookmarks();
+  const id = stopLocation.locid ? stopLocation.locid : stopLocation.id;
 
-  existingBookmarks[stopLocation.locid] = stopLocation;
+  existingBookmarks[id] = stopLocation;
 
   updateBookmarks(existingBookmarks);
 }

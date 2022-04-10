@@ -15,7 +15,7 @@ import StopLocationViewContainer from "../view/stop/container/StopLocationViewCo
 function StopLocationViewRouter() {
   const { id } = useParams();
 
-  return <StopLocationViewContainer locationId={id} />;
+  return <StopLocationViewContainer locationId={parseInt(id, 10)} />;
 }
 
 export default function Routes() {

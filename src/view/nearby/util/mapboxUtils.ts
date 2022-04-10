@@ -2,7 +2,6 @@ import { each, map } from "lodash";
 import mapboxgl from "mapbox-gl";
 import { StopLocation } from "../../../api/trimet/interfaces/types";
 import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
-import { RouteDirectionDict } from "../../../store/reducers/util/getRoutesFromStopLocations";
 import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
 import { LatLngCoords } from "../components/NearbyMap";
 

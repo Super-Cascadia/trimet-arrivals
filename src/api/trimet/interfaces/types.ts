@@ -24,8 +24,9 @@ export interface StopLocation {
   dir: string;
   lat: number;
   lng: number;
-  locid: number;
-  route: TrimetRoute[];
+  locid?: number;
+  id?: number;
+  route?: TrimetRoute[];
 }
 
 export interface StopData {

@@ -30,8 +30,12 @@ const InitialState = {
 };
 
 function removeStopBookmark(state: BookmarksReducerState, action: Action) {
+  const { locationId } = action.payload;
+
   const newBookmarks = omitBy({ ...state.bookmarks }, (item: StopLocation) => {
-    return item.locid === action.payload.locationId;
+    const id = item.locid ? item.locid : item.id;
+
+    return id === locationId;
   });
 
   return {
@@ -41,12 +45,15 @@ function removeStopBookmark(state: BookmarksReducerState, action: Action) {
 }
 
 function createStopBookmark(state: BookmarksReducerState, action: Action) {
+  const { stopLocation } = action.payload;
+  const id = stopLocation.locid ? stopLocation.locid : stopLocation.id;
+
   return {
     ...state,
     bookmarks: {
       ...state.bookmarks,
-      [action.payload.stopLocation.locid]: {
-        ...action.payload.stopLocation
+      [id]: {
+        ...stopLocation
       }
     }
   };
