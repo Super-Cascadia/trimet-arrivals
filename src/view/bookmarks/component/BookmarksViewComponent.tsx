@@ -21,15 +21,13 @@ function getBookmarkedStops(bookmarks: StopLocation[]) {
   }
 
   return map(bookmarks, (stopLocation: StopLocation) => {
-    const locationId = stopLocation.locid;
+    const locationId = stopLocation.locid
+      ? stopLocation.locid
+      : stopLocation.id;
 
     return (
-      <div className="bookmark-stop-wrapper">
-        <StopContainer
-          key={locationId}
-          locationId={locationId}
-          showArrivals={false}
-        />
+      <div className="bookmark-stop-wrapper" key={locationId}>
+        <StopContainer locationId={locationId} showArrivals={false} />
       </div>
     );
   });

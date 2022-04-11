@@ -26,6 +26,10 @@ export default class StopComponent extends React.Component<Props> {
     this.loadArrivalData = (locId: number) => this.loadArrivals(locId);
   }
 
+  public componentDidMount() {
+    this.props.loadArrivalData(this.props.locationId);
+  }
+
   public loadAndSetInterval(locationId: number) {
     const { loadArrivalData } = this.props;
     loadArrivalData(locationId);

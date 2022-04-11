@@ -23,7 +23,12 @@ export interface Arrival {
 }
 
 export interface ArrivalLocation {
+  lng: number;
+  passengerCode: string;
   id: number;
+  dir: string;
+  lat: number;
+  desc: string;
 }
 
 export interface ArrivalData {
