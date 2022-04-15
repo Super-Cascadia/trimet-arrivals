@@ -1,5 +1,6 @@
 import { map, split } from "lodash";
 import React, { Component } from "react";
+import { Button } from "react-bootstrap";
 import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import RouteIndicator from "../../../component/route/RouteIndicator";
 import "./StopRouteListing.scss";
@@ -74,7 +75,7 @@ export default class StopRouteListing extends Component<Props, State> {
       <div>
         <span className="serving-label">Routes: </span>
         <span className="route-indicators">{getSimpleRouteList(routes)}</span>
-        <button onClick={this.toggleDetails}>Details</button>
+        <Button onClick={this.toggleDetails}>Details</Button>
       </div>
     );
   }

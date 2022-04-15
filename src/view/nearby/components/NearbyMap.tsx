@@ -26,11 +26,15 @@ export default class NearbyMap extends Component<Props> {
 
   public componentDidMount() {
     const { currentLocation, stopLocations, nearbyRouteIds } = this.props;
-    this.initializeMap(currentLocation, stopLocations, nearbyRouteIds);
+    if (currentLocation && stopLocations && nearbyRouteIds) {
+      this.initializeMap(currentLocation, stopLocations, nearbyRouteIds);
+    }
   }
 
   public componentWillUnmount() {
-    this.map.remove();
+    if (this.map) {
+      this.map.remove();
+    }
   }
 
   public render() {

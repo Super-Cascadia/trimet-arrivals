@@ -6,17 +6,8 @@ import { RemoveBookmarkSectionButton } from "../../../../../component/buttons/Re
 import EditSectionNameInput from "./EditSectionNameInput";
 
 function EditModeToggleButton({ onClick, editMode }) {
-  const classNames = cx(
-    "group-menu-item",
-    "float-right",
-    "edit-toggle-button",
-    {
-      enabled: editMode
-    }
-  );
-
   return (
-    <Button onClick={onClick} className={classNames}>
+    <Button onClick={onClick}>
       <FontAwesome name="edit" />
     </Button>
   );
@@ -38,14 +29,14 @@ export default function BookmarkSectionNameControl({
   updateBookmarkSectionName
 }: Props) {
   return (
-    <Card.Header>
+    <Card.Header className="d-flex justify-content-between flex-wrap flex-md-nowrap pt-3 pb-2 mb-3">
       {editMode && (
         <EditSectionNameInput
           sectionName={name}
           updateBookmarkSectionName={updateBookmarkSectionName}
         />
       )}
-      {!editMode && <h3>{name}</h3>}
+      {!editMode && <h3 className="h6">{name}</h3>}
       {editMode && (
         <RemoveBookmarkSectionButton
           removeBookmarkSection={removeBookmarkSection}

@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { get } from "lodash";
+import { get, isEmpty } from "lodash";
 import React from "react";
 import { Card, Col } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
@@ -53,6 +53,10 @@ function getFrequentServiceIndicator(routeId: number) {
 }
 
 export default function RouteListItem({ route }: { route: TrimetRoute }) {
+  if (isEmpty(route)) {
+    return null;
+  }
+
   const routeId = route.id;
   // tslint:disable-next-line:no-empty
   const onClick = () => {};

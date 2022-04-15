@@ -52,21 +52,30 @@ export default class BookmarkSectionComponent extends Component<Props, State> {
       : undefined;
 
     return map(bookmarkedStops, stopLocation => {
+      if (isEmpty(stopLocation)) {
+        return null;
+      }
+
+      const locationId =
+        stopLocation && stopLocation.locid
+          ? stopLocation.locid
+          : stopLocation.id;
+
       return (
-        <li key={stopLocation.locid}>
+        <li key={locationId}>
           <div className="bookmark-stop-wrapper">
             <div className="bookmark-flex-container">
               <div className="bookmark-stop-flex-item">
                 <StopContainer
                   showArrivals={false}
-                  locationId={stopLocation.locid}
+                  locationId={locationId}
                   onRouteIndicatorClick={undefined}
                 />
               </div>
               {this.state.editMode && (
                 <div className="bookmark-remove-flex-item">
                   <RemoveBookmarkButton
-                    stopId={stopLocation.locid}
+                    stopId={locationId}
                     removeBookmarkFromSection={onRemoveBookmarkFromSection}
                   />
                 </div>

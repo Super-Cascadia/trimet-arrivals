@@ -1,6 +1,5 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import { StopLocation } from "../../../api/trimet/interfaces/types";
 import { TrimetLocation } from "../../../store/reducers/data/arrivalsDataReducer";
 import { OnBookmarkClick } from "./StopLocationView";
 

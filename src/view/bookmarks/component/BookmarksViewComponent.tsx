@@ -1,36 +1,12 @@
-import { isEmpty, map } from "lodash";
 import React from "react";
-import { Card, Container } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { StopLocation } from "../../../api/trimet/interfaces/types";
-import StopContainer from "../../nearbyStops/containers/StopContainer";
 import BookmarkSectionsContainer from "../container/BookmarkSectionsContainer";
+import BookmarkedStops from "./BookmarkedStops";
 import "./BookmarksViewComponent.css";
 
 interface Props {
   bookmarks: StopLocation[];
-}
-
-function getBookmarkedStops(bookmarks: StopLocation[]) {
-  if (isEmpty(bookmarks)) {
-    return (
-      <Card>
-        <Card.Header>Uncategorized Bookmarks</Card.Header>
-        <Card.Body>Bookmark a stop and see it here.</Card.Body>
-      </Card>
-    );
-  }
-
-  return map(bookmarks, (stopLocation: StopLocation) => {
-    const locationId = stopLocation.locid
-      ? stopLocation.locid
-      : stopLocation.id;
-
-    return (
-      <div className="bookmark-stop-wrapper" key={locationId}>
-        <StopContainer locationId={locationId} showArrivals={false} />
-      </div>
-    );
-  });
 }
 
 export default function BookmarksViewComponent(props: Props) {
@@ -39,8 +15,14 @@ export default function BookmarksViewComponent(props: Props) {
   return (
     <Container id="bookmarks-view-container">
       <br />
-      <BookmarkSectionsContainer />
-      {getBookmarkedStops(bookmarks)}
+      <Row>
+        <Col>
+          <BookmarkedStops bookmarks={bookmarks} />
+        </Col>
+        <Col>
+          <BookmarkSectionsContainer />
+        </Col>
+      </Row>
     </Container>
   );
 }

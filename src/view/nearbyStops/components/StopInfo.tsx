@@ -16,16 +16,17 @@ export default function StopInfo({ stopLocation, onClick }: Props) {
     return null;
   }
 
+  const id = stopLocation.locid ? stopLocation.locid : stopLocation.id;
   return (
     <Card className="stop-info-header">
       <Card.Header>
-        <h2>
-          <StopLocationIndicator locationId={stopLocation.locid} />
+        <h3 className="h6">
+          <StopLocationIndicator locationId={id} />
           <span className="stop-info">
             {stopLocation.desc} - {stopLocation.dir} -
           </span>
           <span>{stopLocation.distance} feet away</span>
-        </h2>
+        </h3>
       </Card.Header>
       <Card.Body>
         <StopRouteListing routes={stopLocation.route} onClick={onClick} />
