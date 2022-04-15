@@ -52,7 +52,9 @@ interface LoadAllRoutesCompleteAction extends Action {
   };
 }
 
-function createRoutesDictionary(routes: TrimetRoute[]): RouteDataDictionary {
+export function createRoutesDictionary(
+  routes: TrimetRoute[]
+): RouteDataDictionary {
   return _.mapKeys(routes, (route: TrimetRoute) => {
     return route.id;
   });

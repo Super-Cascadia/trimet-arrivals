@@ -1,8 +1,6 @@
 import React from "react";
 import { Route, Switch, useParams, useRouteMatch } from "react-router-dom";
-import { RouteDataDictionary } from "../store/reducers/data/routeDataReducer";
 import LineDetailViewContainer from "../view/lineDetail/container/LineDetailViewContainer";
-import { AerialTram } from "../view/lines/component/AerialTram";
 import { AllLines } from "../view/lines/component/AllLines";
 import { BusLines } from "../view/lines/component/BusLines";
 import { MaxLines } from "../view/lines/component/MaxLines";
@@ -15,32 +13,25 @@ function LineDetailViewRouter() {
   return <LineDetailViewContainer id={id} />;
 }
 
-export function LinesViewSubRoutes({
-  routes
-}: {
-  routes: RouteDataDictionary;
-}) {
+export function LinesViewSubRoutes() {
   const { path } = useRouteMatch();
 
   return (
     <Switch>
       <Route exact={true} path={path}>
-        <AllLines routes={routes} />
+        <AllLines />
       </Route>
       <Route path={`${path}/max`}>
-        <MaxLines routes={routes} />
+        <MaxLines />
       </Route>
       <Route path={`${path}/streetcar`}>
-        <StreetCarLines routes={routes} />
+        <StreetCarLines />
       </Route>
       <Route path={`${path}/bus`}>
-        <BusLines routes={routes} />
+        <BusLines />
       </Route>
       <Route path={`${path}/wes`}>
-        <WES routes={routes} />
-      </Route>
-      <Route path={`${path}/tram`}>
-        <AerialTram routes={routes} />
+        <WES />
       </Route>
       <Route path={`${path}/:id`}>
         <LineDetailViewRouter />

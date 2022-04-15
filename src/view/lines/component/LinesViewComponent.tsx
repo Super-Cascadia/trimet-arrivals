@@ -1,19 +1,11 @@
-import { isEmpty } from "lodash";
 import React from "react";
 import { Container, Nav } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { LinkContainer } from "react-router-bootstrap";
 import { LinesViewSubRoutes } from "../../../routes/LinesSubRoutes";
-import { RouteDataDictionary } from "../../../store/reducers/data/routeDataReducer";
-import Loading from "../../loading/Loading";
 import "./LinesViewComponent.scss";
 
-interface Props {
-  loadAllRoutes: () => {};
-  routes: RouteDataDictionary;
-}
-
-export default class LinesViewComponent extends React.Component<Props> {
+export default class LinesViewComponent extends React.Component {
   private static getRouteNav() {
     return (
       <Container>
@@ -58,36 +50,18 @@ export default class LinesViewComponent extends React.Component<Props> {
               </a>
             </LinkContainer>
           </Nav.Item>
-          <Nav.Item>
-            <LinkContainer to="/lines/wes">
-              <a className="nav-link">
-                <FontAwesome className="tram" name="tram" />
-                Tram
-              </a>
-            </LinkContainer>
-          </Nav.Item>
         </Nav>
       </Container>
     );
   }
 
-  public componentDidMount(): void {
-    this.props.loadAllRoutes();
-  }
-
   public render() {
-    const { routes } = this.props;
-
-    if (isEmpty(routes)) {
-      return <Loading />;
-    }
-
     return (
       <div id="lines-view">
         <br />
         {LinesViewComponent.getRouteNav()}
         <br />
-        <LinesViewSubRoutes routes={routes} />
+        <LinesViewSubRoutes />
       </div>
     );
   }

@@ -1,19 +1,30 @@
-import React from "react";
+import { isEmpty } from "lodash";
+import React, { useEffect, useState } from "react";
 import { Container, Row } from "react-bootstrap";
-import FontAwesome from "react-fontawesome";
-import { RouteDataDictionary } from "../../../store/reducers/data/routeDataReducer";
+import { RouteDataResultSet } from "../../../api/trimet/interfaces/routes";
+import { getAllRoutes } from "../../../api/trimet/routeConfig";
+import { createRoutesDictionary } from "../../../store/reducers/data/routeDataReducer";
 import CollapsiblePane from "../../lineDetail/component/CollapsiblePane";
 import { getBusLines, getRoutes } from "./AllLines";
 
-export function BusLines({ routes }: { routes: RouteDataDictionary }) {
+export function BusLines() {
+  const [routes, setRoutes] = useState({});
+
+  useEffect(() => {
+    getAllRoutes().then((data: RouteDataResultSet) => {
+      const routesDictionary = createRoutesDictionary(data.route);
+      setRoutes(routesDictionary);
+    });
+  }, []);
+
+  if (isEmpty(routes)) {
+    return null;
+  }
+
   const busLines = getBusLines(routes);
 
   return (
     <Container>
-      <h2>
-        <FontAwesome className="bus" name="bus" />
-        Max Bus
-      </h2>
       <CollapsiblePane
         className="route-detail-information-pane"
         title="Schedule"
