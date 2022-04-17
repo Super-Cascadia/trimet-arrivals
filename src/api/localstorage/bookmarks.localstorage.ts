@@ -4,7 +4,7 @@ import { fetchLocalStorageItemByKey, updateStoredItemByKey } from "./util";
 
 export const BOOKMARKS = "BOOKMARKS";
 
-interface StoredBookmarks {
+export interface StoredBookmarks {
   [locationId: number]: StopLocation;
 }
 

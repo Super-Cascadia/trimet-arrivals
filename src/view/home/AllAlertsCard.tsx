@@ -1,9 +1,10 @@
-import _ from "lodash";
+import _, { isEmpty } from "lodash";
 import moment from "moment";
 import React from "react";
 import { Accordion, Badge, Card, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Alert } from "../../api/trimet/interfaces/alertsData";
+import Loading from "../loading/Loading";
 
 function getStopClosureTable(locations) {
   return (
@@ -82,31 +83,41 @@ interface Props {
   alertsData: Alert[];
 }
 
+function getAlertsAccordion(alertsData: Alert[]) {
+  if (isEmpty(alertsData)) {
+    return <Loading />;
+  }
+
+  return (
+    <Accordion defaultActiveKey="0">
+      {alertsData &&
+        alertsData.map(alert => {
+          return (
+            <Accordion.Item eventKey={_.toString(alert.id)} key={alert.id}>
+              <Accordion.Header>
+                {alert.location && <Badge bg="warning">Stop Closure</Badge>}
+                {alert.route && getImpactedRoutes(alert.route)}
+                {alert.id} - {alert.header_text}
+                {getHeader(alert)}
+              </Accordion.Header>
+              <Accordion.Body>
+                {alert.desc}
+                <br />
+                {alert.location && getStopClosureTable(alert.location)}
+                {alert.route && getRouteAlertTable(alert.route)}
+              </Accordion.Body>
+            </Accordion.Item>
+          );
+        })}
+    </Accordion>
+  );
+}
+
 function AllAlertsCard({ alertsData }: Props) {
   return (
     <Card>
       <Card.Header>Route & Stop Alerts</Card.Header>
-      <Accordion defaultActiveKey="0">
-        {alertsData &&
-          alertsData.map(alert => {
-            return (
-              <Accordion.Item eventKey={_.toString(alert.id)} key={alert.id}>
-                <Accordion.Header>
-                  {alert.location && <Badge bg="warning">Stop Closure</Badge>}
-                  {alert.route && getImpactedRoutes(alert.route)}
-                  {alert.id} - {alert.header_text}
-                  {getHeader(alert)}
-                </Accordion.Header>
-                <Accordion.Body>
-                  {alert.desc}
-                  <br />
-                  {alert.location && getStopClosureTable(alert.location)}
-                  {alert.route && getRouteAlertTable(alert.route)}
-                </Accordion.Body>
-              </Accordion.Item>
-            );
-          })}
-      </Accordion>
+      {getAlertsAccordion(alertsData)}
     </Card>
   );
 }
