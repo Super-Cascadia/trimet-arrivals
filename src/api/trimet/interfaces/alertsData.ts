@@ -9,6 +9,7 @@ export interface Alert {
   header_text: string;
   begin: number;
   desc: string;
+  location?: Location;
 }
 
 export interface AlertsData {
