@@ -7,6 +7,7 @@ import {
   LineScheduleInfo,
   maxLightRail
 } from "../../../data/trimet/schedules/maxLightRail";
+import Loading from "../../loading/Loading";
 import CollapsiblePane from "./CollapsiblePane";
 import "./LineDetailView.scss";
 import LineDetailViewStops from "./LineDetailViewStops";
@@ -41,7 +42,7 @@ export default class LinesViewComponent extends React.Component<Props> {
     const { route, id } = this.props;
 
     if (!route) {
-      return "Loading TrimetRoute data...";
+      return <Loading />;
     }
 
     const routeSchedule = maxLightRail[id];
