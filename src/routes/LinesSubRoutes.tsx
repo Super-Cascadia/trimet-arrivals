@@ -1,17 +1,12 @@
 import React from "react";
 import { Route, Switch, useParams, useRouteMatch } from "react-router-dom";
+import LineDetailComponent from "../view/lineDetail/component/LineDetailComponent";
 import LineDetailViewContainer from "../view/lineDetail/container/LineDetailViewContainer";
 import { AllLines } from "../view/lines/component/AllLines";
 import { BusLines } from "../view/lines/component/BusLines";
 import { MaxLines } from "../view/lines/component/MaxLines";
 import { StreetCarLines } from "../view/lines/component/StreetCarLines";
 import { WES } from "../view/lines/component/WES";
-
-function LineDetailViewRouter() {
-  const { id } = useParams();
-
-  return <LineDetailViewContainer id={id} />;
-}
 
 export function LinesViewSubRoutes() {
   const { path } = useRouteMatch();
@@ -34,7 +29,7 @@ export function LinesViewSubRoutes() {
         <WES />
       </Route>
       <Route path={`${path}/:id`}>
-        <LineDetailViewRouter />
+        <LineDetailComponent />
       </Route>
     </Switch>
   );

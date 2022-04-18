@@ -1,6 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { TrimetRoute } from "../../../api/trimet/interfaces/routes";
+import { getAlertsByRouteId } from "../../../api/trimet/alerts";
+import {
+  RouteDataResultSet,
+  TrimetRoute
+} from "../../../api/trimet/interfaces/routes";
+import { getRouteById } from "../../../api/trimet/routeConfig";
 import FrequentServiceIndicator from "../../../component/route/FrequentServiceIndicator";
 import RouteListItem from "../../../component/route/RouteListItem";
 import {
@@ -33,61 +38,66 @@ function getScheduleContent(schedule: LineScheduleInfo) {
   );
 }
 
-export default class LinesViewComponent extends React.Component<Props> {
-  public componentDidMount(): void {
-    this.props.loadRouteData(this.props.id);
+export default function LinesViewComponent(props: Props) {
+  const { id } = props;
+
+  const [route, setRouteData] = useState(undefined);
+  const [alertsData, setAlertsData] = useState(undefined);
+
+  useEffect(() => {
+    getRouteById(id).then((results: RouteDataResultSet) => {
+      setRouteData(results.route[0]);
+    });
+
+    getAlertsByRouteId(id).then(result => setAlertsData(result));
+  }, []);
+
+  if (!route) {
+    return <Loading />;
   }
 
-  public render() {
-    const { route, id } = this.props;
+  const routeSchedule = maxLightRail[id];
 
-    if (!route) {
-      return <Loading />;
-    }
-
-    const routeSchedule = maxLightRail[id];
-
-    return (
-      <Container>
-        <Row>
-          <Col>
-            <RouteListItem route={route} />
-          </Col>
-        </Row>
-        <br />
-        <Row>
-          <Col>
-            <CollapsiblePane
-              className="route-detail-information-pane"
-              title="Schedule"
-              open={true}
-            >
-              {getScheduleContent(routeSchedule)}
-            </CollapsiblePane>
-          </Col>
-          <Col>
-            <CollapsiblePane
-              className="route-detail-map"
-              title={"Map"}
-              open={true}
-            >
-              <p>Map goes here</p>
-            </CollapsiblePane>
-          </Col>
-        </Row>
-        <br />
-        <Row>
-          <Col>
-            <CollapsiblePane
-              className="route-detail-stops"
-              title="Stops"
-              open={true}
-            >
-              <LineDetailViewStops route={route} />
-            </CollapsiblePane>
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
+  return (
+    <Container>
+      <Row>
+        <Col>
+          <RouteListItem route={route} />
+        </Col>
+      </Row>
+      <br />
+      <Row>
+        <Col>
+          <CollapsiblePane
+            className="route-detail-information-pane"
+            title="Schedule"
+            open={true}
+          >
+            {getScheduleContent(routeSchedule)}
+          </CollapsiblePane>
+        </Col>
+        <Col>
+          <CollapsiblePane
+            className="route-detail-map"
+            title={"Map"}
+            open={true}
+          >
+            <p>Map goes here</p>
+          </CollapsiblePane>
+        </Col>
+      </Row>
+      <br />
+      <Row>
+        <Col>
+          <CollapsiblePane
+            className="route-detail-stops"
+            title="Stops"
+            open={true}
+          >
+            <LineDetailViewStops route={route} />
+          </CollapsiblePane>
+        </Col>
+      </Row>
+    </Container>
+  );
 }
