@@ -47,10 +47,14 @@ function BookmarkItem({ index, bookmark, stopData }: BookmarkItemProps) {
   return (
     <ListGroup.Item key={index}>
       <LinkContainer to={`/stop/${index}`}>
-        <span>
+        <div className="d-flex justify-content-between flex-wrap flex-md-nowrap">
           <a>{bookmark.desc}</a>
-          {stopData && <BookmarkItemRoutes stopLocations={stopData.location} />}
-        </span>
+          {stopData && (
+            <div>
+              <BookmarkItemRoutes stopLocations={stopData.location} />
+            </div>
+          )}
+        </div>
       </LinkContainer>
     </ListGroup.Item>
   );
