@@ -22,7 +22,9 @@ export default class LineDetailViewStops extends React.Component<Props> {
           <td>
             <Link to={`/stop/${stop.locid}`}>{stop.locid}</Link>
           </td>
-          <td>{stop.desc}</td>
+          <td>
+            <small>{stop.desc}</small>
+          </td>
           <td>{stop.dir}</td>
         </tr>
       );
@@ -43,7 +45,7 @@ export default class LineDetailViewStops extends React.Component<Props> {
       return (
         <Col>
           <header>
-            <h3>{routeDirection.desc}</h3>
+            <h3 className="h6">{routeDirection.desc}</h3>
             <Table striped={true} bordered={true} hover={true} size="lg">
               <thead>
                 <tr>

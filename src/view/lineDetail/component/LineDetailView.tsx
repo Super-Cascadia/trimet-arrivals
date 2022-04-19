@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { getAlertsByRouteId } from "../../../api/trimet/alerts";
+import { Alert, AlertsData } from "../../../api/trimet/interfaces/alertsData";
 import {
   RouteDataResultSet,
   TrimetRoute
 } from "../../../api/trimet/interfaces/routes";
 import { getRouteById } from "../../../api/trimet/routeConfig";
-import FrequentServiceIndicator from "../../../component/route/FrequentServiceIndicator";
 import RouteListItem from "../../../component/route/RouteListItem";
-import {
-  LineScheduleInfo,
-  maxLightRail
-} from "../../../data/trimet/schedules/maxLightRail";
+import { maxLightRail } from "../../../data/trimet/schedules/maxLightRail";
 import Loading from "../../loading/Loading";
-import CollapsiblePane from "./CollapsiblePane";
+import { AlertsCard } from "./AlertsCard";
 import "./LineDetailView.scss";
-import LineDetailViewStops from "./LineDetailViewStops";
+import { MapCard } from "./MapCard";
+import { ScheduleCard } from "./ScheduleCard";
+import { StopsCard } from "./StopsCard";
 
 interface Props {
   route: TrimetRoute;
@@ -23,33 +22,20 @@ interface Props {
   loadRouteData: (id: number) => {};
 }
 
-function getScheduleContent(schedule: LineScheduleInfo) {
-  return (
-    <>
-      {schedule && schedule.frequentService && (
-        <FrequentServiceIndicator frequentService={schedule.frequentService} />
-      )}
-      <strong>Hours of Operation:</strong> 5:00 AM - 12:00 PM
-      <br />
-      <strong>Connections:</strong>
-      <br />
-      <strong>Areas served:</strong>
-    </>
-  );
-}
-
 export default function LinesViewComponent(props: Props) {
   const { id } = props;
 
-  const [route, setRouteData] = useState(undefined);
-  const [alertsData, setAlertsData] = useState(undefined);
+  const [route, setRouteData] = useState<TrimetRoute>(undefined);
+  const [alertsData, setAlertsData] = useState<Alert[]>(undefined);
 
   useEffect(() => {
     getRouteById(id).then((results: RouteDataResultSet) => {
       setRouteData(results.route[0]);
     });
 
-    getAlertsByRouteId(id).then(result => setAlertsData(result));
+    getAlertsByRouteId(id).then((result: AlertsData) => {
+      setAlertsData(result.alert);
+    });
   }, []);
 
   if (!route) {
@@ -67,35 +53,15 @@ export default function LinesViewComponent(props: Props) {
       </Row>
       <br />
       <Row>
-        <Col>
-          <CollapsiblePane
-            className="route-detail-information-pane"
-            title="Schedule"
-            open={true}
-          >
-            {getScheduleContent(routeSchedule)}
-          </CollapsiblePane>
+        <Col md="3">
+          <ScheduleCard routeSchedule={routeSchedule} />
+          <br />
+          <MapCard />
+          <br />
+          <AlertsCard alertsData={alertsData} />
         </Col>
-        <Col>
-          <CollapsiblePane
-            className="route-detail-map"
-            title={"Map"}
-            open={true}
-          >
-            <p>Map goes here</p>
-          </CollapsiblePane>
-        </Col>
-      </Row>
-      <br />
-      <Row>
-        <Col>
-          <CollapsiblePane
-            className="route-detail-stops"
-            title="Stops"
-            open={true}
-          >
-            <LineDetailViewStops route={route} />
-          </CollapsiblePane>
+        <Col md="9">
+          <StopsCard route={route} />
         </Col>
       </Row>
     </Container>
