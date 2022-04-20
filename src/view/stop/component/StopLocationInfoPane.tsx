@@ -1,48 +1,36 @@
 import React from "react";
 import { Badge } from "react-bootstrap";
+import { ArrivalData } from "../../../api/trimet/interfaces/arrivals";
 import RouteIndicator from "../../../component/route/RouteIndicator";
-import {
-  TrimetArrivalData,
-  TrimetLocation
-} from "../../../store/reducers/data/arrivalsDataReducer";
 import CollapsiblePane from "../../lineDetail/component/CollapsiblePane";
 
 interface LocationInfoPaneProps {
-  location: TrimetLocation;
-  arrivals: TrimetArrivalData;
-  routes: number[];
+  arrivalData: ArrivalData;
 }
 
-function LocationInfoPane({
-  location,
-  arrivals,
-  routes
-}: LocationInfoPaneProps) {
+function LocationInfoPane({ arrivalData }: LocationInfoPaneProps) {
   return (
     <CollapsiblePane className={undefined} title={"Info"} open={true}>
       <ul>
         <li>
           <strong>ID:</strong>
-          <Badge>{location.id}</Badge>
+          {/*<Badge>{location.id}</Badge>*/}
         </li>
         <li>
-          <strong>Serving Routes</strong>{" "}
-          {routes.map(routeId => (
-            <RouteIndicator key={routeId} routeId={routeId} />
-          ))}
+          <strong>Serving Routes</strong> {/*{routes.map(routeId => (*/}
+          {/*  <RouteIndicator key={routeId} routeId={routeId} />*/}
+          {/*))}*/}
+        </li>
+        {/*<li>*/}
+        {/*  <strong>Direction:</strong> {arrivalData.location.dir}*/}
+        {/*</li>*/}
+        <li>
+          <strong>Queried:</strong> {arrivalData.queryTime}
         </li>
         <li>
-          <strong>Direction:</strong> {location.dir}
+          {/*<strong>Lat / Lng:</strong> {location.lat} / {location.lng}*/}
         </li>
-        <li>
-          <strong>Queried:</strong> {arrivals.queryTime}
-        </li>
-        <li>
-          <strong>Lat / Lng:</strong> {location.lat} / {location.lng}
-        </li>
-        <li>
-          <strong>Passenger Code:</strong> {location.passengerCode}
-        </li>
+        <li>{/*<strong>Passenger Code:</strong> {location.passengerCode}*/}</li>
       </ul>
     </CollapsiblePane>
   );

@@ -31,7 +31,14 @@ export interface ArrivalLocation {
   desc: string;
 }
 
+export interface Detour {
+  feet: number;
+  blockId: number;
+  route: number;
+}
+
 export interface ArrivalData {
+  detour: Detour[];
   arrival: Arrival[];
   location: ArrivalLocation[];
   queryTime: string;

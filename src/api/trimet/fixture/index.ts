@@ -36,6 +36,7 @@ export function arrivalsFixtureData(): Promise<ArrivalData> {
 
   const arrivalData: ArrivalData = {
     arrival: [arrival1, arrival2, arrival3],
+    detour: [],
     location: [location1, location2, location3],
     queryTime: "123"
   };

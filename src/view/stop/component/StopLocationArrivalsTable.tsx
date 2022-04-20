@@ -2,8 +2,7 @@ import { map } from "lodash";
 import React from "react";
 import { Table } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import { Arrival } from "../../../api/trimet/interfaces/arrivals";
-import { TrimetArrivalData } from "../../../store/reducers/data/arrivalsDataReducer";
+import { Arrival, ArrivalData } from "../../../api/trimet/interfaces/arrivals";
 import ArrivalRowContainer from "../container/ArrivalRowContainer";
 
 function getArrivals(arrivals: Arrival[]) {
@@ -12,20 +11,20 @@ function getArrivals(arrivals: Arrival[]) {
   });
 }
 
-interface Props {
-  arrivals: TrimetArrivalData;
-}
-
-function filterArrivals(arrivals: TrimetArrivalData, id) {
+function filterArrivals(arrivals: ArrivalData, id) {
   return arrivals.arrival.filter(arrival => arrival.route === parseInt(id, 10));
 }
 
-function StopLocationArrivalsTable({ arrivals }: Props) {
+interface Props {
+  arrivalData: ArrivalData;
+}
+
+function StopLocationArrivalsTable({ arrivalData }: Props) {
   const { routeId } = useParams();
 
   const filteredArrivals = routeId
-    ? filterArrivals(arrivals, routeId)
-    : arrivals.arrival;
+    ? filterArrivals(arrivalData, routeId)
+    : arrivalData.arrival;
 
   return (
     <Table striped={true} bordered={true} hover={true} size="lg">
