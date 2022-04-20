@@ -14,55 +14,50 @@ interface Props {
   route: TrimetRoute;
 }
 
-export default class LineDetailViewStops extends React.Component<Props> {
-  private static getRouteDirectionStops(stops: RouteDirectionStop[]) {
-    return map(stops, stop => {
-      return (
-        <tr>
-          <td>
-            <Link to={`/stop/${stop.locid}`}>{stop.locid}</Link>
-          </td>
-          <td>
-            <small>{stop.desc}</small>
-          </td>
-          <td>{stop.dir}</td>
-        </tr>
-      );
-    });
-  }
-  public render() {
-    const { route } = this.props;
+function getRouteDirectionStops(stops: RouteDirectionStop[]) {
+  return map(stops, stop => {
+    return (
+      <tr>
+        <td>
+          <Link to={`/stop/${stop.locid}`}>{stop.locid}</Link>
+        </td>
+        <td>
+          <small>{stop.desc}</small>
+        </td>
+        <td>{stop.dir}</td>
+      </tr>
+    );
+  });
+}
 
-    if (!route.dir) {
-      return <Loading />;
-    }
+function getRouteDirections(routeDirections: RouteStopDirection[]) {
+  return map(routeDirections, routeDirection => {
+    return (
+      <Col>
+        <header>
+          <h3 className="h6">{routeDirection.desc}</h3>
+          <Table striped={true} bordered={true} hover={true} size="lg">
+            <thead>
+              <tr>
+                <td>Stop ID</td>
+                <td>Name</td>
+                <td>Direction</td>
+              </tr>
+            </thead>
+            <tbody>{getRouteDirectionStops(routeDirection.stop)}</tbody>
+          </Table>
+        </header>
+      </Col>
+    );
+  });
+}
 
-    return <Row>{this.getRouteDirections(route.dir)}</Row>;
+export default function LineDetailViewStops(props: Props) {
+  const { route } = props;
+
+  if (!route.dir) {
+    return <Loading />;
   }
 
-  public getRouteDirections(routeDirections: RouteStopDirection[]) {
-    return map(routeDirections, routeDirection => {
-      return (
-        <Col>
-          <header>
-            <h3 className="h6">{routeDirection.desc}</h3>
-            <Table striped={true} bordered={true} hover={true} size="lg">
-              <thead>
-                <tr>
-                  <td>Stop ID</td>
-                  <td>Name</td>
-                  <td>Direction</td>
-                </tr>
-              </thead>
-              <tbody>
-                {LineDetailViewStops.getRouteDirectionStops(
-                  routeDirection.stop
-                )}
-              </tbody>
-            </Table>
-          </header>
-        </Col>
-      );
-    });
-  }
+  return <Row>{getRouteDirections(route.dir)}</Row>;
 }
