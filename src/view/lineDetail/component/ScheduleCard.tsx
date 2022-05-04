@@ -1,13 +1,15 @@
 import React from "react";
 import { Card } from "react-bootstrap";
+import { TrimetRoute } from "../../../api/trimet/interfaces/routes";
 import FrequentServiceIndicator from "../../../component/route/FrequentServiceIndicator";
 import { LineScheduleInfo } from "../../../data/trimet/schedules/maxLightRail";
 
 interface ScheduleCardParams {
   routeSchedule: LineScheduleInfo;
+  route: TrimetRoute;
 }
 
-export function ScheduleCard({ routeSchedule }: ScheduleCardParams) {
+export function ScheduleCard({ routeSchedule, route }: ScheduleCardParams) {
   return (
     <Card>
       <Card.Header as="h5">Schedule</Card.Header>

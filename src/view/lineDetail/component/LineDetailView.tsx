@@ -24,7 +24,6 @@ interface Props {
 
 export default function LinesViewComponent(props: Props) {
   const { id } = props;
-
   const [route, setRouteData] = useState<TrimetRoute>(undefined);
   const [alertsData, setAlertsData] = useState<Alert[]>(undefined);
 
@@ -54,14 +53,14 @@ export default function LinesViewComponent(props: Props) {
       <br />
       <Row>
         <Col md="3">
-          <ScheduleCard routeSchedule={routeSchedule} />
+          <ScheduleCard routeSchedule={routeSchedule} route={route} />
           <br />
           <MapCard />
           <br />
           <AlertsCard alertsData={alertsData} />
         </Col>
         <Col md="9">
-          <StopsCard route={route} />
+          <StopsCard route={route} alertsData={alertsData} />
         </Col>
       </Row>
     </Container>

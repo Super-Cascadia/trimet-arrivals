@@ -1,17 +1,13 @@
 import { sortBy, uniq } from "lodash";
 import React, { useEffect, useState } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
-import {
-  getAlertsByLocationId,
-  getAlertsByRouteId
-} from "../../../api/trimet/alerts";
+import { getAlertsByLocationId } from "../../../api/trimet/alerts";
 import { getArrivals } from "../../../api/trimet/arrivals";
 import { Alert, AlertsData } from "../../../api/trimet/interfaces/alertsData";
 import { ArrivalData } from "../../../api/trimet/interfaces/arrivals";
 import { StopLocation } from "../../../api/trimet/interfaces/types";
 import Map, { LatLngCoords } from "../../../component/map/Map";
 import { AlertsCard } from "../../lineDetail/component/AlertsCard";
-import CollapsiblePane from "../../lineDetail/component/CollapsiblePane";
 import Loading from "../../loading/Loading";
 import StopLocationArrivals from "./StopLocationArrivals";
 import StopLocationArrivalsTableNav from "./StopLocationArrivalsTableNav";

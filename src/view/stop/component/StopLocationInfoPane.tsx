@@ -1,38 +1,36 @@
 import React from "react";
-import { Badge } from "react-bootstrap";
+import { Badge, Card, ListGroup } from "react-bootstrap";
 import { ArrivalData } from "../../../api/trimet/interfaces/arrivals";
-import RouteIndicator from "../../../component/route/RouteIndicator";
-import CollapsiblePane from "../../lineDetail/component/CollapsiblePane";
 
 interface LocationInfoPaneProps {
   arrivalData: ArrivalData;
 }
 
 function LocationInfoPane({ arrivalData }: LocationInfoPaneProps) {
+  const location = arrivalData.location[0];
+
   return (
-    <CollapsiblePane className={undefined} title={"Info"} open={true}>
-      <ul>
-        <li>
+    <Card>
+      <Card.Header as="h5">Info</Card.Header>
+      <ListGroup variant="flush">
+        <ListGroup.Item>
           <strong>ID:</strong>
-          {/*<Badge>{location.id}</Badge>*/}
-        </li>
-        <li>
-          <strong>Serving Routes</strong> {/*{routes.map(routeId => (*/}
-          {/*  <RouteIndicator key={routeId} routeId={routeId} />*/}
-          {/*))}*/}
-        </li>
-        {/*<li>*/}
-        {/*  <strong>Direction:</strong> {arrivalData.location.dir}*/}
-        {/*</li>*/}
-        <li>
+          <Badge>{location.id}</Badge>
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <strong>Direction:</strong> {location.dir}
+        </ListGroup.Item>
+        <ListGroup.Item>
           <strong>Queried:</strong> {arrivalData.queryTime}
-        </li>
-        <li>
-          {/*<strong>Lat / Lng:</strong> {location.lat} / {location.lng}*/}
-        </li>
-        <li>{/*<strong>Passenger Code:</strong> {location.passengerCode}*/}</li>
-      </ul>
-    </CollapsiblePane>
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <strong>Lat / Lng:</strong> {location.lat} / {location.lng}
+        </ListGroup.Item>
+        <ListGroup.Item>
+          <strong>Passenger Code:</strong> {location.passengerCode}
+        </ListGroup.Item>
+      </ListGroup>
+    </Card>
   );
 }
 
