@@ -1,100 +1,66 @@
-import React from "react";
-import { Container, Row } from "react-bootstrap";
-import { TrimetRoute } from "../../../api/trimet/interfaces/types";
-import Modal from "../../../component/modal/Modal";
-import ModalContent from "../../../component/modal/ModalContent";
+import { Dictionary, flatten, groupBy, mapKeys, size } from "lodash";
+import React, { useEffect, useState } from "react";
+import { Col, Container, Row } from "react-bootstrap";
+import geoLocateCurrentPosition from "../../../api/geolocation/geoLocateCurrentPosition";
+import {
+  Location,
+  StopData,
+  StopLocation,
+  TrimetRoute
+} from "../../../api/trimet/interfaces/types";
+import { getNearbyStops } from "../../../api/trimet/stops";
 import NearbySubRoutes from "../../../routes/NearbySubRoutes";
-import { LoadStopData } from "../../../store/action/stopActions";
-import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
-import Loading from "../../loading/Loading";
-import NearbyMapContainer from "../containers/NearbyMapContainer";
-import NearbySubNavContainer from "../containers/NearbySubNavContainer";
+import NearbySubNav from "./NearbySubNav";
 import "./NearbyViewComponent.scss";
 
-interface Props {
-  loadStopData: LoadStopData;
-  loading: boolean;
-  stopLocations: StopLocationsDictionary;
+function processRoutes(stopData: StopData): Dictionary<TrimetRoute[]> {
+  const routes = stopData.location.map((location: StopLocation) => {
+    return location.route.map((route: TrimetRoute) => route);
+  });
+  const mappedKeys = mapKeys(
+    flatten(routes),
+    (item: TrimetRoute) => `${item.route}-${item.dir[0].dir}`
+  );
+
+  return groupBy(mappedKeys, (key: TrimetRoute) => key.route);
 }
 
-interface State {
-  modalOpen: boolean;
-  routeInfo: TrimetRoute;
-}
+export default function NearbyViewComponent() {
+  const [nearbyStops, setNearbyStopData] = useState<StopData>(undefined);
+  const [nearbyRoutes, setNearbyRoutesData] = useState<
+    Dictionary<TrimetRoute[]>
+  >(undefined);
+  const [userLocation, setUserLocation] = useState<Location>(undefined);
 
-export default class NearbyViewComponent extends React.Component<Props, State> {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      modalOpen: false,
-      routeInfo: null
-    };
-
-    this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-  }
-
-  public componentDidMount() {
-    const { loadStopData } = this.props;
-
-    if (loadStopData) {
-      loadStopData(1000);
-    }
-  }
-
-  public render() {
-    const { loading, stopLocations } = this.props;
-
-    if (loading) {
-      return <Loading />;
-    }
-
-    return (
-      <Container>
-        {!loading && stopLocations && (
-          <Row className="nearby-stops">
-            <div className="flex-container">
-              <section className="flex-stops">
-                <NearbyMapContainer />
-                <br />
-                <br />
-                <NearbySubNavContainer />
-                <NearbySubRoutes />
-              </section>
-              {this.state.modalOpen && this.showModal()}
-            </div>
-          </Row>
-        )}
-      </Container>
-    );
-  }
-
-  public closeModal() {
-    this.setState({
-      modalOpen: false,
-      routeInfo: null
+  useEffect(() => {
+    geoLocateCurrentPosition().then((location: Location) => {
+      setUserLocation(location);
+      getNearbyStops(location, 1000).then((stopData: StopData) => {
+        setNearbyStopData(stopData);
+        const routes = processRoutes(stopData);
+        setNearbyRoutesData(routes);
+      });
     });
-  }
+  }, []);
 
-  public openModal(route: TrimetRoute) {
-    this.setState({
-      modalOpen: true,
-      routeInfo: route
-    });
-  }
+  const stopCount = nearbyStops?.location?.length;
+  const routeCount = size(nearbyRoutes);
 
-  private showModal() {
-    return (
-      <div className="flex-info">
-        <aside id="modal-root" className="modal-wrapper" />
-        <Modal>
-          <ModalContent
-            route={this.state.routeInfo}
-            closeModal={this.closeModal}
-          />
-        </Modal>
-      </div>
-    );
-  }
+  return (
+    <Container fluid={true}>
+      <Row className="nearby-stops">
+        <div>
+          <Col md={3}>
+            <br />
+            <NearbySubNav routeCount={routeCount} stopCount={stopCount} />
+            <NearbySubRoutes
+              nearbyStops={nearbyStops}
+              nearbyRoutes={nearbyRoutes}
+            />
+          </Col>
+          <Col md={9}>{/*<NearbyMapContainer/>*/}</Col>
+        </div>
+      </Row>
+    </Container>
+  );
 }

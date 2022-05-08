@@ -24,7 +24,7 @@ export default function MainNavigationMenu({
           <LinkContainer to="/">
             <a className="nav-link">Home</a>
           </LinkContainer>
-          <LinkContainer to="/nearby/routes">
+          <LinkContainer to="/nearby/stops">
             <a className="nav-link">Nearby</a>
           </LinkContainer>
           <LinkContainer to="/lines">

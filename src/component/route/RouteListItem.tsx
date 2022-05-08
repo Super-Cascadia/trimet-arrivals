@@ -14,7 +14,7 @@ import {
   STREETCAR_S_LINE,
   YELLOW_LINE_NUMBER
 } from "../../api/trimet/constants";
-import { TrimetRoute } from "../../api/trimet/interfaces/routes";
+import { TrimetRoute } from "../../api/trimet/interfaces/types";
 import { maxLightRail } from "../../data/trimet/schedules/maxLightRail";
 import FrequentServiceIndicator from "./FrequentServiceIndicator";
 import RouteIndicator from "./RouteIndicator";
@@ -57,7 +57,7 @@ export default function RouteListItem({ route }: { route: TrimetRoute }) {
     return null;
   }
 
-  const routeId = route.id;
+  const routeId = route.route;
   // tslint:disable-next-line:no-empty
   const onClick = () => {};
 
@@ -89,7 +89,7 @@ export default function RouteListItem({ route }: { route: TrimetRoute }) {
 
   return (
     <Col>
-      <Card bg={bg(route.routeColor)}>
+      <Card>
         <Card.Body>
           <Card.Title>
             <NavLink to={`/lines/${routeId}`}>
@@ -97,7 +97,7 @@ export default function RouteListItem({ route }: { route: TrimetRoute }) {
                 routeId={routeId}
                 route={undefined}
                 verbose={true}
-                routeColor={route.routeColor}
+                routeColor={""}
               />
             </NavLink>
             {route.route}

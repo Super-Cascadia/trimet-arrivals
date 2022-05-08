@@ -1,26 +1,44 @@
-import { map } from "lodash";
+import { Dictionary, map } from "lodash";
 import React from "react";
-import { TrimetRoute } from "../../../api/trimet/interfaces/routes";
-import RouteListItem from "../../../component/route/RouteListItem";
-import { RouteDataDictionary } from "../../../store/reducers/data/routeDataReducer";
+import { Card, ListGroup } from "react-bootstrap";
+import { TrimetRoute } from "../../../api/trimet/interfaces/types";
+import RouteIndicator from "../../../component/route/RouteIndicator";
 import "./NearbyRoutes.scss";
 
-interface Props {
-  nearbyRoutes: RouteDataDictionary;
+function getRouteDirections(route: TrimetRoute) {
+  return (
+    <ListGroup.Item key={`${route.route}-${route.dir[0].dir}`}>
+      <RouteIndicator routeId={route.route} />
+      {route.dir[0].desc}
+    </ListGroup.Item>
+  );
 }
 
-export default class NearbyRoutes extends React.Component<Props> {
-  public static getRoutes(routes: RouteDataDictionary) {
-    return map(routes, (route: TrimetRoute) => {
-      return <RouteListItem route={route} />;
-    });
-  }
-
-  public render() {
+function getRoutes(routes: Dictionary<TrimetRoute[]>) {
+  return map(routes, (route: TrimetRoute[], key) => {
     return (
-      <div id="nearby-view-routes">
-        {NearbyRoutes.getRoutes(this.props.nearbyRoutes)}
-      </div>
+      <>
+        <Card key={key}>
+          <Card.Header as="h5">{route[0].desc}</Card.Header>
+          <ListGroup variant="flush">
+            {route.map(r => getRouteDirections(r))}
+          </ListGroup>
+        </Card>
+        <br />
+      </>
     );
-  }
+  });
+}
+
+interface Props {
+  nearbyRoutes: Dictionary<TrimetRoute[]>;
+}
+
+export default function NearbyRoutes({ nearbyRoutes }: Props) {
+  return (
+    <div id="nearby-view-routes">
+      <br />
+      {getRoutes(nearbyRoutes)}
+    </div>
+  );
 }

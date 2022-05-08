@@ -6,8 +6,9 @@ import { allNearbyRouteIdsSelector } from "../../../store/selectors/nearbyRoutes
 import { allStopLocationsSelector } from "../../../store/selectors/stopSelectors";
 import NearbyMap from "../components/NearbyMap";
 
-const mapStateToProps = (state: RootState) => {
+const mapStateToProps = (state: RootState, props) => {
   return {
+    ...props,
     currentLocation: currentLocationSelector(state),
     nearbyRouteIds: allNearbyRouteIdsSelector(state),
     stopLocations: allStopLocationsSelector(state)

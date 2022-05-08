@@ -1,8 +1,10 @@
+import { Dictionary } from "lodash";
 import React from "react";
 import { Route, Switch, useParams, useRouteMatch } from "react-router-dom";
+import { StopData, TrimetRoute } from "../api/trimet/interfaces/types";
 import NearbyRouteDetailContainer from "../view/nearbyRouteDetail/containers/NearbyRouteDetailContainer";
-import NearbyRoutesContainer from "../view/nearbyRoutes/container/NearbyRoutesContainer";
-import NearbyStopsContainer from "../view/nearbyStops/containers/NearbyStopsContainer";
+import NearbyRoutes from "../view/nearbyRoutes/component/NearbyRoutes";
+import NearbyStops from "../view/nearbyStops/components/NearbyStops";
 
 function NearbyRouteDetailRouter() {
   const { id } = useParams();
@@ -10,22 +12,27 @@ function NearbyRouteDetailRouter() {
   return <NearbyRouteDetailContainer id={id} />;
 }
 
-export default function NearbySubRoutes() {
+interface Props {
+  nearbyStops: StopData;
+  nearbyRoutes: Dictionary<TrimetRoute[]>;
+}
+
+export default function NearbySubRoutes({ nearbyStops, nearbyRoutes }: Props) {
   const { path } = useRouteMatch();
 
   return (
     <Switch>
       <Route exact={true} path={path}>
-        <NearbyRoutesContainer />
+        <NearbyRoutes nearbyRoutes={nearbyRoutes} />
       </Route>
       <Route path={`${path}/routes/:id`}>
         <NearbyRouteDetailRouter />
       </Route>
       <Route path={`${path}/routes`}>
-        <NearbyRoutesContainer />
+        <NearbyRoutes nearbyRoutes={nearbyRoutes} />
       </Route>
       <Route path={`${path}/stops`}>
-        <NearbyStopsContainer />
+        <NearbyStops nearbyStops={nearbyStops} />
       </Route>
     </Switch>
   );
