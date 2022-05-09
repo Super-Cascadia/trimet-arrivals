@@ -99,7 +99,7 @@ export function setNearbyStopMarkers(
 
 function getRouteGeometry(routeId: string, directionId: number) {
   return import(
-    `../../../data/${routeId}/${routeId}_${directionId}.json`
+    `../../../data/trimet/geoJSON/${routeId}/${routeId}_${directionId}.json`
   ).catch(e => {
     return e;
   });

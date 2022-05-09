@@ -39,7 +39,7 @@ export default class NearbyMap extends Component<Props> {
 
   public render() {
     const style = {
-      height: 400,
+      height: 800,
       position: "relative",
       width: "100%"
     };

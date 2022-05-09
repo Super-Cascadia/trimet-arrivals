@@ -1,8 +1,17 @@
-import { Dictionary, flatten, groupBy, mapKeys, size } from "lodash";
+import {
+  Dictionary,
+  flatten,
+  groupBy,
+  map,
+  mapKeys,
+  mapValues,
+  size
+} from "lodash";
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import geoLocateCurrentPosition from "../../../api/geolocation/geoLocateCurrentPosition";
 import {
+  Direction,
   Location,
   StopData,
   StopLocation,
@@ -10,6 +19,9 @@ import {
 } from "../../../api/trimet/interfaces/types";
 import { getNearbyStops } from "../../../api/trimet/stops";
 import NearbySubRoutes from "../../../routes/NearbySubRoutes";
+import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
+import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
+import NearbyMap from "./NearbyMap";
 import NearbySubNav from "./NearbySubNav";
 import "./NearbyViewComponent.scss";
 
@@ -23,6 +35,28 @@ function processRoutes(stopData: StopData): Dictionary<TrimetRoute[]> {
   );
 
   return groupBy(mappedKeys, (key: TrimetRoute) => key.route);
+}
+
+function getNearbyRouteIds(
+  nearbyRoutes: Dictionary<TrimetRoute[]>
+): NearbyRoutesDictionary {
+  return mapValues(nearbyRoutes, (routes: TrimetRoute[]) => {
+    const directions = map(routes, (route: TrimetRoute) => {
+      return map(route.dir, (dir: Direction) => {
+        return dir.dir;
+      });
+    });
+
+    return {
+      directions: flatten(directions)
+    };
+  });
+}
+
+function getStopLocations(nearbyStops: StopData): StopLocationsDictionary {
+  return mapKeys(nearbyStops.location, (location: StopLocation) => {
+    return location.locid;
+  });
 }
 
 export default function NearbyViewComponent() {
@@ -45,21 +79,34 @@ export default function NearbyViewComponent() {
 
   const stopCount = nearbyStops?.location?.length;
   const routeCount = size(nearbyRoutes);
+  const currentLocation = [
+    userLocation?.coords?.longitude,
+    userLocation?.coords?.latitude
+  ];
+  const nearbyRouteIds = nearbyRoutes && getNearbyRouteIds(nearbyRoutes);
+  const stopLocations = nearbyStops && getStopLocations(nearbyStops);
+  const showMap = currentLocation && nearbyRouteIds && stopLocations;
 
   return (
     <Container fluid={true}>
-      <Row className="nearby-stops">
-        <div>
-          <Col md={3}>
-            <br />
-            <NearbySubNav routeCount={routeCount} stopCount={stopCount} />
-            <NearbySubRoutes
-              nearbyStops={nearbyStops}
-              nearbyRoutes={nearbyRoutes}
+      <Row>
+        <Col md={3}>
+          <br />
+          <NearbySubNav routeCount={routeCount} stopCount={stopCount} />
+          <NearbySubRoutes
+            nearbyStops={nearbyStops}
+            nearbyRoutes={nearbyRoutes}
+          />
+        </Col>
+        <Col md={9}>
+          {showMap && (
+            <NearbyMap
+              currentLocation={currentLocation}
+              nearbyRouteIds={nearbyRouteIds}
+              stopLocations={stopLocations}
             />
-          </Col>
-          <Col md={9}>{/*<NearbyMapContainer/>*/}</Col>
-        </div>
+          )}
+        </Col>
       </Row>
     </Container>
   );

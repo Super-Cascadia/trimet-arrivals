@@ -9,7 +9,7 @@ import BookmarksViewContainer from "../view/bookmarks/container/BookmarksViewCon
 import Home from "../view/home/Home";
 import LinesViewContainer from "../view/lines/container/LinesViewContainer";
 import MainNavigationContainer from "../view/mainNav/containers/MainNavigationContainer";
-import NearbyViewContainer from "../view/nearby/containers/NearbyViewContainer";
+import NearbyViewComponent from "../view/nearby/components/NearbyViewComponent";
 import StopLocationViewContainer from "../view/stop/container/StopLocationViewContainer";
 
 function StopLocationViewRouter() {
@@ -28,7 +28,7 @@ export default function Routes() {
             <Home />
           </Route>
           <Route path="/nearby">
-            <NearbyViewContainer />
+            <NearbyViewComponent />
           </Route>
           <Route path="/stop/:id">
             <StopLocationViewRouter />
