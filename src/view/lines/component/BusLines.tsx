@@ -24,7 +24,7 @@ export function BusLines() {
   const busLines = getBusLines(routes);
 
   return (
-    <Container>
+    <Container fluid={true}>
       <CollapsiblePane
         className="route-detail-information-pane"
         title="Schedule"

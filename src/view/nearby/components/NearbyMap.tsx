@@ -2,16 +2,12 @@ import mapboxgl from "mapbox-gl";
 import React, { Component } from "react";
 import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
 import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
+import { setCurrentLocationMarker } from "../util/currentLocationMarker.util";
 import {
   mountMapCenteredOnLocation,
-  setCurrentLocationMarker,
   setNearbyStopMarkers,
   setRoutes
 } from "../util/mapboxUtils";
-
-mapboxgl.accessToken =
-  "pk.eyJ1IjoiamFtZXNvbm55ZWhvbHQiLCJhIjoiY2p3NWoyamV0MTk1dDQ0cGNmdGZkenViMiJ9.TqDD3r62vlPzVgPnYjocsg";
-
 export type LatLngCoords = number[];
 
 interface Props {

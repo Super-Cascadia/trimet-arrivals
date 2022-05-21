@@ -86,7 +86,7 @@ export function AllLines() {
   const wesCommuterRail = getWesCommuterRail(routes);
 
   return (
-    <Container>
+    <Container fluid={true}>
       <div className="line-detail-view-wrapper">
         <h2>Max Light Rail</h2>
         <Row xs={1} md={4} className="g-4">

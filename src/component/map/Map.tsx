@@ -1,9 +1,7 @@
 import mapboxgl from "mapbox-gl";
 import React, { Component } from "react";
-import {
-  mountMapCenteredOnLocation,
-  setCurrentLocationMarker
-} from "../../view/nearby/util/mapboxUtils";
+import { setCurrentLocationMarker } from "../../view/nearby/util/currentLocationMarker.util";
+import { mountMapCenteredOnLocation } from "../../view/nearby/util/mapboxUtils";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiamFtZXNvbm55ZWhvbHQiLCJhIjoiY2p3NWoyamV0MTk1dDQ0cGNmdGZkenViMiJ9.TqDD3r62vlPzVgPnYjocsg";

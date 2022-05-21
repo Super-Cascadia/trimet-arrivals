@@ -91,12 +91,14 @@ export default function NearbyViewComponent() {
     <Container fluid={true}>
       <Row>
         <Col md={3}>
-          <br />
+          {/*<br />*/}
           <NearbySubNav routeCount={routeCount} stopCount={stopCount} />
-          <NearbySubRoutes
-            nearbyStops={nearbyStops}
-            nearbyRoutes={nearbyRoutes}
-          />
+          <div className="scrollarea">
+            <NearbySubRoutes
+              nearbyStops={nearbyStops}
+              nearbyRoutes={nearbyRoutes}
+            />
+          </div>
         </Col>
         <Col md={9}>
           {showMap && (

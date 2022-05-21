@@ -14,7 +14,7 @@ function ServiceNavigation() {
 
   if (isRoute) {
     return (
-      <Container>
+      <Container fluid={true}>
         <Breadcrumb>
           <LinkContainer to="/lines">
             <Breadcrumb.Item>Lines</Breadcrumb.Item>
@@ -29,7 +29,7 @@ function ServiceNavigation() {
   }
 
   return (
-    <Container>
+    <Container fluid={true}>
       <Nav fill={true} variant="tabs">
         <Nav.Item>
           <LinkContainer to="/lines">

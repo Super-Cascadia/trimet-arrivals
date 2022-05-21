@@ -24,7 +24,7 @@ export function StreetCarLines() {
   const streetCarLines = getStreetCarLines(routes);
 
   return (
-    <Container>
+    <Container fluid={true}>
       <Row xs={1} md={3} className="g-4">
         {getRoutes(streetCarLines)}
       </Row>

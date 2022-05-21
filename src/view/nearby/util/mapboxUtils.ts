@@ -1,52 +1,25 @@
+// @ts-ignore
+// tslint:disable-next-line:no-implicit-dependencies
+import mapboxgl from "!mapbox-gl";
 import { each, map } from "lodash";
-import mapboxgl from "mapbox-gl";
 import { StopLocation } from "../../../api/trimet/interfaces/types";
 import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
 import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
 import { LatLngCoords } from "../components/NearbyMap";
 
 export function mountMapCenteredOnLocation(
-  mapContainer,
+  mapContainer: HTMLDivElement,
   currentLocation: LatLngCoords
 ) {
-  return new mapboxgl.Map({
-    // @ts-ignore
-    center: currentLocation,
-    container: mapContainer,
-    style: "mapbox://styles/mapbox/streets-v9",
-    zoom: 15.25
-  });
-}
+  mapboxgl.accessToken =
+    "pk.eyJ1IjoiamFtZXNvbm55ZWhvbHQiLCJhIjoiY2p3NWoyamV0MTk1dDQ0cGNmdGZkenViMiJ9.TqDD3r62vlPzVgPnYjocsg";
 
-export function setCurrentLocationMarker(
-  mapBoxMap,
-  currentLocation: LatLngCoords
-) {
-  if (currentLocation) {
-    mapBoxMap.addLayer({
-      id: "currentlocation",
-      layout: {
-        "icon-image": "rocket-15"
-      },
-      source: {
-        data: {
-          features: [
-            {
-              geometry: {
-                coordinates: currentLocation,
-                type: "Point"
-              },
-              properties: {},
-              type: "Feature"
-            }
-          ],
-          type: "FeatureCollection"
-        },
-        type: "geojson"
-      },
-      type: "symbol"
-    });
-  }
+  return new mapboxgl.Map({
+    center: currentLocation, // starting position [lng, lat]
+    container: mapContainer, // container ID
+    style: "mapbox://styles/mapbox/streets-v11", // style URL
+    zoom: 16 // starting zoom
+  });
 }
 
 export function setLocations(stopLocations: StopLocationsDictionary) {

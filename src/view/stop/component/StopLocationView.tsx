@@ -69,8 +69,8 @@ export default function StopLocationView(props: Props) {
 
   const coordinates: LatLngCoords = [location.lng, location.lat];
   return (
-    <Container>
-      <br />
+    <Container fluid={true}>
+      {/*<br />*/}
       <Row>
         <StopLocationHeader
           location={location}

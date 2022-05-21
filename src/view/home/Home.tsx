@@ -45,18 +45,19 @@ function Home() {
   }, []);
 
   return (
-    <Container>
+    <Container fluid={true}>
       <br />
       <Row>
-        <Col md={6}>
+        <Col md={5}>
           <InfoCard />
           <br />
-          <BookmarksCard bookmarks={bookmarksData} />
-        </Col>
-        <Col md={6}>
           <SystemAlertsCard systemAlertsData={systemAlertsData} />
-          <br />
+        </Col>
+        <Col md={4}>
           <AllAlertsCard alertsData={alertsData} />
+        </Col>
+        <Col md={3}>
+          <BookmarksCard bookmarks={bookmarksData} />
         </Col>
       </Row>
     </Container>

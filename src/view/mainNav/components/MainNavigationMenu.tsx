@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import "./MainNavigationMenu.scss";
 
@@ -17,9 +17,9 @@ export default function MainNavigationMenu({
   timeOfLastLoad
 }: Props) {
   return (
-    <Navbar bg="dark" variant="dark">
-      <Container>
-        <Navbar.Brand href="#home">Trimet Arrivals</Navbar.Brand>
+    <Navbar bg="dark" variant="dark" sticky="top">
+      <Container fluid={true}>
+        <Navbar.Brand href="#home">Portlandia Transit</Navbar.Brand>
         <Nav className="me-auto">
           <LinkContainer to="/">
             <a className="nav-link">Home</a>
@@ -33,6 +33,19 @@ export default function MainNavigationMenu({
           <LinkContainer to="/bookmarks">
             <a className="nav-link">Bookmarks</a>
           </LinkContainer>
+        </Nav>
+        <Nav>
+          <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
+            <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+            <NavDropdown.Item href="#action/3.2">
+              Another action
+            </NavDropdown.Item>
+            <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item href="#action/3.4">
+              Separated link
+            </NavDropdown.Item>
+          </NavDropdown>
         </Nav>
       </Container>
     </Navbar>

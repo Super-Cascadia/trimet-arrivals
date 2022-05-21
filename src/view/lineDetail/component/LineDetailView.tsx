@@ -44,7 +44,7 @@ export default function LinesViewComponent(props: Props) {
   const routeSchedule = maxLightRail[id];
 
   return (
-    <Container>
+    <Container fluid={true}>
       <Row>
         <Col>
           <RouteListItem route={route} />
