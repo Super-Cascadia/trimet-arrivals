@@ -19,7 +19,7 @@ export default function MainNavigationMenu({
   return (
     <Navbar bg="dark" variant="dark" sticky="top">
       <Container fluid={true}>
-        <Navbar.Brand href="#home">Portlandia Transit</Navbar.Brand>
+        <Navbar.Brand href="#home">Go By Transit</Navbar.Brand>
         <Nav className="me-auto">
           <LinkContainer to="/">
             <a className="nav-link">Home</a>

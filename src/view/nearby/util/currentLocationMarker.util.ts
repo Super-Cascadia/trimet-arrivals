@@ -86,7 +86,6 @@ export function setCurrentLocationMarker(
         "icon-image": "pulsing-dot"
       },
       source: "dot-point",
-
       type: "symbol"
     });
   }

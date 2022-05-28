@@ -3,11 +3,8 @@ import React, { Component } from "react";
 import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
 import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
 import { setCurrentLocationMarker } from "../util/currentLocationMarker.util";
-import {
-  mountMapCenteredOnLocation,
-  setNearbyStopMarkers,
-  setRoutes
-} from "../util/mapboxUtils";
+import { mountMapCenteredOnLocation, setRoutes } from "../util/mapboxUtils";
+import { setNearbyStopMarkers } from "../util/stopLocationMarker.util";
 export type LatLngCoords = number[];
 
 interface Props {
