@@ -1,7 +1,7 @@
 // @ts-ignore
 // tslint:disable-next-line:no-implicit-dependencies
 import mapboxgl, { Map } from "!mapbox-gl";
-import { forEach, isEmpty, isEqual, uniq } from "lodash";
+import { forEach, isEqual, uniq } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
 import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
