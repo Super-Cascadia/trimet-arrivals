@@ -7,8 +7,8 @@ import {
   mapValues,
   size
 } from "lodash";
-import React, { useEffect, useState } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { Col, Container, Form, FormGroup, Row } from "react-bootstrap";
 import geoLocateCurrentPosition from "../../../api/geolocation/geoLocateCurrentPosition";
 import {
   Direction,
@@ -21,7 +21,7 @@ import { getNearbyStops } from "../../../api/trimet/stops";
 import NearbySubRoutes from "../../../routes/NearbySubRoutes";
 import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
 import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
-import NearbyMap from "./NearbyMap";
+import NearbyMapV2 from "./NearbyMapV2";
 import NearbySubNav from "./NearbySubNav";
 import "./NearbyViewComponent.scss";
 
@@ -60,6 +60,8 @@ function getStopLocations(nearbyStops: StopData): StopLocationsDictionary {
 }
 
 export default function NearbyViewComponent() {
+  const radius = 1000;
+  const [radiusSize, setRadiusSize] = useState<number>(radius);
   const [nearbyStops, setNearbyStopData] = useState<StopData>(undefined);
   const [nearbyRoutes, setNearbyRoutesData] = useState<
     Dictionary<TrimetRoute[]>
@@ -67,15 +69,38 @@ export default function NearbyViewComponent() {
   const [userLocation, setUserLocation] = useState<Location>(undefined);
 
   useEffect(() => {
-    geoLocateCurrentPosition().then((location: Location) => {
-      setUserLocation(location);
-      getNearbyStops(location, 1000).then((stopData: StopData) => {
-        setNearbyStopData(stopData);
-        const routes = processRoutes(stopData);
-        setNearbyRoutesData(routes);
-      });
-    });
-  }, []);
+    async function fetchData() {
+      // console.info("effect: fetchData");
+
+      if (userLocation) {
+        getNearbyStops(userLocation, radiusSize).then((stopData: StopData) => {
+          const routes = processRoutes(stopData);
+
+          // console.log("effect: fetchData: stopData", stopData);
+          // console.log("effect: fetchData: routes", routes);
+
+          setNearbyStopData(stopData);
+          setNearbyRoutesData(routes);
+        });
+      } else {
+        geoLocateCurrentPosition().then((location: Location) => {
+          setUserLocation(location);
+          getNearbyStops(location, radiusSize).then((stopData: StopData) => {
+            setNearbyStopData(stopData);
+            const routes = processRoutes(stopData);
+            setNearbyRoutesData(routes);
+          });
+        });
+      }
+    }
+
+    fetchData();
+  }, [radiusSize]);
+
+  function handleRadiusSelectionChange(e) {
+    // console.log("set radius", e.target.value);
+    setRadiusSize(e.target.value);
+  }
 
   const stopCount = nearbyStops?.location?.length;
   const routeCount = size(nearbyRoutes);
@@ -91,7 +116,23 @@ export default function NearbyViewComponent() {
     <Container fluid={true}>
       <Row>
         <Col md={3}>
-          {/*<br />*/}
+          <FormGroup>
+            <Form.Select
+              aria-label="Default select example"
+              value={radiusSize}
+              onChange={handleRadiusSelectionChange}
+            >
+              <option>Select</option>
+              <option value="250">250</option>
+              <option value="500">500</option>
+              <option value="750">750</option>
+              <option value="1000">1000</option>
+              <option value="1500">1500</option>
+              <option value="2000">2000</option>
+              <option value="2500">2500</option>
+              <option value="5000">5000</option>
+            </Form.Select>
+          </FormGroup>
           <NearbySubNav routeCount={routeCount} stopCount={stopCount} />
           <div className="scrollarea">
             <NearbySubRoutes
@@ -102,7 +143,8 @@ export default function NearbyViewComponent() {
         </Col>
         <Col md={9}>
           {showMap && (
-            <NearbyMap
+            <NearbyMapV2
+              radiusSize={radiusSize}
               currentLocation={currentLocation}
               nearbyRouteIds={nearbyRouteIds}
               stopLocations={stopLocations}

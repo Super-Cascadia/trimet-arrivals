@@ -1,9 +1,9 @@
 // @ts-ignore
 // tslint:disable-next-line:no-implicit-dependencies
 import mapboxgl from "!mapbox-gl";
-import { each } from "lodash";
+import { each, isUndefined } from "lodash";
 import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
-import { LatLngCoords } from "../components/NearbyMap";
+import { LatLngCoords } from "../components/NearbyMapV2";
 
 export function mountMapCenteredOnLocation(
   mapContainer: HTMLDivElement,
@@ -28,29 +28,72 @@ function getRouteGeometry(routeId: string, directionId: number) {
   });
 }
 
-function addMapboxLayer(mapBoxMap, routeIdentifier: string, promise) {
-  mapBoxMap.addLayer({
-    id: routeIdentifier,
-    source: {
-      data: {
-        geometry: promise.geometry,
-        type: "Feature"
-      },
-      type: "geojson"
+function addMapboxLayer(
+  map,
+  routeIdentifier: string,
+  promise,
+  sourceId: string
+) {
+  map.addSource(sourceId, {
+    data: {
+      geometry: promise.geometry,
+      properties: {},
+      type: "Feature"
     },
+    type: "geojson"
+  });
+
+  const layer = map.addLayer({
+    id: sourceId,
+    layout: {
+      "line-cap": "round",
+      "line-join": "round"
+    },
+    paint: {
+      "line-color": "#0080ff",
+      "line-width": 5
+    },
+    source: sourceId,
     type: "line"
   });
+
+  // layer.on("mouseover", e => {
+  //   console.log("hover route", e);
+  // });
+
+  // layer.on("click", e => {
+  //   console.log("click route", e);
+  // });
+
+  return layer;
 }
 
-function addRouteLayers(mapBoxMap, returnedPromises: any[]) {
+function addRouteLayers(mapBoxMap, returnedPromises: any[]): any[] {
+  const sources = {};
+  const sourceIds = [];
+  const routeLayers = [];
+
   each(returnedPromises, promise => {
     if (!promise.code) {
       const { route_number, direction } = promise.properties;
       const routeIdentifier = `${route_number}_${direction}`;
+      const sourceId = `route-${routeIdentifier}`;
+      sourceIds.push(sourceId);
 
-      addMapboxLayer(mapBoxMap, routeIdentifier, promise);
+      if (isUndefined(sources[sourceId])) {
+        sources[sourceId] = {};
+        const routeLayer = addMapboxLayer(
+          mapBoxMap,
+          routeIdentifier,
+          promise,
+          sourceId
+        );
+        routeLayers.push(routeLayer);
+      }
     }
   });
+
+  return sourceIds;
 }
 
 export function setRoutes(mapBoxMap, nearbyRouteIds: NearbyRoutesDictionary) {
@@ -63,12 +106,13 @@ export function setRoutes(mapBoxMap, nearbyRouteIds: NearbyRoutesDictionary) {
     });
   });
 
-  Promise.all(promises)
+  return Promise.all(promises)
     .then((returnedPromises: any[]) => {
-      addRouteLayers(mapBoxMap, returnedPromises);
+      return Promise.resolve(addRouteLayers(mapBoxMap, returnedPromises));
     })
     .catch(err => {
       // tslint:disable
       console.error(err);
+      return Promise.resolve([]);
     });
 }
