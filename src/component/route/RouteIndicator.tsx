@@ -40,9 +40,11 @@ function getRouteDisplay(routeId: number, verboseRouteDisplay: boolean) {
   }
 }
 
-export default function RouteIndicator(props: Props) {
-  const { routeId, verbose, routeColor = DEFAULT_ROUTE_COLOR } = props;
-
+export default function RouteIndicator({
+  routeColor = DEFAULT_ROUTE_COLOR,
+  routeId,
+  verbose
+}: Props) {
   return (
     <LinkContainer to={`/lines/${routeId}`}>
       {getRouteDisplay(routeId, verbose)}

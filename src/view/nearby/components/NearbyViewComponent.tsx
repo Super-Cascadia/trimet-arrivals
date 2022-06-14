@@ -1,6 +1,7 @@
 import { Dictionary, size } from "lodash";
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import geoLocateCurrentPosition from "../../../api/geolocation/geoLocateCurrentPosition";
 import {
   Location,
@@ -19,9 +20,11 @@ import NearbySubNav from "./NearbySubNav";
 import "./NearbyViewComponent.scss";
 import { SearchRadiusSelection } from "./SearchRadiusSelection";
 
+const DEFAULT_RADIUS = 1000;
+
 export default function NearbyViewComponent() {
-  const radius = 1000;
-  const [radiusSize, setRadiusSize] = useState<number>(radius);
+  const history = useHistory();
+  const [radiusSize, setRadiusSize] = useState<number>(DEFAULT_RADIUS);
   const [nearbyStops, setNearbyStopData] = useState<StopData>(undefined);
   const [nearbyRoutes, setNearbyRoutesData] = useState<
     Dictionary<TrimetRoute[]>
@@ -58,12 +61,15 @@ export default function NearbyViewComponent() {
   }, [radiusSize]);
 
   function handleRadiusSelectionChange(e) {
-    // console.log("set radius", e.target.value);
+    console.log("set DEFAULT_RADIUS", e.target.value);
     setRadiusSize(e.target.value);
   }
 
-  const stopCount = nearbyStops?.location?.length;
-  const routeCount = size(nearbyRoutes);
+  function handleStopMarkerClick(data: any) {
+    console.log("stopMarkerClick", data.properties);
+    history.push(`/nearby/stops/${data.properties.locid}`);
+  }
+
   const currentLocation = [
     userLocation?.coords?.longitude,
     userLocation?.coords?.latitude
@@ -76,21 +82,18 @@ export default function NearbyViewComponent() {
     <Container fluid={true}>
       <Row>
         <Col md={3}>
-          <SearchRadiusSelection
+          <NearbySubRoutes
+            currentLocation={currentLocation}
             radiusSize={radiusSize}
             handleRadiusSelectionChange={handleRadiusSelectionChange}
+            nearbyStops={nearbyStops}
+            nearbyRoutes={nearbyRoutes}
           />
-          <NearbySubNav routeCount={routeCount} stopCount={stopCount} />
-          <div className="scrollarea">
-            <NearbySubRoutes
-              nearbyStops={nearbyStops}
-              nearbyRoutes={nearbyRoutes}
-            />
-          </div>
         </Col>
         <Col md={9}>
           {showMap && (
             <NearbyMapV2
+              handleStopmarkerClick={handleStopMarkerClick}
               radiusSize={radiusSize}
               currentLocation={currentLocation}
               nearbyRouteIds={nearbyRouteIds}

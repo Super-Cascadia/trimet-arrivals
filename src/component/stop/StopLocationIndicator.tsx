@@ -5,11 +5,19 @@ import "./StopLocationIndicator.css";
 
 interface Props {
   locationId: number;
+  nearbyStops?: boolean;
 }
 
-export default function StopLocationIndicator({ locationId }: Props) {
+export default function StopLocationIndicator({
+  locationId,
+  nearbyStops
+}: Props) {
+  const route = nearbyStops
+    ? `/nearby/stops/${locationId}`
+    : `/stop/${locationId}`;
+
   return (
-    <Link to={`/stop/${locationId}`}>
+    <Link to={route}>
       <Badge>{locationId}</Badge>
     </Link>
   );

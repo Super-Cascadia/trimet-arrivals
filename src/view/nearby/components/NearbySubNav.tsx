@@ -16,7 +16,7 @@ export default function NearbySubNav({ stopCount, routeCount }: Props) {
   return (
     <Nav fill={true} variant="tabs">
       <Nav.Item>
-        <LinkContainer to={`${url}/stops`}>
+        <LinkContainer to={`/nearby/stops`}>
           <a className="nav-link">
             <FontAwesome className="route" name="route" />
             Stops ({stopCount})
@@ -24,7 +24,7 @@ export default function NearbySubNav({ stopCount, routeCount }: Props) {
         </LinkContainer>
       </Nav.Item>
       <Nav.Item>
-        <LinkContainer to={`${url}/routes`}>
+        <LinkContainer to={`/nearby/routes`}>
           <a className="nav-link">
             <FontAwesome className="route" name="route" />
             Routes ({routeCount})

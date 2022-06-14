@@ -1,7 +1,4 @@
-// @ts-ignore
 import { map } from "lodash";
-import mapboxgl from "mapbox-gl";
-import { StopLocation } from "../../../api/trimet/interfaces/types";
 import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
 
 interface Geometry {
@@ -15,28 +12,60 @@ interface Feature {
   properties: {};
 }
 
-export function setNearbyStopMarkers(
-  mapSource,
-  stopLocations: StopLocationsDictionary
+export function setNearbyStops(
+  mapBoxMap: any,
+  stopLocations: StopLocationsDictionary,
+  handleStopMarkerClick: (data: any) => void
 ) {
-  return map(stopLocations, (stopLocation: StopLocation) => {
-    // create the popup
-    const popup = new mapboxgl.Popup({ offset: 25 }).setText(
-      `Stop ID: ${stopLocation.locid}
-       Description: ${stopLocation.desc}
-      `
-    );
+  console.log("setNearbyStops");
+  const features = map(stopLocations, stopLocation => {
+    return {
+      type: "Feature",
+      properties: {
+        locid: stopLocation.locid
+      },
+      geometry: {
+        type: "Point",
+        coordinates: [stopLocation.lng, stopLocation.lat]
+      }
+    };
+  });
 
-    // create DOM element for the marker
-    const el = document.createElement("div");
-    el.id = "marker";
+  mapBoxMap.addSource("nearbyStopLocations", {
+    type: "geojson",
+    data: {
+      type: "FeatureCollection",
+      features: features
+    }
+  });
 
-    return new mapboxgl.Marker({
-      color: "#FFFFFF",
-      draggable: false
-    })
-      .setLngLat([stopLocation.lng, stopLocation.lat])
-      .setPopup(popup)
-      .addTo(mapSource);
+  mapBoxMap.addLayer({
+    id: "circle",
+    type: "circle",
+    source: "nearbyStopLocations",
+    paint: {
+      "circle-color": "#4264fb",
+      "circle-radius": 8,
+      "circle-stroke-width": 2,
+      "circle-stroke-color": "#ffffff"
+    }
+  });
+
+  // Center the map on the coordinates of any clicked circle from the 'circle' layer.
+  mapBoxMap.on("click", "circle", e => {
+    mapBoxMap.flyTo({
+      center: e.features[0].geometry.coordinates
+    });
+    handleStopMarkerClick(e.features[0]);
+  });
+
+  // Change the cursor to a pointer when the it enters a feature in the 'circle' layer.
+  mapBoxMap.on("mouseenter", "circle", () => {
+    mapBoxMap.getCanvas().style.cursor = "pointer";
+  });
+
+  // Change it back to a pointer when it leaves.
+  mapBoxMap.on("mouseleave", "circle", () => {
+    mapBoxMap.getCanvas().style.cursor = "";
   });
 }

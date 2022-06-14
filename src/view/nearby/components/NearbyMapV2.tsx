@@ -7,16 +7,9 @@ import { StopLocationsDictionary } from "../../../store/reducers/util/formatStop
 import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
 import { setCurrentLocationMarker } from "../util/currentLocationMarker.util";
 import { setRoutes } from "../util/mapboxUtils";
-import { setNearbyStopMarkers } from "../util/stopLocationMarker.util";
+import { setNearbyStops } from "../util/stopLocationMarker.util";
 
 export type LatLngCoords = number[];
-
-interface Props {
-  radiusSize: number;
-  currentLocation: LatLngCoords;
-  stopLocations: StopLocationsDictionary;
-  nearbyRouteIds: NearbyRoutesDictionary;
-}
 
 const style = {
   height: 800,
@@ -61,11 +54,20 @@ function initializeMap(
   });
 }
 
+interface Props {
+  radiusSize: number;
+  currentLocation: LatLngCoords;
+  stopLocations: StopLocationsDictionary;
+  nearbyRouteIds: NearbyRoutesDictionary;
+  handleStopmarkerClick: (data: any) => void;
+}
+
 function NearbyMapV2({
   currentLocation,
   stopLocations,
   nearbyRouteIds,
-  radiusSize
+  radiusSize,
+  handleStopmarkerClick
 }: Props) {
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -119,7 +121,7 @@ function NearbyMapV2({
     } // wait for map to initialize
     map.current.on("load", () => {
       // console.info("effect: set current location marker");
-      setCurrentLocationMarker(map.current, currentLocation);
+      // setCurrentLocationMarker(map.current, currentLocation);
     });
   }, [currentLocation]);
 
@@ -130,12 +132,16 @@ function NearbyMapV2({
     } // wait for map to initialize
     map.current.on("load", () => {
       // console.info("effect: initialize map markers and routes");
-      const markers = setNearbyStopMarkers(map.current, stopLocations);
-      setMapMarkers(markers);
+      const markers = setNearbyStops(
+        map.current,
+        stopLocations,
+        handleStopmarkerClick
+      );
+      // setMapMarkers(markers);
       setStopLocationIdsState(Object.keys(stopLocations));
-      setRoutes(map.current, nearbyRouteIds).then(routeMapLayers => {
-        setRouteLayers(routeMapLayers);
-      });
+      // setRoutes(map.current, nearbyRouteIds).then(routeMapLayers => {
+      //   setRouteLayers(routeMapLayers);
+      // });
     });
   }, []);
 
@@ -148,9 +154,13 @@ function NearbyMapV2({
     if (stopLocationIdsAreSame === false) {
       // console.info("effect: update map markers", stopLocations);
       removeMarkers(mapMarkers);
-      const markers = setNearbyStopMarkers(map.current, stopLocations);
+      const markers = setNearbyStops(
+        map.current,
+        stopLocations,
+        handleStopmarkerClick
+      );
       setStopLocationIdsState(Object.keys(stopLocations));
-      setMapMarkers(markers);
+      // setMapMarkers(markers);
     }
   }, [radiusSize, stopLocations]);
 
@@ -165,10 +175,10 @@ function NearbyMapV2({
 
       removeRouteLayers(map.current, routeLayers);
       setRouteLayers([]);
-      setRoutes(map.current, nearbyRouteIds).then(routeMapLayers => {
-        setRouteIdsState(Object.keys(nearbyRouteIds));
-        setRouteLayers(routeMapLayers);
-      });
+      // setRoutes(map.current, nearbyRouteIds).then(routeMapLayers => {
+      //   setRouteIdsState(Object.keys(nearbyRouteIds));
+      //   setRouteLayers(routeMapLayers);
+      // });
     }
   }, [radiusSize, nearbyRouteIds]);
 
@@ -179,11 +189,11 @@ function NearbyMapV2({
     }
     // console.info("effect: initialize marker movement animation ");
 
-    map.current.on("move", () => {
-      setLng(getMapLongitude(map));
-      setLat(getMapLatitude(map));
-      setZoom(map.current.getZoom().toFixed(2));
-    });
+    // map.current.on("move", () => {
+    //   setLng(getMapLongitude(map));
+    //   setLat(getMapLatitude(map));
+    //   setZoom(map.current.getZoom().toFixed(2));
+    // });
   }, []);
 
   // @ts-ignore

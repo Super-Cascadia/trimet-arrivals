@@ -4,6 +4,8 @@ import { Card, ListGroup } from "react-bootstrap";
 import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import RouteIndicator from "../../../component/route/RouteIndicator";
 import "./NearbyRoutes.scss";
+import NearbySubNav from "./NearbySubNav";
+import { SearchRadiusSelection } from "./SearchRadiusSelection";
 
 function getRouteDirections(route: TrimetRoute) {
   return (
@@ -32,11 +34,26 @@ function getRoutes(routes: Dictionary<TrimetRoute[]>) {
 
 interface Props {
   nearbyRoutes: Dictionary<TrimetRoute[]>;
+  radiusSize: number;
+  handleRadiusSelectionChange: (e: any) => void;
+  routeCount: number;
+  stopCount: number;
 }
 
-export default function NearbyRoutes({ nearbyRoutes }: Props) {
+export default function NearbyRoutes({
+  nearbyRoutes,
+  radiusSize,
+  handleRadiusSelectionChange,
+  routeCount,
+  stopCount
+}: Props) {
   return (
     <div id="nearby-view-routes">
+      <SearchRadiusSelection
+        radiusSize={radiusSize}
+        handleRadiusSelectionChange={handleRadiusSelectionChange}
+      />
+      <NearbySubNav routeCount={routeCount} stopCount={stopCount} />
       <br />
       {getRoutes(nearbyRoutes)}
     </div>
