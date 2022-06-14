@@ -1,5 +1,4 @@
-import { isEmpty, map, sortBy } from "lodash";
-import moment from "moment";
+import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import {
   Button,
@@ -8,72 +7,20 @@ import {
   Card,
   Container,
   Nav,
-  Navbar,
-  Table,
-  Tabs,
-  Tab
+  Navbar
 } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useParams } from "react-router-dom";
 import { getArrivals } from "../../../api/trimet/arrivals";
 import {
-  Arrival,
   ArrivalData,
   ArrivalLocation
 } from "../../../api/trimet/interfaces/arrivals";
 import { getNormalizedDistanceString } from "../util/turfUtils";
-
-function getArrivalRows(data: ArrivalData) {
-  const sortedArrivals = sortBy(data.arrival, arrival => arrival.scheduled);
-  return map(sortedArrivals, (arrival: Arrival) => {
-    const estimatedTime = moment(arrival.estimated).format("h:mma");
-    const scheduledTime = moment(arrival.scheduled).format("h:mma");
-
-    return (
-      <tr>
-        <td>
-          <small>{arrival.shortSign}</small>
-        </td>
-        <td>
-          <small>{estimatedTime}</small>
-        </td>
-        <td>
-          <small>{scheduledTime}</small>
-        </td>
-      </tr>
-    );
-  });
-}
+import StopArrivals from "./NearbyStopArrivals";
 
 interface Props {
   currentLocation: number[];
-}
-
-interface StopArrivalsParams {
-  data: ArrivalData;
-}
-
-function StopArrivals({ data }: StopArrivalsParams) {
-  return (
-    <>
-      <h5>Arrivals</h5>
-      <Tabs defaultActiveKey="home" id="stop-arrival-tabs" className="mb-3">
-        <Tab eventKey="home" title="Table">
-          <Table striped={true} bordered={true} hover={true} size="sm">
-            <thead>
-              <th>Route</th>
-              <th>Est. Arrival</th>
-              <th>Scheduled</th>
-            </thead>
-            <tbody>{getArrivalRows(data)}</tbody>
-          </Table>
-        </Tab>
-        <Tab eventKey="profile" title="List">
-          List goes here
-        </Tab>
-      </Tabs>
-    </>
-  );
 }
 
 interface StopInfoParams {
@@ -92,7 +39,7 @@ function StopInfo({ stopLocation, distanceDescription }: StopInfoParams) {
         </Card.Text>
         <ButtonToolbar aria-label="Toolbar with button groups">
           <ButtonGroup className="me-2" aria-label="First group">
-            <Button variant="primary">Go</Button>
+            <Button variant="success">Go</Button>
             <Button variant="primary">Info</Button>
           </ButtonGroup>
           <ButtonGroup className="me-2" aria-label="Second group">
@@ -111,7 +58,7 @@ export function NearbyStopsDetail({ currentLocation }: Props) {
 
   useEffect(() => {
     async function fetchData() {
-      const arrivals = await getArrivals(id, 30);
+      const arrivals = await getArrivals(id, 90);
       setData(arrivals);
     }
 
@@ -130,13 +77,13 @@ export function NearbyStopsDetail({ currentLocation }: Props) {
   );
 
   return (
-    <div>
+    <div className="scrollarea">
       <Navbar bg="secondary" variant="dark">
         <Container>
           <Nav>{stopLocation.desc}</Nav>
           <Nav>
             <LinkContainer to="/nearby/stops">
-              <a className="nav-link">Close</a>
+              <a className="nav-link">Back</a>
             </LinkContainer>
           </Nav>
         </Container>

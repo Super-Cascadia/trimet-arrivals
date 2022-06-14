@@ -31,3 +31,13 @@ export function getNormalizedDistanceString(
     return `${roundedMiles} miles away`;
   }
 }
+
+export function getNormalizedDistanceFromFeet(feet: number) {
+  const diff = feet / MILE_IN_FEET;
+
+  if (diff < 1) {
+    return `${round(diff, 2)} feet away`;
+  } else {
+    return `${round(diff, 2)} miles away`;
+  }
+}

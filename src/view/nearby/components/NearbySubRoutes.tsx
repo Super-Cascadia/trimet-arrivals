@@ -1,11 +1,12 @@
 import { Dictionary, size } from "lodash";
 import React from "react";
 import { Route, Switch, useParams, useRouteMatch } from "react-router-dom";
-import { StopData, TrimetRoute } from "../api/trimet/interfaces/types";
-import NearbyRoutes from "../view/nearby/components/NearbyRoutes";
-import NearbyStops from "../view/nearby/components/NearbyStops";
-import { NearbyStopsDetail } from "../view/nearby/components/NearbyStopsDetail";
-import NearbyRouteDetailContainer from "../view/nearbyRouteDetail/containers/NearbyRouteDetailContainer";
+import { StopData, TrimetRoute } from "../../../api/trimet/interfaces/types";
+import NearbyRouteDetailContainer from "../../nearbyRouteDetail/containers/NearbyRouteDetailContainer";
+import NearbyRoutes from "./NearbyRoutes";
+import NearbyStops from "./NearbyStops";
+import { NearbyStopsDetail } from "./NearbyStopsDetail";
+import StopArrivalDetail from "./StopArrivalDetail";
 
 function NearbyRouteDetailRouter() {
   const { id } = useParams();
@@ -55,6 +56,9 @@ export default function NearbySubRoutes({
           routeCount={routeCount}
           handleRadiusSelectionChange={handleRadiusSelectionChange}
         />
+      </Route>
+      <Route path={`${path}/stops/:id/arrival/:arrivalId`}>
+        <StopArrivalDetail />
       </Route>
       <Route path={`${path}/stops/:id`}>
         <NearbyStopsDetail currentLocation={currentLocation} />

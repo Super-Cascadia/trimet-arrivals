@@ -9,16 +9,14 @@ import {
   TrimetRoute
 } from "../../../api/trimet/interfaces/types";
 import { getNearbyStops } from "../../../api/trimet/stops";
-import NearbySubRoutes from "../../../routes/NearbySubRoutes";
 import {
   getNearbyRouteIds,
   getStopLocations,
   processRoutes
 } from "../util/dataUtils";
 import NearbyMapV2 from "./NearbyMapV2";
-import NearbySubNav from "./NearbySubNav";
+import NearbySubRoutes from "./NearbySubRoutes";
 import "./NearbyViewComponent.scss";
-import { SearchRadiusSelection } from "./SearchRadiusSelection";
 
 const DEFAULT_RADIUS = 1000;
 

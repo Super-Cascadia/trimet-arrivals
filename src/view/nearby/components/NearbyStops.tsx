@@ -80,11 +80,12 @@ export default function NearbyStops({
   }
 
   return (
-    <div className="stops-wrapper">
+    <div className="stops-wrapper scrollarea">
       <SearchRadiusSelection
         radiusSize={radiusSize}
         handleRadiusSelectionChange={handleRadiusSelectionChange}
       />
+      <br />
       <NearbySubNav routeCount={routeCount} stopCount={stopCount} />
       <br />
       {getLocationInfo(nearbyStops, currentLocation)}

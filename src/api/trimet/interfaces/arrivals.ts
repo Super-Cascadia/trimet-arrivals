@@ -20,6 +20,7 @@ export interface Arrival {
   blockPosition: BlockPosition;
   estimated: number;
   shortSign: string;
+  inCongestion: boolean;
 }
 
 export interface ArrivalLocation {

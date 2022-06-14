@@ -48,11 +48,12 @@ export default function NearbyRoutes({
   stopCount
 }: Props) {
   return (
-    <div id="nearby-view-routes">
+    <div id="nearby-view-routes" className="scrollarea">
       <SearchRadiusSelection
         radiusSize={radiusSize}
         handleRadiusSelectionChange={handleRadiusSelectionChange}
       />
+      <br />
       <NearbySubNav routeCount={routeCount} stopCount={stopCount} />
       <br />
       {getRoutes(nearbyRoutes)}

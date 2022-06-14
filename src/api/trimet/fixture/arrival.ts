@@ -21,6 +21,7 @@ const blockPosition: BlockPosition = {
   vehicleID: 123
 };
 
+// @ts-ignore
 export const arrival1: Arrival = {
   blockID: 123,
   blockPosition,
@@ -43,6 +44,7 @@ export const arrival1: Arrival = {
   vehicleID: "123"
 };
 
+// @ts-ignore
 export const arrival2: Arrival = {
   blockID: 123,
   blockPosition,
@@ -65,6 +67,7 @@ export const arrival2: Arrival = {
   vehicleID: "123"
 };
 
+// @ts-ignore
 export const arrival3: Arrival = {
   blockID: 123,
   blockPosition,
