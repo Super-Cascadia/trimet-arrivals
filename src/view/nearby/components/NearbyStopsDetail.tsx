@@ -9,7 +9,9 @@ import {
   Container,
   Nav,
   Navbar,
-  Table
+  Table,
+  Tabs,
+  Tab
 } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useParams } from "react-router-dom";
@@ -55,14 +57,21 @@ function StopArrivals({ data }: StopArrivalsParams) {
   return (
     <>
       <h5>Arrivals</h5>
-      <Table striped={true} bordered={true} hover={true} size="sm">
-        <thead>
-          <th>Route</th>
-          <th>Est. Arrival</th>
-          <th>Scheduled</th>
-        </thead>
-        <tbody>{getArrivalRows(data)}</tbody>
-      </Table>
+      <Tabs defaultActiveKey="home" id="stop-arrival-tabs" className="mb-3">
+        <Tab eventKey="home" title="Table">
+          <Table striped={true} bordered={true} hover={true} size="sm">
+            <thead>
+              <th>Route</th>
+              <th>Est. Arrival</th>
+              <th>Scheduled</th>
+            </thead>
+            <tbody>{getArrivalRows(data)}</tbody>
+          </Table>
+        </Tab>
+        <Tab eventKey="profile" title="List">
+          List goes here
+        </Tab>
+      </Tabs>
     </>
   );
 }
