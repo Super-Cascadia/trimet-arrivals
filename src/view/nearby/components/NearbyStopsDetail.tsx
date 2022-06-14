@@ -3,18 +3,22 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import {
   Button,
+  ButtonGroup,
+  ButtonToolbar,
   Card,
   Container,
   Nav,
   Navbar,
-  Table,
-  ButtonToolbar,
-  ButtonGroup
+  Table
 } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useParams } from "react-router-dom";
 import { getArrivals } from "../../../api/trimet/arrivals";
-import { Arrival, ArrivalData } from "../../../api/trimet/interfaces/arrivals";
+import {
+  Arrival,
+  ArrivalData,
+  ArrivalLocation
+} from "../../../api/trimet/interfaces/arrivals";
 import { getNormalizedDistanceString } from "../util/turfUtils";
 
 function getArrivalRows(data: ArrivalData) {
@@ -41,6 +45,55 @@ function getArrivalRows(data: ArrivalData) {
 
 interface Props {
   currentLocation: number[];
+}
+
+interface StopArrivalsParams {
+  data: ArrivalData;
+}
+
+function StopArrivals({ data }: StopArrivalsParams) {
+  return (
+    <>
+      <h5>Arrivals</h5>
+      <Table striped={true} bordered={true} hover={true} size="sm">
+        <thead>
+          <th>Route</th>
+          <th>Est. Arrival</th>
+          <th>Scheduled</th>
+        </thead>
+        <tbody>{getArrivalRows(data)}</tbody>
+      </Table>
+    </>
+  );
+}
+
+interface StopInfoParams {
+  stopLocation: ArrivalLocation;
+  distanceDescription: string;
+}
+
+function StopInfo({ stopLocation, distanceDescription }: StopInfoParams) {
+  return (
+    <Card>
+      <Card.Header>Info</Card.Header>
+      <Card.Body>
+        <Card.Text>
+          <strong>Stop ID:</strong>
+          {stopLocation.id}
+        </Card.Text>
+        <ButtonToolbar aria-label="Toolbar with button groups">
+          <ButtonGroup className="me-2" aria-label="First group">
+            <Button variant="primary">Go</Button>
+            <Button variant="primary">Info</Button>
+          </ButtonGroup>
+          <ButtonGroup className="me-2" aria-label="Second group">
+            <Button variant="secondary">Bookmark</Button>
+          </ButtonGroup>
+        </ButtonToolbar>
+      </Card.Body>
+      <Card.Footer className="text-muted">{distanceDescription}</Card.Footer>
+    </Card>
+  );
 }
 
 export function NearbyStopsDetail({ currentLocation }: Props) {
@@ -80,35 +133,12 @@ export function NearbyStopsDetail({ currentLocation }: Props) {
         </Container>
       </Navbar>
       <br />
-      <Card>
-        <Card.Header>Info</Card.Header>
-        <Card.Body>
-          <Card.Text>
-            <strong>Stop ID:</strong>
-            {stopLocation.id}
-          </Card.Text>
-          <ButtonToolbar aria-label="Toolbar with button groups">
-            <ButtonGroup className="me-2" aria-label="First group">
-              <Button variant="primary">Go</Button>
-              <Button variant="primary">Info</Button>
-            </ButtonGroup>
-            <ButtonGroup className="me-2" aria-label="Second group">
-              <Button variant="secondary">Bookmark</Button>
-            </ButtonGroup>
-          </ButtonToolbar>
-        </Card.Body>
-        <Card.Footer className="text-muted">{distanceDescription}</Card.Footer>
-      </Card>
+      <StopInfo
+        stopLocation={stopLocation}
+        distanceDescription={distanceDescription}
+      />
       <br />
-      <h5>Arrivals</h5>
-      <Table striped={true} bordered={true} hover={true} size="sm">
-        <thead>
-          <th>Route</th>
-          <th>Est. Arrival</th>
-          <th>Scheduled</th>
-        </thead>
-        <tbody>{getArrivalRows(data)}</tbody>
-      </Table>
+      <StopArrivals data={data} />
     </div>
   );
 }
