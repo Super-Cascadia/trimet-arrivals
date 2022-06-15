@@ -15,7 +15,7 @@ import {
   processRoutes
 } from "../util/dataUtils";
 import NearbyMapV2 from "./NearbyMapV2";
-import NearbySubRoutes from "./NearbySubRoutes";
+import NearbySubRoutes from "../routes/NearbySubRoutes";
 import "./NearbyViewComponent.scss";
 
 const DEFAULT_RADIUS = 1000;

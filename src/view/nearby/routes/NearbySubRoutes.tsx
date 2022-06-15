@@ -3,10 +3,10 @@ import React from "react";
 import { Route, Switch, useParams, useRouteMatch } from "react-router-dom";
 import { StopData, TrimetRoute } from "../../../api/trimet/interfaces/types";
 import NearbyRouteDetailContainer from "../../nearbyRouteDetail/containers/NearbyRouteDetailContainer";
-import NearbyRoutes from "./NearbyRoutes";
-import NearbyStops from "./NearbyStops";
-import { NearbyStopsDetail } from "./NearbyStopsDetail";
-import StopArrivalDetail from "./StopArrivalDetail";
+import NearbyRoutes from "../components/NearbyRoutes";
+import NearbyStops from "../components/NearbyStops";
+import { NearbyStopsDetail } from "../components/NearbyStopsDetail";
+import StopArrivalDetail from "../components/StopArrivalDetail";
 
 function NearbyRouteDetailRouter() {
   const { id } = useParams();
