@@ -1,4 +1,4 @@
-import { map, sortBy } from "lodash";
+import { map, round, sortBy } from "lodash";
 import moment, { Moment } from "moment";
 import React from "react";
 import { Badge, ListGroup, Tab, Table, Tabs } from "react-bootstrap";
@@ -16,6 +16,15 @@ export function getFormattedTime(arrival: number): string {
 
 export function getNormalizedTimeDifference(time: number, toTime: Moment) {
   const timeMoment = moment(time);
+  const minutesUntilArrival = timeMoment.diff(toTime, "minutes");
+
+  return minutesUntilArrival >= 60
+    ? `${round(timeMoment.diff(toTime, "hours", true), 1)} hrs`
+    : `${minutesUntilArrival} min`;
+}
+
+export function getTimeDifferenceInMinutes(time: number, toTime: Moment) {
+  const timeMoment = moment(time);
   return timeMoment.diff(toTime, "minutes");
 }
 
@@ -31,24 +40,71 @@ interface ArrivalsTableParams {
   data: ArrivalData;
 }
 
-function getArrivalsList(sortedArrivals: Arrival[], now: moment.Moment) {
+interface TimeDiffBadgeParams {
+  estimatedArrivalTime: number;
+  scheduledArrivalTime: number;
+}
+
+function TimeDiffBadge({
+  estimatedArrivalTime,
+  scheduledArrivalTime
+}: TimeDiffBadgeParams) {
+  const now = moment();
+  const timeStampToDiff = estimatedArrivalTime
+    ? estimatedArrivalTime
+    : scheduledArrivalTime;
+  const timeUntilArrival = getNormalizedTimeDifference(timeStampToDiff, now);
+  const minutesLate = getTimeDifferenceInMinutes(
+    scheduledArrivalTime,
+    moment(estimatedArrivalTime)
+  );
+
+  console.log("minutesLate", timeUntilArrival, minutesLate);
+
+  const onTime = minutesLate === 0;
+  const late = minutesLate < 0;
+  const early = minutesLate > 0;
+
+  const getColor = () => {
+    if (onTime) {
+      return "success";
+    } else if (late) {
+      return "danger";
+    } else {
+      return "primary";
+    }
+  };
+
+  const color = getColor();
+
+  const getStatusDescription = () => {
+    if (onTime) {
+      return <span> | On Time</span>;
+    } else if (late) {
+      return <span> | late</span>;
+    } else {
+      return null;
+    }
+  };
+
+  return (
+    <Badge bg={color} pill={true}>
+      {timeUntilArrival} {getStatusDescription()}
+    </Badge>
+  );
+}
+
+function getArrivalsList(sortedArrivals: Arrival[]) {
   const { id } = useParams();
 
   return map(sortedArrivals, (arrival: Arrival) => {
     const estimatedArrivalTime = arrival.estimated;
     const scheduledArrivalTime = arrival.scheduled;
-    const formattedEstimatedTime = estimatedArrivalTime
-      ? getFormattedTime(estimatedArrivalTime)
-      : "No Estimation";
     const scheduledTime = getFormattedTime(scheduledArrivalTime);
-    const timeStampToDiff = estimatedArrivalTime
-      ? estimatedArrivalTime
-      : scheduledArrivalTime;
-    const timeDiff = getNormalizedTimeDifference(timeStampToDiff, now);
 
     return (
       <ListGroup.Item
-        variant="primary"
+        variant="light"
         as="li"
         className="d-flex justify-content-between align-items-start"
       >
@@ -57,21 +113,28 @@ function getArrivalsList(sortedArrivals: Arrival[], now: moment.Moment) {
             <a className="fw-bold">{arrival.shortSign}</a>
           </LinkContainer>
           <div>
-            {formattedEstimatedTime} / {scheduledTime}
+            {estimatedArrivalTime ? (
+              <small>
+                Estimated: {getFormattedTime(estimatedArrivalTime)} /{" "}
+                {scheduledTime}
+              </small>
+            ) : (
+              <small>Scheduled: {scheduledTime}</small>
+            )}
           </div>
         </div>
-        <Badge bg="primary" pill={true}>
-          {timeDiff} min
-        </Badge>
+        <TimeDiffBadge
+          estimatedArrivalTime={estimatedArrivalTime}
+          scheduledArrivalTime={scheduledArrivalTime}
+        />
       </ListGroup.Item>
     );
   });
 }
 
 export function ArrivalList({ data }: ArrivalsTableParams) {
-  const now = moment();
   const sortedArrivals = sortArrivalsByEstimated(data.arrival);
-  const arrivalsList = getArrivalsList(sortedArrivals, now);
+  const arrivalsList = getArrivalsList(sortedArrivals);
 
   return (
     <div>

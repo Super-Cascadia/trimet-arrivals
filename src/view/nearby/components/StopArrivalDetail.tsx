@@ -16,7 +16,8 @@ import { Arrival, ArrivalData } from "../../../api/trimet/interfaces/arrivals";
 import { getNormalizedDistanceFromFeet } from "../util/turfUtils";
 import {
   getFormattedTime,
-  getNormalizedTimeDifference
+  getNormalizedTimeDifference,
+  getTimeDifferenceInMinutes
 } from "./NearbyStopArrivals";
 
 interface BooleanBadgeParams {
@@ -87,7 +88,7 @@ export function StopArrivalDetail() {
           <Card.Text>{foundArrival.status}</Card.Text>
           <Card.Text>
             <Badge bg="primary" pill={true}>
-              {timeDiff} min
+              {timeDiff}
             </Badge>
             {estimatedTime} / {scheduledTime}
           </Card.Text>
