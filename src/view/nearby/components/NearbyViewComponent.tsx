@@ -1,4 +1,4 @@
-import { Dictionary, size } from "lodash";
+import { Dictionary } from "lodash";
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
@@ -9,13 +9,13 @@ import {
   TrimetRoute
 } from "../../../api/trimet/interfaces/types";
 import { getNearbyStops } from "../../../api/trimet/stops";
+import NearbySubRoutes from "../routes/NearbySubRoutes";
 import {
   getNearbyRouteIds,
   getStopLocations,
   processRoutes
 } from "../util/dataUtils";
 import NearbyMapV2 from "./NearbyMapV2";
-import NearbySubRoutes from "../routes/NearbySubRoutes";
 import "./NearbyViewComponent.scss";
 
 const DEFAULT_RADIUS = 1000;

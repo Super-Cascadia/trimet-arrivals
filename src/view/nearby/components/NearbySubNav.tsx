@@ -11,10 +11,16 @@ interface Props {
 }
 
 export default function NearbySubNav({ stopCount, routeCount }: Props) {
-  const { url } = useRouteMatch();
-
   return (
     <Nav fill={true} variant="tabs">
+      <Nav.Item>
+        <LinkContainer to={`/nearby/simple-routes`}>
+          <a className="nav-link">
+            <FontAwesome className="route" name="simple-routes" />
+            Simple Routes ({routeCount})
+          </a>
+        </LinkContainer>
+      </Nav.Item>
       <Nav.Item>
         <LinkContainer to={`/nearby/stops`}>
           <a className="nav-link">

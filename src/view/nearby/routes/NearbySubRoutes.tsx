@@ -4,6 +4,7 @@ import { Route, Switch, useParams, useRouteMatch } from "react-router-dom";
 import { StopData, TrimetRoute } from "../../../api/trimet/interfaces/types";
 import NearbyRouteDetailContainer from "../../nearbyRouteDetail/containers/NearbyRouteDetailContainer";
 import NearbyRoutes from "../components/NearbyRoutes";
+import NearbySimpleRoutes from "../components/NearbySimpleRoutes";
 import NearbyStops from "../components/NearbyStops";
 import { NearbyStopsDetail } from "../components/NearbyStopsDetail";
 import StopArrivalDetail from "../components/StopArrivalDetail";
@@ -46,6 +47,17 @@ export default function NearbySubRoutes({
       </Route>
       <Route path={`${path}/routes/:id`}>
         <NearbyRouteDetailRouter />
+      </Route>
+      <Route path={`${path}/simple-routes`}>
+        <br />
+        <NearbySimpleRoutes
+          nearbyStops={nearbyStops}
+          nearbyRoutes={nearbyRoutes}
+          radiusSize={radiusSize}
+          handleRadiusSelectionChange={handleRadiusSelectionChange}
+          routeCount={routeCount}
+          stopCount={stopCount}
+        />
       </Route>
       <Route path={`${path}/routes`}>
         <br />

@@ -35,7 +35,7 @@ export function setNearbyStops(
     type: "geojson",
     data: {
       type: "FeatureCollection",
-      features: features
+      features
     }
   });
 
