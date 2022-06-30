@@ -13,12 +13,11 @@ import { LinkContainer } from "react-router-bootstrap";
 import { useParams } from "react-router-dom";
 import { getArrivals } from "../../../api/trimet/arrivals";
 import { Arrival, ArrivalData } from "../../../api/trimet/interfaces/arrivals";
-import { getNormalizedDistanceFromFeet } from "../util/turfUtils";
 import {
   getFormattedTime,
-  getNormalizedTimeDifference,
-  getTimeDifferenceInMinutes
-} from "./NearbyStopArrivals";
+  getNormalizedTimeDifference
+} from "../util/timeUtils";
+import { getNormalizedDistanceFromFeet } from "../util/turfUtils";
 
 interface BooleanBadgeParams {
   status: boolean;
@@ -41,7 +40,7 @@ function BooleanBadge({ status }: BooleanBadgeParams) {
 }
 
 export function StopArrivalDetail() {
-  const { id, arrivalId } = useParams();
+  const { id } = useParams();
   const [data, setData] = useState<ArrivalData>(null);
 
   useEffect(() => {
@@ -61,8 +60,6 @@ export function StopArrivalDetail() {
     data.arrival,
     (arrival: Arrival) => arrival.id
   ) as Arrival;
-
-  console.log(id, arrivalId, foundArrival);
 
   const estimatedTime = getFormattedTime(foundArrival.estimated);
   const scheduledTime = getFormattedTime(foundArrival.scheduled);

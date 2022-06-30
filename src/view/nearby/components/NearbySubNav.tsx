@@ -2,7 +2,6 @@ import React from "react";
 import { Nav } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { LinkContainer } from "react-router-bootstrap";
-import { useRouteMatch } from "react-router-dom";
 import "./NearbySubNav.scss";
 
 interface Props {

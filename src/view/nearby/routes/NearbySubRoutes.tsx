@@ -8,6 +8,7 @@ import NearbySimpleRoutes from "../components/NearbySimpleRoutes";
 import NearbyStops from "../components/NearbyStops";
 import { NearbyStopsDetail } from "../components/NearbyStopsDetail";
 import StopArrivalDetail from "../components/StopArrivalDetail";
+import NearbySimpleRouteArrivals from "../components/NearbySimpleRouteArrivals";
 
 function NearbyRouteDetailRouter() {
   const { id } = useParams();
@@ -47,6 +48,9 @@ export default function NearbySubRoutes({
       </Route>
       <Route path={`${path}/routes/:id`}>
         <NearbyRouteDetailRouter />
+      </Route>
+      <Route path={`${path}/simple-routes/:id`}>
+        <NearbySimpleRouteArrivals />
       </Route>
       <Route path={`${path}/simple-routes`}>
         <br />

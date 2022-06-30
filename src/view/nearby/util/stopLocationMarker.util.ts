@@ -17,38 +17,37 @@ export function setNearbyStops(
   stopLocations: StopLocationsDictionary,
   handleStopMarkerClick: (data: any) => void
 ) {
-  console.log("setNearbyStops");
   const features = map(stopLocations, stopLocation => {
     return {
-      type: "Feature",
-      properties: {
-        locid: stopLocation.locid
-      },
       geometry: {
         type: "Point",
         coordinates: [stopLocation.lng, stopLocation.lat]
-      }
+      },
+      properties: {
+        locid: stopLocation.locid
+      },
+      type: "Feature"
     };
   });
 
   mapBoxMap.addSource("nearbyStopLocations", {
-    type: "geojson",
     data: {
       type: "FeatureCollection",
       features
-    }
+    },
+    type: "geojson"
   });
 
   mapBoxMap.addLayer({
     id: "circle",
-    type: "circle",
-    source: "nearbyStopLocations",
     paint: {
       "circle-color": "#4264fb",
       "circle-radius": 8,
-      "circle-stroke-width": 2,
-      "circle-stroke-color": "#ffffff"
-    }
+      "circle-stroke-color": "#ffffff",
+      "circle-stroke-width": 2
+    },
+    source: "nearbyStopLocations",
+    type: "circle"
   });
 
   // Center the map on the coordinates of any clicked circle from the 'circle' layer.

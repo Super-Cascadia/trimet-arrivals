@@ -7,7 +7,6 @@ import { useLocation } from "react-router-dom";
 
 function ServiceNavigation() {
   const location = useLocation();
-
   const [a, b, routeId] = location.pathname.split("/");
   const value = routeId ? parseInt(routeId, 10) : null;
   const isRoute = value && isNumber(value);

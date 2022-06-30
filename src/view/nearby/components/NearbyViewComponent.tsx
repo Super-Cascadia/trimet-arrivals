@@ -59,12 +59,10 @@ export default function NearbyViewComponent() {
   }, [radiusSize]);
 
   function handleRadiusSelectionChange(e) {
-    console.log("set DEFAULT_RADIUS", e.target.value);
     setRadiusSize(e.target.value);
   }
 
   function handleStopMarkerClick(data: any) {
-    console.log("stopMarkerClick", data.properties);
     history.push(`/nearby/stops/${data.properties.locid}`);
   }
 

@@ -1,6 +1,6 @@
-import { Dictionary, each, filter, groupBy, join, map, slice } from "lodash";
+import { Dictionary, each, filter, groupBy, join, map } from "lodash";
 import React, { useEffect, useState } from "react";
-import { Card } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
 import { getArrivals } from "../../../api/trimet/arrivals";
 import { Arrival, ArrivalData } from "../../../api/trimet/interfaces/arrivals";
 import {
@@ -8,6 +8,7 @@ import {
   StopLocation,
   TrimetRoute
 } from "../../../api/trimet/interfaces/types";
+import SimpleArrivalListItem from "./common/SimpleArrivalListItem";
 import "./NearbyRoutes.scss";
 import NearbySubNav from "./NearbySubNav";
 import { SearchRadiusSelection } from "./SearchRadiusSelection";
@@ -21,12 +22,22 @@ interface Props {
   stopCount: number;
 }
 
-function getRouteArrivals(arrivalData: ArrivalData, nearbyStops: StopData) {
-  const groupedArrivals = groupBy(arrivalData.arrival, "locid");
-  console.log("groupedArrivals", groupedArrivals);
-
-  const closestNearbyRoutes = [];
-  const closestNearbyRouteStructure = [];
+interface RouteStructure {
+  route: TrimetRoute;
+  arrivals: Arrival[];
+  stop: StopLocation;
+  dir: number;
+  id: number;
+}
+function getRouteArrivals(
+  arrivalData: ArrivalData,
+  nearbyStops: StopData
+): {
+  closestNearbyRouteStructure: RouteStructure[];
+} {
+  const groupedArrivals = groupBy(arrivalData?.arrival, "locid");
+  const closestNearbyRoutes: string[] = [];
+  const closestNearbyRouteStructure: RouteStructure[] = [];
 
   each(nearbyStops?.location, (stop: StopLocation) => {
     each(stop?.route, (route: TrimetRoute) => {
@@ -52,7 +63,7 @@ function getRouteArrivals(arrivalData: ArrivalData, nearbyStops: StopData) {
     });
   });
 
-  return { closestNearbyRoutes, closestNearbyRouteStructure };
+  return { closestNearbyRouteStructure };
 }
 
 export default function NearbySimpleRoutes({
@@ -64,33 +75,30 @@ export default function NearbySimpleRoutes({
   stopCount
 }: Props) {
   const [arrivalData, setArrivalData] = useState<ArrivalData>(null);
-  const locationIds = join(
-    map(nearbyStops?.location, loc => loc.locid),
-    ","
-  );
 
   useEffect(() => {
     async function fetchData() {
-      const arrivals = await getArrivals(locationIds, 90);
-      setArrivalData(arrivals);
+      if (nearbyStops) {
+        const locationIds = join(
+          map(nearbyStops?.location, loc => loc.locid),
+          ","
+        );
+
+        const arrivals = await getArrivals(locationIds, 90);
+        setArrivalData(arrivals);
+      }
     }
     fetchData();
-  }, [locationIds.length > 0]);
+  }, [nearbyStops]);
 
-  if (!nearbyStops) {
+  if (!nearbyStops || !arrivalData) {
     return null;
   }
 
-  const { closestNearbyRoutes, closestNearbyRouteStructure } = getRouteArrivals(
+  const { closestNearbyRouteStructure } = getRouteArrivals(
     arrivalData,
     nearbyStops
   );
-
-  console.log("nearbyStops", nearbyStops);
-  console.log("nearbyRoutes", nearbyRoutes);
-  console.log("arrivals", arrivalData);
-  console.log("closestNearbyRoutes", closestNearbyRoutes);
-  console.log("closestNearbyRoutesStructure", closestNearbyRouteStructure);
 
   return (
     <div id="nearby-view-routes" className="scrollarea">
@@ -100,39 +108,26 @@ export default function NearbySimpleRoutes({
       />
       <br />
       <NearbySubNav routeCount={routeCount} stopCount={stopCount} />
-      {map(nearbyStops.location, (stop: StopLocation) => {
-        return (
-          <div>
-            <div>{stop.locid}</div>
-            {map(stop.route, route => {
-              const arrivalsForLocation: Arrival[] = filter(
-                arrivalData.arrival,
-                arrival => {
-                  return arrival.locid;
-                }
-              ) as Arrival[];
+      <br />
+      <ListGroup>
+        {map(
+          closestNearbyRouteStructure,
+          (route: RouteStructure, index: number) => {
+            const arrival = route.arrivals[0];
+            const stop = route.stop;
 
-              const limitedArrivals = slice(arrivalsForLocation, 0, 2);
-              const arrivals = map(limitedArrivals, arrival => {
-                return (
-                  <div>
-                    {arrival.route}
-                    {/*{arrival.estimated}*/}
-                    {/*{arrival.scheduled}*/}
-                  </div>
-                );
-              });
-
-              return (
-                <Card>
-                  {route.desc}
-                  {arrivals}
-                </Card>
-              );
-            })}
-          </div>
-        );
-      })}
+            return (
+              <SimpleArrivalListItem
+                key={index}
+                id={stop.locid}
+                arrival={arrival}
+                route={route.route}
+                stop={stop}
+              />
+            );
+          }
+        )}
+      </ListGroup>
     </div>
   );
 }
