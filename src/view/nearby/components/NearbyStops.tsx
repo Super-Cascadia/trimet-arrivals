@@ -35,24 +35,21 @@ function getLocationInfo(stopLocations: StopData, currentLocation: number[]) {
         stopLocation.lat
       ]);
       return (
-        <>
-          <Card key={key}>
-            <Card.Header as="h6">
-              <StopLocationIndicator
-                locationId={stopLocation.locid}
-                nearbyStops={true}
-              />
-              {stopLocation.desc}
-            </Card.Header>
-            <ListGroup variant="flush">
-              {stopLocation.route.map(r => getRouteDirections(r))}
-            </ListGroup>
-            <Card.Footer className="text-muted">
-              {distanceDescription}
-            </Card.Footer>
-          </Card>
-          <br />
-        </>
+        <Card key={key}>
+          <Card.Header as="h6">
+            <StopLocationIndicator
+              locationId={stopLocation.locid}
+              nearbyStops={true}
+            />
+            {stopLocation.desc}
+          </Card.Header>
+          <ListGroup variant="flush">
+            {stopLocation.route.map(r => getRouteDirections(r))}
+          </ListGroup>
+          <Card.Footer className="text-muted">
+            {distanceDescription}
+          </Card.Footer>
+        </Card>
       );
     }
   );

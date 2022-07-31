@@ -1,6 +1,6 @@
 import React from "react";
 
-import { LinesViewSubRoutes } from "../../../routes/LinesSubRoutes";
+import { Outlet } from "react-router";
 import "./LinesViewComponent.scss";
 import ServiceNavigation from "./ServiceNavigation";
 
@@ -9,7 +9,7 @@ export default function LinesViewComponent() {
     <div id="lines-view">
       <br />
       <ServiceNavigation />
-      <LinesViewSubRoutes />
+      <Outlet />
     </div>
   );
 }

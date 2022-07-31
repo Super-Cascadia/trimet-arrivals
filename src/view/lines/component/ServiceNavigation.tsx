@@ -31,7 +31,7 @@ function ServiceNavigation() {
     <Container fluid={true}>
       <Nav fill={true} variant="tabs">
         <Nav.Item>
-          <LinkContainer to="/lines">
+          <LinkContainer to="/lines/all">
             <a className="nav-link">
               <FontAwesome className="route" name="route" />
               All

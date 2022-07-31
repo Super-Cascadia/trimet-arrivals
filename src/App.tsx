@@ -1,7 +1,7 @@
 import React from "react";
 import { Provider } from "react-redux";
 import "./App.css";
-import Routes from "./routes/Routes";
+import RootAppRoutes from "./routes/RootAppRoutes";
 import appStore from "./store/store";
 
 const store = appStore();
@@ -11,7 +11,7 @@ export default class App extends React.Component {
     return (
       <Provider store={store}>
         <div>
-          <Routes />
+          <RootAppRoutes />
         </div>
       </Provider>
     );

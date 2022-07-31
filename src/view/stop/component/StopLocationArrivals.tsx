@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { ArrivalData } from "../../../api/trimet/interfaces/arrivals";
 import StopLocationArrivalsTable from "./StopLocationArrivalsTable";
 
@@ -8,17 +8,16 @@ interface Props {
 }
 
 function StopLocationArrivals({ arrivalData }: Props) {
-  const { path } = useRouteMatch();
-
   return (
-    <Switch>
-      <Route exact={true} path={path}>
+    <Routes>
+      <Route
+        path="/"
+        element={<StopLocationArrivalsTable arrivalData={arrivalData} />}
+      />
+      <Route path={`/route/:routeId`}>
         <StopLocationArrivalsTable arrivalData={arrivalData} />
       </Route>
-      <Route path={`${path}/route/:routeId`}>
-        <StopLocationArrivalsTable arrivalData={arrivalData} />
-      </Route>
-    </Switch>
+    </Routes>
   );
 }
 

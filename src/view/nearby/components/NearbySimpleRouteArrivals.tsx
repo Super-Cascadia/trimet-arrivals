@@ -2,6 +2,7 @@ import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { useParams } from "react-router";
+import { useSearchParams } from "react-router-dom";
 import { getArrivals } from "../../../api/trimet/arrivals";
 import {
   ArrivalData,
@@ -9,10 +10,11 @@ import {
 } from "../../../api/trimet/interfaces/arrivals";
 import "./NearbyRoutes.scss";
 
-interface Props {}
-
-export default function NearbySimpleRouteArrivals({}: Props) {
-  const { id, stop, direction } = useParams();
+export default function NearbySimpleRouteArrivals() {
+  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const stop = searchParams.get("stop");
+  const direction = searchParams.get("stop");
   const [arrivalData, setArrivalData] = useState<ArrivalData>(null);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import React from "react";
 import { ListGroup } from "react-bootstrap";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Arrival } from "../../../../api/trimet/interfaces/arrivals";
 import {
   Direction,
@@ -23,8 +23,7 @@ function SimpleArrivalListItem({
   route,
   stop
 }: ArrivalListItemParams) {
-  const { path } = useRouteMatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const estimatedArrivalTime = arrival.estimated;
   const scheduledArrivalTime = arrival.scheduled;
   const routeDirection: Direction = route.dir[0];
@@ -36,9 +35,9 @@ function SimpleArrivalListItem({
   );
 
   function handleClick() {
-    history.push(
-      `${path}/${routeId}?stop=${stop.locid}&direction=${routeDirection.dir}`
-    );
+    const url = `/nearby/simple-routes/${routeId}?stop=${stop.locid}&direction=${routeDirection.dir}`;
+    const otherUrl = `/nearby/simple-routes/${routeId}`;
+    navigate(url);
   }
 
   return (
