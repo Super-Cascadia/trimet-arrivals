@@ -36,7 +36,6 @@ function SimpleArrivalListItem({
 
   function handleClick() {
     const url = `/nearby/simple-routes/${routeId}?stop=${stop.locid}&direction=${routeDirection.dir}`;
-    const otherUrl = `/nearby/simple-routes/${routeId}`;
     navigate(url);
   }
 

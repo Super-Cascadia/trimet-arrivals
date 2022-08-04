@@ -22,7 +22,9 @@ function ArrivalListItem({ id, arrival }: ArrivalListItemParams) {
       className="d-flex justify-content-between align-items-start"
     >
       <div className="ms-2 me-auto">
-        <LinkContainer to={`/nearby/stops/${id}/arrival/${arrival.id}`}>
+        <LinkContainer
+          to={`/nearby/simple-routes/${arrival.route}?stop=${arrival.locid}&direction=${arrival.dir}`}
+        >
           <a className="fw-bold">{arrival.shortSign}</a>
         </LinkContainer>
         <div>
