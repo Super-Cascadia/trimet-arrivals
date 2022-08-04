@@ -1,7 +1,7 @@
 import { fixtureEnabled } from "../util";
 import { API, BASE_URL } from "./constants";
 import { allRoutesFixtureData, routeFixtureById } from "./fixture/allRoutes";
-import { RouteData, RouteDataResultSet } from "./interfaces/routes";
+import { RouteDataResultSet } from "./interfaces/routes";
 import { getTrimetData } from "./util";
 
 const ROUTE_BASE_URL = `${BASE_URL}V1/routeConfig/`;
@@ -12,6 +12,10 @@ function getRouteByIdUrl(id: number): string {
 
 function getAllRoutesUrl(): string {
   return `${ROUTE_BASE_URL}json/true/dir/true/stops/true/${API}`;
+}
+
+function getSubsequentRouteStopsUrl(id: number, locId: number): string {
+  return `${ROUTE_BASE_URL}json/true/route/${id}/dir/true/stops/true/startSeq/${locId}/${API}`;
 }
 
 export async function getRouteById(id: number): Promise<RouteDataResultSet> {
@@ -30,6 +34,15 @@ export async function getAllRoutes(): Promise<RouteDataResultSet> {
   }
 
   const request = getAllRoutesUrl();
+
+  return getTrimetData<RouteDataResultSet>(request);
+}
+
+export async function getSubsequentRouteStops(
+  id: number,
+  locid: number
+): Promise<RouteDataResultSet> {
+  const request = getSubsequentRouteStopsUrl(id, locid);
 
   return getTrimetData<RouteDataResultSet>(request);
 }

@@ -10,7 +10,7 @@ import RouteIndicator from "../../../component/route/RouteIndicator";
 import StopLocationIndicator from "../../../component/stop/StopLocationIndicator";
 import Loading from "../../loading/Loading";
 import { getNormalizedDistanceString } from "../util/turfUtils";
-import NearbySubNav from "./NearbySubNav";
+import NearbySubNav from "./common/NearbySubNav";
 import "./NearbyViewComponent.scss";
 import { SearchRadiusSelection } from "./SearchRadiusSelection";
 

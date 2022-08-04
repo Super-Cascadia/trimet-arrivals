@@ -1,7 +1,7 @@
 import { map, sortBy } from "lodash";
 import moment from "moment";
 import React from "react";
-import { ListGroup, Tab, Table, Tabs } from "react-bootstrap";
+import { Card, ListGroup, Tab, Table, Tabs } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { Arrival, ArrivalData } from "../../../api/trimet/interfaces/arrivals";
 import { getFormattedTime } from "../util/timeUtils";
@@ -36,9 +36,12 @@ export function ArrivalList({ data }: ArrivalsTableParams) {
   const arrivalsList = getArrivalsList(sortedArrivals);
 
   return (
-    <div>
-      <ListGroup as="ul">{arrivalsList}</ListGroup>
-    </div>
+    <Card>
+      <Card.Header>Departures</Card.Header>
+      <ListGroup variant="flush" as="ul">
+        {arrivalsList}
+      </ListGroup>
+    </Card>
   );
 }
 

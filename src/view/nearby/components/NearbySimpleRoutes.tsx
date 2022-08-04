@@ -8,9 +8,9 @@ import {
   StopLocation,
   TrimetRoute
 } from "../../../api/trimet/interfaces/types";
+import NearbySubNav from "./common/NearbySubNav";
 import SimpleArrivalListItem from "./common/SimpleArrivalListItem";
 import "./NearbyRoutes.scss";
-import NearbySubNav from "./NearbySubNav";
 import { SearchRadiusSelection } from "./SearchRadiusSelection";
 
 interface Props {

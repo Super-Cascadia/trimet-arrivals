@@ -3,8 +3,8 @@ import React from "react";
 import { Card, ListGroup } from "react-bootstrap";
 import { TrimetRoute } from "../../../api/trimet/interfaces/types";
 import RouteIndicator from "../../../component/route/RouteIndicator";
+import NearbySubNav from "./common/NearbySubNav";
 import "./NearbyRoutes.scss";
-import NearbySubNav from "./NearbySubNav";
 import { SearchRadiusSelection } from "./SearchRadiusSelection";
 
 function getRouteDirections(route: TrimetRoute) {

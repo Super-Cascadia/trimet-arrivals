@@ -23,6 +23,88 @@ import { getTimeUntilArrival } from "../util/timeUtils";
 import RouteStopInfo from "./common/RouteStopInfo";
 import "./NearbyRoutes.scss";
 
+interface DeparturesCardParams {
+  filteredArrivals: Arrival[];
+}
+
+function DeparturesCard({ filteredArrivals }: DeparturesCardParams) {
+  return (
+    <Card>
+      <Card.Header>Departures</Card.Header>
+      <ListGroup className="list-group-flush">
+        {map(filteredArrivals, (arrival: any, index: number) => {
+          const estimatedArrivalTime = arrival.estimated;
+          const scheduledArrivalTime = arrival.scheduled;
+          const timeUntilArrival = getTimeUntilArrival(
+            estimatedArrivalTime,
+            scheduledArrivalTime
+          );
+
+          const variant = index === 0 ? "primary" : "light";
+          const estimatedTime = moment(estimatedArrivalTime).format("h:mm a");
+          const scheduledTime = moment(scheduledArrivalTime).format("h:mm a");
+          const arrivalTime = estimatedArrivalTime
+            ? estimatedTime
+            : scheduledTime;
+
+          return (
+            <ListGroup.Item
+              key={index}
+              variant={variant}
+              as="li"
+              className="d-flex justify-content-between align-items-start"
+            >
+              <span>
+                {index === 0 && <FontAwesome name="caret-right" />}
+                {timeUntilArrival}
+              </span>
+              <small>{arrivalTime}</small>
+            </ListGroup.Item>
+          );
+        })}
+      </ListGroup>
+    </Card>
+  );
+}
+
+interface TopNavBarParams {
+  id: string;
+}
+
+function TopNavBar({ id }: TopNavBarParams) {
+  return (
+    <Navbar bg="secondary" variant="dark">
+      <Container>
+        <Nav as="h2">{id}</Nav>
+        <Nav>
+          <LinkContainer to="/nearby/simple-routes">
+            <a className="nav-link">Back</a>
+          </LinkContainer>
+        </Nav>
+      </Container>
+    </Navbar>
+  );
+}
+
+interface InfoCardParams {
+  id: string;
+}
+
+function InfoCard({ id }: InfoCardParams) {
+  return (
+    <Card>
+      {/*<Card.Header>Stop Info</Card.Header>*/}
+      <Card.Body>
+        <Card.Title as="h6">{id} schedule:</Card.Title>
+        <Card.Text>5:00 to 23:30</Card.Text>
+        <hr />
+        <Card.Title as="h6">Stop also serves:</Card.Title>
+        <Card.Text>56, 54</Card.Text>
+      </Card.Body>
+    </Card>
+  );
+}
+
 export default function NearbySimpleRouteArrivals() {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
@@ -56,54 +138,11 @@ export default function NearbySimpleRouteArrivals() {
 
   return (
     <div className="scrollarea">
-      <Navbar bg="secondary" variant="dark">
-        <Container>
-          <Nav as="h2">{id}</Nav>
-          <Nav>
-            <LinkContainer to="/nearby/simple-routes">
-              <a className="nav-link">Back</a>
-            </LinkContainer>
-          </Nav>
-        </Container>
-      </Navbar>
+      <TopNavBar id={id} />
       <br />
       <RouteStopInfo shortSign={shortSign} stopLocation={stopLocation} />
       <br />
-      <Card>
-        <Card.Header>Departures</Card.Header>
-        <ListGroup className="list-group-flush">
-          {map(filteredArrivals, (arrival: any, index: number) => {
-            const estimatedArrivalTime = arrival.estimated;
-            const scheduledArrivalTime = arrival.scheduled;
-            const timeUntilArrival = getTimeUntilArrival(
-              estimatedArrivalTime,
-              scheduledArrivalTime
-            );
-
-            const variant = index === 0 ? "primary" : "light";
-            const estimatedTime = moment(estimatedArrivalTime).format("h:mm a");
-            const scheduledTime = moment(scheduledArrivalTime).format("h:mm a");
-            const arrivalTime = estimatedArrivalTime
-              ? estimatedTime
-              : scheduledTime;
-
-            return (
-              <ListGroup.Item
-                key={index}
-                variant={variant}
-                as="li"
-                className="d-flex justify-content-between align-items-start"
-              >
-                <span>
-                  {index === 0 && <FontAwesome name="caret-right" />}
-                  {timeUntilArrival}
-                </span>
-                <small>{arrivalTime}</small>
-              </ListGroup.Item>
-            );
-          })}
-        </ListGroup>
-      </Card>
+      <DeparturesCard filteredArrivals={filteredArrivals} />
       <br />
       <Card>
         <Card.Header>Stops on Route</Card.Header>
@@ -112,16 +151,7 @@ export default function NearbySimpleRouteArrivals() {
         </ListGroup>
       </Card>
       <br />
-      <Card>
-        {/*<Card.Header>Stop Info</Card.Header>*/}
-        <Card.Body>
-          <Card.Title as="h6">{id} schedule:</Card.Title>
-          <Card.Text>5:00 to 23:30</Card.Text>
-          <hr />
-          <Card.Title as="h6">Stop also serves:</Card.Title>
-          <Card.Text>56, 54</Card.Text>
-        </Card.Body>
-      </Card>
+      <InfoCard id={id} />
     </div>
   );
 }
