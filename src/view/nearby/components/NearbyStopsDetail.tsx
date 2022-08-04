@@ -17,6 +17,8 @@ import {
   ArrivalLocation
 } from "../../../api/trimet/interfaces/arrivals";
 import { getNormalizedDistanceString } from "../util/turfUtils";
+import RouteStopInfo from "./common/RouteStopInfo";
+import StopInfo from "./common/StopInfo";
 import StopArrivals from "./NearbyStopArrivals";
 
 interface Props {
@@ -28,29 +30,29 @@ interface StopInfoParams {
   distanceDescription: string;
 }
 
-function StopInfo({ stopLocation, distanceDescription }: StopInfoParams) {
-  return (
-    <Card>
-      <Card.Header>Info</Card.Header>
-      <Card.Body>
-        <Card.Text>
-          <strong>Stop ID:</strong>
-          {stopLocation.id}
-        </Card.Text>
-        <ButtonToolbar aria-label="Toolbar with button groups">
-          <ButtonGroup className="me-2" aria-label="First group">
-            <Button variant="success">Go</Button>
-            <Button variant="primary">Info</Button>
-          </ButtonGroup>
-          <ButtonGroup className="me-2" aria-label="Second group">
-            <Button variant="secondary">Bookmark</Button>
-          </ButtonGroup>
-        </ButtonToolbar>
-      </Card.Body>
-      <Card.Footer className="text-muted">{distanceDescription}</Card.Footer>
-    </Card>
-  );
-}
+// function StopInfo({ stopLocation, distanceDescription }: StopInfoParams) {
+//   return (
+//     <Card>
+//       <Card.Header>Info</Card.Header>
+//       <Card.Body>
+//         <Card.Text>
+//           <strong>Stop ID:</strong>
+//           {stopLocation.id}
+//         </Card.Text>
+//         <ButtonToolbar aria-label="Toolbar with button groups">
+//           <ButtonGroup className="me-2" aria-label="First group">
+//             <Button variant="success">Go</Button>
+//             <Button variant="primary">Info</Button>
+//           </ButtonGroup>
+//           <ButtonGroup className="me-2" aria-label="Second group">
+//             <Button variant="secondary">Bookmark</Button>
+//           </ButtonGroup>
+//         </ButtonToolbar>
+//       </Card.Body>
+//       <Card.Footer className="text-muted">{distanceDescription}</Card.Footer>
+//     </Card>
+//   );
+// }
 
 export function NearbyStopsDetail({ currentLocation }: Props) {
   const { id } = useParams();
@@ -89,10 +91,7 @@ export function NearbyStopsDetail({ currentLocation }: Props) {
         </Container>
       </Navbar>
       <br />
-      <StopInfo
-        stopLocation={stopLocation}
-        distanceDescription={distanceDescription}
-      />
+      <StopInfo stopLocation={stopLocation} />
       <br />
       <StopArrivals data={data} />
     </div>

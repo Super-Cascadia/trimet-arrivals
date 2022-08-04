@@ -82,15 +82,16 @@ function ArrivalsTable({ data }: ArrivalsTableParams) {
 function StopArrivals({ data }: StopArrivalsParams) {
   return (
     <>
-      <h5>Arrivals</h5>
-      <Tabs defaultActiveKey="list" id="stop-arrival-tabs" className="mb-3">
-        <Tab eventKey="list" title="List">
-          <ArrivalList data={data} />
-        </Tab>
-        <Tab eventKey="table" title="Table">
-          <ArrivalsTable data={data} />
-        </Tab>
-      </Tabs>
+      <ArrivalList data={data} />
+      {/*<h5>Arrivals</h5>*/}
+      {/*<Tabs defaultActiveKey="list" id="stop-arrival-tabs" className="mb-3">*/}
+      {/*  <Tab eventKey="list" title="List">*/}
+      {/*    <ArrivalList data={data} />*/}
+      {/*  </Tab>*/}
+      {/*  <Tab eventKey="table" title="Table">*/}
+      {/*    <ArrivalsTable data={data} />*/}
+      {/*  </Tab>*/}
+      {/*</Tabs>*/}
     </>
   );
 }

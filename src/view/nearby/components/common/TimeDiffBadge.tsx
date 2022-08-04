@@ -52,7 +52,7 @@ function TimeDiffBadge({
 
   return (
     <Badge bg={color} pill={true}>
-      <span className="h5">
+      <span>
         {timeUntilArrival} {getStatusDescription()}
       </span>
     </Badge>

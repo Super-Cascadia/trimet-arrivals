@@ -2,14 +2,12 @@ import { filter, isEmpty, last, map, split, toNumber } from "lodash";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import {
-  Button,
-  ButtonGroup,
   Card,
   Container,
   ListGroup,
+  ListGroupItem,
   Nav,
-  Navbar,
-  Stack
+  Navbar
 } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { useParams } from "react-router";
@@ -22,6 +20,7 @@ import {
   ArrivalLocation
 } from "../../../api/trimet/interfaces/arrivals";
 import { getTimeUntilArrival } from "../util/timeUtils";
+import RouteStopInfo from "./common/RouteStopInfo";
 import "./NearbyRoutes.scss";
 
 export default function NearbySimpleRouteArrivals() {
@@ -68,31 +67,7 @@ export default function NearbySimpleRouteArrivals() {
         </Container>
       </Navbar>
       <br />
-      <Stack direction="horizontal" gap={3}>
-        <div className="me-auto">
-          <Card>
-            <Card.Body>
-              <Card.Title>
-                <FontAwesome name="arrow-circle-right" />
-                {shortSign}
-              </Card.Title>
-              <Card.Text>
-                <small className="text-muted">
-                  Stop: {stopLocation.desc} ({stop})
-                </small>
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </div>
-        <div>
-          <ButtonGroup vertical={true}>
-            <Button variant="primary">GO</Button>
-            <Button variant="light">
-              <FontAwesome name="bookmark" />
-            </Button>
-          </ButtonGroup>
-        </div>
-      </Stack>
+      <RouteStopInfo shortSign={shortSign} stopLocation={stopLocation} />
       <br />
       <Card>
         <Card.Header>Departures</Card.Header>
@@ -127,6 +102,13 @@ export default function NearbySimpleRouteArrivals() {
               </ListGroup.Item>
             );
           })}
+        </ListGroup>
+      </Card>
+      <br />
+      <Card>
+        <Card.Header>Stops on Route</Card.Header>
+        <ListGroup className="list-group-flush">
+          <ListGroupItem>2600</ListGroupItem>
         </ListGroup>
       </Card>
       <br />
