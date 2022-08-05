@@ -14,8 +14,8 @@ const blockPosition: BlockPosition = {
   nextLocID: 123,
   nextStopSeq: 123,
   routeNumber: 123,
-  signMesageLong: "123",
   signMessage: "123",
+  signMessageLong: "123",
   trip: [trip1],
   tripID: "string",
   vehicleID: 123

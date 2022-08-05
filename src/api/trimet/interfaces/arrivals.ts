@@ -59,7 +59,7 @@ export interface BlockPosition {
   nextStopSeq: number;
   routeNumber: number;
   signMessage: string;
-  signMesageLong: string;
+  signMessageLong: string;
   tripID: string;
   vehicleID: number;
   trip: Trip[];

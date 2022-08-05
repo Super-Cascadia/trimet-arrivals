@@ -1,4 +1,14 @@
-import { filter, isEmpty, last, map, split, toNumber } from "lodash";
+import {
+  filter,
+  find,
+  findIndex,
+  isEmpty,
+  last,
+  map,
+  slice,
+  split,
+  toNumber
+} from "lodash";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import {
@@ -19,6 +29,15 @@ import {
   ArrivalData,
   ArrivalLocation
 } from "../../../api/trimet/interfaces/arrivals";
+import {
+  RouteDataResultSet,
+  RouteDirectionStop
+} from "../../../api/trimet/interfaces/routes";
+import {
+  getRouteById,
+  getRouteByIdAndDirection,
+  getSubsequentRouteStops
+} from "../../../api/trimet/routeConfig";
 import { getTimeUntilArrival } from "../util/timeUtils";
 import RouteStopInfo from "./common/RouteStopInfo";
 import "./NearbyRoutes.scss";
@@ -109,32 +128,56 @@ export default function NearbySimpleRouteArrivals() {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const stop = searchParams.get("stop");
-  const direction = searchParams.get("stop");
+  const direction = searchParams.get("direction");
   const [arrivalData, setArrivalData] = useState<ArrivalData>(null);
+  const [filteredArrivalData, setFilteredArrivalData] = useState<Arrival[]>(
+    null
+  );
+  const [routeStopsData, setRouteStopsData] = useState<RouteDataResultSet>(
+    null
+  );
 
   useEffect(() => {
     async function fetchData() {
       if (stop) {
         const arrivals = await getArrivals(stop, 1000);
         setArrivalData(arrivals);
+
+        const filteredArrivals: Arrival[] = filter(
+          arrivals.arrival,
+          (arrival: Arrival) => {
+            return arrival.route === toNumber(id);
+          }
+        );
+
+        setFilteredArrivalData(filteredArrivals);
+
+        const routeStops = await getRouteByIdAndDirection(
+          toNumber(id),
+          toNumber(direction)
+        );
+        setRouteStopsData(routeStops);
       }
     }
 
     fetchData();
   }, [stop]);
 
-  if (isEmpty(arrivalData)) {
+  if (isEmpty(filteredArrivalData) || isEmpty(routeStopsData)) {
     return null;
   }
 
   const stopLocation: ArrivalLocation = arrivalData.location[0];
-  const filteredArrivals: Arrival[] = filter(
-    arrivalData.arrival,
-    (arrival: Arrival) => {
-      return arrival.route === toNumber(id);
+  const shortSign = last(split(filteredArrivalData[0].shortSign, "To"));
+  const routeStops = routeStopsData.route[0].dir[0].stop;
+  const stopIndex = findIndex(
+    routeStops,
+    (routeDirectionStop: RouteDirectionStop, index) => {
+      return routeDirectionStop.locid === toNumber(stop);
     }
   );
-  const shortSign = last(split(filteredArrivals[0].shortSign, "To"));
+
+  const remainingStopsOnRoute = slice(routeStops, stopIndex + 1);
 
   return (
     <div className="scrollarea">
@@ -142,12 +185,25 @@ export default function NearbySimpleRouteArrivals() {
       <br />
       <RouteStopInfo shortSign={shortSign} stopLocation={stopLocation} />
       <br />
-      <DeparturesCard filteredArrivals={filteredArrivals} />
+      <DeparturesCard filteredArrivals={filteredArrivalData} />
       <br />
       <Card>
         <Card.Header>Stops on Route</Card.Header>
         <ListGroup className="list-group-flush">
-          <ListGroupItem>2600</ListGroupItem>
+          {map(
+            remainingStopsOnRoute,
+            (routeDirectionStop: RouteDirectionStop) => {
+              return (
+                <ListGroupItem>
+                  <small>{routeDirectionStop.desc}</small>
+                  <small className="text-muted">
+                    {" "}
+                    ({routeDirectionStop.locid})
+                  </small>
+                </ListGroupItem>
+              );
+            }
+          )}
         </ListGroup>
       </Card>
       <br />
