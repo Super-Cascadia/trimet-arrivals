@@ -12,6 +12,7 @@ import {
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import {
+  Badge,
   Card,
   Container,
   ListGroup,
@@ -33,11 +34,13 @@ import {
   RouteDataResultSet,
   RouteDirectionStop
 } from "../../../api/trimet/interfaces/routes";
+import { StopData, TrimetRoute } from "../../../api/trimet/interfaces/types";
 import {
   getRouteById,
   getRouteByIdAndDirection,
   getSubsequentRouteStops
 } from "../../../api/trimet/routeConfig";
+import { getNearbyStops } from "../../../api/trimet/stops";
 import { getTimeUntilArrival } from "../util/timeUtils";
 import RouteStopInfo from "./common/RouteStopInfo";
 import "./NearbyRoutes.scss";
@@ -124,6 +127,71 @@ function InfoCard({ id }: InfoCardParams) {
   );
 }
 
+interface StopsOnRouteParams {
+  remainingStopsOnRoute: RouteDirectionStop[];
+}
+
+interface StopOnRouteParams {
+  routeDirectionStop: RouteDirectionStop;
+}
+
+function RouteAtStop({ stopData }: { stopData: StopData }) {
+  const routes = stopData.location[0].route;
+  return (
+    <div className="route-at-stop">
+      {map(routes, (route: TrimetRoute) => {
+        return <Badge>{route.route}</Badge>;
+      })}
+    </div>
+  );
+}
+
+function StopOnRoute({ routeDirectionStop }: StopOnRouteParams) {
+  const [stopData, setStopData] = useState<StopData>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (routeDirectionStop) {
+        const location = {
+          coords: {
+            latitude: routeDirectionStop.lat,
+            longitude: routeDirectionStop.lng
+          }
+        };
+
+        const nearbyStopData = await getNearbyStops(location, 10);
+        setStopData(nearbyStopData);
+      }
+    }
+
+    fetchData();
+  }, [routeDirectionStop]);
+
+  return (
+    <ListGroupItem>
+      <small>{routeDirectionStop.desc}</small>
+      <small className="text-muted"> ({routeDirectionStop.locid})</small>
+      {stopData && <RouteAtStop stopData={stopData} />}
+    </ListGroupItem>
+  );
+}
+
+function StopsOnRoute({ remainingStopsOnRoute }: StopsOnRouteParams) {
+  return (
+    <Card>
+      <Card.Header>Stops</Card.Header>
+      <ListGroup className="list-group-flush">
+        {map(
+          remainingStopsOnRoute,
+          (routeDirectionStop: RouteDirectionStop) => {
+            return StopOnRoute({ routeDirectionStop });
+          }
+        )}
+      </ListGroup>
+    </Card>
+  );
+}
+
 export default function NearbySimpleRouteArrivals() {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
@@ -169,15 +237,15 @@ export default function NearbySimpleRouteArrivals() {
 
   const stopLocation: ArrivalLocation = arrivalData.location[0];
   const shortSign = last(split(filteredArrivalData[0].shortSign, "To"));
-  const routeStops = routeStopsData.route[0].dir[0].stop;
+  const routeStopsInDirection = routeStopsData.route[0].dir[0].stop;
   const stopIndex = findIndex(
-    routeStops,
+    routeStopsInDirection,
     (routeDirectionStop: RouteDirectionStop, index) => {
       return routeDirectionStop.locid === toNumber(stop);
     }
   );
 
-  const remainingStopsOnRoute = slice(routeStops, stopIndex + 1);
+  const remainingStopsOnRoute = slice(routeStopsInDirection, stopIndex + 1);
 
   return (
     <div className="scrollarea">
@@ -187,25 +255,7 @@ export default function NearbySimpleRouteArrivals() {
       <br />
       <DeparturesCard filteredArrivals={filteredArrivalData} />
       <br />
-      <Card>
-        <Card.Header>Stops on Route</Card.Header>
-        <ListGroup className="list-group-flush">
-          {map(
-            remainingStopsOnRoute,
-            (routeDirectionStop: RouteDirectionStop) => {
-              return (
-                <ListGroupItem>
-                  <small>{routeDirectionStop.desc}</small>
-                  <small className="text-muted">
-                    {" "}
-                    ({routeDirectionStop.locid})
-                  </small>
-                </ListGroupItem>
-              );
-            }
-          )}
-        </ListGroup>
-      </Card>
+      <StopsOnRoute remainingStopsOnRoute={remainingStopsOnRoute} />
       <br />
       <InfoCard id={id} />
     </div>
