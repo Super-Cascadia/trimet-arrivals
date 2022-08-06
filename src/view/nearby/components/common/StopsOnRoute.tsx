@@ -1,6 +1,7 @@
-import { map } from "lodash";
+import { groupBy, map } from "lodash";
 import React, { useEffect, useState } from "react";
 import { Badge, Card, ListGroup, ListGroupItem } from "react-bootstrap";
+import FontAwesome from "react-fontawesome";
 import { RouteDirectionStop } from "../../../../api/trimet/interfaces/routes";
 import { StopData, TrimetRoute } from "../../../../api/trimet/interfaces/types";
 import { getNearbyStops } from "../../../../api/trimet/stops";
@@ -14,11 +15,17 @@ interface StopOnRouteParams {
 }
 
 function RouteAtStop({ stopData }: { stopData: StopData }) {
-  const routes = stopData.location[0].route;
+  const routes: TrimetRoute[] = stopData.location[0].route;
+
   return (
     <div className="route-at-stop">
+      <FontAwesome name="bus" />
       {map(routes, (route: TrimetRoute) => {
-        return <Badge>{route.route}</Badge>;
+        return (
+          <Badge bg="light" text="dark" pill={true}>
+            {route.route}
+          </Badge>
+        );
       })}
     </div>
   );
@@ -47,7 +54,7 @@ function StopOnRoute({ routeDirectionStop }: StopOnRouteParams) {
 
   return (
     <ListGroupItem>
-      <small>{routeDirectionStop.desc}</small>
+      <span>{routeDirectionStop.desc}</span>
       <small className="text-muted"> ({routeDirectionStop.locid})</small>
       {stopData && <RouteAtStop stopData={stopData} />}
     </ListGroupItem>
