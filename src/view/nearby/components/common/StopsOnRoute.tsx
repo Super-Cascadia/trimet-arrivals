@@ -1,4 +1,4 @@
-import { groupBy, map } from "lodash";
+import { map } from "lodash";
 import React, { useEffect, useState } from "react";
 import { Badge, Card, ListGroup, ListGroupItem } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";

@@ -10,18 +10,24 @@ import {
 import FontAwesome from "react-fontawesome";
 import { StopLocation } from "../../../../api/trimet/interfaces/types";
 
+const BookmarkTooltip = props => (
+  <Tooltip id="button-tooltip" {...props}>
+    Bookmark this route
+  </Tooltip>
+);
+
+const GoToolTip = props => (
+  <Tooltip id="button-tooltip" {...props}>
+    Go from this stop
+  </Tooltip>
+);
+
 interface StopInfoParams {
   shortSign: string;
   stopLocation: StopLocation;
 }
 
 function RouteStopInfo({ shortSign, stopLocation }: StopInfoParams) {
-  const renderTooltip = props => (
-    <Tooltip id="button-tooltip" {...props}>
-      Bookmark this route
-    </Tooltip>
-  );
-
   return (
     <Stack direction="horizontal" gap={3}>
       <div className="me-auto">
@@ -41,11 +47,17 @@ function RouteStopInfo({ shortSign, stopLocation }: StopInfoParams) {
       </div>
       <div>
         <ButtonGroup vertical={true}>
-          <Button variant="primary">GO</Button>
           <OverlayTrigger
             placement="right"
             delay={{ show: 250, hide: 400 }}
-            overlay={renderTooltip}
+            overlay={GoToolTip}
+          >
+            <Button variant="primary">GO</Button>
+          </OverlayTrigger>
+          <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={BookmarkTooltip}
           >
             <Button variant="outline-secondary">
               <FontAwesome name="bookmark" />
