@@ -8,6 +8,7 @@ import {
   Tooltip
 } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
+import { useNavigate } from "react-router-dom";
 import { StopLocation } from "../../../../api/trimet/interfaces/types";
 
 const BookmarkTooltip = props => (
@@ -28,6 +29,13 @@ interface StopInfoParams {
 }
 
 function RouteStopInfo({ shortSign, stopLocation }: StopInfoParams) {
+  const navigate = useNavigate();
+
+  function handleGoClick() {
+    const url = `/nearby/directions?route=54&direction=1&from=1&to=2`;
+    navigate(url);
+  }
+
   return (
     <Stack direction="horizontal" gap={3}>
       <div className="me-auto">
@@ -52,7 +60,9 @@ function RouteStopInfo({ shortSign, stopLocation }: StopInfoParams) {
             delay={{ show: 250, hide: 400 }}
             overlay={GoToolTip}
           >
-            <Button variant="primary">GO</Button>
+            <Button variant="primary" onClick={handleGoClick}>
+              GO
+            </Button>
           </OverlayTrigger>
           <OverlayTrigger
             placement="right"

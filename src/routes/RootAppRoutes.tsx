@@ -17,6 +17,7 @@ import { MaxLines } from "../view/lines/component/MaxLines";
 import { StreetCarLines } from "../view/lines/component/StreetCarLines";
 import { WES } from "../view/lines/component/WES";
 import MainNavigationContainer from "../view/mainNav/containers/MainNavigationContainer";
+import NearbyDirections from "../view/nearby/components/NearbyDirections";
 import NearbyRoutes from "../view/nearby/components/NearbyRoutes";
 import NearbySimpleRouteArrivals from "../view/nearby/components/NearbySimpleRouteArrivals";
 import NearbySimpleRoutes from "../view/nearby/components/NearbySimpleRoutes";
@@ -132,6 +133,7 @@ export default function RootAppRoutes() {
               path="simple-routes/:id"
               element={<NearbySimpleRouteArrivals />}
             />
+            <Route path="directions" element={<NearbyDirections />} />
             <Route path="stops" element={<NearbyStopsComponent />} />
             <Route path="stops/:id" element={<NearbyStopDetailComponent />} />
             <Route path="routes" element={<NearbyRoutesComponent />} />
