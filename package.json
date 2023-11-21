@@ -13,7 +13,7 @@
     "@types/jasmine-enzyme": "^7.0.1",
     "@types/jasmine-matchers": "^0.2.32",
     "@types/jest": "26.0.21",
-    "@types/lodash": "4.14.181",
+    "@types/lodash": "4.14.202",
     "@types/moment": "^2.13.0",
     "@types/node": "13.1.7",
     "@types/prop-types": "15.7.5",
