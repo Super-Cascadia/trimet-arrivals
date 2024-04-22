@@ -2236,10 +2236,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-fontawesome@1.6.4":
-  version "1.6.4"
-  resolved "https://registry.yarnpkg.com/@types/react-fontawesome/-/react-fontawesome-1.6.4.tgz#95884bd8df906b423a254e00d5050f7fe75b3e76"
-  integrity sha512-/fHr+BoUX+3MYpCkb8a+Bpt+Je2/0FgFi1XSaHH0ga1hqMy5PS7Ny/XV0Qh5cJHeKvkONbKWPSwgPlqK7UtdqA==
+"@types/react-fontawesome@1.6.8":
+  version "1.6.8"
+  resolved "https://registry.yarnpkg.com/@types/react-fontawesome/-/react-fontawesome-1.6.8.tgz#9da5356bfb181b71b85e9720b1aeacb502211e56"
+  integrity sha512-+dQ+4jccHraCd/FI4uSeY/O7c1RZ+wVASTgpCgbC6ijh1zSDsr0cb9XU3Dbfy5eJPyXq5QPp9W9RJTVRf+5+pA==
   dependencies:
     "@types/react" "*"
 
