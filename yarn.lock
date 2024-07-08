@@ -2142,13 +2142,13 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/jasmine-enzyme@^7.0.1":
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/@types/jasmine-enzyme/-/jasmine-enzyme-7.0.1.tgz#f1e3cbabe554505006a0fd9c1c389eb2de7d5514"
-  integrity sha512-QUVu6zeiFodnavtZwzSW3hvaFoxe+xPIXolyXe1lGBhDY1w0uS6XpC6hRwq047kLjLJqJ5W5ACeMzRpZuP+fNg==
+"@types/jasmine-enzyme@^7.0.4":
+  version "7.0.4"
+  resolved "https://registry.yarnpkg.com/@types/jasmine-enzyme/-/jasmine-enzyme-7.0.4.tgz#a2a6d77331022655aea528db46352db1bf7527d1"
+  integrity sha512-0CNz5tBcaUxOwIdenw4wvCS7Q5IBLyajo+8NJTkXKMZZVdk47iDRwJpZovkdLRMt8i6v7hm0/uNsitHWEm+/xA==
   dependencies:
     "@types/jasmine" "*"
-    "@types/react" "*"
+    "@types/react" "^16"
 
 "@types/jasmine-matchers@^0.2.32":
   version "0.2.32"
@@ -2278,6 +2278,15 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
+"@types/react@^16":
+  version "16.14.60"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.60.tgz#f7ab62a329b82826f12d02bc8031d4ef4b5e0d81"
+  integrity sha512-wIFmnczGsTcgwCBeIYOuy2mdXEiKZ5znU/jNOnMZPQyCcIxauMGWlX0TNG4lZ7NxRKj7YUIZRneJQSSdB2jKgg==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "^0.16"
+    csstype "^3.0.2"
+
 "@types/redux-thunk@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@types/redux-thunk/-/redux-thunk-2.1.0.tgz#bc2b6e972961831afb82a9bf4f06726e351f9416"
@@ -2301,6 +2310,11 @@
   version "0.16.2"
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
   integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
+
+"@types/scheduler@^0.16":
+  version "0.16.8"
+  resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.8.tgz#ce5ace04cfeabe7ef87c0091e50752e36707deff"
+  integrity sha512-WZLiwShhwLRmeV6zH+GkbOFT6Z6VklCItrDioxUnv+u4Ll+8vKeFySoFyK/0ctcRpOmwAicELfmys1sDc/Rw+A==
 
 "@types/stack-utils@^1.0.1":
   version "1.0.1"
