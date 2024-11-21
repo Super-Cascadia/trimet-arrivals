@@ -1,4 +1,4 @@
-import { Dictionary, each, filter, groupBy, join, map } from "lodash";
+import { Dictionary, each, filter, groupBy, isEmpty, join, map } from "lodash";
 import React, { useEffect, useState } from "react";
 import { ListGroup } from "react-bootstrap";
 import { getArrivals } from "../../../api/trimet/arrivals";
@@ -100,6 +100,15 @@ export default function NearbySimpleRoutes({
     nearbyStops
   );
 
+  const sortedNearbyRouteStructure =
+    !isEmpty(closestNearbyRouteStructure) &&
+    closestNearbyRouteStructure.sort((a, b) => {
+      const aArrival = a.arrivals[0];
+      const bArrival = b.arrivals[0];
+
+      return aArrival?.estimated ?? 0 - bArrival?.estimated ?? 0;
+    });
+
   return (
     <div id="nearby-view-routes" className="scrollarea">
       <SearchRadiusSelection
@@ -111,7 +120,7 @@ export default function NearbySimpleRoutes({
       <br />
       <ListGroup>
         {map(
-          closestNearbyRouteStructure,
+          sortedNearbyRouteStructure,
           (route: RouteStructure, index: number) => {
             const arrival = route.arrivals[0];
             const stop = route.stop;

@@ -24,6 +24,11 @@ function SimpleArrivalListItem({
   stop
 }: ArrivalListItemParams) {
   const navigate = useNavigate();
+
+  if (!arrival || !route || !stop) {
+    return null;
+  }
+
   const estimatedArrivalTime = arrival.estimated;
   const scheduledArrivalTime = arrival.scheduled;
   const routeDirection: Direction = route.dir[0];
@@ -47,12 +52,15 @@ function SimpleArrivalListItem({
       onClick={handleClick}
     >
       <div className="ms-2 me-auto">
-        <span className="fw-bold h2">{routeId}</span>
-        <br />
-        <span>{routeDirection.desc}</span>
+        <span className="fw-bold h2">
+          {routeId}
+          <span className="h6">{routeDirection.desc}</span>
+        </span>
+        {/* <br /> */}
+        {/* <span>{routeDirection.desc}</span> */}
         <br />
         <small>
-          {stopName} ({stop.locid})
+          at {stopName} ({stop.locid})
         </small>
       </div>
       <div>

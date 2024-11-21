@@ -1,13 +1,17 @@
 // @ts-ignore
 // tslint:disable-next-line:no-implicit-dependencies
 import mapboxgl, { Map } from "!mapbox-gl";
-import { forEach, isEqual, uniq } from "lodash";
+import * as turf from "@turf/turf";
+import { forEach, isEqual, isString, set, uniq } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
 import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
 import { setCurrentLocationMarker } from "../util/currentLocationMarker.util";
 import { setRoutes } from "../util/mapboxUtils";
-import { setNearbyStops } from "../util/stopLocationMarker.util";
+import {
+  removeStopLocationLayers,
+  setNearbyStops
+} from "../util/stopLocationMarker.util";
 
 export type LatLngCoords = number[];
 
@@ -16,13 +20,6 @@ const style = {
   position: "relative",
   width: "100%"
 };
-
-function removeMarkers(mapMarkers: any[]) {
-  // console.log("removing markers", mapMarkers);
-  forEach(mapMarkers, marker => {
-    marker.remove();
-  });
-}
 
 function removeRouteLayers(map, routeLayers: any[]) {
   // console.log("removing route layers", routeLayers);
@@ -54,6 +51,52 @@ function initializeMap(
   });
 }
 
+function drawCircle(map, lng, lat, radiusSize) {
+  let center = [lng, lat];
+  let radius = radiusSize;
+  let options = { steps: 10, units: "feet", properties: { foo: "bar" } };
+  // @ts-ignore
+  let circle = turf.circle(center, radius, options);
+
+  map.addSource("currentLocationRadius", {
+    type: "geojson",
+    data: circle
+  });
+
+  map.addLayer({
+    id: "currentLocationRadiusLayer",
+    type: "fill",
+    source: "currentLocationRadius",
+    paint: {
+      "fill-color": "#888888",
+      "fill-opacity": 0.4
+    }
+  });
+}
+
+function initializeCurrentLocationMarker(map, lng, lat, radiusSize) {
+  map.current.on("load", () => {
+    map.current.addSource("currentLocationCircle", {
+      type: "geojson",
+      data: {
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [lng, lat]
+        }
+      }
+    });
+
+    map.current.addLayer({
+      id: "currentLocationCircleLayer",
+      type: "circle",
+      source: "currentLocationCircle"
+    });
+
+    drawCircle(map.current, lng, lat, radiusSize);
+  });
+}
+
 interface Props {
   radiusSize: number;
   currentLocation: LatLngCoords;
@@ -81,7 +124,6 @@ function NearbyMapV2({
     Object.keys(nearbyRouteIds)
   );
   const [routeLayers, setRouteLayers] = useState([]);
-  const [mapMarkers, setMapMarkers] = useState([]);
 
   const stopLocationIdProps = Object.keys(stopLocations);
   const routeIdProps = Object.keys(nearbyRouteIds);
@@ -91,37 +133,25 @@ function NearbyMapV2({
   );
   const routeIdsAreSame = isEqual(routeIdProps, routeIdsState);
 
-  // console.log("radiusSize", radiusSize);
-  //
-  // console.log("---Stops---");
-  // console.log("stops: props", stopLocationIdProps);
-  // console.log("stops: state", stopLocationIdsState);
-  // console.log("stops: same", stopLocationIdsAreSame);
-  // console.log("mapMarkers", mapMarkers);
-  //
-  // console.log("---Routes---");
-  // console.log("route: Props", routeIdProps);
-  // console.log("route: State", routeIdsState);
-  // console.log("routes: same", routeIdsAreSame);
-  // console.log("routeLayers", routeLayers);
-
   // Initialize Map
   useEffect(() => {
     mapboxgl.accessToken =
       "pk.eyJ1IjoiamFtZXNvbm55ZWhvbHQiLCJhIjoiY2p3NWoyamV0MTk1dDQ0cGNmdGZkenViMiJ9.TqDD3r62vlPzVgPnYjocsg";
 
     // initialize map only once
+    console.log("initialize map", lng, lat, zoom);
     map.current = initializeMap(lng, lat, mapContainer, zoom);
+    // setCurrentLocationMarker(map.current, currentLocation);
+    initializeCurrentLocationMarker(map, lng, lat, radiusSize);
   }, []);
 
   // initialize currentLocation
   useEffect(() => {
     if (!map.current) {
       return;
-    } // wait for map to initialize
+    }
     map.current.on("load", () => {
-      // console.info("effect: set current location marker");
-      // setCurrentLocationMarker(map.current, currentLocation);
+      console.info("effect: set current location marker");
     });
   }, [currentLocation]);
 
@@ -129,19 +159,13 @@ function NearbyMapV2({
   useEffect(() => {
     if (!map.current) {
       return;
-    } // wait for map to initialize
+    }
+
     map.current.on("load", () => {
-      // console.info("effect: initialize map markers and routes");
-      const markers = setNearbyStops(
-        map.current,
-        stopLocations,
-        handleStopmarkerClick
-      );
-      // setMapMarkers(markers);
+      console.info("effect: initialize map markers and routes");
+
+      setNearbyStops(map.current, stopLocations, handleStopmarkerClick);
       setStopLocationIdsState(Object.keys(stopLocations));
-      // setRoutes(map.current, nearbyRouteIds).then(routeMapLayers => {
-      //   setRouteLayers(routeMapLayers);
-      // });
     });
   }, []);
 
@@ -152,15 +176,11 @@ function NearbyMapV2({
     }
 
     if (stopLocationIdsAreSame === false) {
-      // console.info("effect: update map markers", stopLocations);
-      removeMarkers(mapMarkers);
-      const markers = setNearbyStops(
-        map.current,
-        stopLocations,
-        handleStopmarkerClick
-      );
+      console.info("effect: update map markers", stopLocations);
+
+      removeStopLocationLayers(map.current);
+      setNearbyStops(map.current, stopLocations, handleStopmarkerClick);
       setStopLocationIdsState(Object.keys(stopLocations));
-      // setMapMarkers(markers);
     }
   }, [radiusSize, stopLocations]);
 
@@ -171,30 +191,63 @@ function NearbyMapV2({
     }
 
     if (routeIdsAreSame === false) {
-      // console.info("effect: update map routes", nearbyRouteIds);
-
+      console.info("effect: update map routes", nearbyRouteIds);
       removeRouteLayers(map.current, routeLayers);
       setRouteLayers([]);
-      // setRoutes(map.current, nearbyRouteIds).then(routeMapLayers => {
-      //   setRouteIdsState(Object.keys(nearbyRouteIds));
-      //   setRouteLayers(routeMapLayers);
-      // });
     }
   }, [radiusSize, nearbyRouteIds]);
 
-  // Initialize Move effects on markers
+  // Radius Size Change
   useEffect(() => {
     if (!map.current) {
       return;
     }
-    // console.info("effect: initialize marker movement animation ");
 
-    // map.current.on("move", () => {
-    //   setLng(getMapLongitude(map));
-    //   setLat(getMapLatitude(map));
-    //   setZoom(map.current.getZoom().toFixed(2));
+    console.log("radius size change", radiusSize);
+    const radius = isString(radiusSize) ? parseInt(radiusSize, 10) : radiusSize;
+
+    switch (radius) {
+      case 250:
+        setZoom(19);
+        map.current.setZoom(19);
+        break;
+      case 500:
+        setZoom(18);
+        map.current.setZoom(18);
+        break;
+      case 750:
+        setZoom(17);
+        map.current.setZoom(17);
+        break;
+      case 1000:
+        setZoom(16);
+        map.current.setZoom(16);
+        break;
+      case 1500:
+        setZoom(15);
+        map.current.setZoom(15);
+        break;
+      case 2000:
+        setZoom(14);
+        map.current.setZoom(14);
+        break;
+      case 2500:
+        setZoom(13);
+        map.current.setZoom(13);
+        break;
+      case 5000:
+        setZoom(12);
+        map.current.setZoom(12);
+        break;
+      default:
+        setZoom(16);
+        map.current.setZoom(16);
+    }
+
+    // map.current.on("load", () => {
+    //   map.current.setPaintProperty('currentLocationCircleLayer', 'circle-radius', 100);
     // });
-  }, []);
+  }, [radiusSize]);
 
   // @ts-ignore
   const mapBoxMap = <div style={style} ref={mapContainer} />;

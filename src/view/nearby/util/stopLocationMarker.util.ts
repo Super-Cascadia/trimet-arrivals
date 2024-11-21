@@ -12,6 +12,15 @@ interface Feature {
   properties: {};
 }
 
+export function removeStopLocationLayers(mapBoxMap: any) {
+  if (mapBoxMap.getLayer("circle")) {
+    mapBoxMap.removeLayer("circle");
+  }
+  if (mapBoxMap.getSource("nearbyStopLocations")) {
+    mapBoxMap.removeSource("nearbyStopLocations");
+  }
+}
+
 export function setNearbyStops(
   mapBoxMap: any,
   stopLocations: StopLocationsDictionary,
@@ -30,7 +39,7 @@ export function setNearbyStops(
     };
   });
 
-  mapBoxMap.addSource("nearbyStopLocations", {
+  const nearbyStopLocationsSource = mapBoxMap.addSource("nearbyStopLocations", {
     data: {
       type: "FeatureCollection",
       features
@@ -38,7 +47,7 @@ export function setNearbyStops(
     type: "geojson"
   });
 
-  mapBoxMap.addLayer({
+  const stopLocationLayer = mapBoxMap.addLayer({
     id: "circle",
     paint: {
       "circle-color": "#4264fb",
@@ -67,4 +76,6 @@ export function setNearbyStops(
   mapBoxMap.on("mouseleave", "circle", () => {
     mapBoxMap.getCanvas().style.cursor = "";
   });
+
+  return [nearbyStopLocationsSource, stopLocationLayer];
 }
