@@ -1,15 +1,16 @@
 // @ts-ignore
 // tslint:disable-next-line:no-implicit-dependencies
 import mapboxgl, { Map } from "!mapbox-gl";
-import * as turf from "@turf/turf";
-import { forEach, isEqual, isString, set, uniq } from "lodash";
+import { isEqual, isString } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
 import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
-import { setCurrentLocationMarker } from "../util/currentLocationMarker.util";
-import { setRoutes } from "../util/mapboxUtils";
 import {
+  initializeCurrentLocationMarker,
+  removeCurrentLocationMarkers,
+  removeRouteLayers,
   removeStopLocationLayers,
+  setCurrentLocationMarker,
   setNearbyStops
 } from "../util/stopLocationMarker.util";
 
@@ -20,14 +21,6 @@ const style = {
   position: "relative",
   width: "100%"
 };
-
-function removeRouteLayers(map, routeLayers: any[]) {
-  // console.log("removing route layers", routeLayers);
-  forEach(uniq(routeLayers), layerId => {
-    map.removeLayer(layerId);
-    map.removeSource(layerId);
-  });
-}
 
 function getMapLongitude(map) {
   return map.current.getCenter().lng.toFixed(4);
@@ -48,52 +41,6 @@ function initializeMap(
     container: mapContainer.current,
     style: "mapbox://styles/mapbox/streets-v11",
     zoom
-  });
-}
-
-function drawCircle(map, lng, lat, radiusSize) {
-  let center = [lng, lat];
-  let radius = radiusSize;
-  let options = { steps: 10, units: "feet", properties: { foo: "bar" } };
-  // @ts-ignore
-  let circle = turf.circle(center, radius, options);
-
-  map.addSource("currentLocationRadius", {
-    type: "geojson",
-    data: circle
-  });
-
-  map.addLayer({
-    id: "currentLocationRadiusLayer",
-    type: "fill",
-    source: "currentLocationRadius",
-    paint: {
-      "fill-color": "#888888",
-      "fill-opacity": 0.4
-    }
-  });
-}
-
-function initializeCurrentLocationMarker(map, lng, lat, radiusSize) {
-  map.current.on("load", () => {
-    map.current.addSource("currentLocationCircle", {
-      type: "geojson",
-      data: {
-        type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates: [lng, lat]
-        }
-      }
-    });
-
-    map.current.addLayer({
-      id: "currentLocationCircleLayer",
-      type: "circle",
-      source: "currentLocationCircle"
-    });
-
-    drawCircle(map.current, lng, lat, radiusSize);
   });
 }
 
@@ -142,7 +89,7 @@ function NearbyMapV2({
     console.log("initialize map", lng, lat, zoom);
     map.current = initializeMap(lng, lat, mapContainer, zoom);
     // setCurrentLocationMarker(map.current, currentLocation);
-    initializeCurrentLocationMarker(map, lng, lat, radiusSize);
+    initializeCurrentLocationMarker(map.current, lng, lat, radiusSize);
   }, []);
 
   // initialize currentLocation
@@ -179,8 +126,10 @@ function NearbyMapV2({
       console.info("effect: update map markers", stopLocations);
 
       removeStopLocationLayers(map.current);
+      removeCurrentLocationMarkers(map.current);
       setNearbyStops(map.current, stopLocations, handleStopmarkerClick);
       setStopLocationIdsState(Object.keys(stopLocations));
+      setCurrentLocationMarker(map.current, lng, lat, radiusSize);
     }
   }, [radiusSize, stopLocations]);
 
@@ -224,20 +173,20 @@ function NearbyMapV2({
         map.current.setZoom(16);
         break;
       case 1500:
+        setZoom(15.5);
+        map.current.setZoom(15.5);
+        break;
+      case 2000:
         setZoom(15);
         map.current.setZoom(15);
         break;
-      case 2000:
-        setZoom(14);
-        map.current.setZoom(14);
-        break;
       case 2500:
-        setZoom(13);
-        map.current.setZoom(13);
+        setZoom(14.5);
+        map.current.setZoom(14.5);
         break;
       case 5000:
-        setZoom(12);
-        map.current.setZoom(12);
+        setZoom(13.5);
+        map.current.setZoom(13.5);
         break;
       default:
         setZoom(16);
