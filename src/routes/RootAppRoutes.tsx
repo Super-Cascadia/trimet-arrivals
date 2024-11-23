@@ -21,9 +21,9 @@ import NearbyDirections from "../view/nearby/components/NearbyDirections";
 import NearbyRoutes from "../view/nearby/components/NearbyRoutes";
 import NearbySimpleRouteArrivals from "../view/nearby/components/NearbySimpleRouteArrivals";
 import NearbySimpleRoutes from "../view/nearby/components/NearbySimpleRoutes";
-import NearbyStops from "../view/nearby/components/NearbyStops";
+import NearbyStops, { NearbyStopsProps } from "../view/nearby/components/NearbyStops";
 import { NearbyStopsDetail } from "../view/nearby/components/NearbyStopsDetail";
-import NearbyView from "../view/nearby/components/NearbyViewComponent";
+import NearbyView, { NearbyViewComponentOutletContextProps } from "../view/nearby/components/NearbyViewComponent";
 import StopLocationViewContainer from "../view/stop/container/StopLocationViewContainer";
 
 function StopLocationViewRouter() {
@@ -33,18 +33,18 @@ function StopLocationViewRouter() {
 }
 
 function NearbyStopDetailComponent() {
-  const [currentLocation] = useOutletContext();
+  const { currentLocation } = useOutletContext<NearbyViewComponentOutletContextProps>();
   return <NearbyStopsDetail currentLocation={currentLocation} />;
 }
 
 function NearbyStopsComponent() {
-  const [
+  const {
     currentLocation,
     nearbyRoutes,
     nearbyStops,
     radiusSize,
     handleRadiusSelectionChange
-  ] = useOutletContext();
+   } = useOutletContext<NearbyViewComponentOutletContextProps>();
 
   const stopCount = nearbyStops?.location?.length;
   const routeCount = size(nearbyRoutes);
@@ -65,13 +65,13 @@ function NearbyStopsComponent() {
 }
 
 function NearbyRoutesComponent() {
-  const [
+  const {
     currentLocation,
     nearbyRoutes,
     nearbyStops,
     radiusSize,
     handleRadiusSelectionChange
-  ] = useOutletContext();
+   } = useOutletContext<NearbyViewComponentOutletContextProps>();
 
   const stopCount = nearbyStops?.location?.length;
   const routeCount = size(nearbyRoutes);
@@ -88,13 +88,13 @@ function NearbyRoutesComponent() {
 }
 
 function NearbySimpleRoutesComp() {
-  const [
+  const {
     currentLocation,
     nearbyRoutes,
     nearbyStops,
     radiusSize,
     handleRadiusSelectionChange
-  ] = useOutletContext();
+   } = useOutletContext<NearbyViewComponentOutletContextProps>();
 
   const stopCount = nearbyStops?.location?.length;
   const routeCount = size(nearbyRoutes);

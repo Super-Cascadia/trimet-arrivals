@@ -55,7 +55,7 @@ function getLocationInfo(stopLocations: StopData, currentLocation: number[]) {
   );
 }
 
-interface Props {
+export interface NearbyStopsProps {
   nearbyStops: StopData;
   radiusSize: number;
   handleRadiusSelectionChange: (e: any) => void;
@@ -71,7 +71,7 @@ export default function NearbyStops({
   routeCount,
   stopCount,
   currentLocation
-}: Props) {
+}: NearbyStopsProps) {
   if (!nearbyStops) {
     return <Loading />;
   }

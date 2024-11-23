@@ -20,6 +20,14 @@ import "./NearbyViewComponent.scss";
 
 const DEFAULT_RADIUS = 1000;
 
+export interface NearbyViewComponentOutletContextProps {
+  currentLocation: number[];
+  nearbyRoutes: Dictionary<TrimetRoute[]>;
+  nearbyStops: StopData;
+  radiusSize: number;
+  handleRadiusSelectionChange: (e: any) => void;
+}
+
 export default function NearbyViewComponent() {
   const navigate = useNavigate();
   const [radiusSize, setRadiusSize] = useState<number>(DEFAULT_RADIUS);
@@ -74,18 +82,20 @@ export default function NearbyViewComponent() {
   const stopLocations = nearbyStops && getStopLocations(nearbyStops);
   const showMap = currentLocation && nearbyRouteIds && stopLocations;
 
+  const context: NearbyViewComponentOutletContextProps = {
+    currentLocation,
+    nearbyRoutes,
+    nearbyStops,
+    radiusSize,
+    handleRadiusSelectionChange
+  };
+
   return (
     <Container fluid={true}>
       <Row>
         <Col md={3}>
           <Outlet
-            context={[
-              currentLocation,
-              nearbyRoutes,
-              nearbyStops,
-              radiusSize,
-              handleRadiusSelectionChange
-            ]}
+            context={context}
           />
         </Col>
         <Col md={9}>

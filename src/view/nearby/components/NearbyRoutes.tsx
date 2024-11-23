@@ -32,7 +32,7 @@ function getRoutes(routes: Dictionary<TrimetRoute[]>) {
   });
 }
 
-interface Props {
+export interface NearbyRoutesProps {
   nearbyRoutes: Dictionary<TrimetRoute[]>;
   radiusSize: number;
   handleRadiusSelectionChange: (e: any) => void;
@@ -46,7 +46,7 @@ export default function NearbyRoutes({
   handleRadiusSelectionChange,
   routeCount,
   stopCount
-}: Props) {
+}: NearbyRoutesProps) {
   return (
     <div id="nearby-view-routes" className="scrollarea">
       <SearchRadiusSelection
