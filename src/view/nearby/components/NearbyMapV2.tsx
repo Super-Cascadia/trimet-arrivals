@@ -1,18 +1,23 @@
 // @ts-ignore
 // tslint:disable-next-line:no-implicit-dependencies
-import mapboxgl, { Map } from "!mapbox-gl";
-import { isEqual, isString } from "lodash";
+import { Map } from "!mapbox-gl";
+import { isEqual } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
 import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
 import {
   initializeCurrentLocationMarker,
+  setCurrentLocationMarker
+} from "../util/mapbox/currentLocation";
+import { initializeMap } from "../util/mapbox/initializeMap";
+import { setMapZoom } from "../util/mapbox/mapZoom";
+import { setRoutes } from "../util/mapbox/routeLines";
+import {
   removeCurrentLocationMarkers,
   removeRouteLayers,
   removeStopLocationLayers,
-  setCurrentLocationMarker,
   setNearbyStops
-} from "../util/stopLocationMarker.util";
+} from "../util/mapbox/stopLocationMarker.util";
 
 export type LatLngCoords = number[];
 
@@ -28,20 +33,6 @@ function getMapLongitude(map) {
 
 function getMapLatitude(map) {
   return map.current.getCenter().lat.toFixed(4);
-}
-
-function initializeMap(
-  lng: number,
-  lat: number,
-  mapContainer: React.MutableRefObject<null>,
-  zoom: number
-): Map {
-  return new mapboxgl.Map({
-    center: [lng, lat],
-    container: mapContainer.current,
-    style: "mapbox://styles/mapbox/streets-v11",
-    zoom
-  });
 }
 
 interface Props {
@@ -60,7 +51,7 @@ function NearbyMapV2({
   handleStopmarkerClick
 }: Props) {
   const mapContainer = useRef(null);
-  const map = useRef(null);
+  const map = useRef<Map>(null);
   const [lng, setLng] = useState(currentLocation[0]);
   const [lat, setLat] = useState(currentLocation[1]);
   const [zoom, setZoom] = useState(16);
@@ -82,17 +73,13 @@ function NearbyMapV2({
 
   // Initialize Map
   useEffect(() => {
-    mapboxgl.accessToken =
-      "pk.eyJ1IjoiamFtZXNvbm55ZWhvbHQiLCJhIjoiY2p3NWoyamV0MTk1dDQ0cGNmdGZkenViMiJ9.TqDD3r62vlPzVgPnYjocsg";
-
     // initialize map only once
     console.log("initialize map", lng, lat, zoom);
     map.current = initializeMap(lng, lat, mapContainer, zoom);
-    // setCurrentLocationMarker(map.current, currentLocation);
     initializeCurrentLocationMarker(map.current, lng, lat, radiusSize);
   }, []);
 
-  // initialize currentLocation
+  // Update currentLocation
   useEffect(() => {
     if (!map.current) {
       return;
@@ -110,9 +97,9 @@ function NearbyMapV2({
 
     map.current.on("load", () => {
       console.info("effect: initialize map markers and routes");
-
       setNearbyStops(map.current, stopLocations, handleStopmarkerClick);
       setStopLocationIdsState(Object.keys(stopLocations));
+      setRoutes(map.current, nearbyRouteIds);
     });
   }, []);
 
@@ -153,49 +140,8 @@ function NearbyMapV2({
     }
 
     console.log("radius size change", radiusSize);
-    const radius = isString(radiusSize) ? parseInt(radiusSize, 10) : radiusSize;
 
-    switch (radius) {
-      case 250:
-        setZoom(19);
-        map.current.setZoom(19);
-        break;
-      case 500:
-        setZoom(18);
-        map.current.setZoom(18);
-        break;
-      case 750:
-        setZoom(17);
-        map.current.setZoom(17);
-        break;
-      case 1000:
-        setZoom(16);
-        map.current.setZoom(16);
-        break;
-      case 1500:
-        setZoom(15.5);
-        map.current.setZoom(15.5);
-        break;
-      case 2000:
-        setZoom(15);
-        map.current.setZoom(15);
-        break;
-      case 2500:
-        setZoom(14.5);
-        map.current.setZoom(14.5);
-        break;
-      case 5000:
-        setZoom(13.5);
-        map.current.setZoom(13.5);
-        break;
-      default:
-        setZoom(16);
-        map.current.setZoom(16);
-    }
-
-    // map.current.on("load", () => {
-    //   map.current.setPaintProperty('currentLocationCircleLayer', 'circle-radius', 100);
-    // });
+    setMapZoom(map, radiusSize, setZoom);
   }, [radiusSize]);
 
   // @ts-ignore

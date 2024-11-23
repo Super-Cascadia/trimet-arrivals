@@ -1,28 +1,10 @@
-// @ts-ignore
-// tslint:disable-next-line:no-implicit-dependencies
-import mapboxgl from "!mapbox-gl";
 import { each, isUndefined } from "lodash";
-import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
-import { LatLngCoords } from "../components/NearbyMapV2";
-
-export function mountMapCenteredOnLocation(
-  mapContainer: HTMLDivElement,
-  currentLocation: LatLngCoords
-) {
-  mapboxgl.accessToken =
-    "pk.eyJ1IjoiamFtZXNvbm55ZWhvbHQiLCJhIjoiY2p3NWoyamV0MTk1dDQ0cGNmdGZkenViMiJ9.TqDD3r62vlPzVgPnYjocsg";
-
-  return new mapboxgl.Map({
-    center: currentLocation, // starting position [lng, lat]
-    container: mapContainer, // container ID
-    style: "mapbox://styles/mapbox/streets-v11", // style URL
-    zoom: 16 // starting zoom
-  });
-}
+import { Map } from "mapbox-gl";
+import { NearbyRoutesDictionary } from "../../../../store/reducers/view/nearbyRoutesViewReducer";
 
 function getRouteGeometry(routeId: string, directionId: number) {
   return import(
-    `../../../data/trimet/geoJSON/${routeId}/${routeId}_${directionId}.json`
+    `../../../../data/trimet/geoJSON/${routeId}/${routeId}_${directionId}.json`
   ).catch(e => {
     return e;
   });
@@ -51,7 +33,10 @@ function addMapboxLayer(
     },
     paint: {
       "line-color": "#0080ff",
-      "line-width": 5
+      "line-stroke-color": "#000",
+      "line-dasharray": [2, 4],
+      "line-opacity": 0.8,
+      "line-width": 2
     },
     source: sourceId,
     type: "line"
@@ -68,7 +53,7 @@ function addMapboxLayer(
   return layer;
 }
 
-function addRouteLayers(mapBoxMap, returnedPromises: any[]): any[] {
+function addRouteLayers(mapBoxMap: Map, returnedPromises: any[]): any[] {
   const sources = {};
   const sourceIds = [];
   const routeLayers = [];
@@ -96,7 +81,10 @@ function addRouteLayers(mapBoxMap, returnedPromises: any[]): any[] {
   return sourceIds;
 }
 
-export function setRoutes(mapBoxMap, nearbyRouteIds: NearbyRoutesDictionary) {
+export function setRoutes(
+  mapBoxMap: Map,
+  nearbyRouteIds: NearbyRoutesDictionary
+) {
   const promises = [];
 
   each(nearbyRouteIds, (route, routeId) => {
