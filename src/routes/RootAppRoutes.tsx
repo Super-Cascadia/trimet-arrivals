@@ -21,7 +21,7 @@ import NearbyDirections from "../view/nearby/components/NearbyDirections";
 import NearbyRoutes from "../view/nearby/components/NearbyRoutes";
 import NearbySimpleRouteArrivals from "../view/nearby/components/NearbySimpleRouteArrivals";
 import NearbySimpleRoutes from "../view/nearby/components/NearbySimpleRoutes";
-import NearbyStops, { NearbyStopsProps } from "../view/nearby/components/NearbyStops";
+import NearbyStops from "../view/nearby/components/NearbyStops";
 import { NearbyStopsDetail } from "../view/nearby/components/NearbyStopsDetail";
 import NearbyView, { NearbyViewComponentOutletContextProps } from "../view/nearby/components/NearbyViewComponent";
 import StopLocationViewContainer from "../view/stop/container/StopLocationViewContainer";

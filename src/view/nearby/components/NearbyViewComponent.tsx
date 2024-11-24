@@ -1,7 +1,7 @@
 // @ts-ignore
 // tslint:disable-next-line:no-implicit-dependencies
 import { Map } from "!mapbox-gl";
-import { Dictionary } from "lodash";
+import { Dictionary, isEqual } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Outlet } from "react-router";
@@ -23,10 +23,16 @@ import NearbyMapV2 from "./NearbyMapV2";
 import "./NearbyViewComponent.scss";
 import { initializeCurrentLocationMarker } from "../util/mapbox/currentLocation";
 import { initializeMap } from '../util/mapbox/initializeMap';
+import { setRoutes as setRoutesOnMap } from "../util/mapbox/routeLines";
 import {
+  removeCurrentLocationMarkers as removeCurrentLocationMarkFromMap,
+  removeRouteLayers as removeRoutesFromMap,
+  removeStopLocationLayers as removeStopsFromMap,
   setNearbyStops as setNearbyStopsOnMap
 } from "../util/mapbox/stopLocationMarker.util";
-import { setRoutes as setRoutesOnMap } from "../util/mapbox/routeLines";
+import {
+  setCurrentLocationMarker
+} from "../util/mapbox/currentLocation";
 
 const DEFAULT_RADIUS = 1000;
 
@@ -51,31 +57,38 @@ export default function NearbyViewComponent() {
   >(undefined);
   const [userLocation, setUserLocation] = useState<Location>(undefined);
   const [stopLocationIdsState, setStopLocationIdsState] = useState([]);
-  const [routeIdsState, setRouteIdsState] = useState([]);
-  const [routesState, setRoutesState] = useState([]);
 
+  const currentLocation = [
+    userLocation?.coords?.longitude,
+    userLocation?.coords?.latitude
+  ];
+
+  const lng = currentLocation[0];
+  const lat = currentLocation[1];
+
+  const nearbyRouteIds = nearbyRoutes && getNearbyRouteIds(nearbyRoutes);
+  const stopLocations = nearbyStops && getStopLocations(nearbyStops);
+  const showMap = currentLocation && nearbyRouteIds && stopLocations;
+
+  function fetchInitialData(location) {
+    return getNearbyStops(location, radiusSize).then((stopData: StopData) => {
+      const routes = processRoutes(stopData);
+      setNearbyStopData(stopData);
+      setNearbyRoutesData(routes);
+    });
+  }
+
+  // Initial Load
   useEffect(() => {
-    async function fetchData() {
-      if (userLocation) {
-        getNearbyStops(userLocation, radiusSize).then((stopData: StopData) => {
-          const routes = processRoutes(stopData);
-          setNearbyStopData(stopData);
-          setNearbyRoutesData(routes);
-        });
-      } else {
-        geoLocateCurrentPosition().then((location: Location) => {
-          setUserLocation(location);
-          getNearbyStops(location, radiusSize).then((stopData: StopData) => {
-            setNearbyStopData(stopData);
-            const routes = processRoutes(stopData);
-            setNearbyRoutesData(routes);
-          });
-        });
-      }
+    if (userLocation) {
+      fetchInitialData(userLocation);
+    } else {
+      geoLocateCurrentPosition().then((location: Location) => {
+        setUserLocation(location);
+        fetchInitialData(location);
+      });
     }
-
-    fetchData();
-  }, [radiusSize]);
+  }, []);
 
   // Radius Size Change
   useEffect(() => {
@@ -84,12 +97,25 @@ export default function NearbyViewComponent() {
     }
     console.log("radius size change", radiusSize);
     setMapZoom(mapRef, radiusSize, setZoom);
+
+    getNearbyStops(userLocation, radiusSize).then((stopData: StopData) => {
+      const routes = processRoutes(stopData);
+      const nearbyRouteIds = getNearbyRouteIds(routes);
+      const stopLocations = getStopLocations(stopData);
+
+      removeStopsFromMap(mapRef.current);
+      removeCurrentLocationMarkFromMap(mapRef.current);
+      removeRoutesFromMap(mapRef.current, Object.keys(nearbyRouteIds));
+
+      setNearbyStopData(stopData);
+      setNearbyRoutesData(routes);
+      setNearbyStopsOnMap(mapRef.current, stopLocations, handleStopMarkerClick);
+      setStopLocationIdsState(Object.keys(stopLocations));
+      setCurrentLocationMarker(mapRef.current, lng, lat, radiusSize);
+    });
   }, [radiusSize]);
 
-  function initializeMapboxMap() {
-    const lng = currentLocation[0];
-    const lat = currentLocation[1];
-  
+  function initializeMapboxMap() {  
     console.log("initialize map", lng, lat, zoom);
     mapRef.current = initializeMap(lng, lat, mapContainerRef, zoom);
     initializeCurrentLocationMarker(mapRef.current, lng, lat, radiusSize);
@@ -109,14 +135,6 @@ export default function NearbyViewComponent() {
   function handleStopMarkerClick(data: any) {
     navigate(`/nearby/stops/${data.properties.locid}`);
   }
-
-  const currentLocation = [
-    userLocation?.coords?.longitude,
-    userLocation?.coords?.latitude
-  ];
-  const nearbyRouteIds = nearbyRoutes && getNearbyRouteIds(nearbyRoutes);
-  const stopLocations = nearbyStops && getStopLocations(nearbyStops);
-  const showMap = currentLocation && nearbyRouteIds && stopLocations;
 
   const context: NearbyViewComponentOutletContextProps = {
     currentLocation,

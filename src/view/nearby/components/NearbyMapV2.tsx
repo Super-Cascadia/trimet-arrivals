@@ -56,56 +56,10 @@ function NearbyMapV2({
   const lng = currentLocation[0];
   const lat = currentLocation[1];
 
-  const [stopLocationIdsState, setStopLocationIdsState] = useState(
-    Object.keys(stopLocations)
-  );
-  const [routeIdsState, setRouteIdsState] = useState(
-    Object.keys(nearbyRouteIds)
-  );
-  const [routesState, setRoutesState] = useState([]);
-
-  const stopLocationIdProps = Object.keys(stopLocations);
-  const routeIdProps = Object.keys(nearbyRouteIds);
-  const stopLocationIdsAreSame = isEqual(
-    stopLocationIdProps,
-    stopLocationIdsState
-  );
-  const routeIdsAreSame = isEqual(routeIdProps, routeIdsState);
-
   // Initialize Map
   useEffect(() => {
     initializeMap();
   }, []);
-
-  // Update Map Markers
-  useEffect(() => {
-    if (!mapRef.current) {
-      return;
-    }
-
-    if (stopLocationIdsAreSame === false) {
-      console.info("effect: update map markers", stopLocations);
-
-      removeStopsFromMap(mapRef.current);
-      removeCurrentLocationMarkFromMap(mapRef.current);
-      setNearbyStopsOnMap(mapRef.current, stopLocations, handleStopmarkerClick);
-      setStopLocationIdsState(Object.keys(stopLocations));
-      setCurrentLocationMarker(mapRef.current, lng, lat, radiusSize);
-    }
-  }, [radiusSize, stopLocations]);
-
-  // Update Map Routes
-  useEffect(() => {
-    if (!mapRef.current) {
-      return;
-    }
-
-    if (routeIdsAreSame === false) {
-      console.info("effect: update map routes", nearbyRouteIds);
-      removeRoutesFromMap(mapRef.current, routesState);
-      setRoutesState([]);
-    }
-  }, [radiusSize, nearbyRouteIds]);
 
   // @ts-ignore
   const mapBoxMap = <div style={style} ref={mapContainerRef} />;
