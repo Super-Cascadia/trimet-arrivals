@@ -1,17 +1,12 @@
 // @ts-ignore
 // tslint:disable-next-line:no-implicit-dependencies
-import { Map } from "!mapbox-gl";
 import { isEqual } from "lodash";
 import React, { useEffect, useState } from "react";
 import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
 import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
 import {
-  initializeCurrentLocationMarker,
   setCurrentLocationMarker
 } from "../util/mapbox/currentLocation";
-import { initializeMap } from "../util/mapbox/initializeMap";
-import { setMapZoom } from "../util/mapbox/mapZoom";
-import { setRoutes as setRoutesOnMap } from "../util/mapbox/routeLines";
 import {
   removeCurrentLocationMarkers as removeCurrentLocationMarkFromMap,
   removeRouteLayers as removeRoutesFromMap,
@@ -44,6 +39,7 @@ interface Props {
   stopLocations: StopLocationsDictionary;
   nearbyRouteIds: NearbyRoutesDictionary;
   handleStopmarkerClick: (data: any) => void;
+  initializeMap: () => void;
 }
 
 function NearbyMapV2({
@@ -53,6 +49,7 @@ function NearbyMapV2({
   nearbyRouteIds,
   radiusSize,
   handleStopmarkerClick,
+  initializeMap,
   mapContainerRef,
   mapRef
 }: Props) {
@@ -77,17 +74,7 @@ function NearbyMapV2({
 
   // Initialize Map
   useEffect(() => {
-    // initialize map only once
-    console.log("initialize map", lng, lat, zoom);
-    mapRef.current = initializeMap(lng, lat, mapContainerRef, zoom);
-    initializeCurrentLocationMarker(mapRef.current, lng, lat, radiusSize);
-
-    mapRef.current.on("load", () => {
-      console.info("effect: initialize map markers and routes");
-      setNearbyStopsOnMap(mapRef.current, stopLocations, handleStopmarkerClick);
-      setStopLocationIdsState(Object.keys(stopLocations));
-      setRoutesOnMap(mapRef.current, nearbyRouteIds);
-    });
+    initializeMap();
   }, []);
 
   // Update Map Markers

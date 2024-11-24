@@ -21,6 +21,12 @@ import {
 import { setMapZoom } from "../util/mapbox/mapZoom";
 import NearbyMapV2 from "./NearbyMapV2";
 import "./NearbyViewComponent.scss";
+import { initializeCurrentLocationMarker } from "../util/mapbox/currentLocation";
+import { initializeMap } from '../util/mapbox/initializeMap';
+import {
+  setNearbyStops as setNearbyStopsOnMap
+} from "../util/mapbox/stopLocationMarker.util";
+import { setRoutes as setRoutesOnMap } from "../util/mapbox/routeLines";
 
 const DEFAULT_RADIUS = 1000;
 
@@ -30,6 +36,7 @@ export interface NearbyViewComponentOutletContextProps {
   nearbyStops: StopData;
   radiusSize: number;
   handleRadiusSelectionChange: (e: any) => void;
+  initializeMap: () => void;
 }
 
 export default function NearbyViewComponent() {
@@ -43,15 +50,15 @@ export default function NearbyViewComponent() {
     Dictionary<TrimetRoute[]>
   >(undefined);
   const [userLocation, setUserLocation] = useState<Location>(undefined);
+  const [stopLocationIdsState, setStopLocationIdsState] = useState([]);
+  const [routeIdsState, setRouteIdsState] = useState([]);
+  const [routesState, setRoutesState] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
-      // console.info("effect: fetchData");
-
       if (userLocation) {
         getNearbyStops(userLocation, radiusSize).then((stopData: StopData) => {
           const routes = processRoutes(stopData);
-
           setNearbyStopData(stopData);
           setNearbyRoutesData(routes);
         });
@@ -79,6 +86,22 @@ export default function NearbyViewComponent() {
     setMapZoom(mapRef, radiusSize, setZoom);
   }, [radiusSize]);
 
+  function initializeMapboxMap() {
+    const lng = currentLocation[0];
+    const lat = currentLocation[1];
+  
+    console.log("initialize map", lng, lat, zoom);
+    mapRef.current = initializeMap(lng, lat, mapContainerRef, zoom);
+    initializeCurrentLocationMarker(mapRef.current, lng, lat, radiusSize);
+
+    mapRef.current.on("load", () => {
+      console.info("effect: initialize map markers and routes");
+      setNearbyStopsOnMap(mapRef.current, stopLocations, handleStopMarkerClick);
+      setStopLocationIdsState(Object.keys(stopLocations));
+      setRoutesOnMap(mapRef.current, nearbyRouteIds);
+    });
+  }
+
   function handleRadiusSelectionChange(e) {
     setRadiusSize(e.target.value);
   }
@@ -100,7 +123,8 @@ export default function NearbyViewComponent() {
     nearbyRoutes,
     nearbyStops,
     radiusSize,
-    handleRadiusSelectionChange
+    handleRadiusSelectionChange,
+    initializeMap: initializeMapboxMap
   };
 
   return (
@@ -112,6 +136,7 @@ export default function NearbyViewComponent() {
         <Col md={9}>
           {showMap && (
             <NearbyMapV2
+              initializeMap={initializeMapboxMap}
               zoom={zoom}
               mapRef={mapRef}
               mapContainerRef={mapContainerRef}
