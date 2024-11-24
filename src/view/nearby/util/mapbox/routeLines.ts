@@ -16,6 +16,7 @@ function addMapboxLayer(
   promise,
   sourceId: string
 ) {
+  console.log('adding mapbox layer', sourceId, routeIdentifier);
   map.addSource(sourceId, {
     data: {
       geometry: promise.geometry,
@@ -33,7 +34,6 @@ function addMapboxLayer(
     },
     paint: {
       "line-color": "#0080ff",
-      "line-stroke-color": "#000",
       "line-dasharray": [2, 4],
       "line-opacity": 0.8,
       "line-width": 2
@@ -42,13 +42,13 @@ function addMapboxLayer(
     type: "line"
   });
 
-  // layer.on("mouseover", e => {
-  //   console.log("hover route", e);
-  // });
+  layer.on("mouseover", e => {
+    console.log("hover route", e);
+  });
 
-  // layer.on("click", e => {
-  //   console.log("click route", e);
-  // });
+  layer.on("click", e => {
+    console.log("click route", e);
+  });
 
   return layer;
 }

@@ -114,6 +114,16 @@ function NearbySimpleRoutesComp() {
   );
 }
 
+function NearbySimpleRouteArrivalsComp() {
+  const {
+    handleRouteArrivalsOpened
+   } = useOutletContext<NearbyViewComponentOutletContextProps>();
+
+   const { id } = useParams();
+
+   return <NearbySimpleRouteArrivals handleRouteArrivalsOpened={handleRouteArrivalsOpened} />;
+}
+
 function NearbyRouteDetails() {
   const { id } = useParams();
 
@@ -131,7 +141,7 @@ export default function RootAppRoutes() {
             <Route path="simple-routes" element={<NearbySimpleRoutesComp />} />
             <Route
               path="simple-routes/:id"
-              element={<NearbySimpleRouteArrivals />}
+              element={<NearbySimpleRouteArrivalsComp />}
             />
             <Route path="directions" element={<NearbyDirections />} />
             <Route path="stops" element={<NearbyStopsComponent />} />

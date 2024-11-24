@@ -1,7 +1,7 @@
 // @ts-ignore
 // tslint:disable-next-line:no-implicit-dependencies
 import { Map } from "!mapbox-gl";
-import { Dictionary, isEqual } from "lodash";
+import { Dictionary } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Outlet } from "react-router";
@@ -21,18 +21,16 @@ import {
 import { setMapZoom } from "../util/mapbox/mapZoom";
 import NearbyMapV2 from "./NearbyMapV2";
 import "./NearbyViewComponent.scss";
-import { initializeCurrentLocationMarker } from "../util/mapbox/currentLocation";
+import { initializeCurrentLocationMarker, setCurrentLocationMarker } from "../util/mapbox/currentLocation";
 import { initializeMap } from '../util/mapbox/initializeMap';
 import { setRoutes as setRoutesOnMap } from "../util/mapbox/routeLines";
 import {
-  removeCurrentLocationMarkers as removeCurrentLocationMarkFromMap,
-  removeRouteLayers as removeRoutesFromMap,
-  removeStopLocationLayers as removeStopsFromMap,
-  setNearbyStops as setNearbyStopsOnMap
+  removeCurrentLocationMarkers,
+  removeRouteLayers,
+  removeStopLocationLayers,
+  setNearbyStops
 } from "../util/mapbox/stopLocationMarker.util";
-import {
-  setCurrentLocationMarker
-} from "../util/mapbox/currentLocation";
+import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
 
 const DEFAULT_RADIUS = 1000;
 
@@ -43,6 +41,7 @@ export interface NearbyViewComponentOutletContextProps {
   radiusSize: number;
   handleRadiusSelectionChange: (e: any) => void;
   initializeMap: () => void;
+  handleRouteArrivalsOpened: (id: string, direction: string) => void;
 }
 
 export default function NearbyViewComponent() {
@@ -56,7 +55,6 @@ export default function NearbyViewComponent() {
     Dictionary<TrimetRoute[]>
   >(undefined);
   const [userLocation, setUserLocation] = useState<Location>(undefined);
-  const [stopLocationIdsState, setStopLocationIdsState] = useState([]);
 
   const currentLocation = [
     userLocation?.coords?.longitude,
@@ -103,14 +101,13 @@ export default function NearbyViewComponent() {
       const nearbyRouteIds = getNearbyRouteIds(routes);
       const stopLocations = getStopLocations(stopData);
 
-      removeStopsFromMap(mapRef.current);
-      removeCurrentLocationMarkFromMap(mapRef.current);
-      removeRoutesFromMap(mapRef.current, Object.keys(nearbyRouteIds));
+      removeStopLocationLayers(mapRef.current);
+      removeCurrentLocationMarkers(mapRef.current);
+      removeRouteLayers(mapRef.current, Object.keys(nearbyRouteIds));
 
       setNearbyStopData(stopData);
       setNearbyRoutesData(routes);
-      setNearbyStopsOnMap(mapRef.current, stopLocations, handleStopMarkerClick);
-      setStopLocationIdsState(Object.keys(stopLocations));
+      setNearbyStops(mapRef.current, stopLocations, handleStopMarkerClick);
       setCurrentLocationMarker(mapRef.current, lng, lat, radiusSize);
     });
   }, [radiusSize]);
@@ -122,9 +119,8 @@ export default function NearbyViewComponent() {
 
     mapRef.current.on("load", () => {
       console.info("effect: initialize map markers and routes");
-      setNearbyStopsOnMap(mapRef.current, stopLocations, handleStopMarkerClick);
-      setStopLocationIdsState(Object.keys(stopLocations));
-      setRoutesOnMap(mapRef.current, nearbyRouteIds);
+      setNearbyStops(mapRef.current, stopLocations, handleStopMarkerClick);
+      // setRoutesOnMap(mapRef.current, nearbyRouteIds);
     });
   }
 
@@ -136,13 +132,24 @@ export default function NearbyViewComponent() {
     navigate(`/nearby/stops/${data.properties.locid}`);
   }
 
+  function handleRouteArrivalsOpened(routeId: string, direction: string) {
+    console.log("route arrivals opened", routeId, direction); 
+    const selectedRouteDictionary = {
+      [parseInt(routeId, 10)]: {
+        directions: [parseInt(direction, 10)]
+      }
+    } as NearbyRoutesDictionary;
+    setRoutesOnMap(mapRef.current, selectedRouteDictionary);
+  }
+
   const context: NearbyViewComponentOutletContextProps = {
     currentLocation,
     nearbyRoutes,
     nearbyStops,
     radiusSize,
     handleRadiusSelectionChange,
-    initializeMap: initializeMapboxMap
+    initializeMap: initializeMapboxMap,
+    handleRouteArrivalsOpened
   };
 
   return (

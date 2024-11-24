@@ -28,7 +28,7 @@ import { StopsOnRoute } from "./common/StopsOnRoute";
 import { TopNavBar } from "./common/TopNavBar";
 import "./NearbyRoutes.scss";
 
-export default function NearbySimpleRouteArrivals() {
+export default function NearbySimpleRouteArrivals({ handleRouteArrivalsOpened}: { handleRouteArrivalsOpened: (id: string, direction: string) => void }) {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const stop = searchParams.get("stop");
@@ -61,6 +61,7 @@ export default function NearbySimpleRouteArrivals() {
           toNumber(direction)
         );
         setRouteStopsData(routeStops);
+        handleRouteArrivalsOpened(id, direction);
       }
     }
 
