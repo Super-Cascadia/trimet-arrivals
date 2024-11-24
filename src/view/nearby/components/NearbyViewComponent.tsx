@@ -1,5 +1,8 @@
+// @ts-ignore
+// tslint:disable-next-line:no-implicit-dependencies
+import { Map } from "!mapbox-gl";
 import { Dictionary } from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Outlet } from "react-router";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +18,7 @@ import {
   getStopLocations,
   processRoutes
 } from "../util/dataUtils";
+import { setMapZoom } from "../util/mapbox/mapZoom";
 import NearbyMapV2 from "./NearbyMapV2";
 import "./NearbyViewComponent.scss";
 
@@ -29,7 +33,10 @@ export interface NearbyViewComponentOutletContextProps {
 }
 
 export default function NearbyViewComponent() {
+  const mapContainerRef = useRef(null);
+  const mapRef = useRef<Map>(null);
   const navigate = useNavigate();
+  const [zoom, setZoom] = useState(16);
   const [radiusSize, setRadiusSize] = useState<number>(DEFAULT_RADIUS);
   const [nearbyStops, setNearbyStopData] = useState<StopData>(undefined);
   const [nearbyRoutes, setNearbyRoutesData] = useState<
@@ -44,9 +51,6 @@ export default function NearbyViewComponent() {
       if (userLocation) {
         getNearbyStops(userLocation, radiusSize).then((stopData: StopData) => {
           const routes = processRoutes(stopData);
-
-          // console.log("effect: fetchData: stopData", stopData);
-          // console.log("effect: fetchData: routes", routes);
 
           setNearbyStopData(stopData);
           setNearbyRoutesData(routes);
@@ -64,6 +68,15 @@ export default function NearbyViewComponent() {
     }
 
     fetchData();
+  }, [radiusSize]);
+
+  // Radius Size Change
+  useEffect(() => {
+    if (!mapRef.current) {
+      return;
+    }
+    console.log("radius size change", radiusSize);
+    setMapZoom(mapRef, radiusSize, setZoom);
   }, [radiusSize]);
 
   function handleRadiusSelectionChange(e) {
@@ -94,13 +107,14 @@ export default function NearbyViewComponent() {
     <Container fluid={true}>
       <Row>
         <Col md={3}>
-          <Outlet
-            context={context}
-          />
+          <Outlet context={context} />
         </Col>
         <Col md={9}>
           {showMap && (
             <NearbyMapV2
+              zoom={zoom}
+              mapRef={mapRef}
+              mapContainerRef={mapContainerRef}
               handleStopmarkerClick={handleStopMarkerClick}
               radiusSize={radiusSize}
               currentLocation={currentLocation}
