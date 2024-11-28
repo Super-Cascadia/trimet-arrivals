@@ -65,13 +65,13 @@ export function setNearbyStops(
       },
       properties: {
         locid: stopLocation.locid,
-        routeids: routeIds // Ensure routeids are included
+        routeids: routeIds.join(',') // Ensure routeids are included
       },
       type: "Feature"
     };
   });
 
-  const nearbyStopLocationsSource = mapBoxMap.addSource(STOP_LOCATIONS_SOURCE, {
+  mapBoxMap.addSource(STOP_LOCATIONS_SOURCE, {
     data: {
       type: "FeatureCollection",
       // @ts-ignore
@@ -80,7 +80,7 @@ export function setNearbyStops(
     type: "geojson"
   });
 
-  const stopLocationLayer = mapBoxMap.addLayer({
+  mapBoxMap.addLayer({
     id: STOP_LOCATION_LAYER,
     paint: {
       "circle-color": [
@@ -103,6 +103,8 @@ export function setNearbyStops(
       // @ts-ignore
       center: e.features[0].geometry.coordinates
     });
+    // @TODO: set zoom level
+    mapBoxMap.current.setZoom(16);
     handleStopMarkerClick(e.features[0].properties);
   });
 
@@ -129,11 +131,12 @@ export function setNearbyStops(
       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     }
 
+    const popupHtml = `<strong>Stop ID</strong>: ${locid}<br><strong>Routes</strong>: ${routeids.split(',').join(', ')}`;
     // Populate the popup and set its coordinates
     // based on the feature found.
     popup
       .setLngLat(coordinates)
-      .setHTML(`Stop ID: ${locid}<br>Routes: ${routeids.join(", ")}`)
+      .setHTML(popupHtml)
       .addTo(mapBoxMap);
   });
 
