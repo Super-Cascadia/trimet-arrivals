@@ -11,12 +11,16 @@ function getRouteGeometry(routeId: string, directionId: number) {
 }
 
 function addMapboxLayer(
-  map,
+  map: Map,
   routeIdentifier: string,
   promise,
   sourceId: string
 ) {
+  const isLoaded = map.loaded();
+  console.log('is map loaded', isLoaded);
+
   console.log('adding mapbox layer', sourceId, routeIdentifier);
+
   map.addSource(sourceId, {
     data: {
       geometry: promise.geometry,

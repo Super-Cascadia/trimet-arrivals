@@ -27,7 +27,7 @@ function getArrivalsList(sortedArrivals: Arrival[]) {
   const { id } = useParams();
 
   return map(sortedArrivals, (arrival: Arrival) => {
-    return <ArrivalListItem id={id} arrival={arrival} />;
+    return <ArrivalListItem key={arrival.id} id={id} arrival={arrival} />;
   });
 }
 

@@ -19,22 +19,14 @@ import { WES } from "../view/lines/component/WES";
 import MainNavigationContainer from "../view/mainNav/containers/MainNavigationContainer";
 import NearbyDirections from "../view/nearby/components/NearbyDirections";
 import NearbyRoutes from "../view/nearby/components/NearbyRoutes";
-import NearbySimpleRouteArrivals from "../view/nearby/components/NearbySimpleRouteArrivals";
-import NearbySimpleRoutes from "../view/nearby/components/NearbySimpleRoutes";
 import NearbyStops from "../view/nearby/components/NearbyStops";
-import { NearbyStopsDetail } from "../view/nearby/components/NearbyStopsDetail";
-import NearbyView, { NearbyViewComponentOutletContextProps } from "../view/nearby/components/NearbyViewComponent";
+import NearbyView, { NearbySimpleRouteArrivalsComp, NearbySimpleRoutesComp, NearbyStopDetailComponent, NearbyViewComponentOutletContextProps } from "../view/nearby/components/NearbyViewComponent";
 import StopLocationViewContainer from "../view/stop/container/StopLocationViewContainer";
 
 function StopLocationViewRouter() {
   const { id } = useParams();
 
   return <StopLocationViewContainer locationId={parseInt(id, 10)} />;
-}
-
-function NearbyStopDetailComponent() {
-  const { currentLocation } = useOutletContext<NearbyViewComponentOutletContextProps>();
-  return <NearbyStopsDetail currentLocation={currentLocation} />;
 }
 
 function NearbyStopsComponent() {
@@ -85,43 +77,6 @@ function NearbyRoutesComponent() {
       handleRadiusSelectionChange={handleRadiusSelectionChange}
     />
   );
-}
-
-function NearbySimpleRoutesComp() {
-  const {
-    currentLocation,
-    nearbyRoutes,
-    nearbyStops,
-    radiusSize,
-    handleRadiusSelectionChange
-   } = useOutletContext<NearbyViewComponentOutletContextProps>();
-
-  const stopCount = nearbyStops?.location?.length;
-  const routeCount = size(nearbyRoutes);
-
-  return (
-    <div>
-      <br />
-      <NearbySimpleRoutes
-        nearbyStops={nearbyStops}
-        nearbyRoutes={nearbyRoutes}
-        radiusSize={radiusSize}
-        handleRadiusSelectionChange={handleRadiusSelectionChange}
-        routeCount={routeCount}
-        stopCount={stopCount}
-      />
-    </div>
-  );
-}
-
-function NearbySimpleRouteArrivalsComp() {
-  const {
-    handleRouteArrivalsOpened
-   } = useOutletContext<NearbyViewComponentOutletContextProps>();
-
-   const { id } = useParams();
-
-   return <NearbySimpleRouteArrivals handleRouteArrivalsOpened={handleRouteArrivalsOpened} />;
 }
 
 function NearbyRouteDetails() {

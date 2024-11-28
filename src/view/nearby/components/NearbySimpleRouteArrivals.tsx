@@ -28,7 +28,7 @@ import { StopsOnRoute } from "./common/StopsOnRoute";
 import { TopNavBar } from "./common/TopNavBar";
 import "./NearbyRoutes.scss";
 
-export default function NearbySimpleRouteArrivals({ handleRouteArrivalsOpened}: { handleRouteArrivalsOpened: (id: string, direction: string) => void }) {
+export default function NearbySimpleRouteArrivals({ handleRouteArrivalsOpened}: { handleRouteArrivalsOpened: (id: string, direction: string, stop: string, stopLocation: ArrivalLocation) => void }) {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const stop = searchParams.get("stop");
@@ -44,6 +44,7 @@ export default function NearbySimpleRouteArrivals({ handleRouteArrivalsOpened}: 
   useEffect(() => {
     async function fetchData() {
       if (stop) {
+        console.log("Fetching data for stop: ", stop);
         const arrivals = await getArrivals(stop, 1000);
         setArrivalData(arrivals);
 
@@ -61,7 +62,8 @@ export default function NearbySimpleRouteArrivals({ handleRouteArrivalsOpened}: 
           toNumber(direction)
         );
         setRouteStopsData(routeStops);
-        handleRouteArrivalsOpened(id, direction);
+        const stopLocation: ArrivalLocation = arrivals.location[0];
+        handleRouteArrivalsOpened(id, direction, stop, stopLocation);
       }
     }
 

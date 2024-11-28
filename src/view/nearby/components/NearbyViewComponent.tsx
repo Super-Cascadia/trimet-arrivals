@@ -1,10 +1,8 @@
-// @ts-ignore
-// tslint:disable-next-line:no-implicit-dependencies
-import { Map } from "!mapbox-gl";
-import { Dictionary } from "lodash";
+import { Map } from "mapbox-gl";
+import { Dictionary, size } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { Outlet } from "react-router";
+import { Outlet, useOutletContext, useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
 import geoLocateCurrentPosition from "../../../api/geolocation/geoLocateCurrentPosition";
 import {
@@ -28,11 +26,21 @@ import {
   removeCurrentLocationMarkers,
   removeRouteLayers,
   removeStopLocationLayers,
-  setNearbyStops
+  setNearbyStops,
+  updateStopMarkerColor
 } from "../util/mapbox/stopLocationMarker.util";
 import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
+import NearbySimpleRoutes from "./NearbySimpleRoutes";
+import NearbySimpleRouteArrivals from "./NearbySimpleRouteArrivals";
+import { NearbyStopsDetail } from "./NearbyStopsDetail";
+import { ArrivalLocation } from "../../../api/trimet/interfaces/arrivals";
 
 const DEFAULT_RADIUS = 1000;
+
+export function NearbyStopDetailComponent() {
+  const { currentLocation } = useOutletContext<NearbyViewComponentOutletContextProps>();
+  return <NearbyStopsDetail currentLocation={currentLocation} />;
+}
 
 export interface NearbyViewComponentOutletContextProps {
   currentLocation: number[];
@@ -41,7 +49,42 @@ export interface NearbyViewComponentOutletContextProps {
   radiusSize: number;
   handleRadiusSelectionChange: (e: any) => void;
   initializeMap: () => void;
-  handleRouteArrivalsOpened: (id: string, direction: string) => void;
+  handleRouteArrivalsOpened: (id: string, direction: string, stop: string, stopLocation: ArrivalLocation) => void;
+}
+
+export function NearbySimpleRoutesComp() {
+  const {
+    currentLocation,
+    nearbyRoutes,
+    nearbyStops,
+    radiusSize,
+    handleRadiusSelectionChange
+   } = useOutletContext<NearbyViewComponentOutletContextProps>();
+
+  const stopCount = nearbyStops?.location?.length;
+  const routeCount = size(nearbyRoutes);
+
+  return (
+    <div>
+      <br />
+      <NearbySimpleRoutes
+        nearbyStops={nearbyStops}
+        nearbyRoutes={nearbyRoutes}
+        radiusSize={radiusSize}
+        handleRadiusSelectionChange={handleRadiusSelectionChange}
+        routeCount={routeCount}
+        stopCount={stopCount}
+      />
+    </div>
+  );
+}
+
+export function NearbySimpleRouteArrivalsComp() {
+  const {
+    handleRouteArrivalsOpened
+   } = useOutletContext<NearbyViewComponentOutletContextProps>();
+
+   return <NearbySimpleRouteArrivals handleRouteArrivalsOpened={handleRouteArrivalsOpened} />;
 }
 
 export default function NearbyViewComponent() {
@@ -107,7 +150,7 @@ export default function NearbyViewComponent() {
 
       setNearbyStopData(stopData);
       setNearbyRoutesData(routes);
-      setNearbyStops(mapRef.current, stopLocations, handleStopMarkerClick);
+      setNearbyStops(mapRef.current, stopLocations, Object.keys(nearbyRouteIds), handleStopMarkerClick);
       setCurrentLocationMarker(mapRef.current, lng, lat, radiusSize);
     });
   }, [radiusSize]);
@@ -119,7 +162,7 @@ export default function NearbyViewComponent() {
 
     mapRef.current.on("load", () => {
       console.info("effect: initialize map markers and routes");
-      setNearbyStops(mapRef.current, stopLocations, handleStopMarkerClick);
+      setNearbyStops(mapRef.current, stopLocations, Object.keys(nearbyRouteIds), handleStopMarkerClick);
       // setRoutesOnMap(mapRef.current, nearbyRouteIds);
     });
   }
@@ -132,7 +175,16 @@ export default function NearbyViewComponent() {
     navigate(`/nearby/stops/${data.properties.locid}`);
   }
 
-  function handleRouteArrivalsOpened(routeId: string, direction: string) {
+  function flyToCenter(lng: number, lat: number) {
+    if (mapRef.current) {
+      mapRef.current.flyTo({
+        center: [lng, lat],
+        essential: true // this animation is considered essential with respect to prefers-reduced-motion
+      });
+    }
+  }
+
+  function handleRouteArrivalsOpened(routeId: string, direction: string, stop: string, stopLocation: ArrivalLocation) {
     console.log("route arrivals opened", routeId, direction); 
     const selectedRouteDictionary = {
       [parseInt(routeId, 10)]: {
@@ -140,6 +192,8 @@ export default function NearbyViewComponent() {
       }
     } as NearbyRoutesDictionary;
     setRoutesOnMap(mapRef.current, selectedRouteDictionary);
+    flyToCenter(stopLocation.lng, stopLocation.lat);
+    updateStopMarkerColor(mapRef.current, stop, "#ff0000");
   }
 
   const context: NearbyViewComponentOutletContextProps = {

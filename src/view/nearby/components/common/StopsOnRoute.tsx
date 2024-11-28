@@ -22,7 +22,7 @@ function RouteAtStop({ stopData }: { stopData: StopData }) {
       <FontAwesome name="bus" />
       {map(routes, (route: TrimetRoute) => {
         return (
-          <Badge bg="light" text="dark" pill={true}>
+          <Badge key={route.route} bg="light" text="dark" pill={true}>
             {route.route}
           </Badge>
         );
@@ -53,7 +53,7 @@ function StopOnRoute({ routeDirectionStop }: StopOnRouteParams) {
   }, [routeDirectionStop]);
 
   return (
-    <ListGroupItem>
+    <ListGroupItem key={routeDirectionStop.locid}>
       <span>{routeDirectionStop.desc}</span>
       <small className="text-muted"> ({routeDirectionStop.locid})</small>
       {stopData && <RouteAtStop stopData={stopData} />}

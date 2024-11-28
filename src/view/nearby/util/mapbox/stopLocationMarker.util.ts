@@ -1,5 +1,7 @@
+// @ts-ignore
+// tslint:disable-next-line:no-implicit-dependencies
+import mapboxgl, { Map } from "!mapbox-gl";
 import { forEach, map, set, uniq } from "lodash";
-import { Map } from "mapbox-gl";
 import { StopLocationsDictionary } from "../../../../store/reducers/util/formatStopLocations";
 import { STOP_LOCATION_LAYER, STOP_LOCATIONS_SOURCE, CURRENT_LOCATION_CIRCLE_LAYER, CURRENT_LOCATION_CIRCLE, CURRENT_LOCATION_RADIUS_LAYER, CURRENT_LOCATION_RADIUS } from "./consts";
 
@@ -48,9 +50,12 @@ export function removeCurrentLocationMarkers(mapBoxMap: Map) {
 export function setNearbyStops(
   mapBoxMap: Map,
   stopLocations: StopLocationsDictionary,
+  routeIds: string[],
   handleStopMarkerClick: (data: any) => void
 ) {
-  console.log("setting nearby stops");
+  const isLoaded = mapBoxMap.loaded();
+  console.log('is map loaded', isLoaded);
+  console.log("setting nearby stops", stopLocations, routeIds);
 
   const features = map(stopLocations, stopLocation => {
     return {
@@ -59,7 +64,8 @@ export function setNearbyStops(
         coordinates: [stopLocation.lng, stopLocation.lat]
       },
       properties: {
-        locid: stopLocation.locid
+        locid: stopLocation.locid,
+        routeids: routeIds // Ensure routeids are included
       },
       type: "Feature"
     };
@@ -77,7 +83,12 @@ export function setNearbyStops(
   const stopLocationLayer = mapBoxMap.addLayer({
     id: STOP_LOCATION_LAYER,
     paint: {
-      "circle-color": "#4264fb",
+      "circle-color": [
+        "case",
+        ["==", ["get", "locid"], "SPECIFIC_STOP_ID"], // Replace SPECIFIC_STOP_ID with the actual ID
+        "#ff0000", // Color for the specific stop marker
+        "#4264fb" // Default color for other markers
+      ],
       "circle-radius": 8,
       "circle-stroke-color": "#ffffff",
       "circle-stroke-width": 2
@@ -92,18 +103,66 @@ export function setNearbyStops(
       // @ts-ignore
       center: e.features[0].geometry.coordinates
     });
-    handleStopMarkerClick(e.features[0]);
+    handleStopMarkerClick(e.features[0].properties);
   });
 
-  // Change the cursor to a pointer when the it enters a feature in the 'circle' layer.
-  mapBoxMap.on("mouseenter", STOP_LOCATION_LAYER, () => {
+  // Create a popup, but don't add it to the map yet.
+  const popup = new mapboxgl.Popup({
+    closeButton: false,
+    closeOnClick: false
+  });
+
+  // Show popup on hover
+  mapBoxMap.on("mouseenter", STOP_LOCATION_LAYER, e => {
+    // Change the cursor style as a UI indicator.
     mapBoxMap.getCanvas().style.cursor = "pointer";
+
+    // @ts-ignore
+    const coordinates = e.features[0].geometry.coordinates.slice();
+    const locid = e.features[0].properties.locid;
+    const routeids = e.features[0].properties.routeids;
+
+    // Ensure that if the map is zoomed out such that multiple
+    // copies of the feature are visible, the popup appears
+    // over the copy being pointed to.
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+      coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
+
+    // Populate the popup and set its coordinates
+    // based on the feature found.
+    popup
+      .setLngLat(coordinates)
+      .setHTML(`Stop ID: ${locid}<br>Routes: ${routeids.join(", ")}`)
+      .addTo(mapBoxMap);
   });
 
-  // Change it back to a pointer when it leaves.
   mapBoxMap.on("mouseleave", STOP_LOCATION_LAYER, () => {
     mapBoxMap.getCanvas().style.cursor = "";
+    popup.remove();
   });
+}
 
-  return [nearbyStopLocationsSource, stopLocationLayer];
+// Function to update the color of a specific stop marker by its ID
+export function updateStopMarkerColor(mapBoxMap: Map, stopId: string, color: string) {
+  const isLoaded = mapBoxMap.loaded();
+  console.log('is map loaded', isLoaded);
+
+  function setMarkerColor() {
+    console.log('setting marker color', stopId, color);
+    mapBoxMap.setPaintProperty(STOP_LOCATION_LAYER, "circle-color", [
+      "case",
+      ["==", ["get", "locid"], parseInt(stopId, 10)],
+      color,
+      "#4264fb" // Default color for other markers
+    ]);
+  }
+
+  if (!isLoaded) {
+    mapBoxMap.on("load", () => {
+      setMarkerColor();
+    });
+  } else {
+    setMarkerColor();
+  }
 }
