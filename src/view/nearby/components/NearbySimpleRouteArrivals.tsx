@@ -88,7 +88,7 @@ export default function NearbySimpleRouteArrivals({ handleRouteArrivalsOpened}: 
 
   return (
     <div className="scrollarea">
-      <TopNavBar id={id} />
+      <TopNavBar id={id} shortSign={shortSign} />
       <br />
       <RouteStopInfo shortSign={shortSign} stopLocation={stopLocation} />
       <br />

@@ -7,7 +7,7 @@ export function drawCircle(
   lng: number,
   lat: number,
   radiusSize: number
-) {
+): Map {
   const center = [lng, lat];
   const radius = radiusSize;
   const options = { steps: 26, units: "feet", properties: { foo: "bar" } };
@@ -19,7 +19,7 @@ export function drawCircle(
     data: circle
   });
 
-  map.addLayer({
+  const updatedMap = map.addLayer({
     id: CURRENT_LOCATION_RADIUS_LAYER,
     type: "fill",
     source: CURRENT_LOCATION_RADIUS,
@@ -28,6 +28,8 @@ export function drawCircle(
       "fill-opacity": 0.4
     }
   });
+  
+  return updatedMap;
 }
 
 export function setCurrentLocationMarker(
@@ -35,7 +37,7 @@ export function setCurrentLocationMarker(
   lng: number,
   lat: number,
   radiusSize: number
-) {
+): Map {
   console.log("setting current location marker");
   map.addSource(CURRENT_LOCATION_CIRCLE, {
     type: "geojson",
@@ -55,7 +57,7 @@ export function setCurrentLocationMarker(
     source: CURRENT_LOCATION_CIRCLE
   });
 
-  drawCircle(map, lng, lat, radiusSize);
+  return drawCircle(map, lng, lat, radiusSize);
 }
 
 export function initializeCurrentLocationMarker(
@@ -64,8 +66,11 @@ export function initializeCurrentLocationMarker(
   lat: number,
   radiusSize: number
 ) {
+  let updatedMap = map;
   map.on("load", () => {
     console.log("initializing current location marker");
-    setCurrentLocationMarker(map, lng, lat, radiusSize);
+    updatedMap = setCurrentLocationMarker(map, lng, lat, radiusSize);
   });
+
+  return updatedMap;
 }

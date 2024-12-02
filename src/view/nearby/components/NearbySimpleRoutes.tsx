@@ -17,6 +17,7 @@ interface Props {
   nearbyRoutes: Dictionary<TrimetRoute[]>;
   nearbyStops: StopData;
   radiusSize: number;
+  handleSimpleRoutesOpened: () => void;
   handleRadiusSelectionChange: (e: any) => void;
   routeCount: number;
   stopCount: number;
@@ -71,6 +72,7 @@ export default function NearbySimpleRoutes({
   nearbyRoutes,
   radiusSize,
   handleRadiusSelectionChange,
+  handleSimpleRoutesOpened,
   routeCount,
   stopCount
 }: Props) {
@@ -86,6 +88,7 @@ export default function NearbySimpleRoutes({
 
         const arrivals = await getArrivals(locationIds, 90);
         setArrivalData(arrivals);
+        handleSimpleRoutesOpened();
       }
     }
     fetchData();

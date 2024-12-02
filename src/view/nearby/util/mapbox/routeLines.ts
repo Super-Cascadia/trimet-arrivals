@@ -15,10 +15,9 @@ function addMapboxLayer(
   routeIdentifier: string,
   promise,
   sourceId: string
-) {
+): Map {
   const isLoaded = map.loaded();
   console.log('is map loaded', isLoaded);
-
   console.log('adding mapbox layer', sourceId, routeIdentifier);
 
   map.addSource(sourceId, {
@@ -71,13 +70,13 @@ function addRouteLayers(mapBoxMap: Map, returnedPromises: any[]): any[] {
 
       if (isUndefined(sources[sourceId])) {
         sources[sourceId] = {};
-        const routeLayer = addMapboxLayer(
+        const mapboxMap = addMapboxLayer(
           mapBoxMap,
           routeIdentifier,
           promise,
           sourceId
         );
-        routeLayers.push(routeLayer);
+        routeLayers.push(mapboxMap);
       }
     }
   });

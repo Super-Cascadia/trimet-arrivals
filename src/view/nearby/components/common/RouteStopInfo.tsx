@@ -41,10 +41,10 @@ function RouteStopInfo({ shortSign, stopLocation }: StopInfoParams) {
       <div className="me-auto">
         <Card>
           <Card.Body>
-            <Card.Title>
+            {/* <Card.Title>
               <FontAwesome name="arrow-circle-right" />
               {shortSign}
-            </Card.Title>
+            </Card.Title> */}
             <Card.Text>
               <small className="text-muted">
                 Stop: {stopLocation.desc} ({stopLocation.id})

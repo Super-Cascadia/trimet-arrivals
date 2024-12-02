@@ -53,7 +53,7 @@ export function setNearbyStops(
   routeIds: string[],
   handleStopMarkerClick: (data: any) => void
 ) {
-  const isLoaded = mapBoxMap.loaded();
+  const isLoaded = mapBoxMap?.loaded();
   console.log('is map loaded', isLoaded);
   console.log("setting nearby stops", stopLocations, routeIds);
 
@@ -83,12 +83,7 @@ export function setNearbyStops(
   mapBoxMap.addLayer({
     id: STOP_LOCATION_LAYER,
     paint: {
-      "circle-color": [
-        "case",
-        ["==", ["get", "locid"], "SPECIFIC_STOP_ID"], // Replace SPECIFIC_STOP_ID with the actual ID
-        "#ff0000", // Color for the specific stop marker
-        "#4264fb" // Default color for other markers
-      ],
+      "circle-color": "#4264fb",
       "circle-radius": 8,
       "circle-stroke-color": "#ffffff",
       "circle-stroke-width": 2
@@ -104,8 +99,9 @@ export function setNearbyStops(
       center: e.features[0].geometry.coordinates
     });
     // @TODO: set zoom level
-    mapBoxMap.current.setZoom(16);
-    handleStopMarkerClick(e.features[0].properties);
+    mapBoxMap.setZoom(16);
+    const data = e.features[0];
+    handleStopMarkerClick(data);
   });
 
   // Create a popup, but don't add it to the map yet.
@@ -144,11 +140,13 @@ export function setNearbyStops(
     mapBoxMap.getCanvas().style.cursor = "";
     popup.remove();
   });
+
+  return mapBoxMap;
 }
 
 // Function to update the color of a specific stop marker by its ID
 export function updateStopMarkerColor(mapBoxMap: Map, stopId: string, color: string) {
-  const isLoaded = mapBoxMap.loaded();
+  const isLoaded = mapBoxMap?.loaded();
   console.log('is map loaded', isLoaded);
 
   function setMarkerColor() {
@@ -161,11 +159,14 @@ export function updateStopMarkerColor(mapBoxMap: Map, stopId: string, color: str
     ]);
   }
 
-  if (!isLoaded) {
-    mapBoxMap.on("load", () => {
-      setMarkerColor();
-    });
-  } else {
-    setMarkerColor();
-  }
+  // if (!isLoaded) {
+  //   mapBoxMap?.on("load", () => {
+  //     setMarkerColor();
+  //   });
+  // } else {
+  //   setMarkerColor();
+  // }
+
+  setMarkerColor();
+
 }

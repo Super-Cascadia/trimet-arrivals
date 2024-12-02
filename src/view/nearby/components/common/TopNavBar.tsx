@@ -4,13 +4,17 @@ import { LinkContainer } from "react-router-bootstrap";
 
 interface TopNavBarParams {
   id: string;
+  shortSign?: string;
 }
 
-export function TopNavBar({ id }: TopNavBarParams) {
+export function TopNavBar({ id, shortSign }: TopNavBarParams) {
+  const title = shortSign ? `${id} to ${shortSign}` : id;
   return (
     <Navbar bg="secondary" variant="dark">
       <Container>
-        <Nav as="h2">{id}</Nav>
+        <Nav>
+          <h3>{title}</h3>
+        </Nav>
         <Nav>
           <LinkContainer to="/nearby/simple-routes">
             <a className="nav-link">Back</a>

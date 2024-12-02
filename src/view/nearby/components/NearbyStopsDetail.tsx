@@ -1,10 +1,6 @@
 import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import {
-  Button,
-  ButtonGroup,
-  ButtonToolbar,
-  Card,
   Container,
   Nav,
   Navbar
@@ -17,12 +13,12 @@ import {
   ArrivalLocation
 } from "../../../api/trimet/interfaces/arrivals";
 import { getNormalizedDistanceString } from "../util/turfUtils";
-import RouteStopInfo from "./common/RouteStopInfo";
 import StopInfo from "./common/StopInfo";
 import StopArrivals from "./NearbyStopArrivals";
 
 interface Props {
   currentLocation: number[];
+  handleStopOpened: (stopLocation: ArrivalLocation) => void;
 }
 
 interface StopInfoParams {
@@ -54,13 +50,15 @@ interface StopInfoParams {
 //   );
 // }
 
-export function NearbyStopsDetail({ currentLocation }: Props) {
+export function NearbyStopsDetail({ currentLocation, handleStopOpened }: Props) {
   const { id } = useParams();
   const [data, setData] = useState<ArrivalData>(null);
 
   useEffect(() => {
     async function fetchData() {
       const arrivals = await getArrivals(id, 90);
+      const stopLocation = arrivals.location[0];
+      handleStopOpened(stopLocation);
       setData(arrivals);
     }
 
