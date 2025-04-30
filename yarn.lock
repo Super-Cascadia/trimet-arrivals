@@ -2150,10 +2150,10 @@
     "@types/jasmine" "*"
     "@types/react" "*"
 
-"@types/jasmine-matchers@^0.2.32":
-  version "0.2.32"
-  resolved "https://registry.yarnpkg.com/@types/jasmine-matchers/-/jasmine-matchers-0.2.32.tgz#ca0f5a90525cbc741f1293e17af4367b0b4012de"
-  integrity sha512-ZA8rih01+nKh0q3fD3QPehEEta07ZCaiIrGthARhL8nRSK2PgZQXJEgS2sxGcXceUAr7gGI+Ndg7pBNB21auLQ==
+"@types/jasmine-matchers@^0.2.35":
+  version "0.2.35"
+  resolved "https://registry.yarnpkg.com/@types/jasmine-matchers/-/jasmine-matchers-0.2.35.tgz#77da5a04769135327614840ca8d4902c0ca09e68"
+  integrity sha512-HVc+H8UhrnuHyC1s3wN0jKuIDPuf+UO0X1gKvPHlnoRb1yxcEeCsz87IWOCyIvXdlPVGw9qqOz7WmdT+g6FZgA==
   dependencies:
     "@types/jasmine" "*"
 
@@ -12071,14 +12071,7 @@ qrcode-terminal@^0.12.0:
   resolved "https://registry.yarnpkg.com/qrcode-terminal/-/qrcode-terminal-0.12.0.tgz#bb5b699ef7f9f0505092a3748be4464fe71b5819"
   integrity sha512-EXtzRZmC+YGmGlDFbXKxQiMZNwCLEO6BANKXG4iCtSIM0yqc/pappSx3RIKr4r0uh5JsBckOXeKrB3Iz7mdQpQ==
 
-qs@6.13.0:
-  version "6.13.0"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.13.0.tgz#6ca3bd58439f7e245655798997787b0d88a51906"
-  integrity sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==
-  dependencies:
-    side-channel "^1.0.6"
-
-qs@^6.11.0:
+qs@6.13.0, qs@^6.11.0:
   version "6.13.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.13.0.tgz#6ca3bd58439f7e245655798997787b0d88a51906"
   integrity sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==
