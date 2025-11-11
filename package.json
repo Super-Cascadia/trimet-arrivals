@@ -1,6 +1,7 @@
 {
   "name": "trimet-arrivals",
   "private": true,
+  "homepage": "https://super-cascadia.github.io/trimet-arrivals",
   "repository": "https://github.com/wintermuted/how-fucked-is-the-max.git",
   "author": "Jameson Nyeholt <jameson.nyeholt@gmail.com>",
   "license": "MIT",
