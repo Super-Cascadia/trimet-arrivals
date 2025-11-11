@@ -18,14 +18,14 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '14'
           cache: 'yarn'
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
       - name: Build for PR preview
-        run: NODE_OPTIONS=--openssl-legacy-provider PUBLIC_URL=/${{ github.event.repository.name }}/pr-${{ github.event.pull_request.number }} yarn build
+        run: PUBLIC_URL=/${{ github.event.repository.name }}/pr-${{ github.event.pull_request.number }} yarn build
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
