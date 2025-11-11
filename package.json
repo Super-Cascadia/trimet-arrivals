@@ -11,7 +11,7 @@
     "@types/classnames": "2.3.1",
     "@types/enzyme": "^3.10.18",
     "@types/jasmine-enzyme": "^7.0.1",
-    "@types/jasmine-matchers": "^0.2.32",
+    "@types/jasmine-matchers": "^0.2.35",
     "@types/jest": "26.0.21",
     "@types/lodash": "4.17.20",
     "@types/moment": "^2.13.0",
