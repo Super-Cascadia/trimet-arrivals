@@ -25,10 +25,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build for PR preview
-        run: yarn build
-        env:
-          NODE_OPTIONS: --openssl-legacy-provider
-          PUBLIC_URL: /${{ github.event.repository.name }}/pr-${{ github.event.pull_request.number }}
+        run: NODE_OPTIONS=--openssl-legacy-provider PUBLIC_URL=/${{ github.event.repository.name }}/pr-${{ github.event.pull_request.number }} yarn build
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
