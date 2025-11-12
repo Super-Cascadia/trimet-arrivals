@@ -1,0 +1,54 @@
+.add-bookmark-section-control {
+    margin-bottom: 10px;
+    width: 100%;
+    border-radius: 5px;
+}
+
+.add-bookmark-input-form {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.add-bookmark-name-input {
+    background: rgb(255,255, 255, 0.5);
+    width: 100%;
+    color: black;
+    border-radius: 5px;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.add-bookmark-name-input::placeholder {
+    color: black;
+}
+
+.add-bookmark-name-input-flex-container {
+    flex-grow: 4;
+}
+
+.add-bookmark-button-flex-container {
+    margin-left: 15px;
+}
+
+.add-bookmark-button {
+    background: rgb(0,0,0, 0.5);
+    border: 0;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    line-height: 30px;
+    padding-left: 9px;
+    padding-right: 9px;
+}
+
+.add-bookmark-button:hover {
+    background: rgb(0,0,0, 0.7);
+}
+
+.add-bookmark-button:disabled {
+    background: rgb(0,0,0, 0.2);
+    color: rgb(0,0,0, 0.2);
+    cursor: not-allowed;
+}

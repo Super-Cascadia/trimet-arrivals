@@ -1,0 +1,22 @@
+.bookmark-section h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: white;
+    line-height: 30px;
+}
+
+button.close-button {
+    background: rgb(0,0,0, 0.5);
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+    padding-left: 7px;
+    padding-right: 7px;
+    border-radius: 5px;
+    height: 30px;
+}
+
+button.close-button:hover {
+    background: rgb(0,0,0, 0.70);
+}

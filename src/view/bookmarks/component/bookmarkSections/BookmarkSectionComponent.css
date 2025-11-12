@@ -1,0 +1,39 @@
+.bookmark-section {
+    position: relative;
+}
+
+ul.bookmark-section-bookmarks {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-top: 10px;
+}
+
+.bookmark-flex-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+
+.bookmark-stop-flex-item {
+    flex-grow: 3
+}
+
+.bookmark-remove-flex-item {
+    padding-left: 10px;
+}
+
+.bookmark-section-add-more {
+    text-align: center;
+    color: white;
+    font-size: 14px;
+}
+
+.bookmark-stop-wrapper {
+    margin-bottom: 10px;
+}
+
+.bookmark-section-bookmarks li:last-child .bookmark-stop-wrapper {
+    margin-bottom: 0;
+}

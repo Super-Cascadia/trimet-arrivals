@@ -1,0 +1,19 @@
+.lines-view-nav {
+  a {
+    color: black;
+    text-decoration: none;
+    flex-grow: 1;
+    font-size: 14px;
+    span {
+      margin-right: 5px;
+    }
+  }
+}
+
+.line-detail-view-wrapper {
+  h2 {
+    span {
+      margin-right: 5px;
+    }
+  }
+}

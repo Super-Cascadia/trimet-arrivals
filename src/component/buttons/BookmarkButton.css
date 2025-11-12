@@ -1,0 +1,22 @@
+.bookmark-button {
+    background: rgb(0,0,0, 0.5);
+    display: inline-block;
+    padding-left: 5px;
+    padding-right: 5px;
+    cursor: pointer;
+    vertical-align: middle;
+    line-height: 25px;
+    text-align: center;
+    width: 30px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.bookmark-button:hover {
+    background: rgb(0,0,0, 0.7);
+}
+
+.bookmark-button-container {
+    line-height: 20px;
+}
