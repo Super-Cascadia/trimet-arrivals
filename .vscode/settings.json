@@ -1,0 +1,9 @@
+{
+  "chat.customAgentInSubagent.enabled": true,
+  "chat.extensionUnification.enabled": true,
+  "chat.emptyState.history.enabled": true,
+  "chat.mcp.gallery.enabled": true,
+  "chat.todoListTool.descriptionField": true,
+  "chat.tools.terminal.autoReplyToPrompts": true,
+  "inlineChat.enableV2": true
+}

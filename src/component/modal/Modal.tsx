@@ -1,12 +1,16 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import ReactDOM from "react-dom";
 import "./Modal.css";
 
-export default class Modal extends React.Component<{}> {
+interface ModalProps {
+  children: ReactNode;
+}
+
+export default class Modal extends React.Component<ModalProps> {
   private modalRoot: HTMLElement;
   private el: HTMLDivElement;
 
-  constructor(props) {
+  constructor(props: ModalProps) {
     super(props);
     this.el = document.createElement("div");
   }

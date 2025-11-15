@@ -6,6 +6,7 @@ interface Props {
   className: string;
   title: string;
   open: boolean;
+  children?: React.ReactNode;
 }
 
 interface State {

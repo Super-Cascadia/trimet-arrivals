@@ -19,7 +19,9 @@ function getSystemAlerts(systemAlertsData: IAlert[]) {
       <Alert key={alert.id} variant="warning">
         <Alert.Heading>{alert.header_text}</Alert.Heading>
         <p className="mb-0">
-          <Alert.Link href={alert.info_link_url}>More Info</Alert.Link>
+          <a href={alert.info_link_url} className="alert-link">
+            More Info
+          </a>
         </p>
       </Alert>
     );
