@@ -5,10 +5,11 @@ import { isString } from "lodash";
 
 export function setMapZoom(
   map: Map,
-  radiusSize: number,
+  radiusSize: string | number,
   setZoom: React.Dispatch<React.SetStateAction<number>>
 ) {
-  const radius = isString(radiusSize) ? parseInt(radiusSize, 10) : radiusSize;
+  const radius =
+    typeof radiusSize === "string" ? parseInt(radiusSize, 10) : radiusSize;
 
   switch (radius) {
     case 250:

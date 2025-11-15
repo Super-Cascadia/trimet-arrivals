@@ -2,7 +2,7 @@ import React from "react";
 import { Provider } from "react-redux";
 
 interface ProviderMockProps {
-  children: JSX.Element;
+  children: React.ReactNode;
   store?: any;
 }
 
