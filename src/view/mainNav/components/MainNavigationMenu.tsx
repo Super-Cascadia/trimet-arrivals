@@ -24,9 +24,6 @@ export default function MainNavigationMenu({
           <LinkContainer to="/">
             <a className="nav-link">Home</a>
           </LinkContainer>
-          <LinkContainer to="/nearby/simple-routes">
-            <a className="nav-link">Nearby</a>
-          </LinkContainer>
           <LinkContainer to="/lines/all">
             <a className="nav-link">Lines</a>
           </LinkContainer>

@@ -40,7 +40,7 @@ export default function RootAppRoutes() {
       <MainNavigationContainer />
       <main className="main-view">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Navigate to="/nearby" replace />} />
           <Route path="nearby" element={<NearbyView />}>
             <Route path="" element={<Navigate to="simple-routes" />} />
             <Route path="simple-routes" element={<NearbySimpleRoutesComp />} />
@@ -54,6 +54,7 @@ export default function RootAppRoutes() {
             <Route path="routes" element={<NearbyRoutesComponent />} />
             <Route path="routes/:id" element={<NearbyRouteDetails />} />
           </Route>
+          <Route path="/homepage-backup" element={<Home />} />
           <Route path="stop/:id" element={<StopLocationViewRouter />} />
           <Route path="lines" element={<LinesViewComponent />}>
             <Route path="all" element={<AllLines />} />
