@@ -9,7 +9,7 @@ import {
 } from "../../../api/trimet/interfaces/types";
 import RouteIndicator from "../../../component/route/RouteIndicator";
 import StopLocationIndicator from "../../../component/stop/StopLocationIndicator";
-import Loading from "../../loading/Loading";
+import NearbySkeletonList from "./common/NearbySkeleton";
 import { getNormalizedDistanceString } from "../util/turfUtils";
 import NearbySubNav from "./common/NearbySubNav";
 import "./NearbyViewComponent.scss";
@@ -105,38 +105,37 @@ export default function NearbyStops({
   stopCount,
   currentLocation
 }: NearbyStopsProps) {
-  if (!nearbyStops) {
-    return <Loading />;
-  }
+  const isLoading = !nearbyStops;
 
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
 
   const routeDirectionOptions: { label: string; value: string }[] = [];
   const stopOptions: { label: string; value: string }[] = [];
-  const seenRouteDirections: Set<string> = new Set();
-  const seenStops: Set<number> = new Set();
-
-  nearbyStops.location.forEach(loc => {
-    if (!seenStops.has(loc.locid)) {
-      seenStops.add(loc.locid);
-      stopOptions.push({
-        label: `Stop ${loc.locid} – ${loc.desc}`,
-        value: `stop:${loc.locid}`
-      });
-    }
-    (loc.route || []).forEach(r => {
-      r.dir.forEach(d => {
-        const composite = `${r.route}-${d.dir}`;
-        if (!seenRouteDirections.has(composite)) {
-          seenRouteDirections.add(composite);
-          routeDirectionOptions.push({
-            label: `Route ${r.route} – ${r.desc} – ${d.desc}`,
-            value: `route:${composite}`
-          });
-        }
+  if (!isLoading) {
+    const seenRouteDirections: Set<string> = new Set();
+    const seenStops: Set<number> = new Set();
+    nearbyStops.location.forEach(loc => {
+      if (!seenStops.has(loc.locid)) {
+        seenStops.add(loc.locid);
+        stopOptions.push({
+          label: `Stop ${loc.locid} – ${loc.desc}`,
+          value: `stop:${loc.locid}`
+        });
+      }
+      (loc.route || []).forEach(r => {
+        r.dir.forEach(d => {
+          const composite = `${r.route}-${d.dir}`;
+          if (!seenRouteDirections.has(composite)) {
+            seenRouteDirections.add(composite);
+            routeDirectionOptions.push({
+              label: `Route ${r.route} – ${r.desc} – ${d.desc}`,
+              value: `route:${composite}`
+            });
+          }
+        });
       });
     });
-  });
+  }
 
   const groupedOptions = [
     { label: "Stops", options: stopOptions },
@@ -182,13 +181,17 @@ export default function NearbyStops({
           .filter(o => selectedValues.includes(o.value))}
       />
       <br />
-      {getLocationInfo(
-        nearbyStops,
-        currentLocation,
-        selectedStops,
-        selectedRouteDirections,
-        hasStopFiltering,
-        hasRouteFiltering
+      {isLoading ? (
+        <NearbySkeletonList cards={4} rowsPerCard={3} />
+      ) : (
+        getLocationInfo(
+          nearbyStops,
+          currentLocation,
+          selectedStops,
+          selectedRouteDirections,
+          hasStopFiltering,
+          hasRouteFiltering
+        )
       )}
     </div>
   );

@@ -82,6 +82,9 @@
     "trimet": "node ./scripts/split_routes.js"
   },
   "jest": {
+    "setupFiles": [
+      "<rootDir>/src/setupTestGlobals.js"
+    ],
     "collectCoverageFrom": [
       "src/api/**/*.{ts,tsx}",
       "src/component/**/*.{ts,tsx}",

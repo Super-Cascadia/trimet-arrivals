@@ -12,9 +12,15 @@ export default function geoLocateCurrentPosition(): Promise<Location> {
     });
   }
 
-  return new Promise(resolve => {
-    navigator.geolocation.getCurrentPosition((location: Location) => {
-      resolve(location);
-    });
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      (location: Location) => {
+        resolve(location);
+      },
+      error => {
+        // Reject with the original error to avoid undefined rejection reasons
+        reject(error instanceof Error ? error : new Error(String(error)));
+      }
+    );
   });
 }

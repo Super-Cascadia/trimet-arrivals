@@ -7,6 +7,7 @@ import RouteIndicator from "../../../component/route/RouteIndicator";
 import NearbySubNav from "./common/NearbySubNav";
 import "./NearbyRoutes.scss";
 import { SearchRadiusSelection } from "./SearchRadiusSelection";
+import NearbySkeletonList from "./common/NearbySkeleton";
 
 function getRouteDirections(
   route: TrimetRoute,
@@ -87,35 +88,38 @@ export default function NearbyRoutes({
   routeCount,
   stopCount
 }: NearbyRoutesProps) {
+  const isLoading = !nearbyRoutes;
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
 
   // Build options
   const routeOptions: { label: string; value: string }[] = [];
   const directionOptions: { label: string; value: string }[] = [];
-  const seenRoutes: Set<number> = new Set();
-  const seenDirections: Set<string> = new Set();
-  map(nearbyRoutes, (routeGroup: TrimetRoute[]) => {
-    const route = routeGroup[0];
-    if (!seenRoutes.has(route.route)) {
-      seenRoutes.add(route.route);
-      routeOptions.push({
-        label: `Route ${route.route} – ${route.desc}`,
-        value: `route:${route.route}`
-      });
-    }
-    routeGroup.forEach(r => {
-      r.dir.forEach(d => {
-        const composite = `${r.route}-${d.dir}`;
-        if (!seenDirections.has(composite)) {
-          seenDirections.add(composite);
-          directionOptions.push({
-            label: `Dir ${d.dir} – ${r.desc} – ${d.desc}`,
-            value: `dir:${composite}`
-          });
-        }
+  if (!isLoading) {
+    const seenRoutes: Set<number> = new Set();
+    const seenDirections: Set<string> = new Set();
+    map(nearbyRoutes, (routeGroup: TrimetRoute[]) => {
+      const route = routeGroup[0];
+      if (!seenRoutes.has(route.route)) {
+        seenRoutes.add(route.route);
+        routeOptions.push({
+          label: `Route ${route.route} – ${route.desc}`,
+          value: `route:${route.route}`
+        });
+      }
+      routeGroup.forEach(r => {
+        r.dir.forEach(d => {
+          const composite = `${r.route}-${d.dir}`;
+          if (!seenDirections.has(composite)) {
+            seenDirections.add(composite);
+            directionOptions.push({
+              label: `Dir ${d.dir} – ${r.desc} – ${d.desc}`,
+              value: `dir:${composite}`
+            });
+          }
+        });
       });
     });
-  });
+  }
 
   const groupedOptions = [
     { label: "Routes", options: routeOptions },
@@ -160,12 +164,16 @@ export default function NearbyRoutes({
           .filter(o => selectedValues.includes(o.value))}
       />
       <br />
-      {getRoutes(
-        nearbyRoutes,
-        selectedRoutes,
-        selectedDirections,
-        hasRouteFiltering,
-        hasDirectionFiltering
+      {isLoading ? (
+        <NearbySkeletonList cards={4} rowsPerCard={3} />
+      ) : (
+        getRoutes(
+          nearbyRoutes,
+          selectedRoutes,
+          selectedDirections,
+          hasRouteFiltering,
+          hasDirectionFiltering
+        )
       )}
     </div>
   );

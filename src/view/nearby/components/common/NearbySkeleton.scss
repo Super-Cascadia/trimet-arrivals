@@ -1,0 +1,64 @@
+.skeleton-card {
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.skeleton-line {
+  background: #e6e6e6;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.skeleton-line.is-header {
+  height: 18px;
+}
+
+.skeleton-line::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+  animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(300px);
+  }
+}
+
+.skeleton-gap {
+  height: 10px;
+}
+
+.skeleton-list-item {
+  margin-top: 10px;
+}
+
+.skeleton-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.skeleton-card + .skeleton-card {
+  margin-top: 12px;
+}
+
+/* Size modifiers */
+.skeleton-line.w-100 { width: 100%; }
+.skeleton-line.w-80 { width: 80%; }
+.skeleton-line.w-60 { width: 60%; }
+.skeleton-line.w-50 { width: 50%; }
+.skeleton-line.w-40 { width: 40%; }
+
+.skeleton-line.h-sm { height: 12px; }
+.skeleton-line.h-md { height: 18px; }
