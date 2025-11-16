@@ -85,3 +85,33 @@
 .route-cyan {
     background: $cyan;
 }
+
+// React-select route filter sizing adjustments
+.nearby-route-filter__control {
+    min-height: 30px;
+    font-size: 12px;
+}
+.nearby-route-filter__value-container {
+    padding: 2px 6px;
+}
+.nearby-route-filter__multi-value {
+    font-size: 11px;
+    line-height: 1.2;
+}
+.nearby-route-filter__multi-value__label {
+    font-size: 11px;
+    padding: 2px 4px;
+}
+.nearby-route-filter__multi-value__remove {
+    padding: 0 4px;
+}
+.nearby-route-filter__input input {
+    font-size: 12px !important;
+}
+.nearby-route-filter__single-value {
+    font-size: 12px;
+}
+.nearby-route-filter__option {
+    font-size: 12px;
+    padding: 4px 8px;
+}
