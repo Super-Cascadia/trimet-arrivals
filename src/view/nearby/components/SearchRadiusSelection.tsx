@@ -5,11 +5,13 @@ import FontAwesome from "react-fontawesome";
 export interface SearchRadiusSelectionParams {
   radiusSize: number;
   handleRadiusSelectionChange: (e) => void;
+  handleRefresh?: () => void;
 }
 
 export function SearchRadiusSelection({
   radiusSize,
-  handleRadiusSelectionChange
+  handleRadiusSelectionChange,
+  handleRefresh
 }: SearchRadiusSelectionParams) {
   const options = [250, 500, 750, 1000, 1500, 2000, 2500, 5000];
   return (
@@ -29,8 +31,13 @@ export function SearchRadiusSelection({
             );
           })}
         </Form.Select>
+        {handleRefresh && (
+          <Button variant="outline-secondary" onClick={handleRefresh} aria-label="Refresh">
+            <FontAwesome name="refresh" />
+          </Button>
+        )}
         <Button variant="primary" aria-label="Find transit near me">
-          <FontAwesome name="location-arrow" />
+          <FontAwesome name="location-arrow" />{" "}
           Find Near Me
         </Button>
       </InputGroup>

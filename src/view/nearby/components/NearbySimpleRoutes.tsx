@@ -12,6 +12,7 @@ import {
 } from "../../../api/trimet/interfaces/types";
 import NearbySubNav from "./common/NearbySubNav";
 import SimpleArrivalListItem from "./common/SimpleArrivalListItem";
+import NearbySkeletonList from "./common/NearbySkeleton";
 import "./NearbyRoutes.scss";
 import { SearchRadiusSelection } from "./SearchRadiusSelection";
 
@@ -19,8 +20,10 @@ interface Props {
   nearbyRoutes: Dictionary<TrimetRoute[]>;
   nearbyStops: StopData;
   radiusSize: number;
+  minLoadingTime?: boolean;
   handleSimpleRoutesOpened: () => void;
   handleRadiusSelectionChange: (e: any) => void;
+  handleRefresh?: () => void;
   routeCount: number;
   stopCount: number;
 }
@@ -74,8 +77,10 @@ export default function NearbySimpleRoutes({
   nearbyStops,
   nearbyRoutes,
   radiusSize,
+  minLoadingTime = false,
   handleRadiusSelectionChange,
   handleSimpleRoutesOpened,
+  handleRefresh,
   routeCount,
   stopCount
 }: Props) {
@@ -98,14 +103,11 @@ export default function NearbySimpleRoutes({
     fetchData();
   }, [nearbyStops]);
 
-  if (!nearbyStops || !arrivalData) {
-    return null;
-  }
+  const isLoading = !nearbyStops || !arrivalData || minLoadingTime;
 
-  const { closestNearbyRouteStructure } = getRouteArrivals(
-    arrivalData,
-    nearbyStops
-  );
+  const { closestNearbyRouteStructure } = isLoading
+    ? { closestNearbyRouteStructure: [] }
+    : getRouteArrivals(arrivalData, nearbyStops);
 
   const sortedNearbyRouteStructure =
     !isEmpty(closestNearbyRouteStructure) &&
@@ -116,15 +118,17 @@ export default function NearbySimpleRoutes({
     });
 
   // Build select options from the nearby route structure
-  const routeOptions = (sortedNearbyRouteStructure || []).map(r => {
-    const directionObj = r.route.dir.find(d => d.dir === r.dir);
-    const directionLabel = directionObj?.desc || `Dir ${r.dir}`;
-    const routeDirectionId = `${r.id}-${r.dir}`;
-    return {
-      label: `${r.route.desc} – ${directionLabel} (${routeDirectionId})`,
-      value: routeDirectionId
-    };
-  });
+  const routeOptions = isLoading
+    ? []
+    : (sortedNearbyRouteStructure || []).map(r => {
+        const directionObj = r.route.dir.find(d => d.dir === r.dir);
+        const directionLabel = directionObj?.desc || `Dir ${r.dir}`;
+        const routeDirectionId = `${r.id}-${r.dir}`;
+        return {
+          label: `${r.route.desc} – ${directionLabel} (${routeDirectionId})`,
+          value: routeDirectionId
+        };
+      });
 
   const handleRouteFilterChange = (selected: any) => {
     const values = selected.map((o: any) => o.value);
@@ -142,6 +146,7 @@ export default function NearbySimpleRoutes({
       <SearchRadiusSelection
         radiusSize={radiusSize}
         handleRadiusSelectionChange={handleRadiusSelectionChange}
+        handleRefresh={handleRefresh}
       />
       <br />
       <NearbySubNav routeCount={routeCount} stopCount={stopCount} />
@@ -153,23 +158,28 @@ export default function NearbySimpleRoutes({
         placeholder="Filter routes..."
         classNamePrefix="nearby-route-filter"
         value={routeOptions.filter(o => routeFilter.includes(o.value))}
+        isDisabled={isLoading}
       />
       <br />
-      <ListGroup>
-        {map(filteredStructure, (route: RouteStructure, index: number) => {
-          const arrival = route.arrivals[0];
-          const stop = route.stop;
-          return (
-            <SimpleArrivalListItem
-              key={index}
-              id={stop.locid}
-              arrival={arrival}
-              route={route.route}
-              stop={stop}
-            />
-          );
-        })}
-      </ListGroup>
+      {isLoading ? (
+        <NearbySkeletonList cards={5} rowsPerCard={2} />
+      ) : (
+        <ListGroup>
+          {map(filteredStructure, (route: RouteStructure, index: number) => {
+            const arrival = route.arrivals[0];
+            const stop = route.stop;
+            return (
+              <SimpleArrivalListItem
+                key={index}
+                id={stop.locid}
+                arrival={arrival}
+                route={route.route}
+                stop={stop}
+              />
+            );
+          })}
+        </ListGroup>
+      )}
     </div>
   );
 }

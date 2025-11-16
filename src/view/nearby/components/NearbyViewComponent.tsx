@@ -49,7 +49,9 @@ export interface NearbyViewComponentOutletContextProps {
   nearbyRoutes: Dictionary<TrimetRoute[]>;
   nearbyStops: StopData;
   radiusSize: number;
+  minLoadingTime: boolean;
   handleRadiusSelectionChange: (e: any) => void;
+  handleRefresh: () => void;
   initializeMap: () => void;
   handleRouteArrivalsOpened: (
     id: string,
@@ -79,7 +81,8 @@ export function NearbyStopsComponent() {
     nearbyRoutes,
     nearbyStops,
     radiusSize,
-    handleRadiusSelectionChange
+    handleRadiusSelectionChange,
+    handleRefresh
   } = useOutletContext<NearbyViewComponentOutletContextProps>();
 
   const stopCount = nearbyStops?.location?.length;
@@ -95,6 +98,7 @@ export function NearbyStopsComponent() {
         stopCount={stopCount}
         routeCount={routeCount}
         handleRadiusSelectionChange={handleRadiusSelectionChange}
+        handleRefresh={handleRefresh}
       />
     </div>
   );
@@ -106,8 +110,10 @@ export function NearbySimpleRoutesComp() {
     nearbyRoutes,
     nearbyStops,
     radiusSize,
+    minLoadingTime,
     handleRadiusSelectionChange,
-    handleSimpleRoutesOpened
+    handleSimpleRoutesOpened,
+    handleRefresh
   } = useOutletContext<NearbyViewComponentOutletContextProps>();
 
   const stopCount = nearbyStops?.location?.length;
@@ -120,10 +126,12 @@ export function NearbySimpleRoutesComp() {
         nearbyStops={nearbyStops}
         nearbyRoutes={nearbyRoutes}
         radiusSize={radiusSize}
+        minLoadingTime={minLoadingTime}
         handleRadiusSelectionChange={handleRadiusSelectionChange}
         handleSimpleRoutesOpened={handleSimpleRoutesOpened}
         routeCount={routeCount}
         stopCount={stopCount}
+        handleRefresh={handleRefresh}
       />
     </div>
   );
@@ -147,7 +155,8 @@ export function NearbyRoutesComponent() {
     nearbyRoutes,
     nearbyStops,
     radiusSize,
-    handleRadiusSelectionChange
+    handleRadiusSelectionChange,
+    handleRefresh
   } = useOutletContext<NearbyViewComponentOutletContextProps>();
 
   const stopCount = nearbyStops?.location?.length;
@@ -160,6 +169,7 @@ export function NearbyRoutesComponent() {
       stopCount={stopCount}
       routeCount={routeCount}
       handleRadiusSelectionChange={handleRadiusSelectionChange}
+      handleRefresh={handleRefresh}
     />
   );
 }
@@ -177,6 +187,7 @@ export default function NearbyViewComponent() {
   const [userLocation, setUserLocation] = useState<Location>(undefined);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [displayedRouteIds, setDisplayedRouteIds] = useState<string[]>([]);
+  const [minLoadingTime, setMinLoadingTime] = useState(true);
 
   const currentLocation = [
     userLocation?.coords?.longitude,
@@ -198,15 +209,27 @@ export default function NearbyViewComponent() {
     });
   }
 
+  // Minimum loading time
+  useEffect(() => {
+    const timer = setTimeout(() => setMinLoadingTime(false), 250);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Initial Load
   useEffect(() => {
     if (userLocation) {
-      fetchInitialData(userLocation);
-    } else {
-      geoLocateCurrentPosition().then((location: Location) => {
-        setUserLocation(location);
-        fetchInitialData(location);
+      fetchInitialData(userLocation).catch((error) => {
+        console.error("Error fetching initial data:", error);
       });
+    } else {
+      geoLocateCurrentPosition()
+        .then((location: Location) => {
+          setUserLocation(location);
+          return fetchInitialData(location);
+        })
+        .catch((error) => {
+          console.error("Error during initial load:", error);
+        });
     }
   }, []);
 
@@ -218,25 +241,29 @@ export default function NearbyViewComponent() {
     console.log("radius size change", radiusSize);
     setMapZoom(mapRef, radiusSize, setZoom);
 
-    getNearbyStops(userLocation, radiusSize).then((stopData: StopData) => {
-      const routes = processRoutes(stopData);
-      const nearbyRouteIds = getNearbyRouteIds(routes);
-      const stopLocations = getStopLocations(stopData);
+    getNearbyStops(userLocation, radiusSize)
+      .then((stopData: StopData) => {
+        const routes = processRoutes(stopData);
+        const nearbyRouteIds = getNearbyRouteIds(routes);
+        const stopLocations = getStopLocations(stopData);
 
-      removeStopLocationLayers(mapRef.current);
-      removeCurrentLocationMarkers(mapRef.current);
-      removeRoutes(mapRef.current, Object.keys(nearbyRouteIds));
+        removeStopLocationLayers(mapRef.current);
+        removeCurrentLocationMarkers(mapRef.current);
+        removeRoutes(mapRef.current, Object.keys(nearbyRouteIds));
 
-      setNearbyStopData(stopData);
-      setNearbyRoutesData(routes);
-      setNearbyStops(
-        mapRef.current,
-        stopLocations,
-        Object.keys(nearbyRouteIds),
-        handleStopMarkerClick
-      );
-      setCurrentLocationMarker(mapRef.current, lng, lat, radiusSize);
-    });
+        setNearbyStopData(stopData);
+        setNearbyRoutesData(routes);
+        setNearbyStops(
+          mapRef.current,
+          stopLocations,
+          Object.keys(nearbyRouteIds),
+          handleStopMarkerClick
+        );
+        setCurrentLocationMarker(mapRef.current, lng, lat, radiusSize);
+      })
+      .catch((error) => {
+        console.error("Error updating radius:", error);
+      });
   }, [radiusSize]);
 
   function initializeMapboxMap() {
@@ -260,6 +287,17 @@ export default function NearbyViewComponent() {
   function handleRadiusSelectionChange(e) {
     console.log("handle radius selection change", e.target.value);
     setRadiusSize(e.target.value);
+  }
+
+  function handleRefresh() {
+    console.log("handle refresh");
+    if (userLocation) {
+      setNearbyStopData(undefined);
+      setNearbyRoutesData(undefined);
+      fetchInitialData(userLocation).catch((error) => {
+        console.error("Error refreshing data:", error);
+      });
+    }
   }
 
   function handleStopMarkerClick(data: any) {
@@ -304,11 +342,14 @@ export default function NearbyViewComponent() {
 
   function handleSimpleRoutesOpened() {
     console.info("simple routes opened");
+    if (!mapRef.current || !mapRef.current.isStyleLoaded()) {
+      return;
+    }
     mapRef.current = removeStopLocationLayers(mapRef.current);
     mapRef.current = setNearbyStops(
       mapRef.current,
       stopLocations,
-      Object.keys(nearbyRouteIds),
+      nearbyRouteIds ? Object.keys(nearbyRouteIds) : [],
       handleStopMarkerClick
     );
     mapRef.current = removeRoutes(mapRef.current, displayedRouteIds);
@@ -321,7 +362,9 @@ export default function NearbyViewComponent() {
     nearbyRoutes,
     nearbyStops,
     radiusSize,
+    minLoadingTime,
     handleRadiusSelectionChange,
+    handleRefresh,
     initializeMap: initializeMapboxMap,
     handleRouteArrivalsOpened,
     handleStopOpened,
@@ -331,7 +374,7 @@ export default function NearbyViewComponent() {
   return (
     <Container fluid={true}>
       <Row>
-        <Col md={3}>{isMapLoaded && <Outlet context={context} />}</Col>
+        <Col md={3}><Outlet context={context} /></Col>
         <Col md={9}>
           {showMap && (
             <NearbyMapV2

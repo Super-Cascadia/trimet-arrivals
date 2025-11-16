@@ -77,6 +77,7 @@ export interface NearbyRoutesProps {
   nearbyRoutes: Dictionary<TrimetRoute[]>;
   radiusSize: number;
   handleRadiusSelectionChange: (e: any) => void;
+  handleRefresh?: () => void;
   routeCount: number;
   stopCount: number;
 }
@@ -85,6 +86,7 @@ export default function NearbyRoutes({
   nearbyRoutes,
   radiusSize,
   handleRadiusSelectionChange,
+  handleRefresh,
   routeCount,
   stopCount
 }: NearbyRoutesProps) {
@@ -148,6 +150,7 @@ export default function NearbyRoutes({
       <SearchRadiusSelection
         radiusSize={radiusSize}
         handleRadiusSelectionChange={handleRadiusSelectionChange}
+        handleRefresh={handleRefresh}
       />
       <br />
       <NearbySubNav routeCount={routeCount} stopCount={stopCount} />

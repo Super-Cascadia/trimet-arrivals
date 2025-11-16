@@ -22,7 +22,7 @@ function getRouteDisplay(routeId: number, verboseRouteDisplay: boolean) {
     if (routeId) {
       return (
         <Badge bg="secondary">
-          <FontAwesome name="bus" />
+          <FontAwesome name="bus" />{" "}
           <span>
             {routeId} {verboseRouteDisplay && "Bus"}
           </span>
@@ -33,7 +33,7 @@ function getRouteDisplay(routeId: number, verboseRouteDisplay: boolean) {
   } else {
     return (
       <Badge bg="secondary">
-        <FontAwesome name="train" />
+        <FontAwesome name="train" />{" "}
         <span className="route-indicator-text">{routeFound}</span>
       </Badge>
     );
