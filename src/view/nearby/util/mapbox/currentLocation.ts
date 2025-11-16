@@ -1,6 +1,11 @@
 import * as turf from "@turf/turf";
 import { Map } from "mapbox-gl";
-import { CURRENT_LOCATION_CIRCLE, CURRENT_LOCATION_CIRCLE_LAYER, CURRENT_LOCATION_RADIUS, CURRENT_LOCATION_RADIUS_LAYER } from "./consts";
+import {
+  CURRENT_LOCATION_CIRCLE,
+  CURRENT_LOCATION_CIRCLE_LAYER,
+  CURRENT_LOCATION_RADIUS,
+  CURRENT_LOCATION_RADIUS_LAYER
+} from "./consts";
 
 export function drawCircle(
   map: Map,
@@ -28,7 +33,7 @@ export function drawCircle(
       "fill-opacity": 0.4
     }
   });
-  
+
   return updatedMap;
 }
 

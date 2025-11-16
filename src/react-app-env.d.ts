@@ -9,12 +9,12 @@ declare namespace JSX {
   }
 }
 
-declare module 'react-fontawesome' {
+declare module "react-fontawesome" {
   const FontAwesome: any;
   export default FontAwesome;
 }
 
-declare module 'react-select' {
+declare module "react-select" {
   const Select: any;
   export default Select;
 }

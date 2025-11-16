@@ -3,7 +3,14 @@
 import mapboxgl, { Map } from "!mapbox-gl";
 import { map } from "lodash";
 import { StopLocationsDictionary } from "../../../../store/reducers/util/formatStopLocations";
-import { STOP_LOCATION_LAYER, STOP_LOCATIONS_SOURCE, CURRENT_LOCATION_CIRCLE_LAYER, CURRENT_LOCATION_CIRCLE, CURRENT_LOCATION_RADIUS_LAYER, CURRENT_LOCATION_RADIUS } from "./consts";
+import {
+  STOP_LOCATION_LAYER,
+  STOP_LOCATIONS_SOURCE,
+  CURRENT_LOCATION_CIRCLE_LAYER,
+  CURRENT_LOCATION_CIRCLE,
+  CURRENT_LOCATION_RADIUS_LAYER,
+  CURRENT_LOCATION_RADIUS
+} from "./consts";
 
 export function removeStopLocationLayers(mapBoxMap: Map) {
   let map = mapBoxMap;
@@ -45,7 +52,7 @@ export function setNearbyStops(
   handleStopMarkerClick: (data: any) => void
 ) {
   const isLoaded = mapBoxMap?.loaded();
-  console.log('is map loaded', isLoaded);
+  console.log("is map loaded", isLoaded);
   console.log("setting nearby stops", stopLocations, routeIds);
 
   const features = map(stopLocations, stopLocation => {
@@ -56,7 +63,7 @@ export function setNearbyStops(
       },
       properties: {
         locid: stopLocation.locid,
-        routeids: routeIds.join(',') // Ensure routeids are included
+        routeids: routeIds.join(",") // Ensure routeids are included
       },
       type: "Feature"
     };
@@ -118,7 +125,9 @@ export function setNearbyStops(
       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     }
 
-    const popupHtml = `<strong>Stop ID</strong>: ${locid}<br><strong>Routes</strong>: ${routeids.split(',').join(', ')}`;
+    const popupHtml = `<strong>Stop ID</strong>: ${locid}<br><strong>Routes</strong>: ${routeids
+      .split(",")
+      .join(", ")}`;
     // Populate the popup and set its coordinates
     // based on the feature found.
     popup
@@ -136,12 +145,16 @@ export function setNearbyStops(
 }
 
 // Function to update the color of a specific stop marker by its ID
-export function updateStopMarkerColor(mapBoxMap: Map, stopId: string, color: string) {
+export function updateStopMarkerColor(
+  mapBoxMap: Map,
+  stopId: string,
+  color: string
+) {
   const isLoaded = mapBoxMap?.loaded();
-  console.log('is map loaded', isLoaded);
+  console.log("is map loaded", isLoaded);
 
   function setMarkerColor() {
-    console.log('setting marker color', stopId, color);
+    console.log("setting marker color", stopId, color);
     mapBoxMap.setPaintProperty(STOP_LOCATION_LAYER, "circle-color", [
       "case",
       ["==", ["get", "locid"], parseInt(stopId, 10)],
@@ -159,5 +172,4 @@ export function updateStopMarkerColor(mapBoxMap: Map, stopId: string, color: str
   // }
 
   setMarkerColor();
-
 }

@@ -1,10 +1,6 @@
 import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Nav,
-  Navbar
-} from "react-bootstrap";
+import { Container, Nav, Navbar } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useParams } from "react-router-dom";
 import { getArrivals } from "../../../api/trimet/arrivals";
@@ -50,7 +46,10 @@ interface StopInfoParams {
 //   );
 // }
 
-export function NearbyStopsDetail({ currentLocation, handleStopOpened }: Props) {
+export function NearbyStopsDetail({
+  currentLocation,
+  handleStopOpened
+}: Props) {
   const { id } = useParams();
   const [data, setData] = useState<ArrivalData>(null);
 
