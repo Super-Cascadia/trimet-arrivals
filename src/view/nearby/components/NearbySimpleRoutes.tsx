@@ -12,6 +12,7 @@ import {
 } from "../../../api/trimet/interfaces/types";
 import NearbySubNav from "./common/NearbySubNav";
 import SimpleArrivalListItem from "./common/SimpleArrivalListItem";
+import SimpleArrivalListItemSkeleton from "./common/SimpleArrivalListItemSkeleton";
 import NearbySkeletonList from "./common/NearbySkeleton";
 import "./NearbyRoutes.scss";
 import { SearchRadiusSelection } from "./SearchRadiusSelection";
@@ -161,25 +162,31 @@ export default function NearbySimpleRoutes({
         isDisabled={isLoading}
       />
       <br />
-      {isLoading ? (
-        <NearbySkeletonList cards={5} rowsPerCard={2} />
-      ) : (
-        <ListGroup>
-          {map(filteredStructure, (route: RouteStructure, index: number) => {
-            const arrival = route.arrivals[0];
-            const stop = route.stop;
-            return (
-              <SimpleArrivalListItem
-                key={index}
-                id={stop.locid}
-                arrival={arrival}
-                route={route.route}
-                stop={stop}
-              />
-            );
-          })}
-        </ListGroup>
-      )}
+      <ListGroup>
+        {isLoading ? (
+          <>
+            {Array.from({ length: 5 }).map((_, index) => (
+              <SimpleArrivalListItemSkeleton key={`skeleton-${index}`} />
+            ))}
+          </>
+        ) : (
+          <>
+            {map(filteredStructure, (route: RouteStructure, index: number) => {
+              const arrival = route.arrivals[0];
+              const stop = route.stop;
+              return (
+                <SimpleArrivalListItem
+                  key={index}
+                  id={stop.locid}
+                  arrival={arrival}
+                  route={route.route}
+                  stop={stop}
+                />
+              );
+            })}
+          </>
+        )}
+      </ListGroup>
     </div>
   );
 }

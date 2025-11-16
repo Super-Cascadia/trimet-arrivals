@@ -15,6 +15,10 @@ interface StopOnRouteParams {
 }
 
 function RouteAtStop({ stopData }: { stopData: StopData }) {
+  if (!stopData?.location || stopData.location.length === 0 || !stopData.location[0]?.route) {
+    return null;
+  }
+
   const routes: TrimetRoute[] = stopData.location[0].route;
 
   return (
