@@ -19,9 +19,15 @@ import {
 import { setMapZoom } from "../util/mapbox/mapZoom";
 import NearbyMapV2 from "./NearbyMapV2";
 import "./NearbyViewComponent.scss";
-import { initializeCurrentLocationMarker, setCurrentLocationMarker } from "../util/mapbox/currentLocation";
-import { initializeMap } from '../util/mapbox/initializeMap';
-import { removeRoutes, setRoutes as setRoutesOnMap } from "../util/mapbox/routeLines";
+import {
+  initializeCurrentLocationMarker,
+  setCurrentLocationMarker
+} from "../util/mapbox/currentLocation";
+import { initializeMap } from "../util/mapbox/initializeMap";
+import {
+  removeRoutes,
+  setRoutes as setRoutesOnMap
+} from "../util/mapbox/routeLines";
 import {
   removeCurrentLocationMarkers,
   removeStopLocationLayers,
@@ -45,14 +51,26 @@ export interface NearbyViewComponentOutletContextProps {
   radiusSize: number;
   handleRadiusSelectionChange: (e: any) => void;
   initializeMap: () => void;
-  handleRouteArrivalsOpened: (id: string, direction: string, stop: string, stopLocation: ArrivalLocation) => void;
+  handleRouteArrivalsOpened: (
+    id: string,
+    direction: string,
+    stop: string,
+    stopLocation: ArrivalLocation
+  ) => void;
   handleStopOpened: (stopLocation: ArrivalLocation) => void;
   handleSimpleRoutesOpened: () => void;
 }
 
 export function NearbyStopDetailComponent() {
-  const { currentLocation, handleStopOpened } = useOutletContext<NearbyViewComponentOutletContextProps>();
-  return <NearbyStopsDetail currentLocation={currentLocation} handleStopOpened={handleStopOpened} />;
+  const { currentLocation, handleStopOpened } = useOutletContext<
+    NearbyViewComponentOutletContextProps
+  >();
+  return (
+    <NearbyStopsDetail
+      currentLocation={currentLocation}
+      handleStopOpened={handleStopOpened}
+    />
+  );
 }
 
 export function NearbyStopsComponent() {
@@ -61,8 +79,8 @@ export function NearbyStopsComponent() {
     nearbyRoutes,
     nearbyStops,
     radiusSize,
-    handleRadiusSelectionChange,
-   } = useOutletContext<NearbyViewComponentOutletContextProps>();
+    handleRadiusSelectionChange
+  } = useOutletContext<NearbyViewComponentOutletContextProps>();
 
   const stopCount = nearbyStops?.location?.length;
   const routeCount = size(nearbyRoutes);
@@ -90,7 +108,7 @@ export function NearbySimpleRoutesComp() {
     radiusSize,
     handleRadiusSelectionChange,
     handleSimpleRoutesOpened
-   } = useOutletContext<NearbyViewComponentOutletContextProps>();
+  } = useOutletContext<NearbyViewComponentOutletContextProps>();
 
   const stopCount = nearbyStops?.location?.length;
   const routeCount = size(nearbyRoutes);
@@ -112,11 +130,15 @@ export function NearbySimpleRoutesComp() {
 }
 
 export function NearbySimpleRouteArrivalsComp() {
-  const {
-    handleRouteArrivalsOpened
-   } = useOutletContext<NearbyViewComponentOutletContextProps>();
+  const { handleRouteArrivalsOpened } = useOutletContext<
+    NearbyViewComponentOutletContextProps
+  >();
 
-   return <NearbySimpleRouteArrivals handleRouteArrivalsOpened={handleRouteArrivalsOpened} />;
+  return (
+    <NearbySimpleRouteArrivals
+      handleRouteArrivalsOpened={handleRouteArrivalsOpened}
+    />
+  );
 }
 
 export function NearbyRoutesComponent() {
@@ -126,7 +148,7 @@ export function NearbyRoutesComponent() {
     nearbyStops,
     radiusSize,
     handleRadiusSelectionChange
-   } = useOutletContext<NearbyViewComponentOutletContextProps>();
+  } = useOutletContext<NearbyViewComponentOutletContextProps>();
 
   const stopCount = nearbyStops?.location?.length;
   const routeCount = size(nearbyRoutes);
@@ -207,15 +229,25 @@ export default function NearbyViewComponent() {
 
       setNearbyStopData(stopData);
       setNearbyRoutesData(routes);
-      setNearbyStops(mapRef.current, stopLocations, Object.keys(nearbyRouteIds), handleStopMarkerClick);
+      setNearbyStops(
+        mapRef.current,
+        stopLocations,
+        Object.keys(nearbyRouteIds),
+        handleStopMarkerClick
+      );
       setCurrentLocationMarker(mapRef.current, lng, lat, radiusSize);
     });
   }, [radiusSize]);
 
-  function initializeMapboxMap() {  
+  function initializeMapboxMap() {
     console.log("initialize map", lng, lat, zoom);
     mapRef.current = initializeMap(lng, lat, mapContainerRef, zoom);
-    mapRef.current = initializeCurrentLocationMarker(mapRef.current, lng, lat, radiusSize);
+    mapRef.current = initializeCurrentLocationMarker(
+      mapRef.current,
+      lng,
+      lat,
+      radiusSize
+    );
 
     mapRef.current.on("load", () => {
       console.info("effect: initialize map markers and routes");
@@ -226,12 +258,12 @@ export default function NearbyViewComponent() {
   }
 
   function handleRadiusSelectionChange(e) {
-    console.log('handle radius selection change', e.target.value);
+    console.log("handle radius selection change", e.target.value);
     setRadiusSize(e.target.value);
   }
 
   function handleStopMarkerClick(data: any) {
-    console.log('handle stop marker click', data);
+    console.log("handle stop marker click", data);
     navigate(`/nearby/stops/${data.properties.locid}`);
   }
 
@@ -244,14 +276,22 @@ export default function NearbyViewComponent() {
     }
   }
 
-  async function handleRouteArrivalsOpened(routeId: string, direction: string, stop: string, stopLocation: ArrivalLocation) {
-    console.log("route arrivals opened", routeId, direction); 
+  async function handleRouteArrivalsOpened(
+    routeId: string,
+    direction: string,
+    stop: string,
+    stopLocation: ArrivalLocation
+  ) {
+    console.log("route arrivals opened", routeId, direction);
     const selectedRouteDictionary = {
       [parseInt(routeId, 10)]: {
         directions: [parseInt(direction, 10)]
       }
     } as NearbyRoutesDictionary;
-    const routeIds = await setRoutesOnMap(mapRef.current, selectedRouteDictionary);
+    const routeIds = await setRoutesOnMap(
+      mapRef.current,
+      selectedRouteDictionary
+    );
     setDisplayedRouteIds(routeIds);
     flyToCenter(stopLocation.lng, stopLocation.lat);
     updateStopMarkerColor(mapRef.current, stop, "#ff0000");
@@ -265,7 +305,12 @@ export default function NearbyViewComponent() {
   function handleSimpleRoutesOpened() {
     console.info("simple routes opened");
     mapRef.current = removeStopLocationLayers(mapRef.current);
-    mapRef.current = setNearbyStops(mapRef.current, stopLocations, Object.keys(nearbyRouteIds), handleStopMarkerClick);
+    mapRef.current = setNearbyStops(
+      mapRef.current,
+      stopLocations,
+      Object.keys(nearbyRouteIds),
+      handleStopMarkerClick
+    );
     mapRef.current = removeRoutes(mapRef.current, displayedRouteIds);
     flyToCenter(lng, lat);
     setDisplayedRouteIds([]);
@@ -280,15 +325,13 @@ export default function NearbyViewComponent() {
     initializeMap: initializeMapboxMap,
     handleRouteArrivalsOpened,
     handleStopOpened,
-    handleSimpleRoutesOpened,
+    handleSimpleRoutesOpened
   };
 
   return (
     <Container fluid={true}>
       <Row>
-        <Col md={3}>
-          {isMapLoaded && <Outlet context={context} />}
-        </Col>
+        <Col md={3}>{isMapLoaded && <Outlet context={context} />}</Col>
         <Col md={9}>
           {showMap && (
             <NearbyMapV2

@@ -20,7 +20,7 @@ function NearbyMapV2({
   zoom,
   currentLocation,
   initializeMap,
-  mapContainerRef,
+  mapContainerRef
 }: Props) {
   const lng = currentLocation[0];
   const lat = currentLocation[1];
