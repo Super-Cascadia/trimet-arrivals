@@ -19,7 +19,13 @@ import { StreetCarLines } from "../view/lines/component/StreetCarLines";
 import { WES } from "../view/lines/component/WES";
 import MainNavigationContainer from "../view/mainNav/containers/MainNavigationContainer";
 import NearbyDirections from "../view/nearby/components/NearbyDirections";
-import NearbyView, { NearbyRoutesComponent, NearbySimpleRouteArrivalsComp, NearbySimpleRoutesComp, NearbyStopDetailComponent, NearbyStopsComponent } from "../view/nearby/components/NearbyViewComponent";
+import NearbyView, {
+  NearbyRoutesComponent,
+  NearbySimpleRouteArrivalsComp,
+  NearbySimpleRoutesComp,
+  NearbyStopDetailComponent,
+  NearbyStopsComponent
+} from "../view/nearby/components/NearbyViewComponent";
 import StopLocationViewContainer from "../view/stop/container/StopLocationViewContainer";
 
 function StopLocationViewRouter() {
@@ -36,7 +42,7 @@ function NearbyRouteDetails() {
 
 export default function RootAppRoutes() {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <MainNavigationContainer />
       <main className="main-view">
         <Routes>

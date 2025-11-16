@@ -17,8 +17,8 @@ function addMapboxLayer(
   sourceId: string
 ): Map {
   const isLoaded = map.loaded();
-  console.log('is map loaded', isLoaded);
-  console.log('adding mapbox layer', sourceId, routeIdentifier);
+  console.log("is map loaded", isLoaded);
+  console.log("adding mapbox layer", sourceId, routeIdentifier);
 
   map.addSource(sourceId, {
     data: {
@@ -112,7 +112,7 @@ export function removeRoutes(map: Map, routeLayers: any[]): Map {
   forEach(uniq(routeLayers), layerId => {
     if (map.getLayer(layerId)) {
       map.removeLayer(layerId);
-    } 
+    }
     if (map.getSource(layerId)) {
       map.removeSource(layerId);
     }
