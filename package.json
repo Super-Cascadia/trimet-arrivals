@@ -12,7 +12,7 @@
     "@commitlint/config-conventional": "^20.0.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.26",
     "@fortawesome/free-solid-svg-icons": "^5.12.0",
-    "@fortawesome/react-fontawesome": "^0.1.8",
+    "@fortawesome/react-fontawesome": "^0.2.6",
     "@mapbox/togeojson": "^0.16.0",
     "@turf/turf": "^7.1.0",
     "@types/classnames": "2.2.9",
