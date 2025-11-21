@@ -16,6 +16,7 @@ import SimpleArrivalListItemSkeleton from "./common/SimpleArrivalListItemSkeleto
 import NearbySkeletonList from "./common/NearbySkeleton";
 import "./NearbyRoutes.scss";
 import { SearchRadiusSelection } from "./SearchRadiusSelection";
+import { getDistance, getNormalizedDistanceString } from "../util/turfUtils";
 
 interface Props {
   nearbyRoutes: Dictionary<TrimetRoute[]>;
@@ -27,6 +28,7 @@ interface Props {
   handleRefresh?: () => void;
   routeCount: number;
   stopCount: number;
+  currentLocation: number[];
 }
 
 interface RouteStructure {
@@ -35,10 +37,13 @@ interface RouteStructure {
   stop: StopLocation;
   dir: number;
   id: number;
+  distance: number;
+  distanceString: string;
 }
 function getRouteArrivals(
   arrivalData: ArrivalData,
-  nearbyStops: StopData
+  nearbyStops: StopData,
+  currentLocation: number[]
 ): {
   closestNearbyRouteStructure: RouteStructure[];
 } {
@@ -47,6 +52,10 @@ function getRouteArrivals(
   const closestNearbyRouteStructure: RouteStructure[] = [];
 
   each(nearbyStops?.location, (stop: StopLocation) => {
+    const stopLocation = [stop.lng, stop.lat];
+    const distance = getDistance(currentLocation, stopLocation);
+    const distanceString = getNormalizedDistanceString(currentLocation, stopLocation);
+    
     each(stop?.route, (route: TrimetRoute) => {
       const routeId = route?.route;
       // Iterate all directions to differentiate each direction explicitly
@@ -64,7 +73,9 @@ function getRouteArrivals(
             dir: routeDirection,
             id: routeId,
             route,
-            stop
+            stop,
+            distance,
+            distanceString
           });
         }
       });
@@ -83,7 +94,8 @@ export default function NearbySimpleRoutes({
   handleSimpleRoutesOpened,
   handleRefresh,
   routeCount,
-  stopCount
+  stopCount,
+  currentLocation
 }: Props) {
   const [arrivalData, setArrivalData] = useState<ArrivalData>(null);
   const [routeFilter, setRouteFilter] = useState<string[]>([]);
@@ -108,15 +120,31 @@ export default function NearbySimpleRoutes({
 
   const { closestNearbyRouteStructure } = isLoading
     ? { closestNearbyRouteStructure: [] }
-    : getRouteArrivals(arrivalData, nearbyStops);
+    : getRouteArrivals(arrivalData, nearbyStops, currentLocation);
 
-  const sortedNearbyRouteStructure =
-    !isEmpty(closestNearbyRouteStructure) &&
-    closestNearbyRouteStructure.sort((a, b) => {
-      const aArrival = a.arrivals[0];
-      const bArrival = b.arrivals[0];
-      return (aArrival?.estimated ?? 0) - (bArrival?.estimated ?? 0);
-    });
+  // Separate routes with and without arrivals
+  const routesWithArrivals = !isEmpty(closestNearbyRouteStructure)
+    ? closestNearbyRouteStructure.filter(r => r.arrivals && r.arrivals.length > 0)
+    : [];
+  const routesWithoutArrivals = !isEmpty(closestNearbyRouteStructure)
+    ? closestNearbyRouteStructure.filter(r => !r.arrivals || r.arrivals.length === 0)
+    : [];
+
+  // Sort routes with arrivals by distance
+  const sortedRoutesWithArrivals = routesWithArrivals.sort((a, b) => {
+    return a.distance - b.distance;
+  });
+
+  // Sort routes without arrivals by distance
+  const sortedRoutesWithoutArrivals = routesWithoutArrivals.sort((a, b) => {
+    return a.distance - b.distance;
+  });
+
+  // Combine for backwards compatibility with filter/options
+  const sortedNearbyRouteStructure = [
+    ...sortedRoutesWithArrivals,
+    ...sortedRoutesWithoutArrivals
+  ];
 
   // Build select options from the nearby route structure
   const routeOptions = isLoading
@@ -136,11 +164,18 @@ export default function NearbySimpleRoutes({
     setRouteFilter(values);
   };
 
-  const filteredStructure = routeFilter.length
-    ? (sortedNearbyRouteStructure || []).filter(r =>
+  // Apply filters to both groups
+  const filteredRoutesWithArrivals = routeFilter.length
+    ? sortedRoutesWithArrivals.filter(r =>
         routeFilter.includes(`${r.id}-${r.dir}`)
       )
-    : sortedNearbyRouteStructure;
+    : sortedRoutesWithArrivals;
+
+  const filteredRoutesWithoutArrivals = routeFilter.length
+    ? sortedRoutesWithoutArrivals.filter(r =>
+        routeFilter.includes(`${r.id}-${r.dir}`)
+      )
+    : sortedRoutesWithoutArrivals;
 
   return (
     <div id="nearby-view-routes" className="scrollarea">
@@ -171,16 +206,38 @@ export default function NearbySimpleRoutes({
           </>
         ) : (
           <>
-            {map(filteredStructure, (route: RouteStructure, index: number) => {
+            {map(filteredRoutesWithArrivals, (route: RouteStructure, index: number) => {
               const arrival = route.arrivals[0];
               const stop = route.stop;
               return (
                 <SimpleArrivalListItem
-                  key={index}
+                  key={`with-arrival-${index}`}
                   id={stop.locid}
                   arrival={arrival}
                   route={route.route}
                   stop={stop}
+                  distanceString={route.distanceString}
+                  currentLocation={currentLocation}
+                />
+              );
+            })}
+            {filteredRoutesWithoutArrivals.length > 0 && filteredRoutesWithArrivals.length > 0 && (
+              <ListGroup.Item variant="light" className="text-center" style={{ backgroundColor: '#f8f9fa', borderTop: '2px solid #dee2e6', borderBottom: '2px solid #dee2e6' }}>
+                <small className="text-muted fw-bold">— No arrivals scheduled —</small>
+              </ListGroup.Item>
+            )}
+            {map(filteredRoutesWithoutArrivals, (route: RouteStructure, index: number) => {
+              const arrival = route.arrivals[0];
+              const stop = route.stop;
+              return (
+                <SimpleArrivalListItem
+                  key={`without-arrival-${index}`}
+                  id={stop.locid}
+                  arrival={arrival}
+                  route={route.route}
+                  stop={stop}
+                  distanceString={route.distanceString}
+                  currentLocation={currentLocation}
                 />
               );
             })}

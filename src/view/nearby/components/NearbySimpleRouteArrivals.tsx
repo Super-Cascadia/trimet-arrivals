@@ -22,9 +22,12 @@ import {
 } from "../../../api/trimet/interfaces/routes";
 import { getRouteByIdAndDirection } from "../../../api/trimet/routeConfig";
 import { DeparturesCard } from "./common/DeparturesCard";
+import DeparturesCardSkeleton from "./common/DeparturesCardSkeleton";
 import { InfoCard } from "./common/InfoCard";
 import RouteStopInfo from "./common/RouteStopInfo";
+import RouteStopInfoSkeleton from "./common/RouteStopInfoSkeleton";
 import { StopsOnRoute } from "./common/StopsOnRoute";
+import StopsOnRouteSkeleton from "./common/StopsOnRouteSkeleton";
 import { TopNavBar } from "./common/TopNavBar";
 import "./NearbyRoutes.scss";
 
@@ -50,60 +53,81 @@ export default function NearbySimpleRouteArrivals({
     null
   );
 
-  useEffect(() => {
-    async function fetchData() {
-      if (stop) {
-        console.log("Fetching data for stop: ", stop);
-        const arrivals = await getArrivals(stop, 1000);
-        setArrivalData(arrivals);
+  const fetchData = async () => {
+    if (stop) {
+      console.log("Fetching data for stop: ", stop);
+      const arrivals = await getArrivals(stop, 1000);
+      setArrivalData(arrivals);
 
-        const filteredArrivals: Arrival[] = filter(
-          arrivals.arrival,
-          (arrival: Arrival) => {
-            return arrival.route === toNumber(id);
-          }
-        );
+      const filteredArrivals: Arrival[] = filter(
+        arrivals.arrival,
+        (arrival: Arrival) => {
+          return arrival.route === toNumber(id);
+        }
+      );
 
-        setFilteredArrivalData(filteredArrivals);
+      setFilteredArrivalData(filteredArrivals);
 
-        const routeStops = await getRouteByIdAndDirection(
-          toNumber(id),
-          toNumber(direction)
-        );
-        setRouteStopsData(routeStops);
-        const stopLocation: ArrivalLocation = arrivals.location[0];
-        handleRouteArrivalsOpened(id, direction, stop, stopLocation);
-      }
+      const routeStops = await getRouteByIdAndDirection(
+        toNumber(id),
+        toNumber(direction)
+      );
+      setRouteStopsData(routeStops);
+      const stopLocation: ArrivalLocation = arrivals.location[0];
+      handleRouteArrivalsOpened(id, direction, stop, stopLocation);
     }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [stop]);
 
-  if (isEmpty(filteredArrivalData) || isEmpty(routeStopsData)) {
-    return null;
-  }
+  const handleRefresh = () => {
+    setArrivalData(null);
+    setFilteredArrivalData(null);
+    setRouteStopsData(null);
+    fetchData();
+  };
 
-  const stopLocation: ArrivalLocation = arrivalData.location[0];
-  const shortSign = last(split(filteredArrivalData[0].shortSign, "To"));
-  const routeStopsInDirection = routeStopsData.route[0].dir[0].stop;
-  const stopIndex = findIndex(
+  const isLoading = isEmpty(filteredArrivalData) || isEmpty(routeStopsData);
+
+  const stopLocation: ArrivalLocation = arrivalData?.location?.[0];
+  const shortSign = filteredArrivalData?.[0] ? last(split(filteredArrivalData[0].shortSign, "To")) : null;
+  const routeStopsInDirection = routeStopsData?.route?.[0]?.dir?.[0]?.stop;
+  const stopIndex = routeStopsInDirection ? findIndex(
     routeStopsInDirection,
     (routeDirectionStop: RouteDirectionStop, index) => {
       return routeDirectionStop.locid === toNumber(stop);
     }
-  );
+  ) : -1;
 
-  const remainingStopsOnRoute = slice(routeStopsInDirection, stopIndex + 1);
+  const remainingStopsOnRoute = routeStopsInDirection && stopIndex >= 0 ? slice(routeStopsInDirection, stopIndex + 1) : [];
+
+  const selectedArrival = filteredArrivalData && filteredArrivalData.length > 0 ? filteredArrivalData[0] : null;
+  const currentStop = stopIndex >= 0 && routeStopsInDirection ? routeStopsInDirection[stopIndex] : null;
+  const currentStopSeq = currentStop ? currentStop.seq : undefined;
 
   return (
     <div className="scrollarea">
-      <TopNavBar id={id} shortSign={shortSign} />
+      <TopNavBar id={id} shortSign={shortSign} handleRefresh={handleRefresh} />
       <br />
-      <RouteStopInfo shortSign={shortSign} stopLocation={stopLocation} />
+      {isLoading ? (
+        <RouteStopInfoSkeleton />
+      ) : (
+        <RouteStopInfo shortSign={shortSign} stopLocation={stopLocation} />
+      )}
       <br />
-      <DeparturesCard filteredArrivals={filteredArrivalData} />
+      {isLoading ? (
+        <DeparturesCardSkeleton />
+      ) : (
+        <DeparturesCard filteredArrivals={filteredArrivalData} />
+      )}
       <br />
-      <StopsOnRoute remainingStopsOnRoute={remainingStopsOnRoute} />
+      {isLoading ? (
+        <StopsOnRouteSkeleton />
+      ) : (
+        <StopsOnRoute remainingStopsOnRoute={remainingStopsOnRoute} selectedArrival={selectedArrival} currentStopSeq={currentStopSeq} />
+      )}
       <br />
       <InfoCard id={id} />
     </div>

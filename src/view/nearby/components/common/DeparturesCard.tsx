@@ -4,7 +4,8 @@ import React from "react";
 import { Card, ListGroup } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { Arrival } from "../../../../api/trimet/interfaces/arrivals";
-import { getTimeUntilArrival } from "../../util/timeUtils";
+import { ArrivalCountdown } from "./ArrivalCountdown";
+import "./DeparturesCard.scss";
 
 interface DeparturesCardParams {
   filteredArrivals: Arrival[];
@@ -18,10 +19,6 @@ export function DeparturesCard({ filteredArrivals }: DeparturesCardParams) {
         {map(filteredArrivals, (arrival: any, index: number) => {
           const estimatedArrivalTime = arrival.estimated;
           const scheduledArrivalTime = arrival.scheduled;
-          const timeUntilArrival = getTimeUntilArrival(
-            estimatedArrivalTime,
-            scheduledArrivalTime
-          );
 
           const variant = index === 0 ? "primary" : "light";
           const estimatedTime = moment(estimatedArrivalTime).format("h:mm a");
@@ -37,10 +34,23 @@ export function DeparturesCard({ filteredArrivals }: DeparturesCardParams) {
               as="li"
               className="d-flex justify-content-between align-items-start"
             >
-              <span>
-                {index === 0 && <FontAwesome name="caret-right" />}
-                {timeUntilArrival}
-              </span>
+              <div>
+                <span>
+                  {index === 0 && <FontAwesome name="caret-right" />}
+                  <ArrivalCountdown
+                    estimatedArrivalTime={estimatedArrivalTime}
+                    scheduledArrivalTime={scheduledArrivalTime}
+                  />
+                </span>
+                {arrival.vehicleID && (
+                  <>
+                    <br />
+                    <small className="text-muted bus-id">
+                      Bus {arrival.vehicleID}
+                    </small>
+                  </>
+                )}
+              </div>
               <small>{arrivalTime}</small>
             </ListGroup.Item>
           );

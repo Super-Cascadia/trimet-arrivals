@@ -132,6 +132,7 @@ export function NearbySimpleRoutesComp() {
         routeCount={routeCount}
         stopCount={stopCount}
         handleRefresh={handleRefresh}
+        currentLocation={currentLocation}
       />
     </div>
   );

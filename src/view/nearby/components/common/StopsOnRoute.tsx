@@ -5,13 +5,18 @@ import FontAwesome from "react-fontawesome";
 import { RouteDirectionStop } from "../../../../api/trimet/interfaces/routes";
 import { StopData, TrimetRoute } from "../../../../api/trimet/interfaces/types";
 import { getNearbyStops } from "../../../../api/trimet/stops";
+import "./StopsOnRoute.scss";
 
 interface StopsOnRouteParams {
   remainingStopsOnRoute: RouteDirectionStop[];
+  selectedArrival?: any;
+  currentStopSeq?: number;
 }
 
 interface StopOnRouteParams {
   routeDirectionStop: RouteDirectionStop;
+  selectedArrival?: any;
+  currentStopSeq?: number;
 }
 
 function RouteAtStop({ stopData }: { stopData: StopData }) {
@@ -35,7 +40,7 @@ function RouteAtStop({ stopData }: { stopData: StopData }) {
   );
 }
 
-function StopOnRoute({ routeDirectionStop }: StopOnRouteParams) {
+function StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq }: StopOnRouteParams) {
   const [stopData, setStopData] = useState<StopData>(null);
 
   useEffect(() => {
@@ -56,16 +61,55 @@ function StopOnRoute({ routeDirectionStop }: StopOnRouteParams) {
     fetchData();
   }, [routeDirectionStop]);
 
+  // Calculate estimated arrival time based on selected bus's arrival at current stop
+  const getEstimatedArrivalTime = () => {
+    if (!selectedArrival || !selectedArrival.estimated || currentStopSeq === undefined) {
+      return null;
+    }
+
+    const targetStopSeq = routeDirectionStop.seq;
+    
+    // Calculate stops away from the current stop (where bus will arrive)
+    const stopsAway = targetStopSeq - currentStopSeq;
+    
+    // Don't show negative or zero (should already be filtered but double check)
+    if (stopsAway <= 0) {
+      return null;
+    }
+    
+    // Calculate estimated time based on arrival time at current stop
+    // Assume average of 1.5 minutes per stop
+    const avgMinutesPerStop = 1.5;
+    const additionalMinutes = stopsAway * avgMinutesPerStop * 60 * 1000; // convert to ms
+    
+    const estimatedArrival = selectedArrival.estimated + additionalMinutes;
+    
+    return new Date(estimatedArrival).toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit',
+      hour12: true 
+    });
+  };
+
+  const estimatedTime = getEstimatedArrivalTime();
+
   return (
-    <ListGroupItem key={routeDirectionStop.locid}>
-      <span>{routeDirectionStop.desc}</span>
-      <small className="text-muted"> ({routeDirectionStop.locid})</small>
-      {stopData && <RouteAtStop stopData={stopData} />}
+    <ListGroupItem key={routeDirectionStop.locid} className="d-flex justify-content-between align-items-center">
+      <div>
+        <span>{routeDirectionStop.desc}</span>
+        <small className="text-muted"> ({routeDirectionStop.locid})</small>
+        {stopData && <RouteAtStop stopData={stopData} />}
+      </div>
+      {estimatedTime && (
+        <small className="text-muted stop-arrival-time">
+          {estimatedTime}
+        </small>
+      )}
     </ListGroupItem>
   );
 }
 
-export function StopsOnRoute({ remainingStopsOnRoute }: StopsOnRouteParams) {
+export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentStopSeq }: StopsOnRouteParams) {
   return (
     <Card>
       <Card.Header>Stops</Card.Header>
@@ -73,7 +117,7 @@ export function StopsOnRoute({ remainingStopsOnRoute }: StopsOnRouteParams) {
         {map(
           remainingStopsOnRoute,
           (routeDirectionStop: RouteDirectionStop) => {
-            return StopOnRoute({ routeDirectionStop });
+            return StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq });
           }
         )}
       </ListGroup>

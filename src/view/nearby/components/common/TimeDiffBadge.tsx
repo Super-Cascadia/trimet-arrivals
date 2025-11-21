@@ -1,10 +1,8 @@
 import moment from "moment";
 import React from "react";
 import { Badge } from "react-bootstrap";
-import {
-  getTimeDifferenceInMinutes,
-  getTimeUntilArrival
-} from "../../util/timeUtils";
+import { getTimeDifferenceInMinutes } from "../../util/timeUtils";
+import { ArrivalCountdown } from "./ArrivalCountdown";
 
 interface TimeDiffBadgeParams {
   estimatedArrivalTime: number;
@@ -15,10 +13,6 @@ function TimeDiffBadge({
   estimatedArrivalTime,
   scheduledArrivalTime
 }: TimeDiffBadgeParams) {
-  const timeUntilArrival = getTimeUntilArrival(
-    estimatedArrivalTime,
-    scheduledArrivalTime
-  );
   const minutesLate = getTimeDifferenceInMinutes(
     scheduledArrivalTime,
     moment(estimatedArrivalTime)
@@ -53,7 +47,11 @@ function TimeDiffBadge({
   return (
     <Badge bg={color} pill={true}>
       <span>
-        {timeUntilArrival} {getStatusDescription()}
+        <ArrivalCountdown
+          estimatedArrivalTime={estimatedArrivalTime}
+          scheduledArrivalTime={scheduledArrivalTime}
+        />{" "}
+        {getStatusDescription()}
       </span>
     </Badge>
   );

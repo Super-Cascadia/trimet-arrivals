@@ -4,3 +4,59 @@
    cursor: pointer;
  }
 }
+
+.list-item-compact {
+  gap: 0.5rem;
+}
+
+.list-item-compact > div:first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.list-item-compact > div:last-child {
+  flex: 0 0 auto;
+}
+
+.route-direction-desc {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0;
+  padding: 0;
+}
+
+.stop-location-text {
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.direction-arrow {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.exact-time {
+  font-size: 0.7rem;
+}
+
+.arrival-time-container {
+  line-height: 1.2;
+}
+
+.me-1 {
+  margin-right: 0.025rem !important;
+}
+
+.fw-bold.h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  line-height: 1;
+  display: inline-flex;
+  align-items: flex-end;
+}
