@@ -11,12 +11,16 @@ interface StopsOnRouteParams {
   remainingStopsOnRoute: RouteDirectionStop[];
   selectedArrival?: any;
   currentStopSeq?: number;
+  allStopsOnRoute?: RouteDirectionStop[];
+  downstreamArrivals?: any;
 }
 
 interface StopOnRouteParams {
   routeDirectionStop: RouteDirectionStop;
   selectedArrival?: any;
   currentStopSeq?: number;
+  allStopsOnRoute?: RouteDirectionStop[];
+  downstreamArrivals?: any;
 }
 
 function RouteAtStop({ stopData }: { stopData: StopData }) {
@@ -40,7 +44,7 @@ function RouteAtStop({ stopData }: { stopData: StopData }) {
   );
 }
 
-function StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq }: StopOnRouteParams) {
+function StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq, allStopsOnRoute, downstreamArrivals }: StopOnRouteParams) {
   const [stopData, setStopData] = useState<StopData>(null);
 
   useEffect(() => {
@@ -61,34 +65,39 @@ function StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq }: St
     fetchData();
   }, [routeDirectionStop]);
 
-  // Calculate estimated arrival time based on selected bus's arrival at current stop
+  // Get actual estimated arrival time from API data
   const getEstimatedArrivalTime = () => {
-    if (!selectedArrival || !selectedArrival.estimated || currentStopSeq === undefined) {
+    if (!selectedArrival || !downstreamArrivals) {
       return null;
     }
 
-    const targetStopSeq = routeDirectionStop.seq;
+    // Find the arrival at this stop for the selected vehicle
+    const arrivalAtThisStop = downstreamArrivals.arrival?.find(
+      (arrival: any) => 
+        arrival.locid === routeDirectionStop.locid && 
+        arrival.vehicleID === selectedArrival.vehicleID &&
+        arrival.route === selectedArrival.route &&
+        arrival.dir === selectedArrival.dir
+    );
     
-    // Calculate stops away from the current stop (where bus will arrive)
-    const stopsAway = targetStopSeq - currentStopSeq;
-    
-    // Don't show negative or zero (should already be filtered but double check)
-    if (stopsAway <= 0) {
-      return null;
+    if (arrivalAtThisStop?.estimated) {
+      return new Date(arrivalAtThisStop.estimated).toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit',
+        hour12: true 
+      });
     }
     
-    // Calculate estimated time based on arrival time at current stop
-    // Assume average of 1.5 minutes per stop
-    const avgMinutesPerStop = 1.5;
-    const additionalMinutes = stopsAway * avgMinutesPerStop * 60 * 1000; // convert to ms
+    // Fallback to scheduled time if no estimate
+    if (arrivalAtThisStop?.scheduled) {
+      return new Date(arrivalAtThisStop.scheduled).toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit',
+        hour12: true 
+      });
+    }
     
-    const estimatedArrival = selectedArrival.estimated + additionalMinutes;
-    
-    return new Date(estimatedArrival).toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
-      minute: '2-digit',
-      hour12: true 
-    });
+    return null;
   };
 
   const estimatedTime = getEstimatedArrivalTime();
@@ -109,7 +118,7 @@ function StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq }: St
   );
 }
 
-export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentStopSeq }: StopsOnRouteParams) {
+export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentStopSeq, allStopsOnRoute, downstreamArrivals }: StopsOnRouteParams) {
   return (
     <Card>
       <Card.Header>Stops</Card.Header>
@@ -117,7 +126,7 @@ export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentSt
         {map(
           remainingStopsOnRoute,
           (routeDirectionStop: RouteDirectionStop) => {
-            return StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq });
+            return StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq, allStopsOnRoute, downstreamArrivals });
           }
         )}
       </ListGroup>

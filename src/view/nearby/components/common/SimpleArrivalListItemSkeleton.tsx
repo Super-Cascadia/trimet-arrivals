@@ -24,8 +24,25 @@ function SimpleArrivalListItemSkeleton() {
         </div>
       </div>
       <div className="text-end arrival-time-container flex-shrink-0">
-        <div className="skeleton-line w-50 h-md" />
-        <div className="skeleton-line w-40 h-sm" />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+          <div className="skeleton-line w-80 h-md" />
+          <span className="skeleton-status-indicator" />
+        </div>
+        <br />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+          <div className="skeleton-line w-60 h-sm skeleton-secondary" />
+          <span className="skeleton-status-indicator" />
+        </div>
+        <br />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+          <div className="skeleton-line w-60 h-sm skeleton-secondary" />
+          <span className="skeleton-status-indicator" />
+        </div>
+        <br />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+          <div className="skeleton-line w-60 h-sm skeleton-secondary" />
+          <span className="skeleton-status-indicator" />
+        </div>
       </div>
     </ListGroup.Item>
   );

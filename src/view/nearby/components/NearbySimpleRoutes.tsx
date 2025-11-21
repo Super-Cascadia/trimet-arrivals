@@ -208,12 +208,18 @@ export default function NearbySimpleRoutes({
           <>
             {map(filteredRoutesWithArrivals, (route: RouteStructure, index: number) => {
               const arrival = route.arrivals[0];
+              const nextArrival = route.arrivals[1];
+              const thirdArrival = route.arrivals[2];
+              const fourthArrival = route.arrivals[3];
               const stop = route.stop;
               return (
                 <SimpleArrivalListItem
                   key={`with-arrival-${index}`}
                   id={stop.locid}
                   arrival={arrival}
+                  nextArrival={nextArrival}
+                  thirdArrival={thirdArrival}
+                  fourthArrival={fourthArrival}
                   route={route.route}
                   stop={stop}
                   distanceString={route.distanceString}
@@ -228,12 +234,18 @@ export default function NearbySimpleRoutes({
             )}
             {map(filteredRoutesWithoutArrivals, (route: RouteStructure, index: number) => {
               const arrival = route.arrivals[0];
+              const nextArrival = route.arrivals[1];
+              const thirdArrival = route.arrivals[2];
+              const fourthArrival = route.arrivals[3];
               const stop = route.stop;
               return (
                 <SimpleArrivalListItem
                   key={`without-arrival-${index}`}
                   id={stop.locid}
                   arrival={arrival}
+                  nextArrival={nextArrival}
+                  thirdArrival={thirdArrival}
+                  fourthArrival={fourthArrival}
                   route={route.route}
                   stop={stop}
                   distanceString={route.distanceString}

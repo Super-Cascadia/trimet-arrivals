@@ -52,6 +52,8 @@ export default function NearbySimpleRouteArrivals({
   const [routeStopsData, setRouteStopsData] = useState<RouteDataResultSet>(
     null
   );
+  const [selectedDepartureIndex, setSelectedDepartureIndex] = useState<number>(0);
+  const [downstreamArrivals, setDownstreamArrivals] = useState<ArrivalData>(null);
 
   const fetchData = async () => {
     if (stop) {
@@ -75,6 +77,28 @@ export default function NearbySimpleRouteArrivals({
       setRouteStopsData(routeStops);
       const stopLocation: ArrivalLocation = arrivals.location[0];
       handleRouteArrivalsOpened(id, direction, stop, stopLocation);
+      
+      // Fetch arrivals for all downstream stops
+      const routeStopsInDirection = routeStops?.route?.[0]?.dir?.[0]?.stop;
+      if (routeStopsInDirection) {
+        const stopIndex = findIndex(
+          routeStopsInDirection,
+          (routeDirectionStop: RouteDirectionStop) => {
+            return routeDirectionStop.locid === toNumber(stop);
+          }
+        );
+        
+        if (stopIndex >= 0) {
+          const remainingStops = slice(routeStopsInDirection, stopIndex + 1);
+          // Get up to 128 stop IDs (API limit)
+          const stopIds = remainingStops.slice(0, 128).map(s => s.locid).join(',');
+          
+          if (stopIds) {
+            const downstreamArrivalsData = await getArrivals(stopIds, 1000);
+            setDownstreamArrivals(downstreamArrivalsData);
+          }
+        }
+      }
     }
   };
 
@@ -86,6 +110,7 @@ export default function NearbySimpleRouteArrivals({
     setArrivalData(null);
     setFilteredArrivalData(null);
     setRouteStopsData(null);
+    setDownstreamArrivals(null);
     fetchData();
   };
 
@@ -103,7 +128,7 @@ export default function NearbySimpleRouteArrivals({
 
   const remainingStopsOnRoute = routeStopsInDirection && stopIndex >= 0 ? slice(routeStopsInDirection, stopIndex + 1) : [];
 
-  const selectedArrival = filteredArrivalData && filteredArrivalData.length > 0 ? filteredArrivalData[0] : null;
+  const selectedArrival = filteredArrivalData && filteredArrivalData.length > selectedDepartureIndex ? filteredArrivalData[selectedDepartureIndex] : null;
   const currentStop = stopIndex >= 0 && routeStopsInDirection ? routeStopsInDirection[stopIndex] : null;
   const currentStopSeq = currentStop ? currentStop.seq : undefined;
 
@@ -120,13 +145,23 @@ export default function NearbySimpleRouteArrivals({
       {isLoading ? (
         <DeparturesCardSkeleton />
       ) : (
-        <DeparturesCard filteredArrivals={filteredArrivalData} />
+        <DeparturesCard 
+          filteredArrivals={filteredArrivalData} 
+          selectedIndex={selectedDepartureIndex}
+          onSelectDeparture={setSelectedDepartureIndex}
+        />
       )}
       <br />
       {isLoading ? (
         <StopsOnRouteSkeleton />
       ) : (
-        <StopsOnRoute remainingStopsOnRoute={remainingStopsOnRoute} selectedArrival={selectedArrival} currentStopSeq={currentStopSeq} />
+        <StopsOnRoute 
+          remainingStopsOnRoute={remainingStopsOnRoute} 
+          selectedArrival={selectedArrival} 
+          currentStopSeq={currentStopSeq}
+          allStopsOnRoute={routeStopsInDirection}
+          downstreamArrivals={downstreamArrivals}
+        />
       )}
       <br />
       <InfoCard id={id} />

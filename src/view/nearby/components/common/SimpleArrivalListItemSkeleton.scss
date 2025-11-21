@@ -8,6 +8,10 @@
   min-width: 80px;
 }
 
+.skeleton-line.w-30 {
+  min-width: 60px;
+}
+
 .skeleton-line.w-40 {
   min-width: 80px;
 }
@@ -22,6 +26,20 @@
 
 .skeleton-line.w-80 {
   min-width: 200px;
+}
+
+.skeleton-line.skeleton-secondary {
+  opacity: 0.6;
+}
+
+.skeleton-status-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e6e6e6;
+  margin-left: 4px;
+  flex-shrink: 0;
 }
 
 // Add spacing between skeleton list items

@@ -46,6 +46,8 @@
 
 .arrival-time-container {
   line-height: 1.2;
+  font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
+  font-variant-numeric: tabular-nums;
 }
 
 .me-1 {
@@ -59,4 +61,9 @@
   line-height: 1;
   display: inline-flex;
   align-items: flex-end;
+  font-size: 1.25rem;
+}
+
+.route-direction-desc.h6 {
+  font-size: 0.85rem;
 }
