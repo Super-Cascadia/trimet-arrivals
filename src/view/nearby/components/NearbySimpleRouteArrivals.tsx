@@ -8,6 +8,7 @@ import {
   toNumber
 } from "lodash";
 import React, { useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
 import { useParams } from "react-router";
 import { useSearchParams } from "react-router-dom";
 import { getArrivals } from "../../../api/trimet/arrivals";
@@ -53,6 +54,7 @@ export default function NearbySimpleRouteArrivals({
     null
   );
   const [selectedDepartureIndex, setSelectedDepartureIndex] = useState<number>(0);
+  const [selectedDestinationIndex, setSelectedDestinationIndex] = useState<number | null>(null);
   const [downstreamArrivals, setDownstreamArrivals] = useState<ArrivalData>(null);
 
   const fetchData = async () => {
@@ -140,8 +142,15 @@ export default function NearbySimpleRouteArrivals({
         id={id} 
         shortSign={shortSign} 
         handleRefresh={handleRefresh}
+        routeId={toNumber(id)}
+        direction={toNumber(direction)}
+        stopId={toNumber(stop)}
+        routeDesc={routeDesc}
+        stopDesc={stopLocation?.desc}
+        directionDesc={directionDesc}
+        stopLat={stopLocation?.lat}
+        stopLng={stopLocation?.lng}
       />
-      <br />
       {isLoading ? (
         <RouteStopInfoSkeleton />
       ) : (
@@ -174,10 +183,28 @@ export default function NearbySimpleRouteArrivals({
           currentStopSeq={currentStopSeq}
           allStopsOnRoute={routeStopsInDirection}
           downstreamArrivals={downstreamArrivals}
+          onDestinationSelect={setSelectedDestinationIndex}
         />
       )}
       <br />
-      <InfoCard id={id} />
+      {!isLoading && (
+        <div className="d-grid">
+          <Button
+            variant="primary"
+            size="lg"
+            disabled={selectedDestinationIndex === null}
+            onClick={() => {
+              if (selectedDestinationIndex !== null) {
+                const destinationStop = remainingStopsOnRoute[selectedDestinationIndex];
+                const url = `/nearby/directions?route=${id}&direction=${direction}&from=${stop}&to=${destinationStop.locid}`;
+                window.location.href = url;
+              }
+            }}
+          >
+            GO
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

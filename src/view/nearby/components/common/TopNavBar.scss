@@ -6,3 +6,12 @@
     pointer-events: none;
   }
 }
+
+.navbar-title {
+  font-size: 1.2rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}

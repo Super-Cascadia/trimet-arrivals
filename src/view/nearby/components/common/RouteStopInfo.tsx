@@ -95,53 +95,24 @@ function RouteStopInfo({ shortSign, stopLocation, routeId, direction, routeDesc,
   }
 
   return (
-    <Stack direction="horizontal" gap={3}>
-      <div className="me-auto">
-        <Card>
-          <Card.Body>
-            {/* <Card.Title>
-              <FontAwesome name="arrow-circle-right" />
-              {shortSign}
-            </Card.Title> */}
-            <Card.Text>
-              <small className="text-muted">
-                <span>
-                  <strong>From: </strong>
-                </span>
-                <Link to={`/nearby/stops/${stopLocation.id}`}>
-                  {stopLocation.desc} ({stopLocation.id})
-                </Link>
-              </small>
-            </Card.Text>
-          </Card.Body>
-        </Card>
-      </div>
-      <div>
-        <ButtonGroup vertical={true}>
-          <OverlayTrigger
-            placement="right"
-            delay={{ show: 250, hide: 400 }}
-            overlay={GoToolTip}
-          >
-            <Button variant="primary" onClick={handleGoClick}>
-              GO
-            </Button>
-          </OverlayTrigger>
-          <OverlayTrigger
-            placement="right"
-            delay={{ show: 250, hide: 400 }}
-            overlay={BookmarkTooltip}
-          >
-            <Button 
-              variant={isBookmarked ? "warning" : "outline-secondary"}
-              onClick={handleBookmarkToggle}
-            >
-              <FontAwesome name={isBookmarked ? 'bookmark' : 'bookmark-o'} />
-            </Button>
-          </OverlayTrigger>
-        </ButtonGroup>
-      </div>
-    </Stack>
+    <Card>
+      <Card.Body>
+        {/* <Card.Title>
+          <FontAwesome name="arrow-circle-right" />
+          {shortSign}
+        </Card.Title> */}
+        <Card.Text>
+          <small className="text-muted">
+            <span>
+              <strong>From: </strong>
+            </span>
+            <Link to={`/nearby/stops/${stopLocation.id}`}>
+              {stopLocation.desc} ({stopLocation.id})
+            </Link>
+          </small>
+        </Card.Text>
+      </Card.Body>
+    </Card>
   );
 }
 

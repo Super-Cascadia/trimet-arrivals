@@ -13,6 +13,7 @@ interface StopsOnRouteParams {
   currentStopSeq?: number;
   allStopsOnRoute?: RouteDirectionStop[];
   downstreamArrivals?: any;
+  onDestinationSelect?: (index: number | null) => void;
 }
 
 interface StopOnRouteParams {
@@ -137,27 +138,62 @@ function StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq, allS
   );
 }
 
-export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentStopSeq, allStopsOnRoute, downstreamArrivals }: StopsOnRouteParams) {
+export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentStopSeq, allStopsOnRoute, downstreamArrivals, onDestinationSelect }: StopsOnRouteParams) {
   const [selectedDestinationIndex, setSelectedDestinationIndex] = useState<number | null>(null);
   const [isSelecting, setIsSelecting] = useState(true);
+  const [showEarlier, setShowEarlier] = useState(false);
+  const [showFuture, setShowFuture] = useState(false);
 
   const handleSelectDestination = (index: number) => {
     setSelectedDestinationIndex(index);
     setIsSelecting(false);
+    setShowEarlier(false);
+    setShowFuture(false);
+    if (onDestinationSelect) {
+      onDestinationSelect(index);
+    }
   };
 
   const handleSelectAgain = () => {
     setIsSelecting(true);
+    setShowEarlier(false);
+    setShowFuture(false);
+    if (onDestinationSelect) {
+      onDestinationSelect(null);
+    }
   };
 
-  const stopsToShow = isSelecting 
-    ? remainingStopsOnRoute 
-    : selectedDestinationIndex !== null 
-      ? [remainingStopsOnRoute[selectedDestinationIndex]]
-      : remainingStopsOnRoute;
+  const handleShowEarlier = () => {
+    setShowEarlier(!showEarlier);
+    setShowFuture(false);
+  };
+
+  const handleShowFuture = () => {
+    setShowFuture(!showFuture);
+    setShowEarlier(false);
+  };
+
+  let stopsToShow: RouteDirectionStop[];
+  if (isSelecting) {
+    stopsToShow = remainingStopsOnRoute;
+  } else if (selectedDestinationIndex !== null) {
+    if (showEarlier) {
+      // Show from start to selected (inclusive)
+      stopsToShow = remainingStopsOnRoute.slice(0, selectedDestinationIndex + 1);
+    } else if (showFuture) {
+      // Show from selected to end (inclusive)
+      stopsToShow = remainingStopsOnRoute.slice(selectedDestinationIndex);
+    } else {
+      // Show only selected
+      stopsToShow = [remainingStopsOnRoute[selectedDestinationIndex]];
+    }
+  } else {
+    stopsToShow = remainingStopsOnRoute;
+  }
   
   const hasMoreStops = remainingStopsOnRoute.length > 1;
   const hasEarlierStops = selectedDestinationIndex !== null && selectedDestinationIndex > 0 && !isSelecting;
+  const hasFutureStops = selectedDestinationIndex !== null && selectedDestinationIndex < remainingStopsOnRoute.length - 1 && !isSelecting;
 
   return (
     <Card>
@@ -175,11 +211,11 @@ export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentSt
         )}
       </Card.Header>
       <ListGroup className="list-group-flush">
-        {hasEarlierStops && (
+        {hasEarlierStops && !showEarlier && (
           <ListGroup.Item
             as="li"
             className="d-flex justify-content-center align-items-center"
-            onClick={() => setIsSelecting(true)}
+            onClick={handleShowEarlier}
             style={{ cursor: 'pointer', color: '#007bff' }}
           >
             <FontAwesome name="chevron-up" className="me-2" />
@@ -189,11 +225,8 @@ export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentSt
         {map(
           stopsToShow,
           (routeDirectionStop: RouteDirectionStop, index: number) => {
-            const actualIndex = isSelecting 
-              ? remainingStopsOnRoute.indexOf(routeDirectionStop)
-              : selectedDestinationIndex !== null
-                ? selectedDestinationIndex
-                : remainingStopsOnRoute.indexOf(routeDirectionStop);
+            const actualIndex = remainingStopsOnRoute.indexOf(routeDirectionStop);
+            const canSelect = isSelecting || showEarlier || showFuture;
             
             return (
               <StopOnRoute
@@ -204,25 +237,42 @@ export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentSt
                 allStopsOnRoute={allStopsOnRoute}
                 downstreamArrivals={downstreamArrivals}
                 isSelected={actualIndex === selectedDestinationIndex}
-                onSelect={isSelecting ? () => handleSelectDestination(actualIndex) : undefined}
+                onSelect={canSelect ? () => handleSelectDestination(actualIndex) : undefined}
               />
             );
           }
         )}
-        {hasMoreStops && selectedDestinationIndex !== null && (
+        {showEarlier && (
           <ListGroup.Item
             as="li"
             className="d-flex justify-content-center align-items-center"
-            onClick={() => setIsSelecting(!isSelecting)}
+            onClick={handleShowEarlier}
             style={{ cursor: 'pointer', color: '#007bff' }}
           >
-            <FontAwesome name={isSelecting ? "chevron-up" : "chevron-down"} className="me-2" />
-            <span>
-              {isSelecting 
-                ? "show less" 
-                : `${remainingStopsOnRoute.length - selectedDestinationIndex - 1} future stop${remainingStopsOnRoute.length - selectedDestinationIndex - 1 === 1 ? '' : 's'}`
-              }
-            </span>
+            <FontAwesome name="chevron-up" className="me-2" />
+            <span>show less</span>
+          </ListGroup.Item>
+        )}
+        {hasFutureStops && !showFuture && (
+          <ListGroup.Item
+            as="li"
+            className="d-flex justify-content-center align-items-center"
+            onClick={handleShowFuture}
+            style={{ cursor: 'pointer', color: '#007bff' }}
+          >
+            <FontAwesome name="chevron-down" className="me-2" />
+            <span>{remainingStopsOnRoute.length - selectedDestinationIndex - 1} future stop{remainingStopsOnRoute.length - selectedDestinationIndex - 1 === 1 ? '' : 's'}</span>
+          </ListGroup.Item>
+        )}
+        {showFuture && (
+          <ListGroup.Item
+            as="li"
+            className="d-flex justify-content-center align-items-center"
+            onClick={handleShowFuture}
+            style={{ cursor: 'pointer', color: '#007bff' }}
+          >
+            <FontAwesome name="chevron-down" className="me-2" />
+            <span>show less</span>
           </ListGroup.Item>
         )}
       </ListGroup>
