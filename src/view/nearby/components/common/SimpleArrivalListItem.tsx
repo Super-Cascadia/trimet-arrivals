@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ListGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import FontAwesome from "react-fontawesome";
 import moment from "moment";
 import { Arrival } from "../../../../api/trimet/interfaces/arrivals";
 import {
@@ -9,6 +10,13 @@ import {
   TrimetRoute
 } from "../../../../api/trimet/interfaces/types";
 import { ArrivalCountdown } from "./ArrivalCountdown";
+import { 
+  isRouteBookmarkedInGroups, 
+  addRouteBookmark, 
+  removeBookmark,
+  getBookmarkItemId
+} from "../../../../api/localstorage/bookmarkGroups.localstorage";
+import { toast } from "react-toastify";
 import "./SimpleArrivalListItem.scss";
 
 interface ArrivalListItemParams {
@@ -141,6 +149,52 @@ function SimpleArrivalListItem({
   const stopName = stop.desc;
   const directionArrow = getDirectionArrow(currentLocation, stop);
   
+  const [isBookmarked, setIsBookmarked] = useState(
+    isRouteBookmarkedInGroups(routeId, stop.locid, routeDirection.dir)
+  );
+  
+  useEffect(() => {
+    setIsBookmarked(isRouteBookmarkedInGroups(routeId, stop.locid, routeDirection.dir));
+  }, [routeId, stop.locid, routeDirection.dir]);
+  
+  const handleBookmarkToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isBookmarked) {
+      const bookmarkId = getBookmarkItemId("route", stop.locid, routeId, routeDirection.dir);
+      removeBookmark(bookmarkId);
+      toast.info(`Removed Route ${routeId} from bookmarks`, {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
+    } else {
+      addRouteBookmark(
+        routeId,
+        stop.locid,
+        routeDirection.dir,
+        route.desc,
+        stopName,
+        routeDirection.desc,
+        stop.lat,
+        stop.lng,
+        undefined, // groupId - defaults to DEFAULT_GROUP_ID
+        stop
+      );
+      toast.success(`Bookmarked Route ${routeId}!`, {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
+    }
+    setIsBookmarked(!isBookmarked);
+  };
+  
   // Format exact arrival time
   const arrivalTimeStamp = estimatedArrivalTime || scheduledArrivalTime;
   const exactTime = arrivalTimeStamp 
@@ -199,18 +253,19 @@ function SimpleArrivalListItem({
     <ListGroup.Item
       variant="light"
       as="li"
-      className="d-flex justify-content-between align-items-start list-item-compact"
+      className="d-flex justify-content-between list-item-compact"
       onClick={handleClick}
     >
-      <div className="me-1">
-        <span className="fw-bold h2">
-          {routeId}{' '}
-          <span className="h6 route-direction-desc">{routeDirection.desc}</span>
-        </span>
-        {/* <br /> */}
-        {/* <span>{routeDirection.desc}</span> */}
-        <br />
-        <div className="stop-location-text">
+      <div className="me-1 flex-grow-1 d-flex flex-column">
+        <div className="d-flex align-items-start gap-2">
+          <div className="flex-grow-1">
+            <span className="fw-bold h2">
+              {routeId}{' '}
+              <span className="h6 route-direction-desc">{routeDirection.desc}</span>
+            </span>
+          </div>
+        </div>
+        <div className="stop-location-text mt-1">
           <div>at {stopName} ({stop.locid})</div>
           {distanceString && (
             <div>
@@ -220,45 +275,54 @@ function SimpleArrivalListItem({
           )}
         </div>
       </div>
-      <div className="text-end arrival-time-container flex-shrink-0">
-        <small className="fw-bold" style={{ fontSize: '0.7rem' }}>
-          <ArrivalCountdown
-            estimatedArrivalTime={estimatedArrivalTime}
-            scheduledArrivalTime={scheduledArrivalTime}
-          />
-          {exactTime && <span className="text-muted"> ({exactTime})</span>}
-          <StatusIndicator estimated={estimatedArrivalTime} scheduled={scheduledArrivalTime} />
-        </small>
-        {nextArrival && (
-          <>
-            <br />
-            <small className="text-muted" style={{ fontSize: '0.7rem' }}>
-              {nextTimeUntil}
-              {nextExactTime && <span> ({nextExactTime})</span>}
-              <StatusIndicator estimated={nextEstimatedArrivalTime} scheduled={nextScheduledArrivalTime} />
-            </small>
-          </>
-        )}
-        {thirdArrival && (
-          <>
-            <br />
-            <small className="text-muted" style={{ fontSize: '0.7rem' }}>
-              {thirdTimeUntil}
-              {thirdExactTime && <span> ({thirdExactTime})</span>}
-              <StatusIndicator estimated={thirdEstimatedArrivalTime} scheduled={thirdScheduledArrivalTime} />
-            </small>
-          </>
-        )}
-        {fourthArrival && (
-          <>
-            <br />
-            <small className="text-muted" style={{ fontSize: '0.7rem' }}>
-              {fourthTimeUntil}
-              {fourthExactTime && <span> ({fourthExactTime})</span>}
-              <StatusIndicator estimated={fourthEstimatedArrivalTime} scheduled={fourthScheduledArrivalTime} />
-            </small>
-          </>
-        )}
+      <div className="d-flex flex-column align-items-end justify-content-between">
+        <div className="text-end arrival-time-container flex-shrink-0">
+          <small className="fw-bold" style={{ fontSize: '0.7rem' }}>
+            <ArrivalCountdown
+              estimatedArrivalTime={estimatedArrivalTime}
+              scheduledArrivalTime={scheduledArrivalTime}
+            />
+            {exactTime && <span className="text-muted"> ({exactTime})</span>}
+            <StatusIndicator estimated={estimatedArrivalTime} scheduled={scheduledArrivalTime} />
+          </small>
+          {nextArrival && (
+            <>
+              <br />
+              <small className="text-muted" style={{ fontSize: '0.7rem' }}>
+                {nextTimeUntil}
+                {nextExactTime && <span> ({nextExactTime})</span>}
+                <StatusIndicator estimated={nextEstimatedArrivalTime} scheduled={nextScheduledArrivalTime} />
+              </small>
+            </>
+          )}
+          {thirdArrival && (
+            <>
+              <br />
+              <small className="text-muted" style={{ fontSize: '0.7rem' }}>
+                {thirdTimeUntil}
+                {thirdExactTime && <span> ({thirdExactTime})</span>}
+                <StatusIndicator estimated={thirdEstimatedArrivalTime} scheduled={thirdScheduledArrivalTime} />
+              </small>
+            </>
+          )}
+          {fourthArrival && (
+            <>
+              <br />
+              <small className="text-muted" style={{ fontSize: '0.7rem' }}>
+                {fourthTimeUntil}
+                {fourthExactTime && <span> ({fourthExactTime})</span>}
+                <StatusIndicator estimated={fourthEstimatedArrivalTime} scheduled={fourthScheduledArrivalTime} />
+              </small>
+            </>
+          )}
+        </div>
+        <button
+          className="btn btn-link p-0 bookmark-btn"
+          onClick={handleBookmarkToggle}
+          style={{ fontSize: '1.2rem', color: isBookmarked ? '#ffc107' : '#6c757d' }}
+        >
+          <FontAwesome name={isBookmarked ? 'bookmark' : 'bookmark-o'} />
+        </button>
       </div>
     </ListGroup.Item>
   );

@@ -150,6 +150,11 @@ export function updateStopMarkerColor(
   stopId: string,
   color: string
 ) {
+  if (!mapBoxMap) {
+    console.warn("mapBoxMap is null, cannot update marker color");
+    return;
+  }
+  
   const isLoaded = mapBoxMap?.loaded();
   console.log("is map loaded", isLoaded);
 

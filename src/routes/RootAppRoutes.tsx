@@ -8,7 +8,7 @@ import {
   useParams,
   Navigate
 } from "react-router-dom";
-import BookmarksViewContainer from "../view/bookmarks/container/BookmarksViewContainer";
+import BookmarksViewV2 from "../view/bookmarks/component/BookmarksViewV2";
 import Home from "../view/home/Home";
 import LineDetailComponent from "../view/lineDetail/component/LineDetailComponent";
 import { AllLines } from "../view/lines/component/AllLines";
@@ -70,7 +70,7 @@ export default function RootAppRoutes() {
             <Route path={`wes`} element={<WES />} />
             <Route path={`:id`} element={<LineDetailComponent />} />
           </Route>
-          <Route path="bookmarks/*" element={<BookmarksViewContainer />} />
+          <Route path="bookmarks/*" element={<BookmarksViewV2 />} />
         </Routes>
       </main>
     </Router>

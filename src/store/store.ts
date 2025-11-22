@@ -4,6 +4,8 @@ import { thunk } from "redux-thunk";
 import reducers from "./reducers";
 import { rootSaga } from "./sagas";
 
+let storeInstance: any = null;
+
 export default function appStore() {
   const composeEnhancers =
     // @ts-ignore
@@ -15,6 +17,12 @@ export default function appStore() {
   );
 
   sagaMiddleware.run(rootSaga);
+  
+  storeInstance = store;
 
   return store;
+}
+
+export function getStore() {
+  return storeInstance;
 }

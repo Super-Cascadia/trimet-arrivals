@@ -17,6 +17,7 @@ import NearbySkeletonList from "./common/NearbySkeleton";
 import "./NearbyRoutes.scss";
 import { SearchRadiusSelection } from "./SearchRadiusSelection";
 import { getDistance, getNormalizedDistanceString } from "../util/turfUtils";
+import { isRouteBookmarkedInGroups } from '../../../api/localstorage/bookmarkGroups.localstorage';
 
 interface Props {
   nearbyRoutes: Dictionary<TrimetRoute[]>;
@@ -130,13 +131,25 @@ export default function NearbySimpleRoutes({
     ? closestNearbyRouteStructure.filter(r => !r.arrivals || r.arrivals.length === 0)
     : [];
 
-  // Sort routes with arrivals by distance
+  // Sort routes with arrivals - bookmarked first, then by distance
   const sortedRoutesWithArrivals = routesWithArrivals.sort((a, b) => {
+    const aBookmarked = isRouteBookmarkedInGroups(a.id, a.stop.locid, a.dir);
+    const bBookmarked = isRouteBookmarkedInGroups(b.id, b.stop.locid, b.dir);
+    
+    if (aBookmarked && !bBookmarked) return -1;
+    if (!aBookmarked && bBookmarked) return 1;
+    
     return a.distance - b.distance;
   });
 
-  // Sort routes without arrivals by distance
+  // Sort routes without arrivals - bookmarked first, then by distance
   const sortedRoutesWithoutArrivals = routesWithoutArrivals.sort((a, b) => {
+    const aBookmarked = isRouteBookmarkedInGroups(a.id, a.stop.locid, a.dir);
+    const bBookmarked = isRouteBookmarkedInGroups(b.id, b.stop.locid, b.dir);
+    
+    if (aBookmarked && !bBookmarked) return -1;
+    if (!aBookmarked && bBookmarked) return 1;
+    
     return a.distance - b.distance;
   });
 

@@ -70,15 +70,40 @@ interface DeparturesCardParams {
 }
 
 export function DeparturesCard({ filteredArrivals, selectedIndex = 0, onSelectDeparture }: DeparturesCardParams) {
+  const [isExpanded, setIsExpanded] = React.useState(false);
+
+  const handleDepartureSelect = (index: number) => {
+    if (onSelectDeparture) {
+      onSelectDeparture(index);
+      setIsExpanded(false);
+    }
+  };
+  
+  const arrivalsToShow = isExpanded ? filteredArrivals : [filteredArrivals[selectedIndex]];
+  const hasMoreArrivals = filteredArrivals.length > 1;
+  const hasEarlierDepartures = selectedIndex > 0 && !isExpanded;
+
   return (
     <Card>
       <Card.Header>Departures</Card.Header>
       <ListGroup className="list-group-flush">
-        {map(filteredArrivals, (arrival: any, index: number) => {
+        {hasEarlierDepartures && (
+          <ListGroup.Item
+            as="li"
+            className="d-flex justify-content-center align-items-center"
+            onClick={() => setIsExpanded(true)}
+            style={{ cursor: 'pointer', color: '#007bff' }}
+          >
+            <FontAwesome name="chevron-up" className="me-2" />
+            <span>{selectedIndex} earlier departure{selectedIndex === 1 ? '' : 's'}</span>
+          </ListGroup.Item>
+        )}
+        {map(arrivalsToShow, (arrival: any, arrivalIndex: number) => {
+          const actualIndex = isExpanded ? arrivalIndex : selectedIndex;
           const estimatedArrivalTime = arrival.estimated;
           const scheduledArrivalTime = arrival.scheduled;
 
-          const variant = index === 0 ? "primary" : "light";
+          const variant = actualIndex === 0 ? "primary" : "light";
           const estimatedTime = moment(estimatedArrivalTime).format("h:mm a");
           const scheduledTime = moment(scheduledArrivalTime).format("h:mm a");
           const arrivalTime = estimatedArrivalTime
@@ -87,11 +112,11 @@ export function DeparturesCard({ filteredArrivals, selectedIndex = 0, onSelectDe
 
           return (
             <ListGroup.Item
-              key={index}
+              key={actualIndex}
               variant={variant}
               as="li"
               className="d-flex justify-content-between align-items-start"
-              onClick={() => onSelectDeparture?.(index)}
+              onClick={() => handleDepartureSelect(actualIndex)}
               style={{ cursor: onSelectDeparture ? 'pointer' : 'default' }}
             >
               <div className="d-flex align-items-center gap-2">
@@ -99,8 +124,8 @@ export function DeparturesCard({ filteredArrivals, selectedIndex = 0, onSelectDe
                   <input
                     type="radio"
                     name="departure-selection"
-                    checked={selectedIndex === index}
-                    onChange={() => onSelectDeparture(index)}
+                    checked={selectedIndex === actualIndex}
+                    onChange={() => handleDepartureSelect(actualIndex)}
                     onClick={(e) => e.stopPropagation()}
                   />
                 )}
@@ -108,7 +133,7 @@ export function DeparturesCard({ filteredArrivals, selectedIndex = 0, onSelectDe
                   {arrival.vehicleID ? (
                     <span className="bus-id">Bus {arrival.vehicleID}</span>
                   ) : (
-                    <span>Departure {index + 1}</span>
+                    <span>Departure {actualIndex + 1}</span>
                   )}
                 </div>
               </div>
@@ -125,6 +150,22 @@ export function DeparturesCard({ filteredArrivals, selectedIndex = 0, onSelectDe
             </ListGroup.Item>
           );
         })}
+        {hasMoreArrivals && (
+          <ListGroup.Item
+            as="li"
+            className="d-flex justify-content-center align-items-center"
+            onClick={() => setIsExpanded(!isExpanded)}
+            style={{ cursor: 'pointer', color: '#007bff' }}
+          >
+            <FontAwesome name={isExpanded ? "chevron-up" : "chevron-down"} className="me-2" />
+            <span>
+              {isExpanded 
+                ? "Show Less" 
+                : `${filteredArrivals.length - 1} future departure${filteredArrivals.length - 1 === 1 ? '' : 's'}`
+              }
+            </span>
+          </ListGroup.Item>
+        )}
       </ListGroup>
     </Card>
   );

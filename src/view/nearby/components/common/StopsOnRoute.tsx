@@ -1,6 +1,6 @@
 import { map } from "lodash";
 import React, { useEffect, useState } from "react";
-import { Badge, Card, ListGroup, ListGroupItem } from "react-bootstrap";
+import { Badge, Button, Card, Form, ListGroup, ListGroupItem } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { RouteDirectionStop } from "../../../../api/trimet/interfaces/routes";
 import { StopData, TrimetRoute } from "../../../../api/trimet/interfaces/types";
@@ -21,6 +21,8 @@ interface StopOnRouteParams {
   currentStopSeq?: number;
   allStopsOnRoute?: RouteDirectionStop[];
   downstreamArrivals?: any;
+  isSelected?: boolean;
+  onSelect?: () => void;
 }
 
 function RouteAtStop({ stopData }: { stopData: StopData }) {
@@ -44,7 +46,7 @@ function RouteAtStop({ stopData }: { stopData: StopData }) {
   );
 }
 
-function StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq, allStopsOnRoute, downstreamArrivals }: StopOnRouteParams) {
+function StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq, allStopsOnRoute, downstreamArrivals, isSelected, onSelect }: StopOnRouteParams) {
   const [stopData, setStopData] = useState<StopData>(null);
 
   useEffect(() => {
@@ -103,11 +105,28 @@ function StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq, allS
   const estimatedTime = getEstimatedArrivalTime();
 
   return (
-    <ListGroupItem key={routeDirectionStop.locid} className="d-flex justify-content-between align-items-center">
-      <div>
-        <span>{routeDirectionStop.desc}</span>
-        <small className="text-muted"> ({routeDirectionStop.locid})</small>
-        {stopData && <RouteAtStop stopData={stopData} />}
+    <ListGroupItem 
+      key={routeDirectionStop.locid} 
+      className="d-flex justify-content-between align-items-center"
+      style={{ cursor: onSelect ? 'pointer' : 'default' }}
+      onClick={onSelect}
+    >
+      <div className="d-flex align-items-center gap-2 flex-grow-1">
+        <Form.Check
+          type="radio"
+          checked={isSelected}
+          onChange={() => {}}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (onSelect) onSelect();
+          }}
+          disabled={!onSelect}
+        />
+        <div>
+          <span>{routeDirectionStop.desc}</span>
+          <small className="text-muted"> ({routeDirectionStop.locid})</small>
+          {stopData && <RouteAtStop stopData={stopData} />}
+        </div>
       </div>
       {estimatedTime && (
         <small className="text-muted stop-arrival-time">
@@ -119,15 +138,92 @@ function StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq, allS
 }
 
 export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentStopSeq, allStopsOnRoute, downstreamArrivals }: StopsOnRouteParams) {
+  const [selectedDestinationIndex, setSelectedDestinationIndex] = useState<number | null>(null);
+  const [isSelecting, setIsSelecting] = useState(true);
+
+  const handleSelectDestination = (index: number) => {
+    setSelectedDestinationIndex(index);
+    setIsSelecting(false);
+  };
+
+  const handleSelectAgain = () => {
+    setIsSelecting(true);
+  };
+
+  const stopsToShow = isSelecting 
+    ? remainingStopsOnRoute 
+    : selectedDestinationIndex !== null 
+      ? [remainingStopsOnRoute[selectedDestinationIndex]]
+      : remainingStopsOnRoute;
+  
+  const hasMoreStops = remainingStopsOnRoute.length > 1;
+  const hasEarlierStops = selectedDestinationIndex !== null && selectedDestinationIndex > 0 && !isSelecting;
+
   return (
     <Card>
-      <Card.Header>Stops</Card.Header>
+      <Card.Header className="d-flex justify-content-between align-items-center">
+        <span>Stops</span>
+        {!isSelecting && selectedDestinationIndex !== null && (
+          <Button 
+            variant="outline-primary" 
+            size="sm"
+            onClick={handleSelectAgain}
+          >
+            <FontAwesome name="repeat" className="me-1" />
+            Select Again
+          </Button>
+        )}
+      </Card.Header>
       <ListGroup className="list-group-flush">
+        {hasEarlierStops && (
+          <ListGroup.Item
+            as="li"
+            className="d-flex justify-content-center align-items-center"
+            onClick={() => setIsSelecting(true)}
+            style={{ cursor: 'pointer', color: '#007bff' }}
+          >
+            <FontAwesome name="chevron-up" className="me-2" />
+            <span>{selectedDestinationIndex} earlier stop{selectedDestinationIndex === 1 ? '' : 's'}</span>
+          </ListGroup.Item>
+        )}
         {map(
-          remainingStopsOnRoute,
-          (routeDirectionStop: RouteDirectionStop) => {
-            return StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq, allStopsOnRoute, downstreamArrivals });
+          stopsToShow,
+          (routeDirectionStop: RouteDirectionStop, index: number) => {
+            const actualIndex = isSelecting 
+              ? remainingStopsOnRoute.indexOf(routeDirectionStop)
+              : selectedDestinationIndex !== null
+                ? selectedDestinationIndex
+                : remainingStopsOnRoute.indexOf(routeDirectionStop);
+            
+            return (
+              <StopOnRoute
+                key={routeDirectionStop.locid}
+                routeDirectionStop={routeDirectionStop}
+                selectedArrival={selectedArrival}
+                currentStopSeq={currentStopSeq}
+                allStopsOnRoute={allStopsOnRoute}
+                downstreamArrivals={downstreamArrivals}
+                isSelected={actualIndex === selectedDestinationIndex}
+                onSelect={isSelecting ? () => handleSelectDestination(actualIndex) : undefined}
+              />
+            );
           }
+        )}
+        {hasMoreStops && selectedDestinationIndex !== null && (
+          <ListGroup.Item
+            as="li"
+            className="d-flex justify-content-center align-items-center"
+            onClick={() => setIsSelecting(!isSelecting)}
+            style={{ cursor: 'pointer', color: '#007bff' }}
+          >
+            <FontAwesome name={isSelecting ? "chevron-up" : "chevron-down"} className="me-2" />
+            <span>
+              {isSelecting 
+                ? "show less" 
+                : `${remainingStopsOnRoute.length - selectedDestinationIndex - 1} future stop${remainingStopsOnRoute.length - selectedDestinationIndex - 1 === 1 ? '' : 's'}`
+              }
+            </span>
+          </ListGroup.Item>
         )}
       </ListGroup>
     </Card>

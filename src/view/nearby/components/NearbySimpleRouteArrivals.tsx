@@ -118,6 +118,8 @@ export default function NearbySimpleRouteArrivals({
 
   const stopLocation: ArrivalLocation = arrivalData?.location?.[0];
   const shortSign = filteredArrivalData?.[0] ? last(split(filteredArrivalData[0].shortSign, "To")) : null;
+  const routeDesc = routeStopsData?.route?.[0]?.desc;
+  const directionDesc = routeStopsData?.route?.[0]?.dir?.[0]?.desc;
   const routeStopsInDirection = routeStopsData?.route?.[0]?.dir?.[0]?.stop;
   const stopIndex = routeStopsInDirection ? findIndex(
     routeStopsInDirection,
@@ -134,12 +136,23 @@ export default function NearbySimpleRouteArrivals({
 
   return (
     <div className="scrollarea">
-      <TopNavBar id={id} shortSign={shortSign} handleRefresh={handleRefresh} />
+      <TopNavBar 
+        id={id} 
+        shortSign={shortSign} 
+        handleRefresh={handleRefresh}
+      />
       <br />
       {isLoading ? (
         <RouteStopInfoSkeleton />
       ) : (
-        <RouteStopInfo shortSign={shortSign} stopLocation={stopLocation} />
+        <RouteStopInfo 
+          shortSign={shortSign} 
+          stopLocation={stopLocation}
+          routeId={toNumber(id)}
+          direction={toNumber(direction)}
+          routeDesc={routeDesc}
+          directionDesc={directionDesc}
+        />
       )}
       <br />
       {isLoading ? (
