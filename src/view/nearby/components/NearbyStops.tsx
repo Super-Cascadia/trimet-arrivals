@@ -93,6 +93,7 @@ export interface NearbyStopsProps {
   radiusSize: number;
   handleRadiusSelectionChange: (e: any) => void;
   handleRefresh?: () => void;
+  handleFindNearMe?: () => void;
   stopCount: number;
   routeCount: number;
   currentLocation: number[];
@@ -103,6 +104,7 @@ export default function NearbyStops({
   radiusSize,
   handleRadiusSelectionChange,
   handleRefresh,
+  handleFindNearMe,
   routeCount,
   stopCount,
   currentLocation
@@ -168,6 +170,7 @@ export default function NearbyStops({
         radiusSize={radiusSize}
         handleRadiusSelectionChange={handleRadiusSelectionChange}
         handleRefresh={handleRefresh}
+        handleFindNearMe={handleFindNearMe}
       />
       <br />
       <NearbySubNav routeCount={routeCount} stopCount={stopCount} />

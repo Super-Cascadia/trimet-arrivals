@@ -14,6 +14,7 @@ interface StopsOnRouteParams {
   allStopsOnRoute?: RouteDirectionStop[];
   downstreamArrivals?: any;
   onDestinationSelect?: (index: number | null) => void;
+  selectedDestinationIndex?: number | null;
 }
 
 interface StopOnRouteParams {
@@ -138,11 +139,19 @@ function StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq, allS
   );
 }
 
-export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentStopSeq, allStopsOnRoute, downstreamArrivals, onDestinationSelect }: StopsOnRouteParams) {
+export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentStopSeq, allStopsOnRoute, downstreamArrivals, onDestinationSelect, selectedDestinationIndex: initialSelectedDestinationIndex }: StopsOnRouteParams) {
   const [selectedDestinationIndex, setSelectedDestinationIndex] = useState<number | null>(null);
   const [isSelecting, setIsSelecting] = useState(true);
   const [showEarlier, setShowEarlier] = useState(false);
   const [showFuture, setShowFuture] = useState(false);
+
+  // Sync internal state with prop when it changes (e.g., from URL parameter)
+  useEffect(() => {
+    if (initialSelectedDestinationIndex !== undefined && initialSelectedDestinationIndex !== null) {
+      setSelectedDestinationIndex(initialSelectedDestinationIndex);
+      setIsSelecting(false);
+    }
+  }, [initialSelectedDestinationIndex]);
 
   const handleSelectDestination = (index: number) => {
     setSelectedDestinationIndex(index);
@@ -198,7 +207,7 @@ export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentSt
   return (
     <Card>
       <Card.Header className="d-flex justify-content-between align-items-center">
-        <span>Stops</span>
+        <span>Destination</span>
         {!isSelecting && selectedDestinationIndex !== null && (
           <Button 
             variant="outline-primary" 

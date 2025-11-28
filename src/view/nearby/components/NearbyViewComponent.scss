@@ -48,3 +48,49 @@ table th, table td {
     height: 85vh;
     max-height: 85vh;
 }
+
+.dropped-marker-alert {
+    font-size: 14px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    
+    strong {
+        font-weight: 600;
+    }
+    
+    .btn {
+        white-space: nowrap;
+    }
+}
+
+.location-mode-indicator {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.dropped-marker-pin {
+    transition: transform 0.2s ease;
+    
+    &:hover {
+        transform: rotate(-45deg) scale(1.1);
+    }
+    
+    &::after {
+        content: '';
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: white;
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}

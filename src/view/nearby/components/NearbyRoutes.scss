@@ -115,3 +115,27 @@
     font-size: 12px;
     padding: 4px 8px;
 }
+.route-arrivals-container {
+    display: flex;
+    flex-direction: column;
+    height: 95vh;
+    max-height: 95vh;
+    position: relative;
+}
+
+.route-arrivals-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: auto !important;
+    max-height: none !important;
+    padding-bottom: 8px;
+}
+
+.route-arrivals-go-button {
+    padding: 12px;
+    background: white;
+    border-top: 1px solid #dee2e6;
+    flex-shrink: 0;
+    z-index: 10;
+}

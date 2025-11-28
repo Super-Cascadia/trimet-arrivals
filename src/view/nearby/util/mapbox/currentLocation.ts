@@ -19,22 +19,29 @@ export function drawCircle(
   // @ts-ignore
   const circle = turf.circle(center, radius, options);
 
-  map.addSource(CURRENT_LOCATION_RADIUS, {
-    type: "geojson",
-    data: circle
-  });
+  if (!map.getSource(CURRENT_LOCATION_RADIUS)) {
+    map.addSource(CURRENT_LOCATION_RADIUS, {
+      type: "geojson",
+      data: circle
+    });
+  } else {
+    // @ts-ignore
+    map.getSource(CURRENT_LOCATION_RADIUS).setData(circle);
+  }
 
-  const updatedMap = map.addLayer({
-    id: CURRENT_LOCATION_RADIUS_LAYER,
-    type: "fill",
-    source: CURRENT_LOCATION_RADIUS,
-    paint: {
-      "fill-color": "#888888",
-      "fill-opacity": 0.4
-    }
-  });
+  if (!map.getLayer(CURRENT_LOCATION_RADIUS_LAYER)) {
+    map.addLayer({
+      id: CURRENT_LOCATION_RADIUS_LAYER,
+      type: "fill",
+      source: CURRENT_LOCATION_RADIUS,
+      paint: {
+        "fill-color": "#888888",
+        "fill-opacity": 0.4
+      }
+    });
+  }
 
-  return updatedMap;
+  return map;
 }
 
 export function setCurrentLocationMarker(
@@ -44,23 +51,33 @@ export function setCurrentLocationMarker(
   radiusSize: number
 ): Map {
   console.log("setting current location marker");
-  map.addSource(CURRENT_LOCATION_CIRCLE, {
-    type: "geojson",
-    data: {
-      type: "Feature",
-      properties: {},
-      geometry: {
-        type: "Point",
-        coordinates: [lng, lat]
-      }
+  
+  const data = {
+    type: "Feature" as const,
+    properties: {},
+    geometry: {
+      type: "Point" as const,
+      coordinates: [lng, lat]
     }
-  });
+  };
+  
+  if (!map.getSource(CURRENT_LOCATION_CIRCLE)) {
+    map.addSource(CURRENT_LOCATION_CIRCLE, {
+      type: "geojson",
+      data
+    });
+  } else {
+    // @ts-ignore
+    map.getSource(CURRENT_LOCATION_CIRCLE).setData(data);
+  }
 
-  map.addLayer({
-    id: CURRENT_LOCATION_CIRCLE_LAYER,
-    type: "circle",
-    source: CURRENT_LOCATION_CIRCLE
-  });
+  if (!map.getLayer(CURRENT_LOCATION_CIRCLE_LAYER)) {
+    map.addLayer({
+      id: CURRENT_LOCATION_CIRCLE_LAYER,
+      type: "circle",
+      source: CURRENT_LOCATION_CIRCLE
+    });
+  }
 
   return drawCircle(map, lng, lat, radiusSize);
 }

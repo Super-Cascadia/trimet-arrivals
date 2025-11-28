@@ -27,6 +27,7 @@ interface Props {
   handleSimpleRoutesOpened: () => void;
   handleRadiusSelectionChange: (e: any) => void;
   handleRefresh?: () => void;
+  handleFindNearMe?: () => void;
   routeCount: number;
   stopCount: number;
   currentLocation: number[];
@@ -40,6 +41,9 @@ interface RouteStructure {
   id: number;
   distance: number;
   distanceString: string;
+  allStopsForRoute?: StopLocation[]; // All stops serving this route-direction
+  currentStopIndex?: number; // Index of currently displayed stop
+  stopLabel?: string; // Letter label (A, B, C, etc.)
 }
 function getRouteArrivals(
   arrivalData: ArrivalData,
@@ -49,9 +53,9 @@ function getRouteArrivals(
   closestNearbyRouteStructure: RouteStructure[];
 } {
   const groupedArrivals = groupBy(arrivalData?.arrival, "locid");
-  const closestNearbyRoutes: string[] = [];
-  const closestNearbyRouteStructure: RouteStructure[] = [];
+  const routeDirectionMap = new Map<string, RouteStructure>();
 
+  // First pass: collect all stops for each route-direction
   each(nearbyStops?.location, (stop: StopLocation) => {
     const stopLocation = [stop.lng, stop.lat];
     const distance = getDistance(currentLocation, stopLocation);
@@ -63,27 +67,51 @@ function getRouteArrivals(
       each(route?.dir, (direction: Direction) => {
         const routeDirection = direction.dir;
         const routeDirectionId = `${routeId}-${routeDirection}`;
-        if (closestNearbyRoutes.indexOf(routeDirectionId) === -1) {
-          const arrivalsForLocation = groupedArrivals[stop.locid];
-          const arrivals = filter(arrivalsForLocation, (arrival: Arrival) => {
-            return arrival.route === routeId && arrival.dir === routeDirection;
-          });
-          closestNearbyRoutes.push(routeDirectionId);
-          closestNearbyRouteStructure.push({
+        
+        const arrivalsForLocation = groupedArrivals[stop.locid];
+        const arrivals = filter(arrivalsForLocation, (arrival: Arrival) => {
+          return arrival.route === routeId && arrival.dir === routeDirection;
+        });
+        
+        if (!routeDirectionMap.has(routeDirectionId)) {
+          // First stop for this route-direction - create entry
+          routeDirectionMap.set(routeDirectionId, {
             arrivals,
             dir: routeDirection,
             id: routeId,
             route,
             stop,
             distance,
-            distanceString
+            distanceString,
+            allStopsForRoute: [stop],
+            currentStopIndex: 0
           });
+        } else {
+          // Additional stop for this route-direction - add to array
+          const existing = routeDirectionMap.get(routeDirectionId)!;
+          existing.allStopsForRoute!.push(stop);
         }
       });
     });
   });
 
-  return { closestNearbyRouteStructure };
+  // Sort stops within each route-direction by distance
+  routeDirectionMap.forEach((value) => {
+    if (value.allStopsForRoute && value.allStopsForRoute.length > 1) {
+      value.allStopsForRoute.sort((a, b) => {
+        const distA = getDistance(currentLocation, [a.lng, a.lat]);
+        const distB = getDistance(currentLocation, [b.lng, b.lat]);
+        return distA - distB;
+      });
+      // Update the main stop to be the closest one
+      value.stop = value.allStopsForRoute[0];
+      const closestLocation = [value.stop.lng, value.stop.lat];
+      value.distance = getDistance(currentLocation, closestLocation);
+      value.distanceString = getNormalizedDistanceString(currentLocation, closestLocation);
+    }
+  });
+
+  return { closestNearbyRouteStructure: Array.from(routeDirectionMap.values()) };
 }
 
 export default function NearbySimpleRoutes({
@@ -94,12 +122,14 @@ export default function NearbySimpleRoutes({
   handleRadiusSelectionChange,
   handleSimpleRoutesOpened,
   handleRefresh,
+  handleFindNearMe,
   routeCount,
   stopCount,
   currentLocation
 }: Props) {
   const [arrivalData, setArrivalData] = useState<ArrivalData>(null);
   const [routeFilter, setRouteFilter] = useState<string[]>([]);
+  const [stopIndexMap, setStopIndexMap] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
     async function fetchData() {
@@ -123,12 +153,60 @@ export default function NearbySimpleRoutes({
     ? { closestNearbyRouteStructure: [] }
     : getRouteArrivals(arrivalData, nearbyStops, currentLocation);
 
+  // Apply current stop indices to route structures
+  const routeStructureWithStopIndices = closestNearbyRouteStructure.map(route => {
+    const routeDirectionId = `${route.id}-${route.dir}`;
+    const currentIndex = stopIndexMap.get(routeDirectionId) || 0;
+    
+    if (route.allStopsForRoute && route.allStopsForRoute.length > 1) {
+      // Update to show the currently selected stop
+      const selectedStop = route.allStopsForRoute[currentIndex];
+      const selectedLocation = [selectedStop.lng, selectedStop.lat];
+      
+      // Get arrivals for the selected stop
+      const groupedArrivals = groupBy(arrivalData?.arrival, "locid");
+      const arrivalsForLocation = groupedArrivals[selectedStop.locid];
+      const arrivals = filter(arrivalsForLocation, (arrival: Arrival) => {
+        return arrival.route === route.id && arrival.dir === route.dir;
+      });
+      
+      return {
+        ...route,
+        stop: selectedStop,
+        distance: getDistance(currentLocation, selectedLocation),
+        distanceString: getNormalizedDistanceString(currentLocation, selectedLocation),
+        arrivals,
+        currentStopIndex: currentIndex
+      };
+    }
+    return route;
+  });
+
+  // Handler to cycle through stops for a route-direction
+  const handleCycleStop = (routeId: number, dir: number, direction: 'prev' | 'next') => {
+    const routeDirectionId = `${routeId}-${dir}`;
+    const route = routeStructureWithStopIndices.find(r => r.id === routeId && r.dir === dir);
+    
+    if (route?.allStopsForRoute && route.allStopsForRoute.length > 1) {
+      const currentIndex = stopIndexMap.get(routeDirectionId) || 0;
+      let nextIndex: number;
+      
+      if (direction === 'next') {
+        nextIndex = (currentIndex + 1) % route.allStopsForRoute.length;
+      } else {
+        nextIndex = (currentIndex - 1 + route.allStopsForRoute.length) % route.allStopsForRoute.length;
+      }
+      
+      setStopIndexMap(new Map(stopIndexMap.set(routeDirectionId, nextIndex)));
+    }
+  };
+
   // Separate routes with and without arrivals
-  const routesWithArrivals = !isEmpty(closestNearbyRouteStructure)
-    ? closestNearbyRouteStructure.filter(r => r.arrivals && r.arrivals.length > 0)
+  const routesWithArrivals = !isEmpty(routeStructureWithStopIndices)
+    ? routeStructureWithStopIndices.filter(r => r.arrivals && r.arrivals.length > 0)
     : [];
-  const routesWithoutArrivals = !isEmpty(closestNearbyRouteStructure)
-    ? closestNearbyRouteStructure.filter(r => !r.arrivals || r.arrivals.length === 0)
+  const routesWithoutArrivals = !isEmpty(routeStructureWithStopIndices)
+    ? routeStructureWithStopIndices.filter(r => !r.arrivals || r.arrivals.length === 0)
     : [];
 
   // Sort routes with arrivals - bookmarked first, then by distance
@@ -159,6 +237,15 @@ export default function NearbySimpleRoutes({
     ...sortedRoutesWithoutArrivals
   ];
 
+  // Assign letter labels (A, B, C, etc.) to each route
+  const routesWithLabels = sortedNearbyRouteStructure.map((route, index) => ({
+    ...route,
+    stopLabel: String.fromCharCode(65 + index) // A=65, B=66, etc.
+  }));
+
+  // Update filtered lists with labels
+  const labeledRoutesMap = new Map(routesWithLabels.map(r => [`${r.id}-${r.dir}-${r.stop.locid}`, r.stopLabel]));
+
   // Build select options from the nearby route structure
   const routeOptions = isLoading
     ? []
@@ -177,18 +264,18 @@ export default function NearbySimpleRoutes({
     setRouteFilter(values);
   };
 
-  // Apply filters to both groups
-  const filteredRoutesWithArrivals = routeFilter.length
-    ? sortedRoutesWithArrivals.filter(r =>
-        routeFilter.includes(`${r.id}-${r.dir}`)
+  // Apply filters to both groups and add labels
+  const filteredRoutesWithArrivals = (routeFilter.length
+    ? routesWithLabels.filter(r =>
+        routeFilter.includes(`${r.id}-${r.dir}`) && r.arrivals && r.arrivals.length > 0
       )
-    : sortedRoutesWithArrivals;
+    : routesWithLabels.filter(r => r.arrivals && r.arrivals.length > 0));
 
-  const filteredRoutesWithoutArrivals = routeFilter.length
-    ? sortedRoutesWithoutArrivals.filter(r =>
-        routeFilter.includes(`${r.id}-${r.dir}`)
+  const filteredRoutesWithoutArrivals = (routeFilter.length
+    ? routesWithLabels.filter(r =>
+        routeFilter.includes(`${r.id}-${r.dir}`) && (!r.arrivals || r.arrivals.length === 0)
       )
-    : sortedRoutesWithoutArrivals;
+    : routesWithLabels.filter(r => !r.arrivals || r.arrivals.length === 0));
 
   return (
     <div id="nearby-view-routes" className="scrollarea">
@@ -196,6 +283,7 @@ export default function NearbySimpleRoutes({
         radiusSize={radiusSize}
         handleRadiusSelectionChange={handleRadiusSelectionChange}
         handleRefresh={handleRefresh}
+        handleFindNearMe={handleFindNearMe}
       />
       <br />
       <NearbySubNav routeCount={routeCount} stopCount={stopCount} />
@@ -225,6 +313,7 @@ export default function NearbySimpleRoutes({
               const thirdArrival = route.arrivals[2];
               const fourthArrival = route.arrivals[3];
               const stop = route.stop;
+              const hasMultipleStops = route.allStopsForRoute && route.allStopsForRoute.length > 1;
               return (
                 <SimpleArrivalListItem
                   key={`with-arrival-${index}`}
@@ -237,6 +326,11 @@ export default function NearbySimpleRoutes({
                   stop={stop}
                   distanceString={route.distanceString}
                   currentLocation={currentLocation}
+                  hasMultipleStops={hasMultipleStops}
+                  currentStopIndex={route.currentStopIndex || 0}
+                  totalStops={route.allStopsForRoute?.length || 1}
+                  onCycleStop={(direction) => handleCycleStop(route.id, route.dir, direction)}
+                  stopLabel={route.stopLabel}
                 />
               );
             })}
@@ -251,6 +345,7 @@ export default function NearbySimpleRoutes({
               const thirdArrival = route.arrivals[2];
               const fourthArrival = route.arrivals[3];
               const stop = route.stop;
+              const hasMultipleStops = route.allStopsForRoute && route.allStopsForRoute.length > 1;
               return (
                 <SimpleArrivalListItem
                   key={`without-arrival-${index}`}
@@ -263,6 +358,11 @@ export default function NearbySimpleRoutes({
                   stop={stop}
                   distanceString={route.distanceString}
                   currentLocation={currentLocation}
+                  hasMultipleStops={hasMultipleStops}
+                  currentStopIndex={route.currentStopIndex || 0}
+                  totalStops={route.allStopsForRoute?.length || 1}
+                  onCycleStop={(direction) => handleCycleStop(route.id, route.dir, direction)}
+                  stopLabel={route.stopLabel}
                 />
               );
             })}

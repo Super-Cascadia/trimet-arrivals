@@ -35,9 +35,6 @@ function NearbyMapV2({
 
   return (
     <div>
-      <div className="sidebar">
-        Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-      </div>
       {mapBoxMap}
     </div>
   );

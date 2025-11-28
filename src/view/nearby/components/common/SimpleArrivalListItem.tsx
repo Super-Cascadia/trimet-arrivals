@@ -29,6 +29,11 @@ interface ArrivalListItemParams {
   stop: StopLocation;
   distanceString?: string;
   currentLocation?: number[];
+  hasMultipleStops?: boolean;
+  currentStopIndex?: number;
+  totalStops?: number;
+  onCycleStop?: (direction: 'prev' | 'next') => void;
+  stopLabel?: string;
 }
 
 function getDirectionArrow(currentLocation: number[], stopLocation: StopLocation): string {
@@ -134,7 +139,12 @@ function SimpleArrivalListItem({
   route,
   stop,
   distanceString,
-  currentLocation
+  currentLocation,
+  hasMultipleStops = false,
+  currentStopIndex = 0,
+  totalStops = 1,
+  onCycleStop,
+  stopLabel
 }: ArrivalListItemParams) {
   const navigate = useNavigate();
 
@@ -258,6 +268,14 @@ function SimpleArrivalListItem({
     >
       <div className="me-1 flex-grow-1 d-flex flex-column">
         <div className="d-flex align-items-start gap-2">
+          {stopLabel && (
+            <div 
+              className="badge bg-primary rounded-circle d-flex align-items-center justify-content-center" 
+              style={{ width: '28px', height: '28px', fontSize: '0.9rem', fontWeight: 'bold' }}
+            >
+              {stopLabel}
+            </div>
+          )}
           <div className="flex-grow-1">
             <span className="fw-bold h2">
               {routeId}{' '}
@@ -265,12 +283,59 @@ function SimpleArrivalListItem({
             </span>
           </div>
         </div>
-        <div className="stop-location-text mt-1">
-          <div>at {stopName} ({stop.locid})</div>
-          {distanceString && (
+        <div className="stop-location-box mt-1 border rounded px-2 py-1" style={{ fontSize: '0.75rem', backgroundColor: '#f8f9fa' }}>
+          <div className="d-flex justify-content-between align-items-start" style={{ fontSize: '0.75rem' }}>
             <div>
-              {directionArrow && <span className="direction-arrow">{directionArrow} </span>}
-              {distanceString}
+              <div>
+                at <a 
+                  href={`/trimet-arrivals/nearby/stops/${stop.locid}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  className="text-decoration-none"
+                >
+                  {stopName}
+                </a> ({stop.locid})
+              </div>
+              {distanceString && (
+                <div className="text-muted">
+                  {directionArrow && <span className="direction-arrow">{directionArrow} </span>}
+                  {distanceString}
+                </div>
+              )}
+            </div>
+          </div>
+          {hasMultipleStops && (
+            <div className="d-flex align-items-center justify-content-center gap-1 mt-2 pt-2 border-top">
+              <button
+                className="btn btn-sm btn-outline-secondary p-0"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (onCycleStop) onCycleStop('prev');
+                }}
+                style={{ width: '20px', height: '20px', fontSize: '0.6rem', lineHeight: 1 }}
+                title="Previous stop"
+              >
+                <FontAwesome name="chevron-left" />
+              </button>
+              <span 
+                className="text-muted" 
+                style={{ minWidth: '28px', textAlign: 'center', fontSize: '0.7rem' }}
+                title={`Stop ${currentStopIndex + 1} of ${totalStops}`}
+              >
+                {currentStopIndex + 1}/{totalStops}
+              </span>
+              <button
+                className="btn btn-sm btn-outline-secondary p-0"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (onCycleStop) onCycleStop('next');
+                }}
+                style={{ width: '20px', height: '20px', fontSize: '0.6rem', lineHeight: 1 }}
+                title="Next stop"
+              >
+                <FontAwesome name="chevron-right" />
+              </button>
             </div>
           )}
         </div>
@@ -320,6 +385,7 @@ function SimpleArrivalListItem({
           className="btn btn-link p-0 bookmark-btn"
           onClick={handleBookmarkToggle}
           style={{ fontSize: '1.2rem', color: isBookmarked ? '#ffc107' : '#6c757d' }}
+          title={isBookmarked ? 'Remove bookmark' : 'Add bookmark'}
         >
           <FontAwesome name={isBookmarked ? 'bookmark' : 'bookmark-o'} />
         </button>

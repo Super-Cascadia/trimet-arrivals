@@ -6,12 +6,14 @@ export interface SearchRadiusSelectionParams {
   radiusSize: number;
   handleRadiusSelectionChange: (e) => void;
   handleRefresh?: () => void;
+  handleFindNearMe?: () => void;
 }
 
 export function SearchRadiusSelection({
   radiusSize,
   handleRadiusSelectionChange,
-  handleRefresh
+  handleRefresh,
+  handleFindNearMe
 }: SearchRadiusSelectionParams) {
   const options = [250, 500, 750, 1000, 1500, 2000, 2500, 5000];
   return (
@@ -36,7 +38,7 @@ export function SearchRadiusSelection({
             <FontAwesome name="refresh" />
           </Button>
         )}
-        <Button variant="primary" aria-label="Find transit near me">
+        <Button variant="primary" onClick={handleFindNearMe} aria-label="Find transit near me">
           <FontAwesome name="location-arrow" />{" "}
           Find Near Me
         </Button>

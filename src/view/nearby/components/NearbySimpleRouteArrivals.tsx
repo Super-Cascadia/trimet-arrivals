@@ -10,6 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 import { getArrivals } from "../../../api/trimet/arrivals";
 import {
@@ -39,13 +40,16 @@ export default function NearbySimpleRouteArrivals({
     id: string,
     direction: string,
     stop: string,
-    stopLocation: ArrivalLocation
+    stopLocation: ArrivalLocation,
+    destinationStopLocation?: ArrivalLocation
   ) => void;
 }) {
   const { id } = useParams();
-  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const stop = searchParams.get("stop");
   const direction = searchParams.get("direction");
+  const destinationParam = searchParams.get("destination");
   const [arrivalData, setArrivalData] = useState<ArrivalData>(null);
   const [filteredArrivalData, setFilteredArrivalData] = useState<Arrival[]>(
     null
@@ -56,6 +60,7 @@ export default function NearbySimpleRouteArrivals({
   const [selectedDepartureIndex, setSelectedDepartureIndex] = useState<number>(0);
   const [selectedDestinationIndex, setSelectedDestinationIndex] = useState<number | null>(null);
   const [downstreamArrivals, setDownstreamArrivals] = useState<ArrivalData>(null);
+  const [hasInitializedFromUrl, setHasInitializedFromUrl] = useState<boolean>(false);
 
   const fetchData = async () => {
     if (stop) {
@@ -108,6 +113,40 @@ export default function NearbySimpleRouteArrivals({
     fetchData();
   }, [stop]);
 
+  // Update map bounds when destination selection changes
+  useEffect(() => {
+    // Don't update URL until we've initialized from URL params
+    if (!hasInitializedFromUrl) {
+      return;
+    }
+    
+    if (selectedDestinationIndex !== null && remainingStopsOnRoute.length > 0 && arrivalData?.location?.[0] && downstreamArrivals) {
+      const destinationStop = remainingStopsOnRoute[selectedDestinationIndex];
+      const destinationLocation = downstreamArrivals.location?.find(loc => loc.id === destinationStop.locid);
+      
+      console.log('Destination selection changed:', {
+        selectedDestinationIndex,
+        destinationStop,
+        destinationLocation,
+        fromLocation: arrivalData.location[0]
+      });
+      
+      if (destinationLocation && arrivalData?.location?.[0]) {
+        handleRouteArrivalsOpened(id, direction, stop, arrivalData.location[0], destinationLocation);
+      }
+      
+      // Update URL with destination parameter
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set('destination', destinationStop.locid.toString());
+      setSearchParams(newParams, { replace: true });
+    } else if (selectedDestinationIndex === null) {
+      // Remove destination parameter when deselected
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete('destination');
+      setSearchParams(newParams, { replace: true });
+    }
+  }, [selectedDestinationIndex, downstreamArrivals, hasInitializedFromUrl]);
+
   const handleRefresh = () => {
     setArrivalData(null);
     setFilteredArrivalData(null);
@@ -135,9 +174,24 @@ export default function NearbySimpleRouteArrivals({
   const selectedArrival = filteredArrivalData && filteredArrivalData.length > selectedDepartureIndex ? filteredArrivalData[selectedDepartureIndex] : null;
   const currentStop = stopIndex >= 0 && routeStopsInDirection ? routeStopsInDirection[stopIndex] : null;
   const currentStopSeq = currentStop ? currentStop.seq : undefined;
+  
+  // Set destination index from URL param when data is loaded
+  useEffect(() => {
+    if (destinationParam && remainingStopsOnRoute.length > 0 && !hasInitializedFromUrl) {
+      const destinationStopId = toNumber(destinationParam);
+      const index = findIndex(remainingStopsOnRoute, (stop) => stop.locid === destinationStopId);
+      if (index >= 0) {
+        setSelectedDestinationIndex(index);
+        setHasInitializedFromUrl(true);
+      }
+    } else if (!destinationParam && remainingStopsOnRoute.length > 0 && !hasInitializedFromUrl) {
+      // No destination in URL, mark as initialized
+      setHasInitializedFromUrl(true);
+    }
+  }, [destinationParam, remainingStopsOnRoute, hasInitializedFromUrl]);
 
   return (
-    <div className="scrollarea">
+    <div className="route-arrivals-container">
       <TopNavBar 
         id={id} 
         shortSign={shortSign} 
@@ -151,47 +205,57 @@ export default function NearbySimpleRouteArrivals({
         stopLat={stopLocation?.lat}
         stopLng={stopLocation?.lng}
       />
-      {isLoading ? (
-        <RouteStopInfoSkeleton />
-      ) : (
-        <RouteStopInfo 
-          shortSign={shortSign} 
-          stopLocation={stopLocation}
-          routeId={toNumber(id)}
-          direction={toNumber(direction)}
-          routeDesc={routeDesc}
-          directionDesc={directionDesc}
-        />
-      )}
-      <br />
-      {isLoading ? (
-        <DeparturesCardSkeleton />
-      ) : (
-        <DeparturesCard 
-          filteredArrivals={filteredArrivalData} 
-          selectedIndex={selectedDepartureIndex}
-          onSelectDeparture={setSelectedDepartureIndex}
-        />
-      )}
-      <br />
-      {isLoading ? (
-        <StopsOnRouteSkeleton />
-      ) : (
-        <StopsOnRoute 
-          remainingStopsOnRoute={remainingStopsOnRoute} 
-          selectedArrival={selectedArrival} 
-          currentStopSeq={currentStopSeq}
-          allStopsOnRoute={routeStopsInDirection}
-          downstreamArrivals={downstreamArrivals}
-          onDestinationSelect={setSelectedDestinationIndex}
-        />
-      )}
-      <br />
+      <div className="scrollarea route-arrivals-scroll">
+        {isLoading ? (
+          <RouteStopInfoSkeleton />
+        ) : (
+          <RouteStopInfo 
+            shortSign={shortSign} 
+            stopLocation={stopLocation}
+            routeId={toNumber(id)}
+            direction={toNumber(direction)}
+            routeDesc={routeDesc}
+            directionDesc={directionDesc}
+            allStopsOnRoute={routeStopsInDirection}
+            currentStopIndex={stopIndex}
+            onDepartureStopSelect={(stopId) => {
+              const newUrl = `/nearby/simple-routes/${id}?stop=${stopId}&direction=${direction}`;
+              navigate(newUrl);
+            }}
+          />
+        )}
+        <br />
+        {isLoading ? (
+          <DeparturesCardSkeleton />
+        ) : (
+          <DeparturesCard 
+            filteredArrivals={filteredArrivalData} 
+            selectedIndex={selectedDepartureIndex}
+            onSelectDeparture={setSelectedDepartureIndex}
+          />
+        )}
+        <br />
+        {isLoading ? (
+          <StopsOnRouteSkeleton />
+        ) : (
+          <StopsOnRoute 
+            remainingStopsOnRoute={remainingStopsOnRoute} 
+            selectedArrival={selectedArrival} 
+            currentStopSeq={currentStopSeq}
+            allStopsOnRoute={routeStopsInDirection}
+            downstreamArrivals={downstreamArrivals}
+            onDestinationSelect={setSelectedDestinationIndex}
+            selectedDestinationIndex={selectedDestinationIndex}
+          />
+        )}
+        <br />
+      </div>
       {!isLoading && (
-        <div className="d-grid">
+        <div className="route-arrivals-go-button">
           <Button
             variant="primary"
             size="lg"
+            className="w-100"
             disabled={selectedDestinationIndex === null}
             onClick={() => {
               if (selectedDestinationIndex !== null) {
