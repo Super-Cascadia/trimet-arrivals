@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/trimet-arrivals/pr-933/static/css/main.84962687.css",
-    "main.js": "/trimet-arrivals/pr-933/static/js/main.af5d6541.js",
+    "main.css": "/trimet-arrivals/pr-933/static/css/main.42d317d4.css",
+    "main.js": "/trimet-arrivals/pr-933/static/js/main.72c31ae6.js",
     "static/js/7696.987ffc63.chunk.js": "/trimet-arrivals/pr-933/static/js/7696.987ffc63.chunk.js",
     "static/js/339.c8a1002d.chunk.js": "/trimet-arrivals/pr-933/static/js/339.c8a1002d.chunk.js",
     "static/js/3724.48e21b84.chunk.js": "/trimet-arrivals/pr-933/static/js/3724.48e21b84.chunk.js",
@@ -136,7 +136,7 @@
     "static/js/6816.1d5b01ea.chunk.js": "/trimet-arrivals/pr-933/static/js/6816.1d5b01ea.chunk.js",
     "static/js/3715.b720aa03.chunk.js": "/trimet-arrivals/pr-933/static/js/3715.b720aa03.chunk.js",
     "static/js/1982.68c36aec.chunk.js": "/trimet-arrivals/pr-933/static/js/1982.68c36aec.chunk.js",
-    "static/js/8345.56932f0e.chunk.js": "/trimet-arrivals/pr-933/static/js/8345.56932f0e.chunk.js",
+    "static/js/8345.60ae292f.chunk.js": "/trimet-arrivals/pr-933/static/js/8345.60ae292f.chunk.js",
     "static/js/5024.2c660d34.chunk.js": "/trimet-arrivals/pr-933/static/js/5024.2c660d34.chunk.js",
     "static/js/6675.fa766ee6.chunk.js": "/trimet-arrivals/pr-933/static/js/6675.fa766ee6.chunk.js",
     "static/js/8170.bd151daf.chunk.js": "/trimet-arrivals/pr-933/static/js/8170.bd151daf.chunk.js",
@@ -217,12 +217,10 @@
     "static/media/roboto-latin-300.woff2": "/trimet-arrivals/pr-933/static/media/roboto-latin-300.37a7069dc30fc663c878.woff2",
     "static/media/roboto-latin-400.woff2": "/trimet-arrivals/pr-933/static/media/roboto-latin-400.176f8f5bd5f02b3abfcf.woff2",
     "static/media/roboto-latin-900.woff2": "/trimet-arrivals/pr-933/static/media/roboto-latin-900.870c8c1486f76054301a.woff2",
-    "index.html": "/trimet-arrivals/pr-933/index.html",
-    "main.84962687.css.map": "/trimet-arrivals/pr-933/static/css/main.84962687.css.map",
-    "main.af5d6541.js.map": "/trimet-arrivals/pr-933/static/js/main.af5d6541.js.map"
+    "index.html": "/trimet-arrivals/pr-933/index.html"
   },
   "entrypoints": [
-    "static/css/main.84962687.css",
-    "static/js/main.af5d6541.js"
+    "static/css/main.42d317d4.css",
+    "static/js/main.72c31ae6.js"
   ]
 }
