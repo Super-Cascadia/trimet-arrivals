@@ -15,6 +15,28 @@ import NearbySubNav from "./common/NearbySubNav";
 import "./NearbyViewComponent.scss";
 import { SearchRadiusSelection } from "./SearchRadiusSelection";
 
+function getDirectionArrow(currentLocation: number[], stopLocation: StopLocation): string {
+  if (!currentLocation || !stopLocation) return "";
+  
+  // Calculate bearing from current location to stop
+  const lat1 = currentLocation[1] * Math.PI / 180;
+  const lat2 = stopLocation.lat * Math.PI / 180;
+  const dLon = (stopLocation.lng - currentLocation[0]) * Math.PI / 180;
+  
+  const y = Math.sin(dLon) * Math.cos(lat2);
+  const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+  const bearing = Math.atan2(y, x) * 180 / Math.PI;
+  
+  // Normalize to 0-360
+  const normalizedBearing = (bearing + 360) % 360;
+  
+  // Convert to 8-direction arrow (N, NE, E, SE, S, SW, W, NW)
+  const directions = ['↑', '↗', '→', '↘', '↓', '↙', '←', '↖'];
+  const index = Math.round(normalizedBearing / 45) % 8;
+  
+  return directions[index];
+}
+
 function getRouteDirections(
   route: TrimetRoute,
   routeDirectionFilter: Set<string>,
@@ -51,6 +73,7 @@ function getLocationInfo(
       stopLocation.lng,
       stopLocation.lat
     ]);
+    const directionArrow = getDirectionArrow(currentLocation, stopLocation);
     const routeDirectionItems = stopLocation.route
       .map(r =>
         getRouteDirections(r, routeDirectionFilter, hasRouteFiltering)
@@ -78,9 +101,17 @@ function getLocationInfo(
               nearbyStops={true}
             />
             {stopLocation.desc}
+            {stopLocation.dir && (
+              <span className="text-muted" style={{ marginLeft: '8px', fontSize: '0.9em' }}>
+                ({stopLocation.dir})
+              </span>
+            )}
           </Card.Header>
           <ListGroup variant="flush">{routeDirectionItems}</ListGroup>
-          <Card.Footer className="text-muted">{distanceDescription}</Card.Footer>
+          <Card.Footer className="text-muted">
+            {directionArrow && <span style={{ marginRight: '6px', fontSize: '1.1em' }}>{directionArrow}</span>}
+            {distanceDescription}
+          </Card.Footer>
         </Card>
         <br />
       </>

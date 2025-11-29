@@ -2,6 +2,7 @@ import { Dictionary, each, filter, groupBy, isEmpty, join, map } from "lodash";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { ListGroup } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
 import { getArrivals } from "../../../api/trimet/arrivals";
 import { Arrival, ArrivalData } from "../../../api/trimet/interfaces/arrivals";
 import {
@@ -24,13 +25,14 @@ interface Props {
   nearbyStops: StopData;
   radiusSize: number;
   minLoadingTime?: boolean;
-  handleSimpleRoutesOpened: () => void;
+  handleSimpleRoutesOpened: (labeledStops?: Array<{locid: number, label: string, lng: number, lat: number}>) => void;
   handleRadiusSelectionChange: (e: any) => void;
   handleRefresh?: () => void;
   handleFindNearMe?: () => void;
   routeCount: number;
   stopCount: number;
   currentLocation: number[];
+  highlightStopMarker?: (stopId: string | null) => void;
 }
 
 interface RouteStructure {
@@ -125,8 +127,10 @@ export default function NearbySimpleRoutes({
   handleFindNearMe,
   routeCount,
   stopCount,
-  currentLocation
+  currentLocation,
+  highlightStopMarker
 }: Props) {
+  const location = useLocation();
   const [arrivalData, setArrivalData] = useState<ArrivalData>(null);
   const [routeFilter, setRouteFilter] = useState<string[]>([]);
   const [stopIndexMap, setStopIndexMap] = useState<Map<string, number>>(new Map());
@@ -141,7 +145,6 @@ export default function NearbySimpleRoutes({
 
         const arrivals = await getArrivals(locationIds, 90);
         setArrivalData(arrivals);
-        handleSimpleRoutesOpened();
       }
     }
     fetchData();
@@ -237,14 +240,38 @@ export default function NearbySimpleRoutes({
     ...sortedRoutesWithoutArrivals
   ];
 
-  // Assign letter labels (A, B, C, etc.) to each route
-  const routesWithLabels = sortedNearbyRouteStructure.map((route, index) => ({
+  // Assign stop ID as label to each route
+  const routesWithLabels = sortedNearbyRouteStructure.map((route) => ({
     ...route,
-    stopLabel: String.fromCharCode(65 + index) // A=65, B=66, etc.
+    stopLabel: route.stop.locid.toString() // Use stop ID as label
   }));
 
   // Update filtered lists with labels
   const labeledRoutesMap = new Map(routesWithLabels.map(r => [`${r.id}-${r.dir}-${r.stop.locid}`, r.stopLabel]));
+
+  // Call handleSimpleRoutesOpened when we have nearby stops
+  // This runs on mount and when data changes
+  useEffect(() => {
+    console.log('[NearbySimpleRoutes] useEffect triggered - isLoading:', isLoading, 'nearbyStops:', nearbyStops);
+    
+    if (!isLoading && nearbyStops?.location) {
+      // Show ALL stops in the search area on the map with their stop IDs
+      const labeledStops = nearbyStops.location.map(stop => ({
+        locid: stop.locid,
+        label: stop.locid.toString(),
+        lng: stop.lng,
+        lat: stop.lat
+      }));
+      
+      console.log('[NearbySimpleRoutes] Calling handleSimpleRoutesOpened with', labeledStops.length, 'labeled stops (all stops in search area):', labeledStops);
+      handleSimpleRoutesOpened(labeledStops);
+    } else {
+      console.log('[NearbySimpleRoutes] Skipping handleSimpleRoutesOpened - conditions not met');
+    }
+    
+    // Cleanup: this component manages the simple routes view markers
+    // When it unmounts (navigating to detail page), markers will be managed by that page
+  }, [isLoading, nearbyStops]);
 
   // Build select options from the nearby route structure
   const routeOptions = isLoading
@@ -330,7 +357,7 @@ export default function NearbySimpleRoutes({
                   currentStopIndex={route.currentStopIndex || 0}
                   totalStops={route.allStopsForRoute?.length || 1}
                   onCycleStop={(direction) => handleCycleStop(route.id, route.dir, direction)}
-                  stopLabel={route.stopLabel}
+                  onHover={highlightStopMarker}
                 />
               );
             })}
@@ -362,7 +389,7 @@ export default function NearbySimpleRoutes({
                   currentStopIndex={route.currentStopIndex || 0}
                   totalStops={route.allStopsForRoute?.length || 1}
                   onCycleStop={(direction) => handleCycleStop(route.id, route.dir, direction)}
-                  stopLabel={route.stopLabel}
+                  onHover={highlightStopMarker}
                 />
               );
             })}

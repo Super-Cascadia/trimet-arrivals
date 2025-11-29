@@ -8,7 +8,7 @@ function SimpleArrivalListItemSkeleton() {
     <ListGroup.Item
       variant="light"
       as="li"
-      className="d-flex justify-content-between align-items-start list-item-compact skeleton-item"
+      className="d-flex justify-content-between align-items-start list-item-compact"
     >
       <div className="me-1">
         <span className="fw-bold h2">
@@ -24,25 +24,8 @@ function SimpleArrivalListItemSkeleton() {
         </div>
       </div>
       <div className="text-end arrival-time-container flex-shrink-0">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-          <div className="skeleton-line w-80 h-md" />
-          <span className="skeleton-status-indicator" />
-        </div>
-        <br />
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-          <div className="skeleton-line w-60 h-sm skeleton-secondary" />
-          <span className="skeleton-status-indicator" />
-        </div>
-        <br />
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-          <div className="skeleton-line w-60 h-sm skeleton-secondary" />
-          <span className="skeleton-status-indicator" />
-        </div>
-        <br />
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-          <div className="skeleton-line w-60 h-sm skeleton-secondary" />
-          <span className="skeleton-status-indicator" />
-        </div>
+        <div className="skeleton-line w-50 h-md" />
+        <div className="skeleton-line w-40 h-sm" />
       </div>
     </ListGroup.Item>
   );

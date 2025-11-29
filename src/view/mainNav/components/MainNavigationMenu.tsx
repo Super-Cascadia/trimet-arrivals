@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import { ThemeToggle } from "../../../component/buttons/ThemeToggle";
 import "./MainNavigationMenu.scss";
 
 function bookmarkCount(numberOfBookmarks: number) {
@@ -17,7 +18,7 @@ export default function MainNavigationMenu({
   timeOfLastLoad
 }: Props) {
   return (
-    <Navbar bg="dark" variant="dark" sticky="top">
+    <Navbar className="bg-body-tertiary" sticky="top">
       <Container fluid={true}>
         <Navbar.Brand href="#home">Go By Transit</Navbar.Brand>
         <Nav className="me-auto">
@@ -32,6 +33,7 @@ export default function MainNavigationMenu({
           </LinkContainer>
         </Nav>
         <Nav>
+          <ThemeToggle />
           <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
             <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
             <NavDropdown.Item href="#action/3.2">

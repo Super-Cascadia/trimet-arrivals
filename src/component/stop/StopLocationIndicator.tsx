@@ -1,5 +1,4 @@
 import React from "react";
-import { Badge } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./StopLocationIndicator.css";
 
@@ -17,8 +16,8 @@ export default function StopLocationIndicator({
     : `/stop/${locationId}`;
 
   return (
-    <Link to={route}>
-      <Badge>{locationId}</Badge>
+    <Link to={route} className="stop-location-indicator-link">
+      <span className="stop-location-indicator">{locationId}</span>
     </Link>
   );
 }

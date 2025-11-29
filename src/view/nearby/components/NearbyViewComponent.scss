@@ -1,5 +1,5 @@
 .stop {
-    background: rgba(255,255,255, 0.80);
+    background: rgba(var(--bs-body-bg-rgb), 0.80);
     border-radius: 5px;
 }
 
@@ -23,7 +23,7 @@ table th, table td {
 }
 
 .reload-button {
-    background: darkgrey;
+    background: var(--bs-secondary-bg);
     display: inline-block;
     padding-top: 3px;
     padding-bottom: 2px;
@@ -68,7 +68,8 @@ table th, table td {
     top: 10px;
     left: 10px;
     z-index: 1;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(var(--bs-body-bg-rgb), 0.9);
+    color: var(--bs-body-color);
     padding: 8px 12px;
     border-radius: 4px;
     font-size: 12px;

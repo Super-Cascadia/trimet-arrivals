@@ -25,6 +25,7 @@ import nearbyRoutesViewReducer, {
   NearbyRoutesViewReducerState
 } from "./view/nearbyRoutesViewReducer";
 import viewReducer, { ViewReducerState } from "./viewReducer";
+import themeReducer, { ThemeReducerState } from "./themeReducer";
 
 export interface RootState {
   alertDataReducer: AlertDataReducerState;
@@ -39,6 +40,7 @@ export interface RootState {
   routeDataReducer: RouteDataReducerState;
   nearbyRoutesDataReducer: NearbyRoutesDataReducerState;
   nearbyRoutesViewReducer: NearbyRoutesViewReducerState;
+  themeReducer: ThemeReducerState;
 }
 
 const app = combineReducers<RootState>({
@@ -53,6 +55,7 @@ const app = combineReducers<RootState>({
   nearbyViewReducer,
   routeDataReducer,
   stopsReducer,
+  themeReducer,
   viewReducer
 } as any);
 

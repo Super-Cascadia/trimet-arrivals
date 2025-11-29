@@ -134,8 +134,8 @@
 
 .route-arrivals-go-button {
     padding: 12px;
-    background: white;
-    border-top: 1px solid #dee2e6;
+    background: var(--bs-body-bg);
+    border-top: 1px solid var(--bs-border-color);
     flex-shrink: 0;
     z-index: 10;
 }

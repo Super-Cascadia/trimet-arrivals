@@ -3,10 +3,12 @@ import * as mapboxgl from "mapbox-gl";
 import { Dictionary, map, set, size } from "lodash";
 import React, { useEffect, useRef, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { Outlet, useOutletContext } from "react-router";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as turf from "@turf/turf";
 import geoLocateCurrentPosition from "../../../api/geolocation/geoLocateCurrentPosition";
+import { RootState } from "../../../store/reducers";
 import {
   Location,
   StopData,
@@ -63,7 +65,8 @@ export interface NearbyViewComponentOutletContextProps {
     stopLocation: ArrivalLocation
   ) => void;
   handleStopOpened: (stopLocation: ArrivalLocation) => void;
-  handleSimpleRoutesOpened: () => void;
+  handleSimpleRoutesOpened: (labeledStops?: Array<{locid: number, label: string, lng: number, lat: number}>) => void;
+  highlightStopMarker: (stopId: string | null) => void;
 }
 
 export function NearbyStopDetailComponent() {
@@ -85,12 +88,26 @@ export function NearbyStopsComponent() {
     nearbyStops,
     radiusSize,
     handleRadiusSelectionChange,
+    handleSimpleRoutesOpened,
     handleRefresh,
     handleFindNearMe
   } = useOutletContext<NearbyViewComponentOutletContextProps>();
 
   const stopCount = nearbyStops?.location?.length;
   const routeCount = size(nearbyRoutes);
+
+  // Add stop markers when component mounts or nearbyStops changes
+  React.useEffect(() => {
+    if (nearbyStops?.location) {
+      const labeledStops = nearbyStops.location.map(stop => ({
+        locid: stop.locid,
+        label: stop.locid.toString(),
+        lng: stop.lng,
+        lat: stop.lat
+      }));
+      handleSimpleRoutesOpened(labeledStops);
+    }
+  }, [nearbyStops, handleSimpleRoutesOpened]);
 
   return (
     <div>
@@ -119,7 +136,8 @@ export function NearbySimpleRoutesComp() {
     handleRadiusSelectionChange,
     handleSimpleRoutesOpened,
     handleRefresh,
-    handleFindNearMe
+    handleFindNearMe,
+    highlightStopMarker
   } = useOutletContext<NearbyViewComponentOutletContextProps>();
 
   const stopCount = nearbyStops?.location?.length;
@@ -138,6 +156,7 @@ export function NearbySimpleRoutesComp() {
         routeCount={routeCount}
         stopCount={stopCount}
         handleRefresh={handleRefresh}
+        highlightStopMarker={highlightStopMarker}
         handleFindNearMe={handleFindNearMe}
         currentLocation={currentLocation}
       />
@@ -189,6 +208,7 @@ export default function NearbyViewComponent() {
   const mapRef = useRef<Map>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const theme = useSelector((state: RootState) => state.themeReducer.theme);
   const [zoom, setZoom] = useState(16);
   const [radiusSize, setRadiusSize] = useState<number>(DEFAULT_RADIUS);
   const [nearbyStops, setNearbyStopData] = useState<StopData>(undefined);
@@ -296,6 +316,35 @@ export default function NearbyViewComponent() {
       return;
     }
     
+    // Skip updating if on simple routes or stops page - let those components manage their own markers
+    const currentPath = window.location.pathname;
+    if (currentPath === '/nearby/simple-routes' || currentPath.includes('/trimet-arrivals/nearby/simple-routes') ||
+        currentPath === '/nearby/stops' || currentPath.includes('/trimet-arrivals/nearby/stops')) {
+      console.log("Skipping radius change update - on simple routes or stops page, updating data only");
+      // Still update the data but don't touch the map markers
+      const searchLocation = isUsingDroppedMarker && droppedMarkerLocation
+        ? {
+            ...userLocation,
+            coords: {
+              ...userLocation.coords,
+              latitude: droppedMarkerLocation.lat,
+              longitude: droppedMarkerLocation.lng
+            }
+          }
+        : userLocation;
+      
+      getNearbyStops(searchLocation, radiusSize)
+        .then((stopData: StopData) => {
+          const routes = processRoutes(stopData);
+          setNearbyStopData(stopData);
+          setNearbyRoutesData(routes);
+        })
+        .catch((error) => {
+          console.error("Error updating radius data:", error);
+        });
+      return;
+    }
+    
     console.log("radius size change", radiusSize);
     
     // Set flag to prevent zoom handler from triggering
@@ -354,9 +403,52 @@ export default function NearbyViewComponent() {
       });
   }, [radiusSize]);
 
+  // Theme Change
+  useEffect(() => {
+    if (mapRef.current) {
+      const style = theme === "dark"
+        ? "mapbox://styles/mapbox/dark-v10"
+        : "mapbox://styles/mapbox/streets-v11";
+      
+      mapRef.current.setStyle(style);
+      
+      mapRef.current.once('style.load', () => {
+        console.log("Map style loaded, restoring layers");
+        
+        // Restore stops
+        if (nearbyStops) {
+          const stopLocations = getStopLocations(nearbyStops);
+          const nearbyRouteIds = nearbyRoutes ? getNearbyRouteIds(nearbyRoutes) : {};
+          
+          setNearbyStops(
+            mapRef.current,
+            stopLocations,
+            Object.keys(nearbyRouteIds),
+            handleStopMarkerClick
+          );
+        }
+        
+        // Restore location marker
+        if (isUsingDroppedMarker && droppedMarkerLocation) {
+          setDroppedMarkerOnMap(droppedMarkerLocation.lng, droppedMarkerLocation.lat, radiusSize);
+        } else if (userLocation) {
+          setCurrentLocationMarker(
+            mapRef.current,
+            userLocation.coords.longitude,
+            userLocation.coords.latitude,
+            radiusSize
+          );
+        }
+        
+        // Restore displayed routes would be complex, clearing them for now
+        setDisplayedRouteIds([]);
+      });
+    }
+  }, [theme]);
+
   function initializeMapboxMap() {
     console.log("initialize map", lng, lat, zoom);
-    mapRef.current = initializeMap(lng, lat, mapContainerRef, zoom);
+    mapRef.current = initializeMap(lng, lat, mapContainerRef, zoom, theme);
     mapRef.current = initializeCurrentLocationMarker(
       mapRef.current,
       lng,
@@ -402,6 +494,14 @@ export default function NearbyViewComponent() {
     // Skip updating map stops on route detail pages - they manage their own markers
     if (isOnRouteDetailPage()) {
       console.log("Skipping zoom search update - on route detail page");
+      return;
+    }
+    
+    // Skip updating if on simple routes or stops page - let those components manage their own markers
+    const currentPath = window.location.pathname;
+    if (currentPath === '/nearby/simple-routes' || currentPath.includes('/trimet-arrivals/nearby/simple-routes') ||
+        currentPath === '/nearby/stops' || currentPath.includes('/trimet-arrivals/nearby/stops')) {
+      console.log("Skipping zoom search update - on simple routes or stops page");
       return;
     }
 
@@ -565,8 +665,7 @@ export default function NearbyViewComponent() {
     });
     
     // Add radius circle around dropped marker
-    const circle = require("@turf/circle").default;
-    const radiusCircle = circle([lng, lat], radiusSize, {
+    const radiusCircle = turf.circle([lng, lat], radiusSize, {
       steps: 26,
       units: "feet"
     });
@@ -816,6 +915,9 @@ export default function NearbyViewComponent() {
     removeStopLocationLayers(mapRef.current);
     
     // Remove existing route-specific stop markers if they exist
+    if (mapRef.current.getLayer("routeStopMarkersLayer-label")) {
+      mapRef.current.removeLayer("routeStopMarkersLayer-label");
+    }
     if (mapRef.current.getLayer("routeStopMarkersLayer")) {
       mapRef.current.removeLayer("routeStopMarkersLayer");
     }
@@ -871,9 +973,35 @@ export default function NearbyViewComponent() {
       source: "routeStopMarkersSource",
       paint: {
         "circle-color": ["get", "color"],
-        "circle-radius": 8,
+        "circle-radius": 10,
         "circle-stroke-color": "#ffffff",
         "circle-stroke-width": 2
+      }
+    });
+    
+    // Add text labels for stop markers
+    if (mapRef.current.getLayer("routeStopMarkersLayer-label")) {
+      mapRef.current.removeLayer("routeStopMarkersLayer-label");
+    }
+    
+    mapRef.current.addLayer({
+      id: "routeStopMarkersLayer-label",
+      type: "symbol",
+      source: "routeStopMarkersSource",
+      layout: {
+        "text-field": ["to-string", ["get", "locid"]],
+        "text-size": 11,
+        "text-font": ["DIN Offc Pro Bold", "Arial Unicode MS Bold"],
+        "text-anchor": "center",
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "text-optional": false
+      },
+      paint: {
+        "text-color": "#ffffff",
+        "text-halo-color": "#000000",
+        "text-halo-width": 1,
+        "text-halo-blur": 0.5
       }
     });
     
@@ -972,17 +1100,15 @@ export default function NearbyViewComponent() {
   }
 
   function handleStopOpened(stopLocation: ArrivalLocation) {
-    flyToCenter(stopLocation.lng, stopLocation.lat);
-    updateStopMarkerColor(mapRef.current, `${stopLocation.id}`, "#ff0000");
-  }
-
-  function handleSimpleRoutesOpened() {
-    console.info("simple routes opened");
-    if (!mapRef.current || !mapRef.current.isStyleLoaded()) {
-      return;
-    }
+    console.log("stop opened", stopLocation);
     
-    // Remove route-specific stop markers
+    // Remove existing stop location layers
+    removeStopLocationLayers(mapRef.current);
+    
+    // Remove existing route-specific stop markers if they exist
+    if (mapRef.current.getLayer("routeStopMarkersLayer-label")) {
+      mapRef.current.removeLayer("routeStopMarkersLayer-label");
+    }
     if (mapRef.current.getLayer("routeStopMarkersLayer")) {
       mapRef.current.removeLayer("routeStopMarkersLayer");
     }
@@ -990,24 +1116,166 @@ export default function NearbyViewComponent() {
       mapRef.current.removeSource("routeStopMarkersSource");
     }
     
-    // Remove route segment layer
-    if (mapRef.current.getLayer("routeSegmentLayer")) {
-      mapRef.current.removeLayer("routeSegmentLayer");
-    }
-    if (mapRef.current.getSource("routeSegmentSource")) {
-      mapRef.current.removeSource("routeSegmentSource");
+    // Create stop marker for this location
+    const stopFeatures = [{
+      type: "Feature" as const,
+      geometry: {
+        type: "Point" as const,
+        coordinates: [stopLocation.lng, stopLocation.lat]
+      },
+      properties: {
+        locid: stopLocation.id,
+        color: "#ff0000"
+      }
+    }];
+    
+    // Add source and layer for route-specific stop markers
+    mapRef.current.addSource("routeStopMarkersSource", {
+      type: "geojson",
+      data: {
+        type: "FeatureCollection",
+        features: stopFeatures
+      }
+    });
+    
+    mapRef.current.addLayer({
+      id: "routeStopMarkersLayer",
+      type: "circle",
+      source: "routeStopMarkersSource",
+      paint: {
+        "circle-color": ["get", "color"],
+        "circle-radius": 10,
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-width": 2
+      }
+    });
+    
+    // Add text labels for stop markers
+    mapRef.current.addLayer({
+      id: "routeStopMarkersLayer-label",
+      type: "symbol",
+      source: "routeStopMarkersSource",
+      layout: {
+        "text-field": ["to-string", ["get", "locid"]],
+        "text-size": 11,
+        "text-font": ["DIN Offc Pro Bold", "Arial Unicode MS Bold"],
+        "text-anchor": "center",
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "text-optional": false
+      },
+      paint: {
+        "text-color": "#ffffff",
+        "text-halo-color": "#000000",
+        "text-halo-width": 1,
+        "text-halo-blur": 0.5
+      }
+    });
+    
+    flyToCenter(stopLocation.lng, stopLocation.lat);
+  }
+
+  function handleSimpleRoutesOpened(labeledStops?: Array<{locid: number, label: string, lng: number, lat: number}>) {
+    console.log('[handleSimpleRoutesOpened] Called with labeledStops:', labeledStops);
+    console.log('[handleSimpleRoutesOpened] mapRef.current exists:', !!mapRef.current);
+    console.log('[handleSimpleRoutesOpened] mapRef.current.isStyleLoaded():', mapRef.current?.isStyleLoaded());
+    
+    if (!mapRef.current) {
+      console.warn('[handleSimpleRoutesOpened] Map not available, exiting early');
+      return;
     }
     
-    mapRef.current = removeStopLocationLayers(mapRef.current);
-    mapRef.current = setNearbyStops(
-      mapRef.current,
-      stopLocations,
-      nearbyRouteIds ? Object.keys(nearbyRouteIds) : [],
-      handleStopMarkerClick
-    );
-    mapRef.current = removeRoutes(mapRef.current, displayedRouteIds);
-    flyToCenter(lng, lat);
-    setDisplayedRouteIds([]);
+    const processMarkers = () => {
+      console.log('[handleSimpleRoutesOpened.processMarkers] Starting to process markers');
+      console.log('[handleSimpleRoutesOpened.processMarkers] Map loaded:', mapRef.current?.loaded());
+      console.log('[handleSimpleRoutesOpened.processMarkers] Style loaded:', mapRef.current?.isStyleLoaded());
+    
+      // Remove route-specific stop markers
+      console.log('[handleSimpleRoutesOpened.processMarkers] Removing existing layers');
+      if (mapRef.current.getLayer("routeStopMarkersLayer-label")) {
+        console.log('[handleSimpleRoutesOpened.processMarkers] Removing routeStopMarkersLayer-label');
+        mapRef.current.removeLayer("routeStopMarkersLayer-label");
+      }
+      if (mapRef.current.getLayer("routeStopMarkersLayer")) {
+        console.log('[handleSimpleRoutesOpened.processMarkers] Removing routeStopMarkersLayer');
+        mapRef.current.removeLayer("routeStopMarkersLayer");
+      }
+      if (mapRef.current.getSource("routeStopMarkersSource")) {
+        console.log('[handleSimpleRoutesOpened.processMarkers] Removing routeStopMarkersSource');
+        mapRef.current.removeSource("routeStopMarkersSource");
+      }
+      
+      // Remove route segment layer
+      if (mapRef.current.getLayer("routeSegmentLayer")) {
+        console.log('[handleSimpleRoutesOpened.processMarkers] Removing routeSegmentLayer');
+        mapRef.current.removeLayer("routeSegmentLayer");
+      }
+      if (mapRef.current.getSource("routeSegmentSource")) {
+        console.log('[handleSimpleRoutesOpened.processMarkers] Removing routeSegmentSource');
+        mapRef.current.removeSource("routeSegmentSource");
+      }
+      
+      console.log('[handleSimpleRoutesOpened.processMarkers] Removing stop location layers');
+      mapRef.current = removeStopLocationLayers(mapRef.current);
+      
+      console.log('[handleSimpleRoutesOpened.processMarkers] Removing routes');
+      mapRef.current = removeRoutes(mapRef.current, displayedRouteIds);
+      setDisplayedRouteIds([]);
+      
+      // Add stops after cleanup is complete
+      if (labeledStops && labeledStops.length > 0) {
+        // Use labeled stops
+        console.log('[handleSimpleRoutesOpened.processMarkers] Adding labeled stops to map:', labeledStops.length, 'stops');
+        const { setLabeledStops } = require("../util/mapbox/stopLocationMarker.util");
+        mapRef.current = setLabeledStops(
+          mapRef.current,
+          labeledStops,
+          handleStopMarkerClick
+        );
+        console.log('[handleSimpleRoutesOpened.processMarkers] Labeled stops added successfully');
+      } else {
+        // Fallback to regular stops
+        console.log('[handleSimpleRoutesOpened.processMarkers] No labeled stops, using regular stops');
+        mapRef.current = setNearbyStops(
+          mapRef.current,
+          stopLocations,
+          nearbyRouteIds ? Object.keys(nearbyRouteIds) : [],
+          handleStopMarkerClick
+        );
+        console.log('[handleSimpleRoutesOpened.processMarkers] Regular stops added');
+      }
+      
+      if (labeledStops && labeledStops.length > 0) {
+        const firstStop = labeledStops[0];
+        flyToCenter(firstStop.lng, firstStop.lat);
+      }
+    };
+    
+    // Wait for style to load before processing markers
+    if (!mapRef.current.isStyleLoaded()) {
+      console.log('[handleSimpleRoutesOpened] Style not loaded, waiting for styledata event');
+      mapRef.current.once('styledata', processMarkers);
+    } else {
+      console.log('[handleSimpleRoutesOpened] Style already loaded, processing immediately');
+      processMarkers();
+    }
+  }
+
+  function highlightStopMarker(stopId: string | null) {
+    if (!mapRef.current) return;
+    
+    // Check if the stop location layer exists (it won't exist on detail pages)
+    if (!mapRef.current.getLayer("stopLocationLayer")) {
+      return;
+    }
+    
+    if (stopId) {
+      // Highlight the hovered stop
+      updateStopMarkerColor(mapRef.current, stopId, "#ff6b6b");
+    } else {
+      // Reset all markers to default color
+      mapRef.current.setPaintProperty("stopLocationLayer", "circle-color", "#4264fb");
+    }
   }
 
   const context: NearbyViewComponentOutletContextProps = {
@@ -1022,7 +1290,8 @@ export default function NearbyViewComponent() {
     initializeMap: initializeMapboxMap,
     handleRouteArrivalsOpened,
     handleStopOpened,
-    handleSimpleRoutesOpened
+    handleSimpleRoutesOpened,
+    highlightStopMarker
   };
 
   return (

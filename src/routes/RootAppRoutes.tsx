@@ -1,5 +1,6 @@
 import { size } from "lodash";
 import React from "react";
+import { useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
   Route,
@@ -8,6 +9,7 @@ import {
   useParams,
   Navigate
 } from "react-router-dom";
+import { RootState } from "../store/reducers";
 import BookmarksViewV2 from "../view/bookmarks/component/BookmarksViewV2";
 import Home from "../view/home/Home";
 import LineDetailComponent from "../view/lineDetail/component/LineDetailComponent";
@@ -41,6 +43,12 @@ function NearbyRouteDetails() {
 }
 
 export default function RootAppRoutes() {
+  const theme = useSelector((state: RootState) => state.themeReducer.theme);
+
+  React.useEffect(() => {
+    document.documentElement.setAttribute("data-bs-theme", theme);
+  }, [theme]);
+
   return (
     <Router basename={process.env.PUBLIC_URL}>
       <MainNavigationContainer />
