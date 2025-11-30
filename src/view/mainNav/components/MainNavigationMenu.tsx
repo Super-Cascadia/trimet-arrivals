@@ -1,12 +1,16 @@
 import React from "react";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import CurrentTime from "../../../component/buttons/CurrentTime";
 import { ThemeToggle } from "../../../component/buttons/ThemeToggle";
+import TimeSettingsDropdown from "../../../component/buttons/TimeSettingsDropdown";
 import "./MainNavigationMenu.scss";
 
 function bookmarkCount(numberOfBookmarks: number) {
   return <>{numberOfBookmarks > 0 && <span>({numberOfBookmarks})</span>}</>;
 }
+
+const TRANSIT_EMOJIS = ['🚌', '🚋', '🚎', '🚐', '🚆', '🚇', '🚈', '🚝'];
 
 interface Props {
   numberOfBookmarks: number;
@@ -17,10 +21,22 @@ export default function MainNavigationMenu({
   numberOfBookmarks = 0,
   timeOfLastLoad
 }: Props) {
+  const [emojiIndex, setEmojiIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setEmojiIndex((prevIndex) => (prevIndex + 1) % TRANSIT_EMOJIS.length);
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <Navbar className="bg-body-tertiary" sticky="top">
       <Container fluid={true}>
-        <Navbar.Brand href="#home">Go By Transit</Navbar.Brand>
+        <Navbar.Brand href="#home">
+          <span style={{ marginLeft: '8px' }}>{TRANSIT_EMOJIS[emojiIndex]} Go By Transit</span>
+        </Navbar.Brand>
         <Nav className="me-auto">
           <LinkContainer to="/">
             <a className="nav-link">Home</a>
@@ -34,17 +50,14 @@ export default function MainNavigationMenu({
         </Nav>
         <Nav>
           <ThemeToggle />
-          <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
-            <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.2">
-              Another action
-            </NavDropdown.Item>
-            <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+          <NavDropdown title="Settings" id="collasible-nav-dropdown" align="end">
+            <TimeSettingsDropdown />
             <NavDropdown.Divider />
             <NavDropdown.Item href="#action/3.4">
-              Separated link
+              Other Settings
             </NavDropdown.Item>
           </NavDropdown>
+          <CurrentTime />
         </Nav>
       </Container>
     </Navbar>

@@ -23,7 +23,7 @@ export function ArrivalCountdown({
       if (diffInSeconds <= 0) {
         setTimeString("Arriving");
       } else if (diffInSeconds < 60) {
-        setTimeString(`${diffInSeconds}s`);
+        setTimeString(`0:${String(diffInSeconds).padStart(2, '0')}`);
       } else {
         const minutes = Math.floor(diffInSeconds / 60);
         const seconds = diffInSeconds % 60;
@@ -31,10 +31,10 @@ export function ArrivalCountdown({
           const hours = Math.floor(minutes / 60);
           const remainingMinutes = minutes % 60;
           setTimeString(
-            `${hours}hr ${remainingMinutes}m ${seconds}s`
+            `${hours}:${String(remainingMinutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
           );
         } else {
-          setTimeString(`${minutes}m ${seconds}s`);
+          setTimeString(`${minutes}:${String(seconds).padStart(2, '0')}`);
         }
       }
     };

@@ -8,6 +8,7 @@ import {
   TrimetRoute
 } from "../../../../api/trimet/interfaces/types";
 import { ArrivalCountdown } from "./ArrivalCountdown";
+import { StatusIndicator } from "./StatusIndicator";
 import "./SimpleArrivalListItem.scss";
 
 interface ArrivalListItemParams {
@@ -93,23 +94,83 @@ function SimpleArrivalListItem({
     navigate(url);
   }
 
+  const handleMouseEnter = () => {
+    if (onHover) {
+      onHover(stop.locid.toString());
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (onHover) {
+      onHover(null);
+    }
+  };
+
+  // Format additional arrival times
+  const getArrivalTime = (arrivalData: Arrival | undefined) => {
+    if (!arrivalData) return null;
+    const timestamp = arrivalData.estimated || arrivalData.scheduled;
+    return timestamp ? new Date(timestamp).toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit',
+      hour12: true 
+    }) : null;
+  };
+
   return (
     <ListGroup.Item
       variant="light"
       as="li"
       className="d-flex justify-content-between align-items-start list-item-compact"
       onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div className="me-1">
         <span className="fw-bold h2">
           {routeId}
           <span className="h6 route-direction-desc">{routeDirection.desc}</span>
         </span>
-        {/* <br /> */}
-        {/* <span>{routeDirection.desc}</span> */}
         <br />
         <div className="stop-location-text">
-          <div>at {stopName} ({stop.locid})</div>
+          <div>
+            at {stopName} ({stop.locid})
+            {hasMultipleStops && (
+              <span className="text-muted" style={{ marginLeft: '8px', fontSize: '0.85em' }}>
+                {currentStopIndex !== undefined && totalStops !== undefined && (
+                  <>
+                    (Stop {currentStopIndex + 1} of {totalStops})
+                    {onCycleStop && (
+                      <span style={{ marginLeft: '6px' }}>
+                        <button
+                          className="btn btn-sm btn-link p-0"
+                          style={{ fontSize: '0.9em', textDecoration: 'none' }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onCycleStop('prev');
+                          }}
+                          title="Previous stop"
+                        >
+                          ◄
+                        </button>
+                        <button
+                          className="btn btn-sm btn-link p-0 ms-1"
+                          style={{ fontSize: '0.9em', textDecoration: 'none' }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onCycleStop('next');
+                          }}
+                          title="Next stop"
+                        >
+                          ►
+                        </button>
+                      </span>
+                    )}
+                  </>
+                )}
+              </span>
+            )}
+          </div>
           {distanceString && (
             <div>
               {directionArrow && <span className="direction-arrow">{directionArrow} </span>}
@@ -124,9 +185,43 @@ function SimpleArrivalListItem({
             estimatedArrivalTime={estimatedArrivalTime}
             scheduledArrivalTime={scheduledArrivalTime}
           />
+          {exactTime && <span className="text-muted exact-time"> | {exactTime}</span>}
+          <StatusIndicator estimated={estimatedArrivalTime} scheduled={scheduledArrivalTime} />
         </span>
-        <br />
-        {exactTime && <small className="text-muted exact-time">{exactTime}</small>}
+        {(nextArrival || thirdArrival || fourthArrival) && (
+          <div className="mt-1" style={{ fontSize: '0.75em' }}>
+            {nextArrival && (
+              <div className="text-muted">
+                <ArrivalCountdown
+                  estimatedArrivalTime={nextArrival.estimated}
+                  scheduledArrivalTime={nextArrival.scheduled}
+                />
+                {getArrivalTime(nextArrival) && <span> | {getArrivalTime(nextArrival)}</span>}
+                <StatusIndicator estimated={nextArrival.estimated} scheduled={nextArrival.scheduled} />
+              </div>
+            )}
+            {thirdArrival && (
+              <div className="text-muted">
+                <ArrivalCountdown
+                  estimatedArrivalTime={thirdArrival.estimated}
+                  scheduledArrivalTime={thirdArrival.scheduled}
+                />
+                {getArrivalTime(thirdArrival) && <span> | {getArrivalTime(thirdArrival)}</span>}
+                <StatusIndicator estimated={thirdArrival.estimated} scheduled={thirdArrival.scheduled} />
+              </div>
+            )}
+            {fourthArrival && (
+              <div className="text-muted">
+                <ArrivalCountdown
+                  estimatedArrivalTime={fourthArrival.estimated}
+                  scheduledArrivalTime={fourthArrival.scheduled}
+                />
+                {getArrivalTime(fourthArrival) && <span> | {getArrivalTime(fourthArrival)}</span>}
+                <StatusIndicator estimated={fourthArrival.estimated} scheduled={fourthArrival.scheduled} />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </ListGroup.Item>
   );

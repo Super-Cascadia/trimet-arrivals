@@ -5,63 +5,8 @@ import { Card, ListGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { Arrival } from "../../../../api/trimet/interfaces/arrivals";
 import { ArrivalCountdown } from "./ArrivalCountdown";
+import { StatusIndicator } from "./StatusIndicator";
 import "./DeparturesCard.scss";
-
-interface StatusIndicatorProps {
-  estimated?: number;
-  scheduled?: number;
-}
-
-function StatusIndicator({ estimated, scheduled }: StatusIndicatorProps) {
-  if (!estimated || !scheduled) {
-    return null;
-  }
-
-  const diffInMinutes = moment(estimated).diff(moment(scheduled), "minutes");
-  
-  let color: string;
-  let status: string;
-  let detail: string;
-  
-  if (Math.abs(diffInMinutes) <= 1) {
-    color = "#28a745"; // Green - on time
-    status = "On Time";
-    detail = "Arrival is on schedule";
-  } else if (diffInMinutes < -1) {
-    color = "#007bff"; // Blue - early
-    status = "Early";
-    detail = `Running ${Math.abs(diffInMinutes)} minute${Math.abs(diffInMinutes) === 1 ? '' : 's'} early`;
-  } else {
-    color = "#dc3545"; // Red - late
-    status = "Delayed";
-    detail = `Running ${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'} late`;
-  }
-
-  const tooltip = (
-    <Tooltip id="status-tooltip">
-      <strong>{status}</strong>
-      <br />
-      {detail}
-    </Tooltip>
-  );
-
-  return (
-    <OverlayTrigger placement="left" overlay={tooltip}>
-      <span
-        className="status-indicator"
-        style={{
-          display: "inline-block",
-          width: "8px",
-          height: "8px",
-          borderRadius: "50%",
-          backgroundColor: color,
-          marginLeft: "4px",
-          cursor: "pointer"
-        }}
-      />
-    </OverlayTrigger>
-  );
-}
 
 interface DeparturesCardParams {
   filteredArrivals: Arrival[];

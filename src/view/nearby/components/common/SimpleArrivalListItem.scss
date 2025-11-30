@@ -1,8 +1,21 @@
 .list-group-item {
  &:hover {
-   background-color: #f5f5f5;
    cursor: pointer;
  }
+}
+
+// Light mode hover
+[data-bs-theme="light"] .list-group-item {
+  &:hover {
+    background-color: #f5f5f5;
+  }
+}
+
+// Dark mode hover - darker background for better contrast with white text
+[data-bs-theme="dark"] .list-group-item {
+  &:hover {
+    background-color: #2c2c2c;
+  }
 }
 
 .list-item-compact {
@@ -23,7 +36,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin: 0;
+  margin: 0 0 0 5px;
   padding: 0;
 }
 
@@ -46,6 +59,8 @@
 
 .arrival-time-container {
   line-height: 1.2;
+  font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
+  font-variant-numeric: tabular-nums;
 }
 
 .me-1 {

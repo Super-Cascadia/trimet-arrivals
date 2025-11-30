@@ -9,43 +9,67 @@ import TimeDiffBadge from "./TimeDiffBadge";
 interface ArrivalListItemParams {
   id: any;
   arrival: Arrival;
+  isSelected?: boolean;
+  onSelect?: () => void;
 }
 
-function ArrivalListItem({ id, arrival }: ArrivalListItemParams) {
+function ArrivalListItem({ id, arrival, isSelected, onSelect }: ArrivalListItemParams) {
   const navigate = useNavigate();
   const estimatedArrivalTime = arrival.estimated;
   const scheduledArrivalTime = arrival.scheduled;
   const scheduledTime = getFormattedTime(scheduledArrivalTime);
 
   function handleClick() {
-    const url = `/nearby/simple-routes/${arrival.route}?stop=${arrival.locid}&direction=${arrival.dir}`;
-    navigate(url);
+    if (onSelect) {
+      onSelect();
+    } else {
+      const url = `/nearby/simple-routes/${arrival.route}?stop=${arrival.locid}&direction=${arrival.dir}`;
+      navigate(url);
+    }
   }
 
   return (
     <ListGroup.Item
-      variant="light"
+      variant={isSelected ? "primary" : "light"}
       as="li"
       className="d-flex justify-content-between align-items-start"
       onClick={handleClick}
+      style={{ cursor: "pointer" }}
     >
-      <div className="ms-2 me-auto">
-        <span className="fw-bold">{arrival.shortSign}</span>
-        <div>
-          {estimatedArrivalTime ? (
-            <small>
-              Estimated: {getFormattedTime(estimatedArrivalTime)} /{" "}
-              {scheduledTime}
-            </small>
-          ) : (
-            <small>Scheduled: {scheduledTime}</small>
-          )}
+      <div className="d-flex align-items-center w-100">
+        {onSelect && (
+          <div className="me-2">
+            <input
+              type="radio"
+              name="departure-selection"
+              checked={isSelected}
+              onChange={() => {}}
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelect();
+              }}
+              style={{ cursor: "pointer" }}
+            />
+          </div>
+        )}
+        <div className="me-auto">
+          <span className="fw-bold">{arrival.shortSign}</span>
+          <div>
+            {estimatedArrivalTime ? (
+              <small>
+                Estimated: {getFormattedTime(estimatedArrivalTime)} /{" "}
+                {scheduledTime}
+              </small>
+            ) : (
+              <small>Scheduled: {scheduledTime}</small>
+            )}
+          </div>
         </div>
+        <TimeDiffBadge
+          estimatedArrivalTime={estimatedArrivalTime}
+          scheduledArrivalTime={scheduledArrivalTime}
+        />
       </div>
-      <TimeDiffBadge
-        estimatedArrivalTime={estimatedArrivalTime}
-        scheduledArrivalTime={scheduledArrivalTime}
-      />
     </ListGroup.Item>
   );
 }

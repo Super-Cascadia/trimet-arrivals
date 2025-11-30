@@ -3,7 +3,23 @@
 }
 
 .stop-info-header {
-    flex: 4
+    flex: 4;
+    margin-bottom: 1rem;
+}
+
+.stop-heading {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stop-distance {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
 }
 
 .serving-label {

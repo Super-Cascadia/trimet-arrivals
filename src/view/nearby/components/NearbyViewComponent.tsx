@@ -90,7 +90,8 @@ export function NearbyStopsComponent() {
     handleRadiusSelectionChange,
     handleSimpleRoutesOpened,
     handleRefresh,
-    handleFindNearMe
+    handleFindNearMe,
+    highlightStopMarker
   } = useOutletContext<NearbyViewComponentOutletContextProps>();
 
   const stopCount = nearbyStops?.location?.length;
@@ -98,17 +99,20 @@ export function NearbyStopsComponent() {
 
   // Add stop markers when component mounts or nearbyStops changes
   React.useEffect(() => {
-    if (nearbyStops?.location) {
+    if (nearbyStops?.location && nearbyStops.location.length > 0) {
+      console.log('[NearbyStopsComponent] Setting up stop markers, stops count:', nearbyStops.location.length);
       const labeledStops = nearbyStops.location.map(stop => ({
         locid: stop.locid,
         label: stop.locid.toString(),
         lng: stop.lng,
         lat: stop.lat
       }));
-      handleSimpleRoutesOpened(labeledStops);
+      // Use a small delay to ensure map is fully ready
+      setTimeout(() => {
+        handleSimpleRoutesOpened(labeledStops);
+      }, 100);
     }
-  }, [nearbyStops, handleSimpleRoutesOpened]);
-
+  }, [nearbyStops]);
   return (
     <div>
       <br />
@@ -121,6 +125,7 @@ export function NearbyStopsComponent() {
         handleRadiusSelectionChange={handleRadiusSelectionChange}
         handleRefresh={handleRefresh}
         handleFindNearMe={handleFindNearMe}
+        highlightStopMarker={highlightStopMarker}
       />
     </div>
   );
@@ -1298,7 +1303,7 @@ export default function NearbyViewComponent() {
     <Container fluid={true}>
       <Row>
         <Col md={3}><Outlet context={context} /></Col>
-        <Col md={9}>
+        <Col md={9} className="d-flex flex-column" style={{ height: "calc(100vh - 70px)" }}>
           {showMap && (
             <>
               {!isOnDetailPage() && (

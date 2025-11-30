@@ -1,7 +1,8 @@
 import { map, sortBy } from "lodash";
 import moment from "moment";
-import React from "react";
+import React, { useState } from "react";
 import { Card, ListGroup, Tab, Table, Tabs } from "react-bootstrap";
+import FontAwesome from "react-fontawesome";
 import { useParams } from "react-router-dom";
 import { Arrival, ArrivalData } from "../../../api/trimet/interfaces/arrivals";
 import { getFormattedTime } from "../util/timeUtils";
@@ -20,26 +21,105 @@ function sortArrivalsByEstimated(arrivals: Arrival[]): Arrival[] {
 }
 
 interface ArrivalsTableParams {
-  data: ArrivalData;
+  data?: ArrivalData;
+  arrivals?: Arrival[];
+  selectedIndex?: number;
+  onSelectDeparture?: (index: number) => void;
 }
 
-function getArrivalsList(sortedArrivals: Arrival[]) {
+function getArrivalsList(
+  allArrivals: Arrival[], 
+  displayArrivals: Arrival[], 
+  selectedIndex?: number, 
+  onSelectDeparture?: (index: number) => void
+) {
   const { id } = useParams();
 
-  return map(sortedArrivals, (arrival: Arrival) => {
-    return <ArrivalListItem key={arrival.id} id={id} arrival={arrival} />;
+  return map(displayArrivals, (arrival: Arrival) => {
+    // Find the original index in the full list
+    const originalIndex = allArrivals.indexOf(arrival);
+    
+    return (
+      <ArrivalListItem 
+        key={arrival.id} 
+        id={id} 
+        arrival={arrival} 
+        isSelected={selectedIndex === originalIndex}
+        onSelect={onSelectDeparture ? () => onSelectDeparture(originalIndex) : undefined}
+      />
+    );
   });
 }
 
-export function ArrivalList({ data }: ArrivalsTableParams) {
-  const sortedArrivals = sortArrivalsByEstimated(data.arrival);
-  const arrivalsList = getArrivalsList(sortedArrivals);
+export function ArrivalList({ data, arrivals, selectedIndex = 0, onSelectDeparture }: ArrivalsTableParams) {
+  const sortedArrivals = arrivals || (data ? sortArrivalsByEstimated(data.arrival) : []);
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  const isSelectionMode = !!onSelectDeparture;
+  
+  let displayArrivals = sortedArrivals;
+  let hasEarlier = false;
+  let hasLater = false;
+  
+  if (isSelectionMode) {
+    if (!isExpanded) {
+      if (sortedArrivals[selectedIndex]) {
+        displayArrivals = [sortedArrivals[selectedIndex]];
+      } else {
+        displayArrivals = [];
+      }
+      hasEarlier = selectedIndex > 0;
+      hasLater = selectedIndex < sortedArrivals.length - 1;
+    } else {
+      displayArrivals = sortedArrivals;
+    }
+  }
+  
+  const arrivalsList = getArrivalsList(sortedArrivals, displayArrivals, selectedIndex, onSelectDeparture);
 
   return (
     <Card>
       <Card.Header>Departures</Card.Header>
       <ListGroup variant="flush" as="ul">
+        {hasEarlier && (
+          <ListGroup.Item
+            as="li"
+            className="d-flex justify-content-center align-items-center"
+            onClick={() => setIsExpanded(true)}
+            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
+          >
+            <FontAwesome name="chevron-up" className="me-2" />
+            <span>{selectedIndex} earlier departure{selectedIndex === 1 ? '' : 's'}</span>
+          </ListGroup.Item>
+        )}
+        
         {arrivalsList}
+        
+        {hasLater && (
+          <ListGroup.Item
+            as="li"
+            className="d-flex justify-content-center align-items-center"
+            onClick={() => setIsExpanded(true)}
+            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
+          >
+            <FontAwesome name="chevron-down" className="me-2" />
+            <span>
+              {sortedArrivals.length - 1 - selectedIndex} future departure{sortedArrivals.length - 1 - selectedIndex === 1 ? '' : 's'}
+            </span>
+          </ListGroup.Item>
+        )}
+        
+        {isExpanded && isSelectionMode && (
+          <ListGroup.Item
+            as="li"
+            className="d-flex justify-content-center align-items-center"
+            onClick={() => setIsExpanded(false)}
+            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
+          >
+            <FontAwesome name="chevron-up" className="me-2" />
+            <span>Show Less</span>
+          </ListGroup.Item>
+        )}
       </ListGroup>
     </Card>
   );

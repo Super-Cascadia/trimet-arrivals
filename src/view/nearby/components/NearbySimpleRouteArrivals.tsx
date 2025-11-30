@@ -23,7 +23,7 @@ import {
   RouteDirectionStop
 } from "../../../api/trimet/interfaces/routes";
 import { getRouteByIdAndDirection } from "../../../api/trimet/routeConfig";
-import { DeparturesCard } from "./common/DeparturesCard";
+import { ArrivalList } from "./NearbyStopArrivals";
 import DeparturesCardSkeleton from "./common/DeparturesCardSkeleton";
 import { InfoCard } from "./common/InfoCard";
 import RouteStopInfo from "./common/RouteStopInfo";
@@ -228,8 +228,8 @@ export default function NearbySimpleRouteArrivals({
         {isLoading ? (
           <DeparturesCardSkeleton />
         ) : (
-          <DeparturesCard 
-            filteredArrivals={filteredArrivalData} 
+          <ArrivalList 
+            arrivals={filteredArrivalData} 
             selectedIndex={selectedDepartureIndex}
             onSelectDeparture={setSelectedDepartureIndex}
           />

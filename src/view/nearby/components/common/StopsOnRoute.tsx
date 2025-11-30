@@ -225,7 +225,7 @@ export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentSt
             as="li"
             className="d-flex justify-content-center align-items-center"
             onClick={handleShowEarlier}
-            style={{ cursor: 'pointer', color: '#007bff' }}
+            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
           >
             <FontAwesome name="chevron-up" className="me-2" />
             <span>{selectedDestinationIndex} earlier stop{selectedDestinationIndex === 1 ? '' : 's'}</span>
@@ -256,7 +256,7 @@ export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentSt
             as="li"
             className="d-flex justify-content-center align-items-center"
             onClick={handleShowEarlier}
-            style={{ cursor: 'pointer', color: '#007bff' }}
+            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
           >
             <FontAwesome name="chevron-up" className="me-2" />
             <span>show less</span>
@@ -267,7 +267,7 @@ export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentSt
             as="li"
             className="d-flex justify-content-center align-items-center"
             onClick={handleShowFuture}
-            style={{ cursor: 'pointer', color: '#007bff' }}
+            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
           >
             <FontAwesome name="chevron-down" className="me-2" />
             <span>{remainingStopsOnRoute.length - selectedDestinationIndex - 1} future stop{remainingStopsOnRoute.length - selectedDestinationIndex - 1 === 1 ? '' : 's'}</span>
@@ -278,7 +278,7 @@ export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentSt
             as="li"
             className="d-flex justify-content-center align-items-center"
             onClick={handleShowFuture}
-            style={{ cursor: 'pointer', color: '#007bff' }}
+            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
           >
             <FontAwesome name="chevron-down" className="me-2" />
             <span>show less</span>

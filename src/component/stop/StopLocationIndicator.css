@@ -4,16 +4,15 @@
 
 .stop-location-indicator {
     background: #4264fb;
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     color: #ffffff;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    margin-right: 10px;
     vertical-align: middle;
 }

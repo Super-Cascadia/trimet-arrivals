@@ -3,8 +3,10 @@ import React, { useEffect } from "react";
 export type LatLngCoords = number[];
 
 const style = {
-  height: `calc(100vh - 100px)`,
-  position: "relative",
+  height: "100%",
+  position: "absolute",
+  top: 0,
+  bottom: 0,
   width: "100%"
 };
 
@@ -34,7 +36,7 @@ function NearbyMapV2({
   const mapBoxMap = <div style={style} ref={mapContainerRef} />;
 
   return (
-    <div>
+    <div style={{ flex: 1, position: "relative", minHeight: "300px" }}>
       {mapBoxMap}
     </div>
   );

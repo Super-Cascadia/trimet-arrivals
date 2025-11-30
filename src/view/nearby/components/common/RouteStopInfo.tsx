@@ -50,6 +50,7 @@ function RouteStopInfo({ shortSign, stopLocation, routeId, direction, routeDesc,
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
   const [showEarlier, setShowEarlier] = useState(false);
+  const [showFuture, setShowFuture] = useState(false);
   
   useEffect(() => {
     if (routeId && stopLocation?.id && direction !== undefined) {
@@ -103,22 +104,35 @@ function RouteStopInfo({ shortSign, stopLocation, routeId, direction, routeDesc,
     }
     setIsSelecting(false);
     setShowEarlier(false);
+    setShowFuture(false);
   };
 
   const handleSelectAgain = () => {
     setIsSelecting(true);
     setShowEarlier(false);
+    setShowFuture(false);
   };
 
   const handleShowEarlier = () => {
     setShowEarlier(!showEarlier);
+    setShowFuture(false);
+  };
+
+  const handleShowFuture = () => {
+    setShowFuture(!showFuture);
+    setShowEarlier(false);
   };
 
   const previousStops = allStopsOnRoute && currentStopIndex !== undefined && currentStopIndex > 0
     ? allStopsOnRoute.slice(0, currentStopIndex)
     : [];
+    
+  const futureStops = allStopsOnRoute && currentStopIndex !== undefined && currentStopIndex < allStopsOnRoute.length - 1
+    ? allStopsOnRoute.slice(currentStopIndex + 1)
+    : [];
 
   const hasEarlierStops = previousStops.length > 0;
+  const hasFutureStops = futureStops.length > 0;
   const canSelectStops = onDepartureStopSelect && allStopsOnRoute && currentStopIndex !== undefined;
 
   let stopsToShow: RouteDirectionStop[];
@@ -128,15 +142,19 @@ function RouteStopInfo({ shortSign, stopLocation, routeId, direction, routeDesc,
     stopsToShow = allStopsOnRoute;
   } else if (showEarlier) {
     stopsToShow = allStopsOnRoute.slice(0, currentStopIndex + 1);
+  } else if (showFuture) {
+    stopsToShow = allStopsOnRoute.slice(currentStopIndex);
   } else {
-    stopsToShow = [];
+    stopsToShow = allStopsOnRoute && currentStopIndex !== undefined 
+      ? [allStopsOnRoute[currentStopIndex]] 
+      : [];
   }
 
   return (
     <Card>
       <Card.Header className="d-flex justify-content-between align-items-center">
         <span>From</span>
-        {canSelectStops && !isSelecting && hasEarlierStops && (
+        {canSelectStops && !isSelecting && (hasEarlierStops || hasFutureStops) && (
           <Button 
             variant="outline-primary" 
             size="sm"
@@ -147,41 +165,34 @@ function RouteStopInfo({ shortSign, stopLocation, routeId, direction, routeDesc,
           </Button>
         )}
       </Card.Header>
-      <Card.Body>
-        <Card.Text>
-          <small className="text-muted">
-            <Link to={`/nearby/stops/${stopLocation.id}`}>
-              {stopLocation.desc} ({stopLocation.id})
-            </Link>
-          </small>
-        </Card.Text>
-      </Card.Body>
-      {canSelectStops && (isSelecting || showEarlier) && (
-        <ListGroup className="list-group-flush">
-          {hasEarlierStops && !showEarlier && !isSelecting && (
+      
+      <ListGroup className="list-group-flush">
+        {canSelectStops && hasEarlierStops && !showEarlier && !isSelecting && (
+          <ListGroup.Item
+            as="li"
+            className="d-flex justify-content-center align-items-center"
+            onClick={handleShowEarlier}
+            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
+          >
+            <FontAwesome name="chevron-up" className="me-2" />
+            <span>{previousStops.length} earlier stop{previousStops.length === 1 ? '' : 's'}</span>
+          </ListGroup.Item>
+        )}
+        
+        {stopsToShow.map((stop: RouteDirectionStop, index: number) => {
+          const actualIndex = allStopsOnRoute.indexOf(stop);
+          const isCurrentStop = actualIndex === currentStopIndex;
+          const canSelect = isSelecting || showEarlier || showFuture;
+          
+          return (
             <ListGroup.Item
-              as="li"
-              className="d-flex justify-content-center align-items-center"
-              onClick={handleShowEarlier}
-              style={{ cursor: 'pointer', color: '#007bff' }}
+              key={stop.locid}
+              className="d-flex justify-content-between align-items-center"
+              style={{ cursor: canSelect ? 'pointer' : 'default' }}
+              onClick={() => canSelect && handleSelectStop(stop.locid)}
             >
-              <FontAwesome name="chevron-up" className="me-2" />
-              <span>{previousStops.length} earlier stop{previousStops.length === 1 ? '' : 's'}</span>
-            </ListGroup.Item>
-          )}
-          {stopsToShow.map((stop: RouteDirectionStop, index: number) => {
-            const actualIndex = allStopsOnRoute.indexOf(stop);
-            const isCurrentStop = actualIndex === currentStopIndex;
-            const canSelect = isSelecting;
-            
-            return (
-              <ListGroup.Item
-                key={stop.locid}
-                className="d-flex justify-content-between align-items-center"
-                style={{ cursor: canSelect ? 'pointer' : 'default' }}
-                onClick={() => canSelect && handleSelectStop(stop.locid)}
-              >
-                <div className="d-flex align-items-center gap-2 flex-grow-1">
+              <div className="d-flex align-items-center gap-2 flex-grow-1">
+                {canSelectStops && (
                   <Form.Check
                     type="radio"
                     checked={isCurrentStop}
@@ -191,28 +202,54 @@ function RouteStopInfo({ shortSign, stopLocation, routeId, direction, routeDesc,
                       if (canSelect) handleSelectStop(stop.locid);
                     }}
                     disabled={!canSelect}
+                    style={{ cursor: canSelect ? 'pointer' : 'default' }}
                   />
-                  <div>
-                    <span>{stop.desc}</span>
-                    <small className="text-muted"> ({stop.locid})</small>
-                  </div>
+                )}
+                <div>
+                  <span>{stop.desc}</span>
+                  <small className="text-muted"> ({stop.locid})</small>
                 </div>
-              </ListGroup.Item>
-            );
-          })}
-          {showEarlier && (
-            <ListGroup.Item
-              as="li"
-              className="d-flex justify-content-center align-items-center"
-              onClick={handleShowEarlier}
-              style={{ cursor: 'pointer', color: '#007bff' }}
-            >
-              <FontAwesome name="chevron-up" className="me-2" />
-              <span>show less</span>
+              </div>
             </ListGroup.Item>
-          )}
-        </ListGroup>
-      )}
+          );
+        })}
+        
+        {canSelectStops && showEarlier && (
+          <ListGroup.Item
+            as="li"
+            className="d-flex justify-content-center align-items-center"
+            onClick={handleShowEarlier}
+            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
+          >
+            <FontAwesome name="chevron-up" className="me-2" />
+            <span>show less</span>
+          </ListGroup.Item>
+        )}
+
+        {canSelectStops && hasFutureStops && !showFuture && !isSelecting && (
+          <ListGroup.Item
+            as="li"
+            className="d-flex justify-content-center align-items-center"
+            onClick={handleShowFuture}
+            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
+          >
+            <FontAwesome name="chevron-down" className="me-2" />
+            <span>{futureStops.length} future stop{futureStops.length === 1 ? '' : 's'}</span>
+          </ListGroup.Item>
+        )}
+
+        {canSelectStops && showFuture && (
+          <ListGroup.Item
+            as="li"
+            className="d-flex justify-content-center align-items-center"
+            onClick={handleShowFuture}
+            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
+          >
+            <FontAwesome name="chevron-down" className="me-2" />
+            <span>show less</span>
+          </ListGroup.Item>
+        )}
+      </ListGroup>
     </Card>
   );
 }
