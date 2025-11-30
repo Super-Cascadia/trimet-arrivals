@@ -21,13 +21,12 @@ import { StreetCarLines } from "../view/lines/component/StreetCarLines";
 import { WES } from "../view/lines/component/WES";
 import MainNavigationContainer from "../view/mainNav/containers/MainNavigationContainer";
 import NearbyDirections from "../view/nearby/components/NearbyDirections";
-import NearbyView, {
-  NearbyRoutesComponent,
-  NearbySimpleRouteArrivalsComp,
-  NearbySimpleRoutesComp,
-  NearbyStopDetailComponent,
-  NearbyStopsComponent
-} from "../view/nearby/components/NearbyViewComponent";
+import NearbyView from "../view/nearby/components/NearbyViewComponent";
+import { NearbyRoutesComponent } from "../view/nearby/components/NearbyRoutesComponent";
+import { NearbySimpleRouteArrivalsComp } from "../view/nearby/components/NearbySimpleRouteArrivalsComp";
+import { NearbySimpleRoutesComp } from "../view/nearby/components/NearbySimpleRoutesComp";
+import { NearbyStopDetailComponent } from "../view/nearby/components/NearbyStopDetailComponent";
+import { NearbyStopsComponent } from "../view/nearby/components/NearbyStopsComponent";
 import StopLocationViewContainer from "../view/stop/container/StopLocationViewContainer";
 
 function StopLocationViewRouter() {
