@@ -13,29 +13,45 @@ import { DistanceDisplay } from "./DistanceDisplay";
 import { StatusIndicator } from "./StatusIndicator";
 import "./SimpleArrivalListItem.scss";
 
+/**
+ * Props for the SimpleArrivalListItem component
+ */
 interface ArrivalListItemParams {
+  /** Unique identifier for the list item */
   id: any;
-  arrival?: Arrival;
-  nextArrival?: Arrival;
-  thirdArrival?: Arrival;
-  fourthArrival?: Arrival;
+  /** List of upcoming arrivals */
+  arrivals?: Arrival[];
+  /** TriMet route information */
   route: TrimetRoute;
+  /** Stop location details */
   stop: StopLocation;
+  /** Formatted distance string (e.g., "0.5 mi") */
   distanceString?: string;
+  /** Current user location as [latitude, longitude] */
   currentLocation?: number[];
+  /** Whether there are multiple stops for this route */
   hasMultipleStops?: boolean;
+  /** Zero-based index of the current stop */
   currentStopIndex?: number;
+  /** Total number of stops for this route */
   totalStops?: number;
+  /** Callback to cycle between stops */
   onCycleStop?: (direction: 'prev' | 'next') => void;
+  /** Callback when hovering over the item, receives stop ID or null */
   onHover?: (stopId: string | null) => void;
 }
 
+/**
+ * A compact list item displaying arrival information for a TriMet route at a specific stop.
+ * Shows the route number, direction, stop name, distance, and upcoming arrival times.
+ * Supports cycling through multiple stops and hover interactions.
+ * 
+ * @param props - The component props
+ * @returns A clickable list item with arrival information, or null if route/stop are missing
+ */
 function SimpleArrivalListItem({
   id,
-  arrival,
-  nextArrival,
-  thirdArrival,
-  fourthArrival,
+  arrivals = [],
   route,
   stop,
   distanceString,
@@ -52,6 +68,7 @@ function SimpleArrivalListItem({
     return null;
   }
 
+  const arrival = arrivals[0];
   const estimatedArrivalTime = arrival?.estimated;
   const scheduledArrivalTime = arrival?.scheduled;
   const routeDirection: Direction = route.dir[0];
@@ -75,7 +92,7 @@ function SimpleArrivalListItem({
     }
   };
 
-  const subsequentArrivals = [nextArrival, thirdArrival, fourthArrival].filter((a): a is Arrival => !!a);
+  const subsequentArrivals = arrivals.slice(1, 4);
 
   return (
     <ListGroup.Item

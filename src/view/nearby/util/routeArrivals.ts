@@ -1,4 +1,5 @@
 import { each, filter, groupBy } from "lodash";
+import moment from "moment";
 import { Arrival, ArrivalData } from "../../../api/trimet/interfaces/arrivals";
 import {
   StopData,
@@ -7,6 +8,7 @@ import {
   Direction
 } from "../../../api/trimet/interfaces/types";
 import { getDistance, getNormalizedDistanceString } from "./turfUtils";
+import { isRouteBookmarkedInGroups } from "../../../api/localstorage/bookmarkGroups.localstorage";
 
 export interface RouteStructure {
   route: TrimetRoute;
@@ -99,4 +101,76 @@ export function getRouteArrivals(
   });
 
   return { closestNearbyRouteStructure: Array.from(routeDirectionMap.values()) };
+}
+
+/**
+ * Enriches route structures with specific stop selection and arrival filtering.
+ * Handles selecting the correct stop based on user interaction (cycling stops)
+ * and separates arrivals into current day and future arrivals.
+ */
+export function enrichRouteStructure(
+  routeStructures: RouteStructure[],
+  arrivalData: ArrivalData,
+  stopIndexMap: Map<string, number>,
+  currentLocation: number[]
+): RouteStructure[] {
+  return routeStructures.map(route => {
+    const routeDirectionId = `${route.id}-${route.dir}`;
+    const currentIndex = stopIndexMap.get(routeDirectionId) || 0;
+    const endOfDay = moment().endOf('day').valueOf();
+    
+    let selectedStop = route.stop;
+    let arrivals = route.arrivals;
+
+    if (route.allStopsForRoute && route.allStopsForRoute.length > 1) {
+      // Update to show the currently selected stop
+      selectedStop = route.allStopsForRoute[currentIndex];
+      
+      // Get arrivals for the selected stop
+      const groupedArrivals = groupBy(arrivalData?.arrival, "locid");
+      const arrivalsForLocation = groupedArrivals[selectedStop.locid];
+      arrivals = filter(arrivalsForLocation, (arrival: Arrival) => {
+        return arrival.route === route.id && arrival.dir === route.dir;
+      });
+    }
+    
+    // Filter arrivals to ensure they are within the current day
+    const filteredArrivals = arrivals.filter(arrival => {
+      const arrivalTime = arrival.estimated || arrival.scheduled;
+      return arrivalTime <= endOfDay;
+    });
+
+    // Get future arrivals (after end of day)
+    const futureArrivals = arrivals.filter(arrival => {
+      const arrivalTime = arrival.estimated || arrival.scheduled;
+      return arrivalTime > endOfDay;
+    });
+      
+    const selectedLocation = [selectedStop.lng, selectedStop.lat];
+      
+    return {
+      ...route,
+      stop: selectedStop,
+      distance: getDistance(currentLocation, selectedLocation),
+      distanceString: getNormalizedDistanceString(currentLocation, selectedLocation),
+      arrivals: filteredArrivals,
+      futureArrivals: futureArrivals,
+      currentStopIndex: currentIndex
+    };
+  });
+}
+
+/**
+ * Sorts route structures prioritizing bookmarked routes, then by distance.
+ */
+export function sortRoutesByBookmarkAndDistance(routes: RouteStructure[]): RouteStructure[] {
+  return routes.sort((a, b) => {
+    const aBookmarked = isRouteBookmarkedInGroups(a.id, a.stop.locid, a.dir);
+    const bBookmarked = isRouteBookmarkedInGroups(b.id, b.stop.locid, b.dir);
+    
+    if (aBookmarked && !bBookmarked) return -1;
+    if (!aBookmarked && bBookmarked) return 1;
+    
+    return a.distance - b.distance;
+  });
 }

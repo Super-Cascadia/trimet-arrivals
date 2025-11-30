@@ -1,4 +1,4 @@
-import { Dictionary, filter, groupBy, isEmpty, join, map } from "lodash";
+import { Dictionary, isEmpty, join, map } from "lodash";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { ListGroup } from "react-bootstrap";
@@ -16,9 +16,7 @@ import SimpleArrivalListItemSkeleton from "./common/SimpleArrivalListItemSkeleto
 import NearbySkeletonList from "./common/NearbySkeleton";
 import "./NearbyRoutes.scss";
 import { SearchRadiusSelection } from "./SearchRadiusSelection";
-import { getDistance, getNormalizedDistanceString } from "../util/turfUtils";
-import { isRouteBookmarkedInGroups } from '../../../api/localstorage/bookmarkGroups.localstorage';
-import { getRouteArrivals, RouteStructure } from "../util/routeArrivals";
+import { getRouteArrivals, RouteStructure, enrichRouteStructure, sortRoutesByBookmarkAndDistance } from "../util/routeArrivals";
 
 /**
  * Props for the NearbySimpleRoutes component
@@ -115,50 +113,12 @@ export default function NearbySimpleRoutes({
     : getRouteArrivals(arrivalData, nearbyStops, currentLocation);
 
   // Apply current stop indices to route structures
-  const routeStructureWithStopIndices = closestNearbyRouteStructure.map(route => {
-    const routeDirectionId = `${route.id}-${route.dir}`;
-    const currentIndex = stopIndexMap.get(routeDirectionId) || 0;
-    const endOfDay = moment().endOf('day').valueOf();
-    
-    let selectedStop = route.stop;
-    let arrivals = route.arrivals;
-
-    if (route.allStopsForRoute && route.allStopsForRoute.length > 1) {
-      // Update to show the currently selected stop
-      selectedStop = route.allStopsForRoute[currentIndex];
-      
-      // Get arrivals for the selected stop
-      const groupedArrivals = groupBy(arrivalData?.arrival, "locid");
-      const arrivalsForLocation = groupedArrivals[selectedStop.locid];
-      arrivals = filter(arrivalsForLocation, (arrival: Arrival) => {
-        return arrival.route === route.id && arrival.dir === route.dir;
-      });
-    }
-    
-    // Filter arrivals to ensure they are within the current day
-    const filteredArrivals = arrivals.filter(arrival => {
-      const arrivalTime = arrival.estimated || arrival.scheduled;
-      return arrivalTime <= endOfDay;
-    });
-
-    // Get future arrivals (after end of day)
-    const futureArrivals = arrivals.filter(arrival => {
-      const arrivalTime = arrival.estimated || arrival.scheduled;
-      return arrivalTime > endOfDay;
-    });
-      
-    const selectedLocation = [selectedStop.lng, selectedStop.lat];
-      
-    return {
-      ...route,
-      stop: selectedStop,
-      distance: getDistance(currentLocation, selectedLocation),
-      distanceString: getNormalizedDistanceString(currentLocation, selectedLocation),
-      arrivals: filteredArrivals,
-      futureArrivals: futureArrivals,
-      currentStopIndex: currentIndex
-    };
-  });
+  const routeStructureWithStopIndices = enrichRouteStructure(
+    closestNearbyRouteStructure,
+    arrivalData,
+    stopIndexMap,
+    currentLocation
+  );
 
   // Handler to cycle through stops for a route-direction
   const handleCycleStop = (routeId: number, dir: number, direction: 'prev' | 'next') => {
@@ -188,26 +148,10 @@ export default function NearbySimpleRoutes({
     : [];
 
   // Sort routes with arrivals - bookmarked first, then by distance
-  const sortedRoutesWithArrivals = routesWithArrivals.sort((a, b) => {
-    const aBookmarked = isRouteBookmarkedInGroups(a.id, a.stop.locid, a.dir);
-    const bBookmarked = isRouteBookmarkedInGroups(b.id, b.stop.locid, b.dir);
-    
-    if (aBookmarked && !bBookmarked) return -1;
-    if (!aBookmarked && bBookmarked) return 1;
-    
-    return a.distance - b.distance;
-  });
+  const sortedRoutesWithArrivals = sortRoutesByBookmarkAndDistance(routesWithArrivals);
 
   // Sort routes without arrivals - bookmarked first, then by distance
-  const sortedRoutesWithoutArrivals = routesWithoutArrivals.sort((a, b) => {
-    const aBookmarked = isRouteBookmarkedInGroups(a.id, a.stop.locid, a.dir);
-    const bBookmarked = isRouteBookmarkedInGroups(b.id, b.stop.locid, b.dir);
-    
-    if (aBookmarked && !bBookmarked) return -1;
-    if (!aBookmarked && bBookmarked) return 1;
-    
-    return a.distance - b.distance;
-  });
+  const sortedRoutesWithoutArrivals = sortRoutesByBookmarkAndDistance(routesWithoutArrivals);
 
   // Combine for backwards compatibility with filter/options
   const sortedNearbyRouteStructure = [
@@ -310,20 +254,13 @@ export default function NearbySimpleRoutes({
         ) : (
           <>
             {map(filteredRoutesWithArrivals, (route: RouteStructure, index: number) => {
-              const arrival = route.arrivals[0];
-              const nextArrival = route.arrivals[1];
-              const thirdArrival = route.arrivals[2];
-              const fourthArrival = route.arrivals[3];
               const stop = route.stop;
               const hasMultipleStops = route.allStopsForRoute && route.allStopsForRoute.length > 1;
               return (
                 <SimpleArrivalListItem
                   key={`with-arrival-${index}`}
                   id={stop.locid}
-                  arrival={arrival}
-                  nextArrival={nextArrival}
-                  thirdArrival={thirdArrival}
-                  fourthArrival={fourthArrival}
+                  arrivals={route.arrivals}
                   route={route.route}
                   stop={stop}
                   distanceString={route.distanceString}
@@ -354,7 +291,7 @@ export default function NearbySimpleRoutes({
                 <SimpleArrivalListItem
                   key={`without-arrival-${index}`}
                   id={stop.locid}
-                  arrival={nextFutureArrival}
+                  arrivals={nextFutureArrival ? [nextFutureArrival] : []}
                   route={route.route}
                   stop={stop}
                   distanceString={route.distanceString}
