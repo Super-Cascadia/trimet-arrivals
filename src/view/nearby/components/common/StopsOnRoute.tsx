@@ -1,10 +1,9 @@
 import { map } from "lodash";
 import React, { useEffect, useState } from "react";
-import { Badge, Button, Card, Form, ListGroup, ListGroupItem } from "react-bootstrap";
+import { Button, Card, ListGroup } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { RouteDirectionStop } from "../../../../api/trimet/interfaces/routes";
-import { StopData, TrimetRoute } from "../../../../api/trimet/interfaces/types";
-import { getNearbyStops } from "../../../../api/trimet/stops";
+import { StopOnRoute } from "./StopOnRoute";
 import "./StopsOnRoute.scss";
 
 interface StopsOnRouteParams {
@@ -17,128 +16,20 @@ interface StopsOnRouteParams {
   selectedDestinationIndex?: number | null;
 }
 
-interface StopOnRouteParams {
-  routeDirectionStop: RouteDirectionStop;
-  selectedArrival?: any;
-  currentStopSeq?: number;
-  allStopsOnRoute?: RouteDirectionStop[];
-  downstreamArrivals?: any;
-  isSelected?: boolean;
-  onSelect?: () => void;
-}
-
-function RouteAtStop({ stopData }: { stopData: StopData }) {
-  if (!stopData?.location || stopData.location.length === 0 || !stopData.location[0]?.route) {
-    return null;
-  }
-
-  const routes: TrimetRoute[] = stopData.location[0].route;
-
-  return (
-    <div className="route-at-stop">
-      <FontAwesome name="bus" />
-      {map(routes, (route: TrimetRoute) => {
-        return (
-          <Badge key={route.route} bg="light" text="dark" pill={true}>
-            {route.route}
-          </Badge>
-        );
-      })}
-    </div>
-  );
-}
-
-function StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq, allStopsOnRoute, downstreamArrivals, isSelected, onSelect }: StopOnRouteParams) {
-  const [stopData, setStopData] = useState<StopData>(null);
-
-  useEffect(() => {
-    async function fetchData() {
-      if (routeDirectionStop) {
-        const location = {
-          coords: {
-            latitude: routeDirectionStop.lat,
-            longitude: routeDirectionStop.lng
-          }
-        };
-
-        const nearbyStopData = await getNearbyStops(location, 10);
-        setStopData(nearbyStopData);
-      }
-    }
-
-    fetchData();
-  }, [routeDirectionStop]);
-
-  // Get actual estimated arrival time from API data
-  const getEstimatedArrivalTime = () => {
-    if (!selectedArrival || !downstreamArrivals) {
-      return null;
-    }
-
-    // Find the arrival at this stop for the selected vehicle
-    const arrivalAtThisStop = downstreamArrivals.arrival?.find(
-      (arrival: any) => 
-        arrival.locid === routeDirectionStop.locid && 
-        arrival.vehicleID === selectedArrival.vehicleID &&
-        arrival.route === selectedArrival.route &&
-        arrival.dir === selectedArrival.dir
-    );
-    
-    if (arrivalAtThisStop?.estimated) {
-      return new Date(arrivalAtThisStop.estimated).toLocaleTimeString('en-US', { 
-        hour: 'numeric', 
-        minute: '2-digit',
-        hour12: true 
-      });
-    }
-    
-    // Fallback to scheduled time if no estimate
-    if (arrivalAtThisStop?.scheduled) {
-      return new Date(arrivalAtThisStop.scheduled).toLocaleTimeString('en-US', { 
-        hour: 'numeric', 
-        minute: '2-digit',
-        hour12: true 
-      });
-    }
-    
-    return null;
-  };
-
-  const estimatedTime = getEstimatedArrivalTime();
-
-  return (
-    <ListGroupItem 
-      key={routeDirectionStop.locid} 
-      className="d-flex justify-content-between align-items-center"
-      style={{ cursor: onSelect ? 'pointer' : 'default' }}
-      onClick={onSelect}
-    >
-      <div className="d-flex align-items-center gap-2 flex-grow-1">
-        <Form.Check
-          type="radio"
-          checked={isSelected}
-          onChange={() => {}}
-          onClick={(e) => {
-            e.stopPropagation();
-            if (onSelect) onSelect();
-          }}
-          disabled={!onSelect}
-        />
-        <div>
-          <span>{routeDirectionStop.desc}</span>
-          <small className="text-muted"> ({routeDirectionStop.locid})</small>
-          {stopData && <RouteAtStop stopData={stopData} />}
-        </div>
-      </div>
-      {estimatedTime && (
-        <small className="text-muted stop-arrival-time">
-          {estimatedTime}
-        </small>
-      )}
-    </ListGroupItem>
-  );
-}
-
+/**
+ * StopsOnRoute component displays a list of stops along a route with destination selection functionality.
+ * Users can select a destination stop, view earlier/future stops, and manage their selection.
+ * 
+ * @param {StopsOnRouteParams} props - The component props
+ * @param {RouteDirectionStop[]} props.remainingStopsOnRoute - Array of remaining stops on the route from current position
+ * @param {any} [props.selectedArrival] - Currently selected arrival information
+ * @param {number} [props.currentStopSeq] - Sequence number of the current stop
+ * @param {RouteDirectionStop[]} [props.allStopsOnRoute] - Complete array of all stops on the route
+ * @param {any} [props.downstreamArrivals] - Arrival information for downstream stops
+ * @param {(index: number | null) => void} [props.onDestinationSelect] - Callback function when a destination is selected or deselected
+ * @param {number | null} [props.selectedDestinationIndex] - Index of the initially selected destination stop
+ * @returns {JSX.Element} A card component with destination selection interface
+ */
 export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentStopSeq, allStopsOnRoute, downstreamArrivals, onDestinationSelect, selectedDestinationIndex: initialSelectedDestinationIndex }: StopsOnRouteParams) {
   const [selectedDestinationIndex, setSelectedDestinationIndex] = useState<number | null>(null);
   const [isSelecting, setIsSelecting] = useState(true);

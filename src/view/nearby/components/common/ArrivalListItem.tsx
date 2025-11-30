@@ -1,10 +1,11 @@
+import moment from "moment";
 import React from "react";
 import { ListGroup } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { Arrival } from "../../../../api/trimet/interfaces/arrivals";
-import { getFormattedTime } from "../../util/timeUtils";
-import TimeDiffBadge from "./TimeDiffBadge";
+import { ArrivalTimestamp } from "./ArrivalTimestamp";
+import "./ArrivalListItem.scss";
 
 interface ArrivalListItemParams {
   id: any;
@@ -17,7 +18,6 @@ function ArrivalListItem({ id, arrival, isSelected, onSelect }: ArrivalListItemP
   const navigate = useNavigate();
   const estimatedArrivalTime = arrival.estimated;
   const scheduledArrivalTime = arrival.scheduled;
-  const scheduledTime = getFormattedTime(scheduledArrivalTime);
 
   function handleClick() {
     if (onSelect) {
@@ -54,20 +54,10 @@ function ArrivalListItem({ id, arrival, isSelected, onSelect }: ArrivalListItemP
         )}
         <div className="me-auto">
           <span className="fw-bold">{arrival.shortSign}</span>
-          <div>
-            {estimatedArrivalTime ? (
-              <small>
-                Estimated: {getFormattedTime(estimatedArrivalTime)} /{" "}
-                {scheduledTime}
-              </small>
-            ) : (
-              <small>Scheduled: {scheduledTime}</small>
-            )}
-          </div>
         </div>
-        <TimeDiffBadge
-          estimatedArrivalTime={estimatedArrivalTime}
-          scheduledArrivalTime={scheduledArrivalTime}
+        <ArrivalTimestamp 
+          estimatedArrivalTime={estimatedArrivalTime} 
+          scheduledArrivalTime={scheduledArrivalTime} 
         />
       </div>
     </ListGroup.Item>

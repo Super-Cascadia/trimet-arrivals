@@ -8,6 +8,8 @@ import {
   TrimetRoute
 } from "../../../../api/trimet/interfaces/types";
 import { ArrivalCountdown } from "./ArrivalCountdown";
+import { ArrivalTimestamp } from "./ArrivalTimestamp";
+import { DistanceDisplay } from "./DistanceDisplay";
 import { StatusIndicator } from "./StatusIndicator";
 import "./SimpleArrivalListItem.scss";
 
@@ -26,28 +28,6 @@ interface ArrivalListItemParams {
   totalStops?: number;
   onCycleStop?: (direction: 'prev' | 'next') => void;
   onHover?: (stopId: string | null) => void;
-}
-
-function getDirectionArrow(currentLocation: number[], stopLocation: StopLocation): string {
-  if (!currentLocation || !stopLocation) return "";
-  
-  // Calculate bearing from current location to stop
-  const lat1 = currentLocation[1] * Math.PI / 180;
-  const lat2 = stopLocation.lat * Math.PI / 180;
-  const dLon = (stopLocation.lng - currentLocation[0]) * Math.PI / 180;
-  
-  const y = Math.sin(dLon) * Math.cos(lat2);
-  const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
-  const bearing = Math.atan2(y, x) * 180 / Math.PI;
-  
-  // Normalize to 0-360
-  const normalizedBearing = (bearing + 360) % 360;
-  
-  // Convert to 8-direction arrow (N, NE, E, SE, S, SW, W, NW)
-  const directions = ['↑', '↗', '→', '↘', '↓', '↙', '←', '↖'];
-  const index = Math.round(normalizedBearing / 45) % 8;
-  
-  return directions[index];
 }
 
 function SimpleArrivalListItem({
@@ -77,18 +57,7 @@ function SimpleArrivalListItem({
   const routeDirection: Direction = route.dir[0];
   const routeId = route.route;
   const stopName = stop.desc;
-  const directionArrow = getDirectionArrow(currentLocation, stop);
   
-  // Format exact arrival time
-  const arrivalTimeStamp = estimatedArrivalTime || scheduledArrivalTime;
-  const exactTime = arrivalTimeStamp 
-    ? new Date(arrivalTimeStamp).toLocaleTimeString('en-US', { 
-        hour: 'numeric', 
-        minute: '2-digit',
-        hour12: true 
-      })
-    : '';
-
   function handleClick() {
     const url = `/nearby/simple-routes/${routeId}?stop=${stop.locid}&direction=${routeDirection.dir}`;
     navigate(url);
@@ -106,16 +75,7 @@ function SimpleArrivalListItem({
     }
   };
 
-  // Format additional arrival times
-  const getArrivalTime = (arrivalData: Arrival | undefined) => {
-    if (!arrivalData) return null;
-    const timestamp = arrivalData.estimated || arrivalData.scheduled;
-    return timestamp ? new Date(timestamp).toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
-      minute: '2-digit',
-      hour12: true 
-    }) : null;
-  };
+  const subsequentArrivals = [nextArrival, thirdArrival, fourthArrival].filter((a): a is Arrival => !!a);
 
   return (
     <ListGroup.Item
@@ -171,58 +131,30 @@ function SimpleArrivalListItem({
               </span>
             )}
           </div>
-          {distanceString && (
-            <div>
-              {directionArrow && <span className="direction-arrow">{directionArrow} </span>}
-              {distanceString}
-            </div>
-          )}
+          <DistanceDisplay 
+            distanceString={distanceString} 
+            currentLocation={currentLocation} 
+            stopLocation={stop} 
+          />
         </div>
       </div>
-      <div className="text-end arrival-time-container flex-shrink-0">
-        <span className="h6">
-          <ArrivalCountdown
-            estimatedArrivalTime={estimatedArrivalTime}
-            scheduledArrivalTime={scheduledArrivalTime}
+
+      {subsequentArrivals.length > 0 && (
+        <div className="mt-1" style={{ fontSize: '0.75em' }}>
+          <ArrivalTimestamp 
+            estimatedArrivalTime={estimatedArrivalTime} 
+            scheduledArrivalTime={scheduledArrivalTime} 
           />
-          {exactTime && <span className="text-muted exact-time"> | {exactTime}</span>}
-          <StatusIndicator estimated={estimatedArrivalTime} scheduled={scheduledArrivalTime} />
-        </span>
-        {(nextArrival || thirdArrival || fourthArrival) && (
-          <div className="mt-1" style={{ fontSize: '0.75em' }}>
-            {nextArrival && (
-              <div className="text-muted">
-                <ArrivalCountdown
-                  estimatedArrivalTime={nextArrival.estimated}
-                  scheduledArrivalTime={nextArrival.scheduled}
-                />
-                {getArrivalTime(nextArrival) && <span> | {getArrivalTime(nextArrival)}</span>}
-                <StatusIndicator estimated={nextArrival.estimated} scheduled={nextArrival.scheduled} />
-              </div>
-            )}
-            {thirdArrival && (
-              <div className="text-muted">
-                <ArrivalCountdown
-                  estimatedArrivalTime={thirdArrival.estimated}
-                  scheduledArrivalTime={thirdArrival.scheduled}
-                />
-                {getArrivalTime(thirdArrival) && <span> | {getArrivalTime(thirdArrival)}</span>}
-                <StatusIndicator estimated={thirdArrival.estimated} scheduled={thirdArrival.scheduled} />
-              </div>
-            )}
-            {fourthArrival && (
-              <div className="text-muted">
-                <ArrivalCountdown
-                  estimatedArrivalTime={fourthArrival.estimated}
-                  scheduledArrivalTime={fourthArrival.scheduled}
-                />
-                {getArrivalTime(fourthArrival) && <span> | {getArrivalTime(fourthArrival)}</span>}
-                <StatusIndicator estimated={fourthArrival.estimated} scheduled={fourthArrival.scheduled} />
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+          {subsequentArrivals.map((arrival, index) => (
+            <div key={index} className="text-muted">
+              <ArrivalTimestamp 
+                estimatedArrivalTime={arrival.estimated} 
+                scheduledArrivalTime={arrival.scheduled} 
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </ListGroup.Item>
   );
 }
