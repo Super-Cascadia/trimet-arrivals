@@ -3,7 +3,7 @@ import * as mapboxgl from "mapbox-gl";
 import { Dictionary } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import geoLocateCurrentPosition from "../../../api/geolocation/geoLocateCurrentPosition";
 import { RootState } from "../../../store/reducers";
 import {
@@ -85,6 +85,7 @@ export function useNearbyMapLogic() {
   const mapRef = useRef<Map>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const theme = useSelector((state: RootState) => state.themeReducer.theme);
   const [zoom, setZoom] = useState(16);
   const [radiusSize, setRadiusSize] = useState<number>(DEFAULT_RADIUS);
@@ -117,7 +118,7 @@ export function useNearbyMapLogic() {
 
   const nearbyRouteIds = nearbyRoutes && getNearbyRouteIds(nearbyRoutes);
   const stopLocations = nearbyStops && getStopLocations(nearbyStops);
-  const showMap = currentLocation && nearbyRouteIds && stopLocations;
+  const showMap = activeLocation && activeLocation[0] !== undefined && nearbyRouteIds && stopLocations;
   
   // Helper function to check if we're on a route detail page
   const isOnRouteDetailPage = () => {
@@ -165,6 +166,37 @@ export function useNearbyMapLogic() {
 
   // Initial Load
   useEffect(() => {
+    const latParam = searchParams.get("lat");
+    const lngParam = searchParams.get("lng");
+
+    if (latParam && lngParam) {
+      const lat = parseFloat(latParam);
+      const lng = parseFloat(lngParam);
+
+      if (!isNaN(lat) && !isNaN(lng)) {
+        setDroppedMarkerLocation({ lng, lat });
+        setIsUsingDroppedMarker(true);
+
+        const location = {
+          coords: { latitude: lat, longitude: lng }
+        } as Location;
+
+        fetchInitialData(location).catch((error) => {
+          console.error("Error fetching initial data for dropped marker:", error);
+        });
+
+        // Also try to get real user location
+        geoLocateCurrentPosition()
+          .then((location: Location) => {
+            setUserLocation(location);
+          })
+          .catch((error) => {
+            console.error("Error getting user location:", error);
+          });
+        return;
+      }
+    }
+
     if (userLocation) {
       fetchInitialData(userLocation).catch((error) => {
         console.error("Error fetching initial data:", error);
@@ -203,7 +235,7 @@ export function useNearbyMapLogic() {
         ? {
             ...userLocation,
             coords: {
-              ...userLocation.coords,
+              ...userLocation?.coords,
               latitude: droppedMarkerLocation.lat,
               longitude: droppedMarkerLocation.lng
             }
@@ -233,7 +265,7 @@ export function useNearbyMapLogic() {
       ? {
           ...userLocation,
           coords: {
-            ...userLocation.coords,
+            ...userLocation?.coords,
             latitude: droppedMarkerLocation.lat,
             longitude: droppedMarkerLocation.lng
           }
@@ -338,15 +370,27 @@ export function useNearbyMapLogic() {
   function initializeMapboxMap() {
     console.log("initialize map", lng, lat, zoom);
     mapRef.current = initializeMap(lng, lat, mapContainerRef, zoom, theme);
-    mapRef.current = initializeCurrentLocationMarker(
-      mapRef.current,
-      lng,
-      lat,
-      radiusSize
-    );
 
     mapRef.current.on("load", () => {
       console.info("effect: initialize map markers and routes");
+      
+      if (isUsingDroppedMarker && droppedMarkerLocation) {
+        droppedMarkerRef.current = setDroppedMarkerOnMap(
+          mapRef.current,
+          droppedMarkerLocation.lng,
+          droppedMarkerLocation.lat,
+          radiusSize,
+          handleDropMarker
+        );
+      } else {
+        setCurrentLocationMarker(
+          mapRef.current,
+          lng,
+          lat,
+          radiusSize
+        );
+      }
+
       // mapRef.current = setNearbyStops(mapRef.current, stopLocations, Object.keys(nearbyRouteIds), handleStopMarkerClick);
       setIsMapLoaded(true);
       // setRoutesOnMap(mapRef.current, nearbyRouteIds);
@@ -453,6 +497,7 @@ export function useNearbyMapLogic() {
     console.log("Dropping marker at", lng, lat);
     setDroppedMarkerLocation({ lng, lat });
     setIsUsingDroppedMarker(true);
+    setSearchParams({ lat: lat.toString(), lng: lng.toString() });
     
     // Skip updating map stops on route detail pages - they manage their own markers
     if (isOnRouteDetailPage()) {
@@ -471,7 +516,7 @@ export function useNearbyMapLogic() {
     const markerLocation = {
       ...userLocation,
       coords: {
-        ...userLocation.coords,
+        ...userLocation?.coords,
         latitude: lat,
         longitude: lng
       }
@@ -516,6 +561,7 @@ export function useNearbyMapLogic() {
     console.log("Resetting to geo location");
     setIsUsingDroppedMarker(false);
     setDroppedMarkerLocation(null);
+    setSearchParams({});
     
     if (userLocation) {
       removeDroppedMarker(mapRef.current, droppedMarkerRef.current);
@@ -568,6 +614,7 @@ export function useNearbyMapLogic() {
     if (isUsingDroppedMarker) {
       setIsUsingDroppedMarker(false);
       setDroppedMarkerLocation(null);
+      setSearchParams({});
       if (mapRef.current) {
         removeDroppedMarker(mapRef.current, droppedMarkerRef.current);
       }

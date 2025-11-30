@@ -1,10 +1,11 @@
 import { map } from "lodash";
 import React, { useEffect, useState } from "react";
-import { Button, Card, ListGroup } from "react-bootstrap";
+import { Card, ListGroup } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { RouteDirectionStop } from "../../../../api/trimet/interfaces/routes";
 import { ExpandCollapseListItem } from "./ExpandCollapseListItem";
 import { StopOnRoute } from "./StopOnRoute";
+import { SelectAgainButton } from "./SelectAgainButton";
 import "./StopsOnRoute.scss";
 
 interface StopsOnRouteParams {
@@ -101,14 +102,7 @@ export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentSt
       <Card.Header className="d-flex justify-content-between align-items-center">
         <span>Destination</span>
         {!isSelecting && selectedDestinationIndex !== null && (
-          <Button 
-            variant="outline-primary" 
-            size="sm"
-            onClick={handleSelectAgain}
-          >
-            <FontAwesome name="repeat" className="me-1" />
-            Select Again
-          </Button>
+          <SelectAgainButton onClick={handleSelectAgain} />
         )}
       </Card.Header>
       <ListGroup className="list-group-flush">

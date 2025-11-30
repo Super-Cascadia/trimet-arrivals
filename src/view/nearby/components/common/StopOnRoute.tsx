@@ -18,6 +18,20 @@ interface StopOnRouteParams {
   onSelect?: () => void;
 }
 
+/**
+ * Component that displays a single stop on a route with its details and estimated arrival time.
+ * 
+ * @param {StopOnRouteParams} props - The component props
+ * @param {RouteDirectionStop} props.routeDirectionStop - The stop information including location and description
+ * @param {any} [props.selectedArrival] - The currently selected arrival/vehicle for tracking
+ * @param {number} [props.currentStopSeq] - The sequence number of the current stop on the route
+ * @param {RouteDirectionStop[]} [props.allStopsOnRoute] - Array of all stops on the route
+ * @param {any} [props.downstreamArrivals] - API data containing arrival information for downstream stops
+ * @param {boolean} [props.isSelected] - Whether this stop is currently selected
+ * @param {() => void} [props.onSelect] - Callback function when the stop is selected
+ * 
+ * @returns {JSX.Element} A list item displaying the stop with radio button, name, location ID, routes at stop, and estimated arrival time
+ */
 export function StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSeq, allStopsOnRoute, downstreamArrivals, isSelected, onSelect }: StopOnRouteParams) {
   const [stopData, setStopData] = useState<StopData>(null);
 

@@ -20,10 +20,15 @@ export function RouteAtStop({ stopData }: { stopData: StopData }) {
 
   return (
     <div className="route-at-stop">
-      <FontAwesome name="bus" />
-      {map(routes, (route: TrimetRoute) => {
+      <FontAwesome name="bus" style={{ marginRight: "4px" }} />
+      {map(routes, (route: TrimetRoute, index: number) => {
         return (
-          <Badge key={route.route} bg="light" text="dark" pill={true}>
+          <Badge
+            key={route.route}
+            bg="secondary"
+            pill={true}
+            style={{ marginRight: index === routes.length - 1 ? 0 : "2px" }}
+          >
             {route.route}
           </Badge>
         );

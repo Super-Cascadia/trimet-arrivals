@@ -15,7 +15,7 @@ import "./SimpleArrivalListItem.scss";
 
 interface ArrivalListItemParams {
   id: any;
-  arrival: Arrival;
+  arrival?: Arrival;
   nextArrival?: Arrival;
   thirdArrival?: Arrival;
   fourthArrival?: Arrival;
@@ -48,12 +48,12 @@ function SimpleArrivalListItem({
 }: ArrivalListItemParams) {
   const navigate = useNavigate();
 
-  if (!arrival || !route || !stop) {
+  if (!route || !stop) {
     return null;
   }
 
-  const estimatedArrivalTime = arrival.estimated;
-  const scheduledArrivalTime = arrival.scheduled;
+  const estimatedArrivalTime = arrival?.estimated;
+  const scheduledArrivalTime = arrival?.scheduled;
   const routeDirection: Direction = route.dir[0];
   const routeId = route.route;
   const stopName = stop.desc;
@@ -139,7 +139,7 @@ function SimpleArrivalListItem({
         </div>
       </div>
 
-      {subsequentArrivals.length > 0 && (
+      {arrival && estimatedArrivalTime && scheduledArrivalTime && (
         <div className="mt-1" style={{ fontSize: '0.75em' }}>
           <ArrivalTimestamp 
             estimatedArrivalTime={estimatedArrivalTime} 

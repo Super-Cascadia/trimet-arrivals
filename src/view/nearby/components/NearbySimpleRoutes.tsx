@@ -1,15 +1,14 @@
-import { Dictionary, each, filter, groupBy, isEmpty, join, map } from "lodash";
+import { Dictionary, filter, groupBy, isEmpty, join, map } from "lodash";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { ListGroup } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
+import moment from "moment";
 import { getArrivals } from "../../../api/trimet/arrivals";
 import { Arrival, ArrivalData } from "../../../api/trimet/interfaces/arrivals";
 import {
   StopData,
-  StopLocation,
-  TrimetRoute,
-  Direction
+  TrimetRoute
 } from "../../../api/trimet/interfaces/types";
 import NearbySubNav from "./common/NearbySubNav";
 import SimpleArrivalListItem from "./common/SimpleArrivalListItem";
@@ -19,103 +18,55 @@ import "./NearbyRoutes.scss";
 import { SearchRadiusSelection } from "./SearchRadiusSelection";
 import { getDistance, getNormalizedDistanceString } from "../util/turfUtils";
 import { isRouteBookmarkedInGroups } from '../../../api/localstorage/bookmarkGroups.localstorage';
+import { getRouteArrivals, RouteStructure } from "../util/routeArrivals";
 
+/**
+ * Props for the NearbySimpleRoutes component
+ */
 interface Props {
+  /** Dictionary of routes grouped by some key */
   nearbyRoutes: Dictionary<TrimetRoute[]>;
+  /** Stop data containing all nearby stops */
   nearbyStops: StopData;
+  /** Radius size in meters for the search area */
   radiusSize: number;
+  /** Flag to enforce minimum loading time for better UX */
   minLoadingTime?: boolean;
+  /** Callback when simple routes view is opened with labeled stops for map display */
   handleSimpleRoutesOpened: (labeledStops?: Array<{locid: number, label: string, lng: number, lat: number}>) => void;
+  /** Callback when radius selection changes */
   handleRadiusSelectionChange: (e: any) => void;
+  /** Optional callback to refresh data */
   handleRefresh?: () => void;
+  /** Optional callback to find routes near user's current location */
   handleFindNearMe?: () => void;
+  /** Total count of routes found */
   routeCount: number;
+  /** Total count of stops found */
   stopCount: number;
+  /** Current user location as [longitude, latitude] */
   currentLocation: number[];
+  /** Optional callback to highlight a stop marker on the map */
   highlightStopMarker?: (stopId: string | null) => void;
 }
 
-interface RouteStructure {
-  route: TrimetRoute;
-  arrivals: Arrival[];
-  stop: StopLocation;
-  dir: number;
-  id: number;
-  distance: number;
-  distanceString: string;
-  allStopsForRoute?: StopLocation[]; // All stops serving this route-direction
-  currentStopIndex?: number; // Index of currently displayed stop
-  stopLabel?: string; // Letter label (A, B, C, etc.)
-}
-function getRouteArrivals(
-  arrivalData: ArrivalData,
-  nearbyStops: StopData,
-  currentLocation: number[]
-): {
-  closestNearbyRouteStructure: RouteStructure[];
-} {
-  const groupedArrivals = groupBy(arrivalData?.arrival, "locid");
-  const routeDirectionMap = new Map<string, RouteStructure>();
 
-  // First pass: collect all stops for each route-direction
-  each(nearbyStops?.location, (stop: StopLocation) => {
-    const stopLocation = [stop.lng, stop.lat];
-    const distance = getDistance(currentLocation, stopLocation);
-    const distanceString = getNormalizedDistanceString(currentLocation, stopLocation);
-    
-    each(stop?.route, (route: TrimetRoute) => {
-      const routeId = route?.route;
-      // Iterate all directions to differentiate each direction explicitly
-      each(route?.dir, (direction: Direction) => {
-        const routeDirection = direction.dir;
-        const routeDirectionId = `${routeId}-${routeDirection}`;
-        
-        const arrivalsForLocation = groupedArrivals[stop.locid];
-        const arrivals = filter(arrivalsForLocation, (arrival: Arrival) => {
-          return arrival.route === routeId && arrival.dir === routeDirection;
-        });
-        
-        if (!routeDirectionMap.has(routeDirectionId)) {
-          // First stop for this route-direction - create entry
-          routeDirectionMap.set(routeDirectionId, {
-            arrivals,
-            dir: routeDirection,
-            id: routeId,
-            route,
-            stop,
-            distance,
-            distanceString,
-            allStopsForRoute: [stop],
-            currentStopIndex: 0
-          });
-        } else {
-          // Additional stop for this route-direction - add to array
-          const existing = routeDirectionMap.get(routeDirectionId)!;
-          existing.allStopsForRoute!.push(stop);
-        }
-      });
-    });
-  });
 
-  // Sort stops within each route-direction by distance
-  routeDirectionMap.forEach((value) => {
-    if (value.allStopsForRoute && value.allStopsForRoute.length > 1) {
-      value.allStopsForRoute.sort((a, b) => {
-        const distA = getDistance(currentLocation, [a.lng, a.lat]);
-        const distB = getDistance(currentLocation, [b.lng, b.lat]);
-        return distA - distB;
-      });
-      // Update the main stop to be the closest one
-      value.stop = value.allStopsForRoute[0];
-      const closestLocation = [value.stop.lng, value.stop.lat];
-      value.distance = getDistance(currentLocation, closestLocation);
-      value.distanceString = getNormalizedDistanceString(currentLocation, closestLocation);
-    }
-  });
-
-  return { closestNearbyRouteStructure: Array.from(routeDirectionMap.values()) };
-}
-
+/**
+ * NearbySimpleRoutes component displays a list of nearby transit routes with arrival times.
+ * 
+ * Features:
+ * - Groups routes by route ID and direction
+ * - Shows multiple stops for the same route-direction (user can cycle through them)
+ * - Sorts routes: bookmarked first, then by distance
+ * - Separates routes with arrivals from routes not currently in service
+ * - Allows filtering routes using a multi-select dropdown
+ * - Displays stop markers on the map with stop IDs as labels
+ * - Fetches arrivals for the remainder of the current day to determine service status
+ * 
+ * @param props - Component props
+ * @returns React component displaying nearby routes and arrivals
+ */
 export default function NearbySimpleRoutes({
   nearbyStops,
   nearbyRoutes,
@@ -143,7 +94,14 @@ export default function NearbySimpleRoutes({
           ","
         );
 
-        const arrivals = await getArrivals(locationIds, 90);
+        // Fetch arrivals for the remainder of the current day to determine "Not in service" status
+        const now = moment();
+        const endOfDay = moment().endOf('day');
+        const minutesUntilEndOfDay = endOfDay.diff(now, 'minutes');
+        // Ensure we request at least 24 hours to get next available times
+        const minutes = Math.max(1440, minutesUntilEndOfDay);
+
+        const arrivals = await getArrivals(locationIds, minutes);
         setArrivalData(arrivals);
       }
     }
@@ -160,29 +118,46 @@ export default function NearbySimpleRoutes({
   const routeStructureWithStopIndices = closestNearbyRouteStructure.map(route => {
     const routeDirectionId = `${route.id}-${route.dir}`;
     const currentIndex = stopIndexMap.get(routeDirectionId) || 0;
+    const endOfDay = moment().endOf('day').valueOf();
     
+    let selectedStop = route.stop;
+    let arrivals = route.arrivals;
+
     if (route.allStopsForRoute && route.allStopsForRoute.length > 1) {
       // Update to show the currently selected stop
-      const selectedStop = route.allStopsForRoute[currentIndex];
-      const selectedLocation = [selectedStop.lng, selectedStop.lat];
+      selectedStop = route.allStopsForRoute[currentIndex];
       
       // Get arrivals for the selected stop
       const groupedArrivals = groupBy(arrivalData?.arrival, "locid");
       const arrivalsForLocation = groupedArrivals[selectedStop.locid];
-      const arrivals = filter(arrivalsForLocation, (arrival: Arrival) => {
+      arrivals = filter(arrivalsForLocation, (arrival: Arrival) => {
         return arrival.route === route.id && arrival.dir === route.dir;
       });
-      
-      return {
-        ...route,
-        stop: selectedStop,
-        distance: getDistance(currentLocation, selectedLocation),
-        distanceString: getNormalizedDistanceString(currentLocation, selectedLocation),
-        arrivals,
-        currentStopIndex: currentIndex
-      };
     }
-    return route;
+    
+    // Filter arrivals to ensure they are within the current day
+    const filteredArrivals = arrivals.filter(arrival => {
+      const arrivalTime = arrival.estimated || arrival.scheduled;
+      return arrivalTime <= endOfDay;
+    });
+
+    // Get future arrivals (after end of day)
+    const futureArrivals = arrivals.filter(arrival => {
+      const arrivalTime = arrival.estimated || arrival.scheduled;
+      return arrivalTime > endOfDay;
+    });
+      
+    const selectedLocation = [selectedStop.lng, selectedStop.lat];
+      
+    return {
+      ...route,
+      stop: selectedStop,
+      distance: getDistance(currentLocation, selectedLocation),
+      distanceString: getNormalizedDistanceString(currentLocation, selectedLocation),
+      arrivals: filteredArrivals,
+      futureArrivals: futureArrivals,
+      currentStopIndex: currentIndex
+    };
   });
 
   // Handler to cycle through stops for a route-direction
@@ -361,26 +336,25 @@ export default function NearbySimpleRoutes({
                 />
               );
             })}
-            {filteredRoutesWithoutArrivals.length > 0 && filteredRoutesWithArrivals.length > 0 && (
-              <ListGroup.Item variant="light" className="text-center" style={{ backgroundColor: '#f8f9fa', borderTop: '2px solid #dee2e6', borderBottom: '2px solid #dee2e6' }}>
-                <small className="text-muted fw-bold">— No arrivals scheduled —</small>
-              </ListGroup.Item>
-            )}
+          </>
+        )}
+      </ListGroup>
+      
+      {!isLoading && filteredRoutesWithoutArrivals.length > 0 && (
+        <>
+          <div className="text-center my-3 pt-2 border-top">
+            <h6 className="text-muted text-uppercase fw-bold" style={{ letterSpacing: '1px' }}>Not in service</h6>
+          </div>
+          <ListGroup>
             {map(filteredRoutesWithoutArrivals, (route: RouteStructure, index: number) => {
-              const arrival = route.arrivals[0];
-              const nextArrival = route.arrivals[1];
-              const thirdArrival = route.arrivals[2];
-              const fourthArrival = route.arrivals[3];
+              const nextFutureArrival = route.futureArrivals?.[0];
               const stop = route.stop;
               const hasMultipleStops = route.allStopsForRoute && route.allStopsForRoute.length > 1;
               return (
                 <SimpleArrivalListItem
                   key={`without-arrival-${index}`}
                   id={stop.locid}
-                  arrival={arrival}
-                  nextArrival={nextArrival}
-                  thirdArrival={thirdArrival}
-                  fourthArrival={fourthArrival}
+                  arrival={nextFutureArrival}
                   route={route.route}
                   stop={stop}
                   distanceString={route.distanceString}
@@ -393,9 +367,9 @@ export default function NearbySimpleRoutes({
                 />
               );
             })}
-          </>
-        )}
-      </ListGroup>
+          </ListGroup>
+        </>
+      )}
     </div>
   );
 }
