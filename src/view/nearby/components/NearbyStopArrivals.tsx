@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { Arrival, ArrivalData } from "../../../api/trimet/interfaces/arrivals";
 import { getFormattedTime } from "../util/timeUtils";
 import ArrivalListItem from "./common/ArrivalListItem";
+import { ExpandCollapseListItem } from "./common/ExpandCollapseListItem";
 
 interface StopArrivalsParams {
   data: ArrivalData;
@@ -82,43 +83,23 @@ export function ArrivalList({ data, arrivals, selectedIndex = 0, onSelectDepartu
       <Card.Header>Departures</Card.Header>
       <ListGroup variant="flush" as="ul">
         {hasEarlier && (
-          <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-center align-items-center"
-            onClick={() => setIsExpanded(true)}
-            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
-          >
-            <FontAwesome name="chevron-up" className="me-2" />
-            <span>{selectedIndex} earlier departure{selectedIndex === 1 ? '' : 's'}</span>
-          </ListGroup.Item>
+          <ExpandCollapseListItem onClick={() => setIsExpanded(true)} icon="chevron-up">
+            {selectedIndex} earlier departure{selectedIndex === 1 ? '' : 's'}
+          </ExpandCollapseListItem>
         )}
         
         {arrivalsList}
         
         {hasLater && (
-          <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-center align-items-center"
-            onClick={() => setIsExpanded(true)}
-            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
-          >
-            <FontAwesome name="chevron-down" className="me-2" />
-            <span>
-              {sortedArrivals.length - 1 - selectedIndex} future departure{sortedArrivals.length - 1 - selectedIndex === 1 ? '' : 's'}
-            </span>
-          </ListGroup.Item>
+          <ExpandCollapseListItem onClick={() => setIsExpanded(true)} icon="chevron-down">
+            {sortedArrivals.length - 1 - selectedIndex} future departure{sortedArrivals.length - 1 - selectedIndex === 1 ? '' : 's'}
+          </ExpandCollapseListItem>
         )}
         
         {isExpanded && isSelectionMode && (
-          <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-center align-items-center"
-            onClick={() => setIsExpanded(false)}
-            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
-          >
-            <FontAwesome name="chevron-up" className="me-2" />
-            <span>Show Less</span>
-          </ListGroup.Item>
+          <ExpandCollapseListItem onClick={() => setIsExpanded(false)} icon="chevron-up">
+            Show Less
+          </ExpandCollapseListItem>
         )}
       </ListGroup>
     </Card>

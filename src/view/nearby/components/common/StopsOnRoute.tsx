@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, ListGroup } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { RouteDirectionStop } from "../../../../api/trimet/interfaces/routes";
+import { ExpandCollapseListItem } from "./ExpandCollapseListItem";
 import { StopOnRoute } from "./StopOnRoute";
 import "./StopsOnRoute.scss";
 
@@ -112,15 +113,9 @@ export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentSt
       </Card.Header>
       <ListGroup className="list-group-flush">
         {hasEarlierStops && !showEarlier && (
-          <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-center align-items-center"
-            onClick={handleShowEarlier}
-            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
-          >
-            <FontAwesome name="chevron-up" className="me-2" />
-            <span>{selectedDestinationIndex} earlier stop{selectedDestinationIndex === 1 ? '' : 's'}</span>
-          </ListGroup.Item>
+          <ExpandCollapseListItem onClick={handleShowEarlier} icon="chevron-up">
+            {selectedDestinationIndex} earlier stop{selectedDestinationIndex === 1 ? '' : 's'}
+          </ExpandCollapseListItem>
         )}
         {map(
           stopsToShow,
@@ -143,37 +138,19 @@ export function StopsOnRoute({ remainingStopsOnRoute, selectedArrival, currentSt
           }
         )}
         {showEarlier && (
-          <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-center align-items-center"
-            onClick={handleShowEarlier}
-            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
-          >
-            <FontAwesome name="chevron-up" className="me-2" />
-            <span>show less</span>
-          </ListGroup.Item>
+          <ExpandCollapseListItem onClick={handleShowEarlier} icon="chevron-up">
+            show less
+          </ExpandCollapseListItem>
         )}
         {hasFutureStops && !showFuture && (
-          <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-center align-items-center"
-            onClick={handleShowFuture}
-            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
-          >
-            <FontAwesome name="chevron-down" className="me-2" />
-            <span>{remainingStopsOnRoute.length - selectedDestinationIndex - 1} future stop{remainingStopsOnRoute.length - selectedDestinationIndex - 1 === 1 ? '' : 's'}</span>
-          </ListGroup.Item>
+          <ExpandCollapseListItem onClick={handleShowFuture} icon="chevron-down">
+            {remainingStopsOnRoute.length - selectedDestinationIndex - 1} future stop{remainingStopsOnRoute.length - selectedDestinationIndex - 1 === 1 ? '' : 's'}
+          </ExpandCollapseListItem>
         )}
         {showFuture && (
-          <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-center align-items-center"
-            onClick={handleShowFuture}
-            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
-          >
-            <FontAwesome name="chevron-down" className="me-2" />
-            <span>show less</span>
-          </ListGroup.Item>
+          <ExpandCollapseListItem onClick={handleShowFuture} icon="chevron-down">
+            show less
+          </ExpandCollapseListItem>
         )}
       </ListGroup>
     </Card>

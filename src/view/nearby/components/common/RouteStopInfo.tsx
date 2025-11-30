@@ -20,6 +20,7 @@ import {
   removeBookmark,
   getBookmarkItemId
 } from "../../../../api/localstorage/bookmarkGroups.localstorage";
+import { ExpandCollapseListItem } from "./ExpandCollapseListItem";
 
 const BookmarkTooltip = props => (
   <Tooltip id="button-tooltip" {...props}>
@@ -168,15 +169,9 @@ function RouteStopInfo({ shortSign, stopLocation, routeId, direction, routeDesc,
       
       <ListGroup className="list-group-flush">
         {canSelectStops && hasEarlierStops && !showEarlier && !isSelecting && (
-          <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-center align-items-center"
-            onClick={handleShowEarlier}
-            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
-          >
-            <FontAwesome name="chevron-up" className="me-2" />
-            <span>{previousStops.length} earlier stop{previousStops.length === 1 ? '' : 's'}</span>
-          </ListGroup.Item>
+          <ExpandCollapseListItem onClick={handleShowEarlier} icon="chevron-up">
+            {previousStops.length} earlier stop{previousStops.length === 1 ? '' : 's'}
+          </ExpandCollapseListItem>
         )}
         
         {stopsToShow.map((stop: RouteDirectionStop, index: number) => {
@@ -215,39 +210,21 @@ function RouteStopInfo({ shortSign, stopLocation, routeId, direction, routeDesc,
         })}
         
         {canSelectStops && showEarlier && (
-          <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-center align-items-center"
-            onClick={handleShowEarlier}
-            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
-          >
-            <FontAwesome name="chevron-up" className="me-2" />
-            <span>show less</span>
-          </ListGroup.Item>
+          <ExpandCollapseListItem onClick={handleShowEarlier} icon="chevron-up">
+            show less
+          </ExpandCollapseListItem>
         )}
 
         {canSelectStops && hasFutureStops && !showFuture && !isSelecting && (
-          <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-center align-items-center"
-            onClick={handleShowFuture}
-            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
-          >
-            <FontAwesome name="chevron-down" className="me-2" />
-            <span>{futureStops.length} future stop{futureStops.length === 1 ? '' : 's'}</span>
-          </ListGroup.Item>
+          <ExpandCollapseListItem onClick={handleShowFuture} icon="chevron-down">
+            {futureStops.length} future stop{futureStops.length === 1 ? '' : 's'}
+          </ExpandCollapseListItem>
         )}
 
         {canSelectStops && showFuture && (
-          <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-center align-items-center"
-            onClick={handleShowFuture}
-            style={{ cursor: 'pointer', color: '#007bff', padding: '0.375rem 0.75rem', fontSize: '0.85rem' }}
-          >
-            <FontAwesome name="chevron-down" className="me-2" />
-            <span>show less</span>
-          </ListGroup.Item>
+          <ExpandCollapseListItem onClick={handleShowFuture} icon="chevron-down">
+            show less
+          </ExpandCollapseListItem>
         )}
       </ListGroup>
     </Card>

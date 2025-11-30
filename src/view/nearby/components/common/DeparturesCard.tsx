@@ -5,6 +5,7 @@ import { Card, ListGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { Arrival } from "../../../../api/trimet/interfaces/arrivals";
 import { ArrivalCountdown } from "./ArrivalCountdown";
+import { ExpandCollapseListItem } from "./ExpandCollapseListItem";
 import { StatusIndicator } from "./StatusIndicator";
 import "./DeparturesCard.scss";
 
@@ -33,15 +34,9 @@ export function DeparturesCard({ filteredArrivals, selectedIndex = 0, onSelectDe
       <Card.Header>Departures</Card.Header>
       <ListGroup className="list-group-flush">
         {hasEarlierDepartures && (
-          <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-center align-items-center"
-            onClick={() => setIsExpanded(true)}
-            style={{ cursor: 'pointer', color: '#007bff' }}
-          >
-            <FontAwesome name="chevron-up" className="me-2" />
-            <span>{selectedIndex} earlier departure{selectedIndex === 1 ? '' : 's'}</span>
-          </ListGroup.Item>
+          <ExpandCollapseListItem onClick={() => setIsExpanded(true)} icon="chevron-up">
+            {selectedIndex} earlier departure{selectedIndex === 1 ? '' : 's'}
+          </ExpandCollapseListItem>
         )}
         {map(arrivalsToShow, (arrival: any, arrivalIndex: number) => {
           const actualIndex = isExpanded ? arrivalIndex : selectedIndex;
@@ -96,20 +91,15 @@ export function DeparturesCard({ filteredArrivals, selectedIndex = 0, onSelectDe
           );
         })}
         {hasMoreArrivals && (
-          <ListGroup.Item
-            as="li"
-            className="d-flex justify-content-center align-items-center"
-            onClick={() => setIsExpanded(!isExpanded)}
-            style={{ cursor: 'pointer', color: '#007bff' }}
+          <ExpandCollapseListItem 
+            onClick={() => setIsExpanded(!isExpanded)} 
+            icon={isExpanded ? "chevron-up" : "chevron-down"}
           >
-            <FontAwesome name={isExpanded ? "chevron-up" : "chevron-down"} className="me-2" />
-            <span>
-              {isExpanded 
-                ? "Show Less" 
-                : `${filteredArrivals.length - 1} future departure${filteredArrivals.length - 1 === 1 ? '' : 's'}`
-              }
-            </span>
-          </ListGroup.Item>
+            {isExpanded 
+              ? "Show Less" 
+              : `${filteredArrivals.length - 1} future departure${filteredArrivals.length - 1 === 1 ? '' : 's'}`
+            }
+          </ExpandCollapseListItem>
         )}
       </ListGroup>
     </Card>
