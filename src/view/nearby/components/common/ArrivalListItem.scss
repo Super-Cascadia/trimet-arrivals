@@ -1,9 +1,9 @@
+@import '../../../../styles/arrival-time.scss';
+
 .arrival-time-container {
-  line-height: 1.2;
-  font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
-  font-variant-numeric: tabular-nums;
+  font-size: 12px !important;
 }
 
 .arrival-time-text {
-  font-size: 16px !important;
+  font-size: 12px !important;
 }

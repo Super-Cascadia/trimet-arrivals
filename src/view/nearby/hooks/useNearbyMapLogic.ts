@@ -4,7 +4,6 @@ import { Dictionary } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import * as turf from "@turf/turf";
 import geoLocateCurrentPosition from "../../../api/geolocation/geoLocateCurrentPosition";
 import { RootState } from "../../../store/reducers";
 import {
@@ -32,14 +31,55 @@ import {
   removeCurrentLocationMarkers,
   removeStopLocationLayers,
   setNearbyStops,
-  updateStopMarkerColor
+  updateStopMarkerColor,
+  setLabeledStops
 } from "../util/mapbox/stopLocationMarker.util";
 import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
 import { ArrivalLocation } from "../../../api/trimet/interfaces/arrivals";
 import { NearbyViewComponentOutletContextProps } from "../context/NearbyViewContext";
+import { removeDroppedMarker, setDroppedMarkerOnMap } from "../util/mapbox/droppedMarker";
+import { calculateRadiusFromMap } from "../util/mapbox/mapCalculations";
+import { drawRouteSegment, removeRouteSegment } from "../util/mapbox/routeSegments";
+import { drawRouteStopMarkers, removeRouteStopMarkers } from "../util/mapbox/routeStopMarkers";
 
 const DEFAULT_RADIUS = 1000;
 
+/**
+ * Custom hook for managing the nearby map view logic in the TriMet Arrivals app.
+ * 
+ * This hook orchestrates all map-related functionality including:
+ * - Initializing and managing Mapbox GL map instance
+ * - Fetching and displaying nearby transit stops and routes
+ * - Handling user location (both geolocation and dropped markers)
+ * - Managing map zoom, radius, and search area updates
+ * - Coordinating map interactions (stop clicks, route displays, etc.)
+ * - Handling theme changes and map style updates
+ * 
+ * @returns {Object} An object containing:
+ *   - context: Props to be passed to child components via outlet context
+ *   - mapRef: Reference to the Mapbox GL map instance
+ *   - mapContainerRef: Reference to the map container DOM element
+ *   - zoom: Current map zoom level
+ *   - activeLocation: Current search location [lng, lat] (either user location or dropped marker)
+ *   - showMap: Boolean indicating if map should be displayed
+ *   - isOnDetailPage: Function to check if currently on a detail page
+ *   - isUsingDroppedMarker: Boolean indicating if using dropped marker instead of geolocation
+ *   - droppedMarkerLocation: Coordinates of dropped marker if set
+ *   - handleResetToGeoLocation: Function to reset to user's geolocation
+ *   - handlePlaceMarker: Function to place a marker at map center
+ *   - lng: Current longitude
+ *   - lat: Current latitude
+ * 
+ * @example
+ * const {
+ *   context,
+ *   mapRef,
+ *   mapContainerRef,
+ *   zoom,
+ *   activeLocation,
+ *   showMap
+ * } = useNearbyMapLogic();
+ */
 export function useNearbyMapLogic() {
   const mapContainerRef = useRef(null);
   const mapRef = useRef<Map>(null);
@@ -208,7 +248,7 @@ export function useNearbyMapLogic() {
 
         removeStopLocationLayers(mapRef.current);
         removeCurrentLocationMarkers(mapRef.current);
-        removeDroppedMarker(mapRef.current);
+        removeDroppedMarker(mapRef.current, droppedMarkerRef.current);
         removeRoutes(mapRef.current, Object.keys(nearbyRouteIds));
 
         setNearbyStopData(stopData);
@@ -224,7 +264,13 @@ export function useNearbyMapLogic() {
         
         // Set the appropriate marker based on mode
         if (isUsingDroppedMarker && droppedMarkerLocation) {
-          setDroppedMarkerOnMap(droppedMarkerLocation.lng, droppedMarkerLocation.lat, radiusSize);
+          droppedMarkerRef.current = setDroppedMarkerOnMap(
+            mapRef.current,
+            droppedMarkerLocation.lng,
+            droppedMarkerLocation.lat,
+            radiusSize,
+            handleDropMarker
+          );
         } else {
           setCurrentLocationMarker(mapRef.current, lng, lat, radiusSize);
         }
@@ -267,7 +313,13 @@ export function useNearbyMapLogic() {
         
         // Restore location marker
         if (isUsingDroppedMarker && droppedMarkerLocation) {
-          setDroppedMarkerOnMap(droppedMarkerLocation.lng, droppedMarkerLocation.lat, radiusSize);
+          droppedMarkerRef.current = setDroppedMarkerOnMap(
+            mapRef.current,
+            droppedMarkerLocation.lng,
+            droppedMarkerLocation.lat,
+            radiusSize,
+            handleDropMarker
+          );
         } else if (userLocation) {
           setCurrentLocationMarker(
             mapRef.current,
@@ -381,7 +433,13 @@ export function useNearbyMapLogic() {
         
         // Update the appropriate marker based on mode
         if (isUsingDroppedMarker && droppedMarkerLocation) {
-          setDroppedMarkerOnMap(droppedMarkerLocation.lng, droppedMarkerLocation.lat, radiusSize);
+          droppedMarkerRef.current = setDroppedMarkerOnMap(
+            mapRef.current,
+            droppedMarkerLocation.lng,
+            droppedMarkerLocation.lat,
+            radiusSize,
+            handleDropMarker
+          );
         } else {
           setCurrentLocationMarker(mapRef.current, userLocation.coords.longitude, userLocation.coords.latitude, radiusSize);
         }
@@ -399,7 +457,13 @@ export function useNearbyMapLogic() {
     // Skip updating map stops on route detail pages - they manage their own markers
     if (isOnRouteDetailPage()) {
       console.log("Skipping marker drop update - on route detail page");
-      setDroppedMarkerOnMap(lng, lat, radiusSize);
+      droppedMarkerRef.current = setDroppedMarkerOnMap(
+        mapRef.current,
+        lng,
+        lat,
+        radiusSize,
+        handleDropMarker
+      );
       return;
     }
     
@@ -421,7 +485,7 @@ export function useNearbyMapLogic() {
 
         removeStopLocationLayers(mapRef.current);
         removeCurrentLocationMarkers(mapRef.current);
-        removeDroppedMarker(mapRef.current);
+        removeDroppedMarker(mapRef.current, droppedMarkerRef.current);
         removeRoutes(mapRef.current, Object.keys(nearbyRouteIds));
 
         setNearbyStopData(stopData);
@@ -435,7 +499,13 @@ export function useNearbyMapLogic() {
           handleStopMarkerClick
         );
         
-        setDroppedMarkerOnMap(lng, lat, radiusSize);
+        droppedMarkerRef.current = setDroppedMarkerOnMap(
+          mapRef.current,
+          lng,
+          lat,
+          radiusSize,
+          handleDropMarker
+        );
       })
       .catch((error) => {
         console.error("Error updating search area for dropped marker:", error);
@@ -448,7 +518,7 @@ export function useNearbyMapLogic() {
     setDroppedMarkerLocation(null);
     
     if (userLocation) {
-      removeDroppedMarker(mapRef.current);
+      removeDroppedMarker(mapRef.current, droppedMarkerRef.current);
       fetchInitialData(userLocation).catch((error) => {
         console.error("Error resetting to geo location:", error);
       });
@@ -464,95 +534,6 @@ export function useNearbyMapLogic() {
         );
         flyToCenter(userLocation.coords.longitude, userLocation.coords.latitude);
       }
-    }
-  }
-
-  function setDroppedMarkerOnMap(lng: number, lat: number, radiusSize: number) {
-    if (!mapRef.current) return;
-    
-    removeDroppedMarker(mapRef.current);
-    
-    // Create a draggable marker using Mapbox GL JS Marker
-    const el = document.createElement('div');
-    el.className = 'dropped-marker-pin';
-    el.style.width = '30px';
-    el.style.height = '30px';
-    el.style.borderRadius = '50% 50% 50% 0';
-    el.style.background = '#FF6B6B';
-    el.style.position = 'absolute';
-    el.style.transform = 'rotate(-45deg)';
-    el.style.border = '3px solid #ffffff';
-    el.style.cursor = 'move';
-    el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
-    
-    const marker = new mapboxgl.Marker({
-      element: el,
-      draggable: true
-    })
-      .setLngLat([lng, lat])
-      .addTo(mapRef.current);
-    
-    // Store marker reference
-    droppedMarkerRef.current = marker;
-    
-    // Handle drag events
-    marker.on('dragend', () => {
-      const lngLat = marker.getLngLat();
-      handleDropMarker(lngLat.lng, lngLat.lat);
-    });
-    
-    // Add radius circle around dropped marker
-    const radiusCircle = turf.circle([lng, lat], radiusSize, {
-      steps: 26,
-      units: "feet"
-    });
-    
-    mapRef.current.addSource("droppedMarkerRadius", {
-      type: "geojson",
-      data: radiusCircle
-    });
-    
-    // Add fill layer for the radius
-    mapRef.current.addLayer({
-      id: "droppedMarkerRadiusLayer",
-      type: "fill",
-      source: "droppedMarkerRadius",
-      paint: {
-        "fill-color": "#FF6B6B",
-        "fill-opacity": 0.08
-      }
-    });
-    
-    // Add outline stroke for the radius
-    mapRef.current.addLayer({
-      id: "droppedMarkerRadiusOutlineLayer",
-      type: "line",
-      source: "droppedMarkerRadius",
-      paint: {
-        "line-color": "#FF6B6B",
-        "line-width": 2,
-        "line-opacity": 0.6
-      }
-    });
-  }
-
-  function removeDroppedMarker(map: Map) {
-    if (!map) return;
-    
-    // Remove the draggable marker
-    if (droppedMarkerRef.current) {
-      droppedMarkerRef.current.remove();
-      droppedMarkerRef.current = null;
-    }
-    
-    if (map.getLayer("droppedMarkerRadiusOutlineLayer")) {
-      map.removeLayer("droppedMarkerRadiusOutlineLayer");
-    }
-    if (map.getLayer("droppedMarkerRadiusLayer")) {
-      map.removeLayer("droppedMarkerRadiusLayer");
-    }
-    if (map.getSource("droppedMarkerRadius")) {
-      map.removeSource("droppedMarkerRadius");
     }
   }
   
@@ -588,7 +569,7 @@ export function useNearbyMapLogic() {
       setIsUsingDroppedMarker(false);
       setDroppedMarkerLocation(null);
       if (mapRef.current) {
-        removeDroppedMarker(mapRef.current);
+        removeDroppedMarker(mapRef.current, droppedMarkerRef.current);
       }
     }
     
@@ -602,27 +583,7 @@ export function useNearbyMapLogic() {
       return;
     }
     
-    // Calculate radius based on map height (50% larger than map height)
-    const mapContainer = mapRef.current.getContainer();
-    const mapHeight = mapContainer.clientHeight;
-    
-    // Get the bounds of the map
-    const bounds = mapRef.current.getBounds();
-    const center = mapRef.current.getCenter();
-    
-    // Calculate the vertical distance in the map (from center to top)
-    const northEast = bounds.getNorthEast();
-    const southWest = bounds.getSouthWest();
-    
-    // Use turf to calculate distance
-    const centerPoint = turf.point([center.lng, center.lat]);
-    const topPoint = turf.point([center.lng, northEast.lat]);
-    
-    // Distance from center to top in miles
-    const distanceMiles = turf.distance(centerPoint, topPoint, { units: "miles" });
-    
-    // Convert to feet and multiply by 1.5 (50% larger)
-    const distanceFeet = distanceMiles * 5280 * 1.5;
+    const distanceFeet = calculateRadiusFromMap(mapRef.current);
     
     console.log("Calculated search radius:", distanceFeet, "feet");
     
@@ -751,172 +712,14 @@ export function useNearbyMapLogic() {
     // Remove ALL nearby stop location layers 
     removeStopLocationLayers(mapRef.current);
     
-    // Remove existing route-specific stop markers if they exist
-    if (mapRef.current.getLayer("routeStopMarkersLayer-label")) {
-      mapRef.current.removeLayer("routeStopMarkersLayer-label");
-    }
-    if (mapRef.current.getLayer("routeStopMarkersLayer")) {
-      mapRef.current.removeLayer("routeStopMarkersLayer");
-    }
-    if (mapRef.current.getSource("routeStopMarkersSource")) {
-      mapRef.current.removeSource("routeStopMarkersSource");
-    }
-    
-    // Create stop markers for from and to locations
-    const stopFeatures = [];
-    
-    // Add from stop (red)
-    stopFeatures.push({
-      type: "Feature",
-      geometry: {
-        type: "Point",
-        coordinates: [stopLocation.lng, stopLocation.lat]
-      },
-      properties: {
-        locid: stopLocation.id,
-        color: "#ff0000",
-        type: "from"
-      }
-    });
-    
-    // Add destination stop (green) if provided
-    if (destinationStopLocation) {
-      stopFeatures.push({
-        type: "Feature",
-        geometry: {
-          type: "Point",
-          coordinates: [destinationStopLocation.lng, destinationStopLocation.lat]
-        },
-        properties: {
-          locid: destinationStopLocation.id,
-          color: "#00ff00",
-          type: "to"
-        }
-      });
-    }
-    
-    // Add source and layer for route-specific stop markers (using unique IDs)
-    mapRef.current.addSource("routeStopMarkersSource", {
-      type: "geojson",
-      data: {
-        type: "FeatureCollection",
-        features: stopFeatures
-      }
-    });
-    
-    mapRef.current.addLayer({
-      id: "routeStopMarkersLayer",
-      type: "circle",
-      source: "routeStopMarkersSource",
-      paint: {
-        "circle-color": ["get", "color"],
-        "circle-radius": 10,
-        "circle-stroke-color": "#ffffff",
-        "circle-stroke-width": 2
-      }
-    });
-    
-    // Add text labels for stop markers
-    if (mapRef.current.getLayer("routeStopMarkersLayer-label")) {
-      mapRef.current.removeLayer("routeStopMarkersLayer-label");
-    }
-    
-    mapRef.current.addLayer({
-      id: "routeStopMarkersLayer-label",
-      type: "symbol",
-      source: "routeStopMarkersSource",
-      layout: {
-        "text-field": ["to-string", ["get", "locid"]],
-        "text-size": 11,
-        "text-font": ["DIN Offc Pro Bold", "Arial Unicode MS Bold"],
-        "text-anchor": "center",
-        "text-allow-overlap": true,
-        "text-ignore-placement": true,
-        "text-optional": false
-      },
-      paint: {
-        "text-color": "#ffffff",
-        "text-halo-color": "#000000",
-        "text-halo-width": 1,
-        "text-halo-blur": 0.5
-      }
-    });
+    // Draw route stop markers
+    drawRouteStopMarkers(mapRef.current, stopLocation, destinationStopLocation);
     
     // If both from and to stops are selected, draw a solid blue line between them
     if (destinationStopLocation) {
-      // Remove existing route segment layer if it exists
-      if (mapRef.current.getLayer("routeSegmentLayer")) {
-        mapRef.current.removeLayer("routeSegmentLayer");
-      }
-      if (mapRef.current.getSource("routeSegmentSource")) {
-        mapRef.current.removeSource("routeSegmentSource");
-      }
-      
-      // Get the route geometry from the map source
-      const routeSourceId = `route-${routeId}_${direction}`;
-      const routeSource = mapRef.current.getSource(routeSourceId);
-      
-      if (routeSource && (routeSource as any)._data) {
-        const routeGeometry = (routeSource as any)._data.geometry;
-        
-        if (routeGeometry && routeGeometry.type === "LineString" && routeGeometry.coordinates) {
-          // Find the closest points on the route to our stops
-          const fromPoint = turf.point([stopLocation.lng, stopLocation.lat]);
-          const toPoint = turf.point([destinationStopLocation.lng, destinationStopLocation.lat]);
-          const routeLine = turf.lineString(routeGeometry.coordinates);
-          
-          // Get the closest points on the line to our stops
-          const fromSnapped = turf.nearestPointOnLine(routeLine, fromPoint);
-          const toSnapped = turf.nearestPointOnLine(routeLine, toPoint);
-          
-          // Get the indices of these points
-          const fromIndex = fromSnapped.properties.index || 0;
-          const toIndex = toSnapped.properties.index || 0;
-          
-          // Extract the segment between the two points
-          const startIndex = Math.min(fromIndex, toIndex);
-          const endIndex = Math.max(fromIndex, toIndex);
-          const segmentCoords = routeGeometry.coordinates.slice(startIndex, endIndex + 1);
-          
-          // Create the segment geometry
-          const segmentFeature = {
-            type: "Feature",
-            geometry: {
-              type: "LineString",
-              coordinates: segmentCoords
-            },
-            properties: {}
-          };
-          
-          mapRef.current.addSource("routeSegmentSource", {
-            type: "geojson",
-            data: segmentFeature as any
-          });
-          
-          mapRef.current.addLayer({
-            id: "routeSegmentLayer",
-            type: "line",
-            source: "routeSegmentSource",
-            layout: {
-              "line-cap": "round",
-              "line-join": "round"
-            },
-            paint: {
-              "line-color": "#0080ff",
-              "line-width": 6,
-              "line-opacity": 1.0
-            }
-          });
-        }
-      }
+      drawRouteSegment(mapRef.current, routeId, direction, stopLocation, destinationStopLocation);
     } else {
-      // Remove segment layer if destination is not selected
-      if (mapRef.current.getLayer("routeSegmentLayer")) {
-        mapRef.current.removeLayer("routeSegmentLayer");
-      }
-      if (mapRef.current.getSource("routeSegmentSource")) {
-        mapRef.current.removeSource("routeSegmentSource");
-      }
+      removeRouteSegment(mapRef.current);
     }
     
     // Fit bounds to show the route between from and to stops
@@ -942,72 +745,8 @@ export function useNearbyMapLogic() {
     // Remove existing stop location layers
     removeStopLocationLayers(mapRef.current);
     
-    // Remove existing route-specific stop markers if they exist
-    if (mapRef.current.getLayer("routeStopMarkersLayer-label")) {
-      mapRef.current.removeLayer("routeStopMarkersLayer-label");
-    }
-    if (mapRef.current.getLayer("routeStopMarkersLayer")) {
-      mapRef.current.removeLayer("routeStopMarkersLayer");
-    }
-    if (mapRef.current.getSource("routeStopMarkersSource")) {
-      mapRef.current.removeSource("routeStopMarkersSource");
-    }
-    
-    // Create stop marker for this location
-    const stopFeatures = [{
-      type: "Feature" as const,
-      geometry: {
-        type: "Point" as const,
-        coordinates: [stopLocation.lng, stopLocation.lat]
-      },
-      properties: {
-        locid: stopLocation.id,
-        color: "#ff0000"
-      }
-    }];
-    
-    // Add source and layer for route-specific stop markers
-    mapRef.current.addSource("routeStopMarkersSource", {
-      type: "geojson",
-      data: {
-        type: "FeatureCollection",
-        features: stopFeatures
-      }
-    });
-    
-    mapRef.current.addLayer({
-      id: "routeStopMarkersLayer",
-      type: "circle",
-      source: "routeStopMarkersSource",
-      paint: {
-        "circle-color": ["get", "color"],
-        "circle-radius": 10,
-        "circle-stroke-color": "#ffffff",
-        "circle-stroke-width": 2
-      }
-    });
-    
-    // Add text labels for stop markers
-    mapRef.current.addLayer({
-      id: "routeStopMarkersLayer-label",
-      type: "symbol",
-      source: "routeStopMarkersSource",
-      layout: {
-        "text-field": ["to-string", ["get", "locid"]],
-        "text-size": 11,
-        "text-font": ["DIN Offc Pro Bold", "Arial Unicode MS Bold"],
-        "text-anchor": "center",
-        "text-allow-overlap": true,
-        "text-ignore-placement": true,
-        "text-optional": false
-      },
-      paint: {
-        "text-color": "#ffffff",
-        "text-halo-color": "#000000",
-        "text-halo-width": 1,
-        "text-halo-blur": 0.5
-      }
-    });
+    // Draw route stop markers (only one in this case)
+    drawRouteStopMarkers(mapRef.current, stopLocation);
     
     flyToCenter(stopLocation.lng, stopLocation.lat);
   }
@@ -1029,28 +768,10 @@ export function useNearbyMapLogic() {
     
       // Remove route-specific stop markers
       console.log('[handleSimpleRoutesOpened.processMarkers] Removing existing layers');
-      if (mapRef.current.getLayer("routeStopMarkersLayer-label")) {
-        console.log('[handleSimpleRoutesOpened.processMarkers] Removing routeStopMarkersLayer-label');
-        mapRef.current.removeLayer("routeStopMarkersLayer-label");
-      }
-      if (mapRef.current.getLayer("routeStopMarkersLayer")) {
-        console.log('[handleSimpleRoutesOpened.processMarkers] Removing routeStopMarkersLayer');
-        mapRef.current.removeLayer("routeStopMarkersLayer");
-      }
-      if (mapRef.current.getSource("routeStopMarkersSource")) {
-        console.log('[handleSimpleRoutesOpened.processMarkers] Removing routeStopMarkersSource');
-        mapRef.current.removeSource("routeStopMarkersSource");
-      }
+      removeRouteStopMarkers(mapRef.current);
       
       // Remove route segment layer
-      if (mapRef.current.getLayer("routeSegmentLayer")) {
-        console.log('[handleSimpleRoutesOpened.processMarkers] Removing routeSegmentLayer');
-        mapRef.current.removeLayer("routeSegmentLayer");
-      }
-      if (mapRef.current.getSource("routeSegmentSource")) {
-        console.log('[handleSimpleRoutesOpened.processMarkers] Removing routeSegmentSource');
-        mapRef.current.removeSource("routeSegmentSource");
-      }
+      removeRouteSegment(mapRef.current);
       
       console.log('[handleSimpleRoutesOpened.processMarkers] Removing stop location layers');
       mapRef.current = removeStopLocationLayers(mapRef.current);
@@ -1063,7 +784,6 @@ export function useNearbyMapLogic() {
       if (labeledStops && labeledStops.length > 0) {
         // Use labeled stops
         console.log('[handleSimpleRoutesOpened.processMarkers] Adding labeled stops to map:', labeledStops.length, 'stops');
-        const { setLabeledStops } = require("../util/mapbox/stopLocationMarker.util");
         mapRef.current = setLabeledStops(
           mapRef.current,
           labeledStops,

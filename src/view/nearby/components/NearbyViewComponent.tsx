@@ -4,6 +4,7 @@ import { Outlet } from "react-router";
 import NearbyMapV2 from "./NearbyMapV2";
 import "./NearbyViewComponent.scss";
 import { useNearbyMapLogic } from "../hooks/useNearbyMapLogic";
+import { LocationStatusAlert } from "./LocationStatusAlert";
 
 export default function NearbyViewComponent() {
   const {
@@ -30,43 +31,15 @@ export default function NearbyViewComponent() {
           {showMap && (
             <>
               {!isOnDetailPage() && (
-                <>
-                  {isUsingDroppedMarker && droppedMarkerLocation ? (
-                    <div className="alert alert-info d-flex justify-content-between align-items-center mb-2" role="alert">
-                      <div>
-                        <div>
-                          <strong>📍 Searching from dropped marker</strong> - Drag the marker to change location
-                        </div>
-                        <small className="text-muted">
-                          {droppedMarkerLocation.lat.toFixed(6)}, {droppedMarkerLocation.lng.toFixed(6)}
-                        </small>
-                      </div>
-                      <button 
-                        className="btn btn-sm btn-primary" 
-                        onClick={handleResetToGeoLocation}
-                      >
-                        Reset to My Location
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="alert alert-secondary d-flex justify-content-between align-items-center mb-2" role="alert">
-                      <div>
-                        <div>
-                          <strong>🗺️ Searching from your location</strong>
-                        </div>
-                        <small className="text-muted">
-                          Longitude: {lng?.toFixed(6)} | Latitude: {lat?.toFixed(6)} | Zoom: {zoom?.toFixed(2)}
-                        </small>
-                      </div>
-                      <button 
-                        className="btn btn-sm btn-outline-primary" 
-                        onClick={handlePlaceMarker}
-                      >
-                        📍 Place Marker Here
-                      </button>
-                    </div>
-                  )}
-                </>
+                <LocationStatusAlert
+                  isUsingDroppedMarker={isUsingDroppedMarker}
+                  droppedMarkerLocation={droppedMarkerLocation}
+                  handleResetToGeoLocation={handleResetToGeoLocation}
+                  handlePlaceMarker={handlePlaceMarker}
+                  lng={lng}
+                  lat={lat}
+                  zoom={zoom}
+                />
               )}
               <NearbyMapV2
                 initializeMap={context.initializeMap}

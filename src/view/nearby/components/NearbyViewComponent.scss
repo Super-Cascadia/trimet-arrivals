@@ -151,11 +151,9 @@ table th, table td {
     margin-bottom: 20px;
 }
 
+@import '../../../styles/arrival-time.scss';
+
 .arrival-time-container {
-  line-height: 1.2;
-  font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
-  font-variant-numeric: tabular-nums;
-  
   ul {
     font-size: 0.75em;
   }

@@ -57,11 +57,7 @@
   font-size: 0.7rem;
 }
 
-.arrival-time-container {
-  line-height: 1.2;
-  font-family: 'Courier New', 'Consolas', 'Monaco', monospace;
-  font-variant-numeric: tabular-nums;
-}
+@import '../../../../styles/arrival-time.scss';
 
 .me-1 {
   margin-right: 0.025rem !important;
