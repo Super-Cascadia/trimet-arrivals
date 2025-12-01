@@ -1,6 +1,7 @@
 import { MutableRefObject, useState } from "react";
 import { Map } from "mapbox-gl";
 import { ArrivalLocation } from "../../../../api/trimet/interfaces/arrivals";
+import { LabeledStop } from "../../../../api/trimet/interfaces/types";
 import { NearbyRoutesDictionary } from "../../../../store/reducers/view/nearbyRoutesViewReducer";
 import { setRoutes as setRoutesOnMap, removeRoutes } from "../../util/mapbox/routeLines";
 import { drawRouteStopMarkers, removeRouteStopMarkers } from "../../util/mapbox/routeStopMarkers";
@@ -151,7 +152,7 @@ export function useMapRouteOperations(
    * 
    * @param labeledStops - Optional array of stops with labels to display.
    */
-  function handleSimpleRoutesOpened(labeledStops?: Array<{locid: number, label: string, lng: number, lat: number}>) {
+  function handleSimpleRoutesOpened(labeledStops?: Array<LabeledStop>) {
     if (!mapRef.current) return;
     
     const processMarkers = () => {

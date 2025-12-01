@@ -3,6 +3,7 @@
 import mapboxgl, { Map } from "!mapbox-gl";
 import { map } from "lodash";
 import { StopLocationsDictionary } from "../../../../store/reducers/util/formatStopLocations";
+import { LabeledStop } from "../../../../api/trimet/interfaces/types";
 import {
   STOP_LOCATION_LAYER,
   STOP_LOCATIONS_SOURCE,
@@ -278,7 +279,7 @@ export function updateStopMarkerColor(
  */
 export function setLabeledStops(
   mapBoxMap: Map,
-  labeledStops: Array<{locid: number, label: string, lng: number, lat: number}>,
+  labeledStops: Array<LabeledStop>,
   handleStopMarkerClick: (data: any) => void
 ) {
   const isLoaded = mapBoxMap?.loaded();
