@@ -1,10 +1,6 @@
 import {
-  filter,
   findIndex,
   isEmpty,
-  last,
-  slice,
-  split,
   toNumber
 } from "lodash";
 import React, { useEffect, useState } from "react";
@@ -19,10 +15,14 @@ import {
   ArrivalLocation
 } from "../../../api/trimet/interfaces/arrivals";
 import {
-  RouteDataResultSet,
-  RouteDirectionStop
+  RouteDataResultSet
 } from "../../../api/trimet/interfaces/routes";
 import { getRouteByIdAndDirection } from "../../../api/trimet/routeConfig";
+import {
+  filterArrivalsByRouteId,
+  getDownstreamStopIds,
+  getRouteStopInfo
+} from "../util/nearby-route-utils";
 import { ArrivalList } from "./NearbyStopArrivals";
 import DeparturesCardSkeleton from "./common/DeparturesCardSkeleton";
 import { InfoCard } from "./common/InfoCard";
@@ -33,6 +33,27 @@ import StopsOnRouteSkeleton from "./common/StopsOnRouteSkeleton";
 import { TopNavBar } from "./common/TopNavBar";
 import "./NearbyRoutes.scss";
 
+/**
+ * Component for displaying route arrivals and stops with destination selection.
+ * 
+ * Allows users to:
+ * - View arrivals for a specific stop on a route
+ * - Select a departure from the list of upcoming arrivals
+ * - Choose a destination stop from remaining stops on the route
+ * - View stops on the route with real-time arrival information
+ * 
+ * @param props - Component props
+ * @param props.handleRouteArrivalsOpened - Callback function triggered when route arrivals are displayed or destination changes.
+ *   Used to update map bounds to show the origin stop and optionally the destination stop.
+ * 
+ * URL Parameters (via React Router):
+ * - id - Route ID
+ * - stop - Stop location ID
+ * - direction - Direction ID (0 or 1)
+ * - destination - (optional) Destination stop location ID for pre-selecting a destination
+ * 
+ * @returns A route arrivals view with departure selection, destination selection, and navigation
+ */
 export default function NearbySimpleRouteArrivals({
   handleRouteArrivalsOpened
 }: {
@@ -68,13 +89,7 @@ export default function NearbySimpleRouteArrivals({
       const arrivals = await getArrivals(stop, 1000);
       setArrivalData(arrivals);
 
-      const filteredArrivals: Arrival[] = filter(
-        arrivals.arrival,
-        (arrival: Arrival) => {
-          return arrival.route === toNumber(id);
-        }
-      );
-
+      const filteredArrivals = filterArrivalsByRouteId(arrivals.arrival, id);
       setFilteredArrivalData(filteredArrivals);
 
       const routeStops = await getRouteByIdAndDirection(
@@ -87,24 +102,11 @@ export default function NearbySimpleRouteArrivals({
       
       // Fetch arrivals for all downstream stops
       const routeStopsInDirection = routeStops?.route?.[0]?.dir?.[0]?.stop;
-      if (routeStopsInDirection) {
-        const stopIndex = findIndex(
-          routeStopsInDirection,
-          (routeDirectionStop: RouteDirectionStop) => {
-            return routeDirectionStop.locid === toNumber(stop);
-          }
-        );
-        
-        if (stopIndex >= 0) {
-          const remainingStops = slice(routeStopsInDirection, stopIndex + 1);
-          // Get up to 128 stop IDs (API limit)
-          const stopIds = remainingStops.slice(0, 128).map(s => s.locid).join(',');
-          
-          if (stopIds) {
-            const downstreamArrivalsData = await getArrivals(stopIds, 1000);
-            setDownstreamArrivals(downstreamArrivalsData);
-          }
-        }
+      const stopIds = getDownstreamStopIds(routeStopsInDirection, stop);
+      
+      if (stopIds) {
+        const downstreamArrivalsData = await getArrivals(stopIds, 1000);
+        setDownstreamArrivals(downstreamArrivalsData);
       }
     }
   };
@@ -157,23 +159,23 @@ export default function NearbySimpleRouteArrivals({
 
   const isLoading = isEmpty(filteredArrivalData) || isEmpty(routeStopsData);
 
-  const stopLocation: ArrivalLocation = arrivalData?.location?.[0];
-  const shortSign = filteredArrivalData?.[0] ? last(split(filteredArrivalData[0].shortSign, "To")) : null;
-  const routeDesc = routeStopsData?.route?.[0]?.desc;
-  const directionDesc = routeStopsData?.route?.[0]?.dir?.[0]?.desc;
-  const routeStopsInDirection = routeStopsData?.route?.[0]?.dir?.[0]?.stop;
-  const stopIndex = routeStopsInDirection ? findIndex(
+  const {
+    stopLocation,
+    shortSign,
+    routeDesc,
+    directionDesc,
     routeStopsInDirection,
-    (routeDirectionStop: RouteDirectionStop, index) => {
-      return routeDirectionStop.locid === toNumber(stop);
-    }
-  ) : -1;
-
-  const remainingStopsOnRoute = routeStopsInDirection && stopIndex >= 0 ? slice(routeStopsInDirection, stopIndex + 1) : [];
-
-  const selectedArrival = filteredArrivalData && filteredArrivalData.length > selectedDepartureIndex ? filteredArrivalData[selectedDepartureIndex] : null;
-  const currentStop = stopIndex >= 0 && routeStopsInDirection ? routeStopsInDirection[stopIndex] : null;
-  const currentStopSeq = currentStop ? currentStop.seq : undefined;
+    stopIndex,
+    remainingStopsOnRoute,
+    selectedArrival,
+    currentStopSeq
+  } = getRouteStopInfo(
+    arrivalData,
+    filteredArrivalData,
+    routeStopsData,
+    stop,
+    selectedDepartureIndex
+  );
   
   // Set destination index from URL param when data is loaded
   useEffect(() => {
