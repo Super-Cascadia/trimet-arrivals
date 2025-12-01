@@ -31,7 +31,7 @@ export function DeparturesCard({ filteredArrivals, selectedIndex = 0, onSelectDe
 
   return (
     <Card>
-      <Card.Header>Departures</Card.Header>
+      <Card.Header>Departures 1</Card.Header>
       <ListGroup className="list-group-flush">
         {hasEarlierDepartures && (
           <ExpandCollapseListItem onClick={() => setIsExpanded(true)} icon="chevron-up">

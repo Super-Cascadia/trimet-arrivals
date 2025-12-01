@@ -8,44 +8,32 @@ import {
   ArrivalData,
   ArrivalLocation
 } from "../../../api/trimet/interfaces/arrivals";
+import StopLocationIndicator from "../../../component/stop/StopLocationIndicator";
 import { getNormalizedDistanceString } from "../util/turfUtils";
-import StopInfo from "./common/StopInfo";
-import StopArrivals from "./NearbyStopArrivals";
+import { ArrivalList } from "./NearbyStopArrivals";
 
 interface Props {
   currentLocation: number[];
   handleStopOpened: (stopLocation: ArrivalLocation) => void;
 }
 
-interface StopInfoParams {
-  stopLocation: ArrivalLocation;
-  distanceDescription: string;
-}
-
-// function StopInfo({ stopLocation, distanceDescription }: StopInfoParams) {
-//   return (
-//     <Card>
-//       <Card.Header>Info</Card.Header>
-//       <Card.Body>
-//         <Card.Text>
-//           <strong>Stop ID:</strong>
-//           {stopLocation.id}
-//         </Card.Text>
-//         <ButtonToolbar aria-label="Toolbar with button groups">
-//           <ButtonGroup className="me-2" aria-label="First group">
-//             <Button variant="success">Go</Button>
-//             <Button variant="primary">Info</Button>
-//           </ButtonGroup>
-//           <ButtonGroup className="me-2" aria-label="Second group">
-//             <Button variant="secondary">Bookmark</Button>
-//           </ButtonGroup>
-//         </ButtonToolbar>
-//       </Card.Body>
-//       <Card.Footer className="text-muted">{distanceDescription}</Card.Footer>
-//     </Card>
-//   );
-// }
-
+/**
+ * Component that displays detailed information about a specific nearby transit stop.
+ * 
+ * Fetches and displays arrival data for a selected stop, including location information
+ * and upcoming arrivals. The component also handles navigation back to the stops list.
+ * 
+ * @param currentLocation - The user's current location as [longitude, latitude]
+ * @param handleStopOpened - Callback function triggered when a stop is opened, receives the stop location data
+ * 
+ * @example
+ * ```tsx
+ * <NearbyStopsDetail 
+ *   currentLocation={[-122.6765, 45.5231]} 
+ *   handleStopOpened={(location) => console.log(location)} 
+ * />
+ * ```
+ */
 export function NearbyStopsDetail({
   currentLocation,
   handleStopOpened
@@ -76,10 +64,15 @@ export function NearbyStopsDetail({
   );
 
   return (
-    <div className="scrollarea">
+    <div className="scrollarea nearby-stop-detail">
       <Navbar bg="secondary" variant="dark">
         <Container>
-          <Nav>{stopLocation.desc}</Nav>
+          <Nav className="align-items-center">
+            <StopLocationIndicator locationId={stopLocation.id} />
+            <span className="ms-2 navbar-text text-white">
+              {stopLocation.desc}
+            </span>
+          </Nav>
           <Nav>
             <LinkContainer to="/nearby/stops">
               <a className="nav-link">Back</a>
@@ -88,9 +81,7 @@ export function NearbyStopsDetail({
         </Container>
       </Navbar>
       <br />
-      <StopInfo stopLocation={stopLocation} />
-      <br />
-      <StopArrivals data={data} />
+      <ArrivalList data={data} />
     </div>
   );
 }

@@ -21,7 +21,7 @@ export function drawRouteStopMarkers(
     },
     properties: {
       locid: stopLocation.id,
-      color: "#ff0000",
+      color: "#4264fb",
       type: "from"
     }
   });
@@ -36,7 +36,7 @@ export function drawRouteStopMarkers(
       },
       properties: {
         locid: destinationStopLocation.id,
-        color: "#00ff00",
+        color: "#4264fb",
         type: "to"
       }
     });
@@ -57,9 +57,7 @@ export function drawRouteStopMarkers(
     source: "routeStopMarkersSource",
     paint: {
       "circle-color": ["get", "color"],
-      "circle-radius": 10,
-      "circle-stroke-color": "#ffffff",
-      "circle-stroke-width": 2
+      "circle-radius": 16
     }
   });
 
@@ -70,18 +68,15 @@ export function drawRouteStopMarkers(
     source: "routeStopMarkersSource",
     layout: {
       "text-field": ["to-string", ["get", "locid"]],
-      "text-size": 11,
-      "text-font": ["DIN Offc Pro Bold", "Arial Unicode MS Bold"],
+      "text-size": 14,
+      "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Regular"],
       "text-anchor": "center",
       "text-allow-overlap": true,
       "text-ignore-placement": true,
       "text-optional": false
     },
     paint: {
-      "text-color": "#ffffff",
-      "text-halo-color": "#000000",
-      "text-halo-width": 1,
-      "text-halo-blur": 0.5
+      "text-color": "#ffffff"
     }
   });
 }

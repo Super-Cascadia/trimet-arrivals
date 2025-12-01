@@ -9,10 +9,6 @@ import { getFormattedTime } from "../util/timeUtils";
 import ArrivalListItem from "./common/ArrivalListItem";
 import { ExpandCollapseListItem } from "./common/ExpandCollapseListItem";
 
-interface StopArrivalsParams {
-  data: ArrivalData;
-}
-
 function sortArrivalsByEstimated(arrivals: Arrival[]): Arrival[] {
   return sortBy(arrivals, arrival =>
     moment(arrival.scheduled)
@@ -52,6 +48,15 @@ function getArrivalsList(
   });
 }
 
+/**
+ * Displays a list of transit arrivals/departures with optional expand/collapse functionality.
+ * 
+ * @param data - The arrival data object containing an array of arrivals
+ * @param arrivals - Optional pre-sorted array of arrivals to display instead of data.arrival
+ * @param selectedIndex - Index of the currently selected arrival (default: 0)
+ * @param onSelectDeparture - Optional callback function to handle departure selection. When provided, enables selection mode with expand/collapse UI
+ * @returns A card component containing the list of arrivals with expand/collapse controls when in selection mode
+ */
 export function ArrivalList({ data, arrivals, selectedIndex = 0, onSelectDeparture }: ArrivalsTableParams) {
   const sortedArrivals = arrivals || (data ? sortArrivalsByEstimated(data.arrival) : []);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -79,7 +84,7 @@ export function ArrivalList({ data, arrivals, selectedIndex = 0, onSelectDepartu
   const arrivalsList = getArrivalsList(sortedArrivals, displayArrivals, selectedIndex, onSelectDeparture);
 
   return (
-    <Card>
+    <Card className="arrival-list">
       <Card.Header>Departures</Card.Header>
       <ListGroup variant="flush" as="ul">
         {hasEarlier && (
@@ -105,59 +110,3 @@ export function ArrivalList({ data, arrivals, selectedIndex = 0, onSelectDepartu
     </Card>
   );
 }
-
-function getArrivalRows(data: ArrivalData) {
-  const sortedArrivals = sortArrivalsByEstimated(data.arrival);
-  return map(sortedArrivals, (arrival: Arrival) => {
-    const estimatedTime = arrival.estimated
-      ? getFormattedTime(arrival.estimated)
-      : "No estimation";
-    const scheduledTime = getFormattedTime(arrival.scheduled);
-
-    return (
-      <tr>
-        <td>
-          <small>{arrival.shortSign}</small>
-        </td>
-        <td>
-          <small>{estimatedTime}</small>
-        </td>
-        <td>
-          <small>{scheduledTime}</small>
-        </td>
-      </tr>
-    );
-  });
-}
-
-function ArrivalsTable({ data }: ArrivalsTableParams) {
-  return (
-    <Table striped={true} bordered={true} hover={true} size="sm">
-      <thead>
-        <th>Route</th>
-        <th>Est. Arrival</th>
-        <th>Scheduled</th>
-      </thead>
-      <tbody>{getArrivalRows(data)}</tbody>
-    </Table>
-  );
-}
-
-function StopArrivals({ data }: StopArrivalsParams) {
-  return (
-    <>
-      <ArrivalList data={data} />
-      {/*<h5>Arrivals</h5>*/}
-      {/*<Tabs defaultActiveKey="list" id="stop-arrival-tabs" className="mb-3">*/}
-      {/*  <Tab eventKey="list" title="List">*/}
-      {/*    <ArrivalList data={data} />*/}
-      {/*  </Tab>*/}
-      {/*  <Tab eventKey="table" title="Table">*/}
-      {/*    <ArrivalsTable data={data} />*/}
-      {/*  </Tab>*/}
-      {/*</Tabs>*/}
-    </>
-  );
-}
-
-export default StopArrivals;

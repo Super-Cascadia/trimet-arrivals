@@ -5,7 +5,7 @@ import "./SimpleArrivalListItemSkeleton.scss";
 function DeparturesCardSkeleton() {
   return (
     <Card>
-      <Card.Header>Departures</Card.Header>
+      <Card.Header>Departures 2</Card.Header>
       <ListGroup className="list-group-flush">
         {Array.from({ length: 3 }).map((_, index) => (
           <ListGroup.Item

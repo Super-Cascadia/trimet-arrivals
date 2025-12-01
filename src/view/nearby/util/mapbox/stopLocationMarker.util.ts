@@ -208,8 +208,16 @@ export function updateStopMarkerColor(
     mapBoxMap.setPaintProperty(STOP_LOCATION_LAYER, "circle-color", [
       "case",
       ["==", ["get", "locid"], parseInt(stopId, 10)],
-      color,
+      "#4264fb", // Keep blue even when highlighted
       "#4264fb" // Default color for other markers
+    ]);
+    
+    // Scale up the highlighted marker
+    mapBoxMap.setPaintProperty(STOP_LOCATION_LAYER, "circle-radius", [
+      "case",
+      ["==", ["get", "locid"], parseInt(stopId, 10)],
+      20, // Larger radius for highlighted marker
+      16  // Default radius
     ]);
   }
 
@@ -286,7 +294,7 @@ export function setLabeledStops(
         id: STOP_LOCATION_LAYER,
         paint: {
           "circle-color": "#4264fb",
-          "circle-radius": 14
+          "circle-radius": 16
         },
         source: STOP_LOCATIONS_SOURCE,
         type: "circle"
@@ -308,7 +316,7 @@ export function setLabeledStops(
         source: STOP_LOCATIONS_SOURCE,
         layout: {
           "text-field": ["get", "label"],
-          "text-size": 12,
+          "text-size": 14,
           "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Regular"],
           "text-anchor": "center",
           "text-allow-overlap": true,

@@ -5,9 +5,8 @@ import {
   StopData,
   StopLocation,
 } from "../../../../api/trimet/interfaces/types";
-import StopLocationIndicator from "../../../../component/stop/StopLocationIndicator";
 import { getNormalizedDistanceString } from "../../util/turfUtils";
-import { DistanceDisplay } from "./DistanceDisplay";
+import { StopHeading } from "./StopHeading";
 import { RouteArrivalCard } from "./RouteArrivalCard";
 
 /**
@@ -84,31 +83,11 @@ export function NearbyLocationList({
             onMouseLeave={() => highlightStopMarker && highlightStopMarker(null)}
           >
             {/* Stop heading (not a card) */}
-            <h2 className="stop-heading">
-              <StopLocationIndicator
-                locationId={stopLocation.locid}
-                nearbyStops={true}
-              />
-              <div className="stop-info">
-                <div>
-                  {stopLocation.desc}
-                  {stopLocation.dir && (
-                    <span className="text-muted" style={{ marginLeft: '8px', fontSize: '0.9em' }}>
-                      ({stopLocation.dir})
-                    </span>
-                  )}
-                </div>
-                {/* Distance directly below stop name */}
-                <div className="stop-distance">
-                  <DistanceDisplay 
-                    distanceString={distanceDescription} 
-                    currentLocation={currentLocation} 
-                    stopLocation={stopLocation} 
-                  />
-                </div>
-              </div>
-            </h2>
-            
+            <StopHeading 
+              stopLocation={stopLocation}
+              currentLocation={currentLocation}
+              distanceDescription={distanceDescription}
+            />
             {/* Route arrivals as list group items */}
             <ListGroup className="mb-3">
               {filteredRoutes.map(route => {

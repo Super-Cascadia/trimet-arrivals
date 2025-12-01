@@ -15,4 +15,25 @@
     font-weight: 500;
     cursor: pointer;
     vertical-align: middle;
+    border: 2px solid #4264fb;
+    transition: all 0.2s ease;
+    font-family: monospace;
+}
+
+.stop-location-indicator.unselected {
+    background: #ffffff;
+    color: #4264fb;
+    border-color: transparent;
+}
+
+.stop-location-indicator.selected {
+    background: #4264fb;
+    color: #ffffff;
+    transform: scale(1.1);
+}
+
+.stop-location-indicator.unselected:hover {
+    background: #8da4fc;
+    color: #ffffff;
+    transform: scale(1.05);
 }

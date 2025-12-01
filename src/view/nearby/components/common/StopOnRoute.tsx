@@ -1,10 +1,11 @@
 import { map } from "lodash";
 import React, { useEffect, useState } from "react";
-import { Badge, Form, ListGroupItem } from "react-bootstrap";
+import { Badge, ListGroupItem } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { RouteDirectionStop } from "../../../../api/trimet/interfaces/routes";
 import { StopData, TrimetRoute } from "../../../../api/trimet/interfaces/types";
 import { getNearbyStops } from "../../../../api/trimet/stops";
+import StopLocationIndicator from "../../../../component/stop/StopLocationIndicator";
 import { RouteAtStop } from "./RouteAtStop";
 import "./StopsOnRoute.scss";
 
@@ -98,19 +99,17 @@ export function StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSe
       onClick={onSelect}
     >
       <div className="d-flex align-items-center gap-2 flex-grow-1">
-        <Form.Check
-          type="radio"
-          checked={isSelected}
-          onChange={() => {}}
+        <StopLocationIndicator 
+          locationId={routeDirectionStop.locid} 
+          nearbyStops={true} 
+          selected={isSelected}
           onClick={(e) => {
             e.stopPropagation();
             if (onSelect) onSelect();
           }}
-          disabled={!onSelect}
         />
         <div>
           <span>{routeDirectionStop.desc}</span>
-          <small className="text-muted"> ({routeDirectionStop.locid})</small>
           {stopData && <RouteAtStop stopData={stopData} />}
         </div>
       </div>
