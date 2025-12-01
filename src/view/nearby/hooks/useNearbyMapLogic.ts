@@ -7,7 +7,6 @@ import { RootState } from "../../../store/reducers";
 import { Location } from "../../../api/trimet/interfaces/types";
 import { getNearbyRouteIds, getStopLocations } from "../util/dataUtils";
 import { NearbyViewComponentOutletContextProps } from "../context/NearbyViewContext";
-import { setDroppedMarkerOnMap } from "../util/mapbox/droppedMarker";
 import { useMapLocation } from "./map/useMapLocation";
 import { useMapData } from "./map/useMapData";
 import { useMapRouteOperations } from "./map/useMapRouteOperations";
@@ -16,6 +15,7 @@ import { useMapInteractions } from "./map/useMapInteractions";
 import { useMapTheme } from "./map/useMapTheme";
 import { useMapInitialization } from "./map/useMapInitialization";
 import { useMapRadius } from "./map/useMapRadius";
+import { setDroppedMarkerOnMap } from "../util/mapbox/droppedMarker";
 
 /**
  * Custom hook for managing the nearby map view logic in the TriMet Arrivals app.
@@ -332,7 +332,7 @@ export function useNearbyMapLogic() {
     isOnDetailPage,
     isUsingDroppedMarker,
     droppedMarkerLocation,
-    handleResetToGeoLocation: () => handleResetToGeoLocation(radiusSize),
+    handleResetToGeoLocation: () => handleResetToGeoLocation(radiusSize, handleDropMarker),
     handlePlaceMarker: () => handlePlaceMarker(handleDropMarker),
     lng,
     lat

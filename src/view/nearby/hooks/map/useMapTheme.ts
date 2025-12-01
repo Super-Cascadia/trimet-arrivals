@@ -2,9 +2,7 @@ import { MutableRefObject, useEffect } from "react";
 import { Map } from "mapbox-gl";
 import { StopData, Location } from "../../../../api/trimet/interfaces/types";
 import { getNearbyRouteIds, getStopLocations } from "../../util/dataUtils";
-import { setNearbyStops } from "../../util/mapbox/stopLocationMarker.util";
-import { setDroppedMarkerOnMap } from "../../util/mapbox/droppedMarker";
-import { setCurrentLocationMarker } from "../../util/mapbox/currentLocation";
+import { updateLocationMarkers, updateStopMarkers } from "./mapMarkerUtils";
 
 /**
  * Hook to handle map theme changes.
@@ -52,30 +50,23 @@ export function useMapTheme(
           const stopLocations = getStopLocations(nearbyStops);
           const nearbyRouteIds = nearbyRoutes ? getNearbyRouteIds(nearbyRoutes) : {};
           
-          setNearbyStops(
+          updateStopMarkers(
             mapRef.current,
             stopLocations,
-            Object.keys(nearbyRouteIds),
+            nearbyRouteIds,
             handleStopMarkerClick
           );
         }
         
-        if (isUsingDroppedMarker && droppedMarkerLocation) {
-          droppedMarkerRef.current = setDroppedMarkerOnMap(
-            mapRef.current,
-            droppedMarkerLocation.lng,
-            droppedMarkerLocation.lat,
-            radiusSize,
-            handleDropMarker
-          );
-        } else if (userLocation) {
-          setCurrentLocationMarker(
-            mapRef.current,
-            userLocation.coords.longitude,
-            userLocation.coords.latitude,
-            radiusSize
-          );
-        }
+        updateLocationMarkers(
+          mapRef.current,
+          isUsingDroppedMarker,
+          droppedMarkerLocation,
+          userLocation ? { lng: userLocation.coords.longitude, lat: userLocation.coords.latitude } : null,
+          radiusSize,
+          handleDropMarker,
+          droppedMarkerRef
+        );
         
         setDisplayedRouteIds([]);
       });

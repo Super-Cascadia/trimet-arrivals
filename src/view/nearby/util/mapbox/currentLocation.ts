@@ -7,6 +7,16 @@ import {
   CURRENT_LOCATION_RADIUS_LAYER
 } from "./consts";
 
+/**
+ * Draws a circle radius around a location on the map.
+ * Creates or updates the radius source and layer to visualize a circular area.
+ * 
+ * @param map - The Mapbox GL map instance
+ * @param lng - Longitude of the circle center
+ * @param lat - Latitude of the circle center
+ * @param radiusSize - Radius size in feet
+ * @returns The updated map instance
+ */
 export function drawCircle(
   map: Map,
   lng: number,
@@ -44,6 +54,16 @@ export function drawCircle(
   return map;
 }
 
+/**
+ * Sets the current location marker on the map with a radius circle.
+ * Creates or updates both the location point marker and surrounding radius.
+ * 
+ * @param map - The Mapbox GL map instance
+ * @param lng - Longitude of the location
+ * @param lat - Latitude of the location
+ * @param radiusSize - Radius size in feet for the surrounding circle
+ * @returns The updated map instance with marker and radius
+ */
 export function setCurrentLocationMarker(
   map: Map,
   lng: number,
@@ -82,6 +102,16 @@ export function setCurrentLocationMarker(
   return drawCircle(map, lng, lat, radiusSize);
 }
 
+/**
+ * Initializes the current location marker when the map loads.
+ * Waits for the map 'load' event before adding the location marker.
+ * 
+ * @param map - The Mapbox GL map instance
+ * @param lng - Longitude of the location
+ * @param lat - Latitude of the location
+ * @param radiusSize - Radius size in feet for the surrounding circle
+ * @returns The map instance (note: actual update happens asynchronously on load)
+ */
 export function initializeCurrentLocationMarker(
   map: Map,
   lng: number,

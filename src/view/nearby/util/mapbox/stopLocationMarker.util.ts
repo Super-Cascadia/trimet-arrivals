@@ -12,6 +12,14 @@ import {
   CURRENT_LOCATION_RADIUS
 } from "./consts";
 
+/**
+ * Removes stop location layers and source from the Mapbox map.
+ * Removes the label layer, circle layer, and source in the correct order
+ * (layers must be removed before the source).
+ * 
+ * @param mapBoxMap - The Mapbox map instance to remove layers from
+ * @returns The updated Mapbox map instance
+ */
 export function removeStopLocationLayers(mapBoxMap: Map) {
   let map = mapBoxMap;
   console.log("removing stop location layers");
@@ -35,6 +43,13 @@ export function removeStopLocationLayers(mapBoxMap: Map) {
   return map;
 }
 
+/**
+ * Removes current location markers from the Mapbox map.
+ * Removes both the circle layer and radius layer along with their sources.
+ * Layers must be removed before their sources to avoid errors.
+ * 
+ * @param mapBoxMap - The Mapbox map instance to remove current location markers from
+ */
 export function removeCurrentLocationMarkers(mapBoxMap: Map) {
   console.log("removing current location markers");
   if (mapBoxMap.getLayer(CURRENT_LOCATION_CIRCLE_LAYER)) {
@@ -54,6 +69,17 @@ export function removeCurrentLocationMarkers(mapBoxMap: Map) {
   }
 }
 
+/**
+ * Adds nearby stop location markers to the Mapbox map with interactive features.
+ * Creates circle markers for each stop location with hover popups and click handlers.
+ * Defers marker creation until the map style is fully loaded to avoid rendering issues.
+ * 
+ * @param mapBoxMap - The Mapbox map instance to add stop markers to
+ * @param stopLocations - Dictionary of stop locations with coordinates and IDs
+ * @param routeIds - Array of route IDs to associate with the stops
+ * @param handleStopMarkerClick - Callback function invoked when a stop marker is clicked
+ * @returns The updated Mapbox map instance
+ */
 export function setNearbyStops(
   mapBoxMap: Map,
   stopLocations: StopLocationsDictionary,
@@ -183,7 +209,14 @@ export function setNearbyStops(
   return mapBoxMap;
 }
 
-// Function to update the color of a specific stop marker by its ID
+/**
+ * Updates the color and size of a specific stop marker on the Mapbox map.
+ * Highlights the selected stop marker by scaling it up while keeping all markers blue.
+ * 
+ * @param mapBoxMap - The Mapbox map instance containing the stop markers
+ * @param stopId - The location ID of the stop marker to highlight
+ * @param color - The color to apply (currently not used as all markers remain blue)
+ */
 export function updateStopMarkerColor(
   mapBoxMap: Map,
   stopId: string,
@@ -232,6 +265,17 @@ export function updateStopMarkerColor(
   setMarkerColor();
 }
 
+/**
+ * Adds labeled stop location markers to the Mapbox map with text overlays.
+ * Creates circle markers with centered text labels for each stop location.
+ * Includes hover popups and click handlers for interactive features.
+ * Defers marker creation until the map style is fully loaded to avoid rendering issues.
+ * 
+ * @param mapBoxMap - The Mapbox map instance to add labeled stop markers to
+ * @param labeledStops - Array of stop objects containing location ID, label text, and coordinates
+ * @param handleStopMarkerClick - Callback function invoked when a stop marker is clicked
+ * @returns The updated Mapbox map instance
+ */
 export function setLabeledStops(
   mapBoxMap: Map,
   labeledStops: Array<{locid: number, label: string, lng: number, lat: number}>,

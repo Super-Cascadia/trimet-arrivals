@@ -85,6 +85,13 @@ export function setDroppedMarkerOnMap(
   return marker;
 }
 
+/**
+ * Removes a dropped marker and its associated radius circle from the map.
+ * Cleans up all layers and sources related to the dropped marker visualization.
+ * 
+ * @param map - The Mapbox GL map instance
+ * @param marker - Optional marker instance to remove. If provided, the marker will be removed from the map.
+ */
 export function removeDroppedMarker(map: Map, marker?: Marker | null) {
   if (!map) return;
 

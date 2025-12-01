@@ -1,8 +1,7 @@
 import { MutableRefObject } from "react";
 import { Map } from "mapbox-gl";
 import { initializeMap } from "../../util/mapbox/initializeMap";
-import { setDroppedMarkerOnMap } from "../../util/mapbox/droppedMarker";
-import { setCurrentLocationMarker } from "../../util/mapbox/currentLocation";
+import { updateLocationMarkers } from "./mapMarkerUtils";
 
 /**
  * Hook to handle map initialization.
@@ -48,22 +47,15 @@ export function useMapInitialization(
     mapRef.current.on("load", () => {
       console.info("effect: initialize map markers and routes");
       
-      if (isUsingDroppedMarker && droppedMarkerLocation) {
-        droppedMarkerRef.current = setDroppedMarkerOnMap(
-          mapRef.current,
-          droppedMarkerLocation.lng,
-          droppedMarkerLocation.lat,
-          radiusSize,
-          handleDropMarker
-        );
-      } else {
-        setCurrentLocationMarker(
-          mapRef.current,
-          lng,
-          lat,
-          radiusSize
-        );
-      }
+      updateLocationMarkers(
+        mapRef.current,
+        isUsingDroppedMarker,
+        droppedMarkerLocation,
+        { lng, lat },
+        radiusSize,
+        handleDropMarker,
+        droppedMarkerRef
+      );
     });
 
     mapRef.current.on("zoomend", () => {

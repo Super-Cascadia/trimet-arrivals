@@ -4,9 +4,9 @@ import { StopData, Location } from "../../../../api/trimet/interfaces/types";
 import { getNearbyStops } from "../../../../api/trimet/stops";
 import { getNearbyRouteIds, getStopLocations, processRoutes } from "../../util/dataUtils";
 import { removeRoutes } from "../../util/mapbox/routeLines";
-import { removeCurrentLocationMarkers, removeStopLocationLayers, setNearbyStops } from "../../util/mapbox/stopLocationMarker.util";
-import { removeDroppedMarker, setDroppedMarkerOnMap } from "../../util/mapbox/droppedMarker";
-import { setCurrentLocationMarker } from "../../util/mapbox/currentLocation";
+import { removeCurrentLocationMarkers, removeStopLocationLayers } from "../../util/mapbox/stopLocationMarker.util";
+import { removeDroppedMarker } from "../../util/mapbox/droppedMarker";
+import { updateLocationMarkers, updateStopMarkers } from "./mapMarkerUtils";
 
 /**
  * Hook to handle updating the map data and markers.
@@ -58,29 +58,22 @@ export function useMapUpdate(
             setNearbyStopData(stopData);
             setNearbyRoutesData(routes);
             
-            setNearbyStops(
+            updateStopMarkers(
               mapRef.current,
               stopLocations,
-              Object.keys(nearbyRouteIds),
+              nearbyRouteIds,
               handleStopMarkerClick
             );
             
-            if (isUsingDroppedMarker && droppedMarkerLocation) {
-              droppedMarkerRef.current = setDroppedMarkerOnMap(
-                  mapRef.current,
-                  droppedMarkerLocation.lng,
-                  droppedMarkerLocation.lat,
-                  radiusSize,
-                  handleDropMarker
-              );
-            } else {
-              setCurrentLocationMarker(
-                  mapRef.current,
-                  searchLocation.coords.longitude,
-                  searchLocation.coords.latitude,
-                  radiusSize
-              );
-            }
+            updateLocationMarkers(
+              mapRef.current,
+              isUsingDroppedMarker,
+              droppedMarkerLocation,
+              { lng: searchLocation.coords.longitude, lat: searchLocation.coords.latitude },
+              radiusSize,
+              handleDropMarker,
+              droppedMarkerRef
+            );
         }
 
         return stopData;

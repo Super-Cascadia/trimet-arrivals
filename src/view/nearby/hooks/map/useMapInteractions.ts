@@ -3,8 +3,8 @@ import { Map } from "mapbox-gl";
 import { Location } from "../../../../api/trimet/interfaces/types";
 import { calculateRadiusFromMap } from "../../util/mapbox/mapCalculations";
 import { removeDroppedMarker } from "../../util/mapbox/droppedMarker";
-import { setCurrentLocationMarker } from "../../util/mapbox/currentLocation";
 import { removeCurrentLocationMarkers } from "../../util/mapbox/stopLocationMarker.util";
+import { updateLocationMarkers } from "./mapMarkerUtils";
 
 /**
  * Hook to handle user interactions with the map.
@@ -45,7 +45,7 @@ export function useMapInteractions(
      * 
      * @param radiusSize - The current radius size.
      */
-    function handleResetToGeoLocation(radiusSize: number) {
+    function handleResetToGeoLocation(radiusSize: number, handleDropMarker: (lng: number, lat: number) => void) {
         console.log("Resetting to geo location");
         setIsUsingDroppedMarker(false);
         setDroppedMarkerLocation(null);
@@ -59,11 +59,14 @@ export function useMapInteractions(
           
           if (mapRef.current) {
             removeCurrentLocationMarkers(mapRef.current);
-            setCurrentLocationMarker(
+            updateLocationMarkers(
               mapRef.current,
-              userLocation.coords.longitude,
-              userLocation.coords.latitude,
-              radiusSize
+              false,
+              null,
+              { lng: userLocation.coords.longitude, lat: userLocation.coords.latitude },
+              radiusSize,
+              handleDropMarker,
+              droppedMarkerRef
             );
             flyToCenter(userLocation.coords.longitude, userLocation.coords.latitude);
           }
