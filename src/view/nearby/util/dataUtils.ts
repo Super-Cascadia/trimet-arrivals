@@ -8,6 +8,12 @@ import {
 import { StopLocationsDictionary } from "../../../store/reducers/util/formatStopLocations";
 import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoutesViewReducer";
 
+/**
+ * Processes stop data to extract and group routes by route number and direction.
+ * 
+ * @param stopData - The stop data containing locations and their associated routes
+ * @returns A dictionary mapping route numbers to arrays of TrimetRoute objects with unique route-direction combinations
+ */
 export function processRoutes(stopData: StopData): Dictionary<TrimetRoute[]> {
   const routes = stopData.location.map((location: StopLocation) => {
     return location.route.map((route: TrimetRoute) => route);
@@ -20,6 +26,12 @@ export function processRoutes(stopData: StopData): Dictionary<TrimetRoute[]> {
   return groupBy(mappedKeys, (key: TrimetRoute) => key.route);
 }
 
+/**
+ * Extracts route IDs and their directions from nearby routes data.
+ * 
+ * @param nearbyRoutes - A dictionary of TriMet routes grouped by route number
+ * @returns A dictionary mapping route IDs to objects containing arrays of direction codes
+ */
 export function getNearbyRouteIds(
   nearbyRoutes: Dictionary<TrimetRoute[]>
 ): NearbyRoutesDictionary {
@@ -36,6 +48,12 @@ export function getNearbyRouteIds(
   });
 }
 
+/**
+ * Converts nearby stop data into a dictionary of stop locations indexed by location ID.
+ * 
+ * @param nearbyStops - The stop data containing an array of stop locations
+ * @returns A dictionary mapping location IDs to their corresponding StopLocation objects
+ */
 export function getStopLocations(
   nearbyStops: StopData
 ): StopLocationsDictionary {
