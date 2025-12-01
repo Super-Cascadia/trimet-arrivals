@@ -5,12 +5,16 @@ import CurrentTime from "../../../component/buttons/CurrentTime";
 import { ThemeToggle } from "../../../component/buttons/ThemeToggle";
 import TimeSettingsDropdown from "../../../component/buttons/TimeSettingsDropdown";
 import "./MainNavigationMenu.scss";
+import trimetLogo from "../../../assets/images/trimet-logo-70s.png";
 
 function bookmarkCount(numberOfBookmarks: number) {
   return <>{numberOfBookmarks > 0 && <span>({numberOfBookmarks})</span>}</>;
 }
 
-const TRANSIT_EMOJIS = ['🚌', '🚋', '🚎', '🚐', '🚆', '🚇', '🚈', '🚝'];
+const TRANSIT_EMOJIS = [
+  '🚋', '🚎', '🚈', '🚝',
+  <img src={trimetLogo} alt="TriMet Logo" style={{ height: '24px', width: 'auto' }} />
+];
 
 interface Props {
   numberOfBookmarks: number;

@@ -1,12 +1,13 @@
-import { map, sortBy } from "lodash";
+import { groupBy, map, sortBy } from "lodash";
 import moment from "moment";
 import React, { useState } from "react";
-import { Card, ListGroup, Tab, Table, Tabs } from "react-bootstrap";
+import { Button, ButtonGroup, Card, ListGroup } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Arrival, ArrivalData } from "../../../api/trimet/interfaces/arrivals";
 import { getFormattedTime } from "../util/timeUtils";
 import ArrivalListItem from "./common/ArrivalListItem";
+import { ArrivalTimestamp } from "./common/ArrivalTimestamp";
 import { ExpandCollapseListItem } from "./common/ExpandCollapseListItem";
 
 function sortArrivalsByEstimated(arrivals: Arrival[]): Arrival[] {
@@ -60,6 +61,8 @@ function getArrivalsList(
 export function ArrivalList({ data, arrivals, selectedIndex = 0, onSelectDeparture }: ArrivalsTableParams) {
   const sortedArrivals = arrivals || (data ? sortArrivalsByEstimated(data.arrival) : []);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [viewMode, setViewMode] = useState<'flat' | 'grouped'>('grouped');
+  const navigate = useNavigate();
   
   const isSelectionMode = !!onSelectDeparture;
   
@@ -67,7 +70,7 @@ export function ArrivalList({ data, arrivals, selectedIndex = 0, onSelectDepartu
   let hasEarlier = false;
   let hasLater = false;
   
-  if (isSelectionMode) {
+  if (isSelectionMode && viewMode === 'flat') {
     if (!isExpanded) {
       if (sortedArrivals[selectedIndex]) {
         displayArrivals = [sortedArrivals[selectedIndex]];
@@ -81,11 +84,9 @@ export function ArrivalList({ data, arrivals, selectedIndex = 0, onSelectDepartu
     }
   }
   
-  const arrivalsList = getArrivalsList(sortedArrivals, displayArrivals, selectedIndex, onSelectDeparture);
-
-  return (
-    <Card className="arrival-list">
-      <Card.Header>Departures</Card.Header>
+  const renderFlatList = () => {
+    const arrivalsList = getArrivalsList(sortedArrivals, displayArrivals, selectedIndex, onSelectDeparture);
+    return (
       <ListGroup variant="flush" as="ul">
         {hasEarlier && (
           <ExpandCollapseListItem onClick={() => setIsExpanded(true)} icon="chevron-up">
@@ -107,6 +108,78 @@ export function ArrivalList({ data, arrivals, selectedIndex = 0, onSelectDepartu
           </ExpandCollapseListItem>
         )}
       </ListGroup>
+    );
+  };
+
+  const renderGroupedList = () => {
+    const grouped = groupBy(sortedArrivals, 'route');
+    const routes = Object.keys(grouped).sort((a, b) => Number(a) - Number(b));
+    
+    return (
+      <ListGroup variant="flush" as="ul">
+        {routes.map(routeId => {
+          const routeArrivals = grouped[routeId];
+          const firstArrival = routeArrivals[0];
+          
+          return (
+            <ListGroup.Item 
+              key={routeId} 
+              variant="light" 
+              className="d-flex justify-content-between align-items-start"
+              onClick={() => {
+                if (!onSelectDeparture) {
+                  const url = `/nearby/simple-routes/${firstArrival.route}?stop=${firstArrival.locid}&direction=${firstArrival.dir}`;
+                  navigate(url);
+                }
+              }}
+              style={{ cursor: !onSelectDeparture ? "pointer" : "default" }}
+            >
+              <div className="me-1">
+                <span className="fw-bold h2">
+                  {routeId}
+                </span>
+                <div className="text-muted">
+                  {firstArrival.shortSign}
+                </div>
+              </div>
+              
+              <div className="mt-1" style={{ fontSize: '0.75em' }}>
+                {routeArrivals.map((arrival, idx) => (
+                  <div key={arrival.id} className={idx > 0 ? "text-muted" : ""}>
+                    <ArrivalTimestamp 
+                      estimatedArrivalTime={arrival.estimated} 
+                      scheduledArrivalTime={arrival.scheduled} 
+                    />
+                  </div>
+                ))}
+              </div>
+            </ListGroup.Item>
+          );
+        })}
+      </ListGroup>
+    );
+  };
+
+  return (
+    <Card className="arrival-list">
+      <Card.Header className="d-flex justify-content-between align-items-center">
+        <span>Departures</span>
+        <ButtonGroup size="sm">
+          <Button 
+            variant={viewMode === 'grouped' ? 'primary' : 'outline-primary'} 
+            onClick={() => { setViewMode('grouped'); setIsExpanded(true); }}
+          >
+            Route
+          </Button>
+          <Button 
+            variant={viewMode === 'flat' ? 'primary' : 'outline-primary'} 
+            onClick={() => setViewMode('flat')}
+          >
+            Sequence
+          </Button>
+        </ButtonGroup>
+      </Card.Header>
+      {viewMode === 'flat' ? renderFlatList() : renderGroupedList()}
     </Card>
   );
 }
