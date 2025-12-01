@@ -2,6 +2,17 @@ import { Map, Marker } from "mapbox-gl";
 import * as mapboxgl from "mapbox-gl";
 import * as turf from "@turf/turf";
 
+/**
+ * Creates and displays a draggable marker on the map with a radius circle.
+ * Removes any existing dropped marker before adding the new one.
+ * 
+ * @param map - The Mapbox GL map instance
+ * @param lng - Longitude coordinate for the marker
+ * @param lat - Latitude coordinate for the marker
+ * @param radiusSize - The radius size in feet for the circle around the marker
+ * @param onDragEnd - Callback function invoked when the marker drag ends, receives the new lng/lat coordinates
+ * @returns The created Marker instance
+ */
 export function setDroppedMarkerOnMap(
   map: Map,
   lng: number,

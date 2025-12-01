@@ -4,20 +4,18 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { RootState } from "../../../store/reducers";
-import { StopData, Location } from "../../../api/trimet/interfaces/types";
-import { getNearbyStops } from "../../../api/trimet/stops";
-import { getNearbyRouteIds, getStopLocations, processRoutes } from "../util/dataUtils";
-import { setMapZoom } from "../util/mapbox/mapZoom";
-import { setCurrentLocationMarker } from "../util/mapbox/currentLocation";
-import { initializeMap } from "../util/mapbox/initializeMap";
-import { removeRoutes } from "../util/mapbox/routeLines";
-import { removeCurrentLocationMarkers, removeStopLocationLayers, setNearbyStops } from "../util/mapbox/stopLocationMarker.util";
+import { Location } from "../../../api/trimet/interfaces/types";
+import { getNearbyRouteIds, getStopLocations } from "../util/dataUtils";
 import { NearbyViewComponentOutletContextProps } from "../context/NearbyViewContext";
-import { removeDroppedMarker, setDroppedMarkerOnMap } from "../util/mapbox/droppedMarker";
-import { calculateRadiusFromMap } from "../util/mapbox/mapCalculations";
+import { setDroppedMarkerOnMap } from "../util/mapbox/droppedMarker";
 import { useMapLocation } from "./map/useMapLocation";
 import { useMapData } from "./map/useMapData";
 import { useMapRouteOperations } from "./map/useMapRouteOperations";
+import { useMapUpdate } from "./map/useMapUpdate";
+import { useMapInteractions } from "./map/useMapInteractions";
+import { useMapTheme } from "./map/useMapTheme";
+import { useMapInitialization } from "./map/useMapInitialization";
+import { useMapRadius } from "./map/useMapRadius";
 
 /**
  * Custom hook for managing the nearby map view logic in the TriMet Arrivals app.
@@ -116,284 +114,6 @@ export function useNearbyMapLogic() {
     );
   };
 
-  // Minimum loading time effect
-  useEffect(() => {
-    const timer = setTimeout(() => setMinLoadingTime(false), 250);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Cleanup zoom timeout
-  useEffect(() => {
-    return () => {
-      if (zoomTimeoutRef.current) {
-        clearTimeout(zoomTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  // Initial Data Load Effect
-  useEffect(() => {
-    if (activeLocation && !nearbyStops) {
-      const loc = {
-        coords: { latitude: lat, longitude: lng }
-      } as Location;
-      
-      fetchInitialData(loc).catch((error) => {
-        console.error("Error fetching initial data:", error);
-      });
-    }
-  }, [activeLocation]);
-
-  // Radius Size Change Effect
-  useEffect(() => {
-    if (!mapRef.current) return;
-    
-    if (isOnRouteDetailPage()) {
-      console.log("Skipping radius change update - on route detail page");
-      return;
-    }
-    
-    const currentPath = window.location.pathname;
-    if (currentPath === '/nearby/simple-routes' || currentPath.includes('/trimet-arrivals/nearby/simple-routes') ||
-        currentPath === '/nearby/stops' || currentPath.includes('/trimet-arrivals/nearby/stops')) {
-      console.log("Skipping radius change update - on simple routes or stops page, updating data only");
-      const searchLocation = isUsingDroppedMarker && droppedMarkerLocation
-        ? {
-            ...userLocation,
-            coords: {
-              ...userLocation?.coords,
-              latitude: droppedMarkerLocation.lat,
-              longitude: droppedMarkerLocation.lng
-            }
-          }
-        : userLocation;
-      
-      if (searchLocation) {
-        fetchInitialData(searchLocation);
-      }
-      return;
-    }
-    
-    console.log("radius size change", radiusSize);
-    
-    isRadiusChanging.current = true;
-    setMapZoom(mapRef, radiusSize, setZoom);
-
-    const searchLocation = isUsingDroppedMarker && droppedMarkerLocation
-      ? {
-          ...userLocation,
-          coords: {
-            ...userLocation?.coords,
-            latitude: droppedMarkerLocation.lat,
-            longitude: droppedMarkerLocation.lng
-          }
-        }
-      : userLocation;
-
-    if (searchLocation) {
-      getNearbyStops(searchLocation, radiusSize)
-        .then((stopData: StopData) => {
-          const routes = processRoutes(stopData);
-          const nearbyRouteIds = getNearbyRouteIds(routes);
-          const stopLocations = getStopLocations(stopData);
-
-          removeStopLocationLayers(mapRef.current);
-          removeCurrentLocationMarkers(mapRef.current);
-          removeDroppedMarker(mapRef.current, droppedMarkerRef.current);
-          removeRoutes(mapRef.current, Object.keys(nearbyRouteIds));
-
-          setNearbyStopData(stopData);
-          setNearbyRoutesData(routes);
-          
-          setNearbyStops(
-            mapRef.current,
-            stopLocations,
-            Object.keys(nearbyRouteIds),
-            handleStopMarkerClick
-          );
-          
-          if (isUsingDroppedMarker && droppedMarkerLocation) {
-            droppedMarkerRef.current = setDroppedMarkerOnMap(
-              mapRef.current,
-              droppedMarkerLocation.lng,
-              droppedMarkerLocation.lat,
-              radiusSize,
-              handleDropMarker
-            );
-          } else {
-            setCurrentLocationMarker(mapRef.current, lng, lat, radiusSize);
-          }
-          
-          setTimeout(() => {
-            isRadiusChanging.current = false;
-          }, 500);
-        })
-        .catch((error) => {
-          console.error("Error updating radius:", error);
-          isRadiusChanging.current = false;
-        });
-    }
-  }, [radiusSize]);
-
-  // Theme Change Effect
-  useEffect(() => {
-    if (mapRef.current) {
-      const style = theme === "dark"
-        ? "mapbox://styles/mapbox/dark-v10"
-        : "mapbox://styles/mapbox/streets-v11";
-      
-      mapRef.current.setStyle(style);
-      
-      mapRef.current.once('style.load', () => {
-        console.log("Map style loaded, restoring layers");
-        
-        if (nearbyStops) {
-          const stopLocations = getStopLocations(nearbyStops);
-          const nearbyRouteIds = nearbyRoutes ? getNearbyRouteIds(nearbyRoutes) : {};
-          
-          setNearbyStops(
-            mapRef.current,
-            stopLocations,
-            Object.keys(nearbyRouteIds),
-            handleStopMarkerClick
-          );
-        }
-        
-        if (isUsingDroppedMarker && droppedMarkerLocation) {
-          droppedMarkerRef.current = setDroppedMarkerOnMap(
-            mapRef.current,
-            droppedMarkerLocation.lng,
-            droppedMarkerLocation.lat,
-            radiusSize,
-            handleDropMarker
-          );
-        } else if (userLocation) {
-          setCurrentLocationMarker(
-            mapRef.current,
-            userLocation.coords.longitude,
-            userLocation.coords.latitude,
-            radiusSize
-          );
-        }
-        
-        setDisplayedRouteIds([]);
-      });
-    }
-  }, [theme]);
-
-  /**
-   * Initializes the Mapbox map instance.
-   * Sets up event listeners for load and zoom events.
-   */
-  function initializeMapboxMap() {
-    console.log("initialize map", lng, lat, zoom);
-    mapRef.current = initializeMap(lng, lat, mapContainerRef, zoom, theme);
-
-    mapRef.current.on("load", () => {
-      console.info("effect: initialize map markers and routes");
-      
-      if (isUsingDroppedMarker && droppedMarkerLocation) {
-        droppedMarkerRef.current = setDroppedMarkerOnMap(
-          mapRef.current,
-          droppedMarkerLocation.lng,
-          droppedMarkerLocation.lat,
-          radiusSize,
-          handleDropMarker
-        );
-      } else {
-        setCurrentLocationMarker(
-          mapRef.current,
-          lng,
-          lat,
-          radiusSize
-        );
-      }
-    });
-
-    mapRef.current.on("zoomend", () => {
-      const currentZoom = mapRef.current.getZoom();
-      setZoom(currentZoom);
-      
-      if (isRadiusChanging.current) {
-        console.log("Skipping zoom update - radius is changing");
-        return;
-      }
-      
-      if (zoomTimeoutRef.current) {
-        clearTimeout(zoomTimeoutRef.current);
-      }
-      
-      zoomTimeoutRef.current = setTimeout(() => {
-        handleZoomSearchUpdate();
-      }, 2000);
-    });
-  }
-
-  /**
-   * Updates the search area and fetches new data after a zoom event.
-   * Debounced to prevent excessive API calls.
-   */
-  function handleZoomSearchUpdate() {
-    if (!mapRef.current || !userLocation) return;
-    
-    if (isOnRouteDetailPage()) return;
-    
-    const currentPath = window.location.pathname;
-    if (currentPath === '/nearby/simple-routes' || currentPath.includes('/trimet-arrivals/nearby/simple-routes') ||
-        currentPath === '/nearby/stops' || currentPath.includes('/trimet-arrivals/nearby/stops')) {
-      return;
-    }
-
-    console.log("Updating search area after zoom");
-    
-    const searchLocation = isUsingDroppedMarker && droppedMarkerLocation
-      ? {
-          ...userLocation,
-          coords: {
-            ...userLocation.coords,
-            latitude: droppedMarkerLocation.lat,
-            longitude: droppedMarkerLocation.lng
-          }
-        }
-      : userLocation;
-    
-    getNearbyStops(searchLocation, radiusSize)
-      .then((stopData: StopData) => {
-        const routes = processRoutes(stopData);
-        const nearbyRouteIds = getNearbyRouteIds(routes);
-        const stopLocations = getStopLocations(stopData);
-
-        removeStopLocationLayers(mapRef.current);
-        removeCurrentLocationMarkers(mapRef.current);
-        removeRoutes(mapRef.current, Object.keys(nearbyRouteIds));
-
-        setNearbyStopData(stopData);
-        setNearbyRoutesData(routes);
-        
-        setNearbyStops(
-          mapRef.current,
-          stopLocations,
-          Object.keys(nearbyRouteIds),
-          handleStopMarkerClick
-        );
-        
-        if (isUsingDroppedMarker && droppedMarkerLocation) {
-          droppedMarkerRef.current = setDroppedMarkerOnMap(
-            mapRef.current,
-            droppedMarkerLocation.lng,
-            droppedMarkerLocation.lat,
-            radiusSize,
-            handleDropMarker
-          );
-        } else {
-          setCurrentLocationMarker(mapRef.current, userLocation.coords.longitude, userLocation.coords.latitude, radiusSize);
-        }
-      })
-      .catch((error) => {
-        console.error("Error updating search area after zoom:", error);
-      });
-  }
-
   /**
    * Handles placing a dropped marker on the map.
    * Updates the search location to the marker's coordinates and fetches nearby data.
@@ -427,78 +147,154 @@ export function useNearbyMapLogic() {
       }
     };
 
-    getNearbyStops(markerLocation, radiusSize)
-      .then((stopData: StopData) => {
-        const routes = processRoutes(stopData);
-        const nearbyRouteIds = getNearbyRouteIds(routes);
-        const stopLocations = getStopLocations(stopData);
-
-        removeStopLocationLayers(mapRef.current);
-        removeCurrentLocationMarkers(mapRef.current);
-        removeDroppedMarker(mapRef.current, droppedMarkerRef.current);
-        removeRoutes(mapRef.current, Object.keys(nearbyRouteIds));
-
-        setNearbyStopData(stopData);
-        setNearbyRoutesData(routes);
-        
-        setNearbyStops(
-          mapRef.current,
-          stopLocations,
-          Object.keys(nearbyRouteIds),
-          handleStopMarkerClick
-        );
-        
-        droppedMarkerRef.current = setDroppedMarkerOnMap(
-          mapRef.current,
-          lng,
-          lat,
-          radiusSize,
-          handleDropMarker
-        );
-      })
+    updateMapData(markerLocation, radiusSize, true, { lng, lat }, droppedMarkerRef)
       .catch((error) => {
         console.error("Error updating search area for dropped marker:", error);
       });
   }
 
-  /**
-   * Resets the map view to the user's geolocation.
-   * Removes any dropped markers and clears URL search params.
-   */
-  function handleResetToGeoLocation() {
-    console.log("Resetting to geo location");
-    setIsUsingDroppedMarker(false);
-    setDroppedMarkerLocation(null);
-    setSearchParams({});
-    
-    if (userLocation) {
-      removeDroppedMarker(mapRef.current, droppedMarkerRef.current);
-      fetchInitialData(userLocation).catch((error) => {
-        console.error("Error resetting to geo location:", error);
-      });
-      
-      if (mapRef.current) {
-        removeCurrentLocationMarkers(mapRef.current);
-        setCurrentLocationMarker(
-          mapRef.current,
-          userLocation.coords.longitude,
-          userLocation.coords.latitude,
-          radiusSize
-        );
-        flyToCenter(userLocation.coords.longitude, userLocation.coords.latitude);
+  // Map update hook
+  const { updateMapData } = useMapUpdate(
+    mapRef,
+    setNearbyStopData,
+    setNearbyRoutesData,
+    handleStopMarkerClick,
+    handleDropMarker
+  );
+
+  // Map interactions hook
+  const {
+    handleResetToGeoLocation,
+    handlePlaceMarker,
+    handleRefresh,
+    handleFindNearMe
+  } = useMapInteractions(
+    mapRef,
+    userLocation,
+    isUsingDroppedMarker,
+    setIsUsingDroppedMarker,
+    setDroppedMarkerLocation,
+    setSearchParams,
+    droppedMarkerRef,
+    fetchInitialData,
+    flyToCenter,
+    setRadiusSize,
+    updateMapData,
+    setNearbyStopData,
+    setNearbyRoutesData
+  );
+
+  // Minimum loading time effect
+  useEffect(() => {
+    const timer = setTimeout(() => setMinLoadingTime(false), 250);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Cleanup zoom timeout
+  useEffect(() => {
+    return () => {
+      if (zoomTimeoutRef.current) {
+        clearTimeout(zoomTimeoutRef.current);
       }
+    };
+  }, []);
+
+  // Initial Data Load Effect
+  useEffect(() => {
+    if (activeLocation && !nearbyStops) {
+      const loc = {
+        coords: { latitude: lat, longitude: lng }
+      } as Location;
+      
+      fetchInitialData(loc).catch((error) => {
+        console.error("Error fetching initial data:", error);
+      });
     }
-  }
-  
+  }, [activeLocation]);
+
+  // Radius Size Change Effect
+  useMapRadius(
+    mapRef,
+    radiusSize,
+    isOnRouteDetailPage,
+    isUsingDroppedMarker,
+    droppedMarkerLocation,
+    userLocation,
+    fetchInitialData,
+    isRadiusChanging,
+    setZoom,
+    updateMapData,
+    droppedMarkerRef
+  );
+
+  // Theme Change Effect
+  useMapTheme(
+    mapRef,
+    theme,
+    nearbyStops,
+    nearbyRoutes,
+    isUsingDroppedMarker,
+    droppedMarkerLocation,
+    userLocation,
+    radiusSize,
+    handleStopMarkerClick,
+    handleDropMarker,
+    droppedMarkerRef,
+    setDisplayedRouteIds
+  );
+
   /**
-   * Places a marker at the center of the current map view.
-   * Useful for users to search in a specific area they are looking at.
+   * Updates the search area and fetches new data after a zoom event.
+   * Debounced to prevent excessive API calls.
    */
-  function handlePlaceMarker() {
+  function handleZoomSearchUpdate() {
     if (!mapRef.current || !userLocation) return;
-    const center = mapRef.current.getCenter();
-    handleDropMarker(center.lng, center.lat);
+    
+    if (isOnRouteDetailPage()) return;
+    
+    const currentPath = window.location.pathname;
+    if (currentPath === '/nearby/simple-routes' || currentPath.includes('/trimet-arrivals/nearby/simple-routes') ||
+        currentPath === '/nearby/stops' || currentPath.includes('/trimet-arrivals/nearby/stops')) {
+      return;
+    }
+
+    console.log("Updating search area after zoom");
+    
+    const searchLocation = isUsingDroppedMarker && droppedMarkerLocation
+      ? {
+          ...userLocation,
+          coords: {
+            ...userLocation.coords,
+            latitude: droppedMarkerLocation.lat,
+            longitude: droppedMarkerLocation.lng
+          }
+        }
+      : userLocation;
+    
+    updateMapData(searchLocation, radiusSize, isUsingDroppedMarker, droppedMarkerLocation, droppedMarkerRef)
+      .catch((error) => {
+        console.error("Error updating search area after zoom:", error);
+      });
   }
+
+  // Map initialization hook
+  const { initializeMapboxMap } = useMapInitialization(
+    mapRef,
+    mapContainerRef,
+    lng,
+    lat,
+    zoom,
+    theme,
+    isUsingDroppedMarker,
+    droppedMarkerLocation,
+    radiusSize,
+    handleDropMarker,
+    droppedMarkerRef,
+    setZoom,
+    isRadiusChanging,
+    zoomTimeoutRef,
+    handleZoomSearchUpdate
+  );
 
   /**
    * Updates the search radius size based on user selection.
@@ -510,80 +306,6 @@ export function useNearbyMapLogic() {
     setRadiusSize(e.target.value);
   }
 
-  /**
-   * Refreshes the nearby data for the current user location.
-   */
-  function handleRefresh() {
-    console.log("handle refresh");
-    if (userLocation) {
-      setNearbyStopData(undefined);
-      setNearbyRoutesData(undefined);
-      fetchInitialData(userLocation).catch((error) => {
-        console.error("Error refreshing data:", error);
-      });
-    }
-  }
-
-  /**
-   * Finds stops near the user's current location.
-   * Calculates the radius based on the current map view bounds.
-   * Resets any dropped markers and centers the map on the user.
-   */
-  function handleFindNearMe() {
-    console.log("find near me clicked");
-    
-    if (isUsingDroppedMarker) {
-      setIsUsingDroppedMarker(false);
-      setDroppedMarkerLocation(null);
-      setSearchParams({});
-      if (mapRef.current) {
-        removeDroppedMarker(mapRef.current, droppedMarkerRef.current);
-      }
-    }
-    
-    if (!mapRef.current || !userLocation) return;
-    
-    if (isOnRouteDetailPage()) return;
-    
-    const distanceFeet = calculateRadiusFromMap(mapRef.current);
-    
-    console.log("Calculated search radius:", distanceFeet, "feet");
-    
-    setRadiusSize(Math.round(distanceFeet));
-    flyToCenter(userLocation.coords.longitude, userLocation.coords.latitude);
-    
-    getNearbyStops(userLocation, Math.round(distanceFeet))
-      .then((stopData: StopData) => {
-        const routes = processRoutes(stopData);
-        const nearbyRouteIds = getNearbyRouteIds(routes);
-        const stopLocations = getStopLocations(stopData);
-
-        removeStopLocationLayers(mapRef.current);
-        removeCurrentLocationMarkers(mapRef.current);
-        removeRoutes(mapRef.current, Object.keys(nearbyRouteIds));
-
-        setNearbyStopData(stopData);
-        setNearbyRoutesData(routes);
-        
-        setNearbyStops(
-          mapRef.current,
-          stopLocations,
-          Object.keys(nearbyRouteIds),
-          handleStopMarkerClick
-        );
-        
-        setCurrentLocationMarker(
-          mapRef.current,
-          userLocation.coords.longitude,
-          userLocation.coords.latitude,
-          Math.round(distanceFeet)
-        );
-      })
-      .catch((error) => {
-        console.error("Error finding near me:", error);
-      });
-  }
-
   const context: NearbyViewComponentOutletContextProps = {
     currentLocation: activeLocation,
     nearbyRoutes,
@@ -592,7 +314,7 @@ export function useNearbyMapLogic() {
     minLoadingTime,
     handleRadiusSelectionChange,
     handleRefresh,
-    handleFindNearMe,
+    handleFindNearMe: () => handleFindNearMe(isOnRouteDetailPage),
     initializeMap: initializeMapboxMap,
     handleRouteArrivalsOpened,
     handleStopOpened,
@@ -610,8 +332,8 @@ export function useNearbyMapLogic() {
     isOnDetailPage,
     isUsingDroppedMarker,
     droppedMarkerLocation,
-    handleResetToGeoLocation,
-    handlePlaceMarker,
+    handleResetToGeoLocation: () => handleResetToGeoLocation(radiusSize),
+    handlePlaceMarker: () => handlePlaceMarker(handleDropMarker),
     lng,
     lat
   };
