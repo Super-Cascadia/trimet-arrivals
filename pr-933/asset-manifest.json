@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/trimet-arrivals/pr-933/static/css/main.14f520b8.css",
-    "main.js": "/trimet-arrivals/pr-933/static/js/main.6a182d3b.js",
+    "main.js": "/trimet-arrivals/pr-933/static/js/main.fb15fba0.js",
     "static/js/7696.987ffc63.chunk.js": "/trimet-arrivals/pr-933/static/js/7696.987ffc63.chunk.js",
     "static/js/339.c8a1002d.chunk.js": "/trimet-arrivals/pr-933/static/js/339.c8a1002d.chunk.js",
     "static/js/3724.48e21b84.chunk.js": "/trimet-arrivals/pr-933/static/js/3724.48e21b84.chunk.js",
@@ -205,6 +205,7 @@
     "static/media/roboto-latin-700.woff": "/trimet-arrivals/pr-933/static/media/roboto-latin-700.2267169ee7270a22a963.woff",
     "static/media/roboto-latin-300.woff": "/trimet-arrivals/pr-933/static/media/roboto-latin-300.865f928cbabcc9f8f2b5.woff",
     "static/media/roboto-latin-400.woff": "/trimet-arrivals/pr-933/static/media/roboto-latin-400.49ae34d4cc6b98c00c69.woff",
+    "static/media/trimet-logo-70s.png": "/trimet-arrivals/pr-933/static/media/trimet-logo-70s.8fba5b018a8746b1c207.png",
     "static/media/roboto-latin-900italic.woff2": "/trimet-arrivals/pr-933/static/media/roboto-latin-900italic.cb5ad999740e9d8a8bd1.woff2",
     "static/media/roboto-latin-300italic.woff2": "/trimet-arrivals/pr-933/static/media/roboto-latin-300italic.c64e7e354c88e613c77c.woff2",
     "static/media/roboto-latin-400italic.woff2": "/trimet-arrivals/pr-933/static/media/roboto-latin-400italic.d022bc70dc1bf7b3425d.woff2",
@@ -221,6 +222,6 @@
   },
   "entrypoints": [
     "static/css/main.14f520b8.css",
-    "static/js/main.6a182d3b.js"
+    "static/js/main.fb15fba0.js"
   ]
 }
