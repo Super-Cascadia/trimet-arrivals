@@ -4,10 +4,10 @@ import { ListGroup } from "react-bootstrap";
 import {
   StopData,
   StopLocation,
-} from "../../../../api/trimet/interfaces/types";
-import { getNormalizedDistanceString } from "../../util/turfUtils";
+} from "../../../../../api/trimet/interfaces/types";
+import { getNormalizedDistanceString } from "../../../util/turfUtils";
 import { StopHeading } from "./StopHeading";
-import { RouteArrivalCard } from "./RouteArrivalCard";
+import { RouteArrivalCard } from "../cards/RouteArrivalCard";
 
 /**
  * Props for the NearbyLocationList component

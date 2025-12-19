@@ -3,10 +3,10 @@ import moment from "moment";
 import React from "react";
 import { Card, ListGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
-import { Arrival } from "../../../../api/trimet/interfaces/arrivals";
-import { ArrivalCountdown } from "./ArrivalCountdown";
-import { ExpandCollapseListItem } from "./ExpandCollapseListItem";
-import { StatusIndicator } from "./StatusIndicator";
+import { Arrival } from "../../../../../api/trimet/interfaces/arrivals";
+import { ArrivalCountdown } from "../arrivals/ArrivalCountdown";
+import { ExpandCollapseListItem } from "../ui/ExpandCollapseListItem";
+import { StatusIndicator } from "../arrivals/StatusIndicator";
 import "./DeparturesCard.scss";
 
 interface DeparturesCardParams {
@@ -67,6 +67,8 @@ export function DeparturesCard({ filteredArrivals, selectedIndex = 0, onSelectDe
                     checked={selectedIndex === actualIndex}
                     onChange={() => handleDepartureSelect(actualIndex)}
                     onClick={(e) => e.stopPropagation()}
+                    title="Select departure"
+                    aria-label="Select departure"
                   />
                 )}
                 <div>
@@ -77,8 +79,8 @@ export function DeparturesCard({ filteredArrivals, selectedIndex = 0, onSelectDe
                   )}
                 </div>
               </div>
-              <div style={{ fontFamily: "'Courier New', 'Consolas', 'Monaco', monospace", fontVariantNumeric: "tabular-nums", textAlign: "right" }}>
-                <span className="fw-bold" style={{ fontSize: '0.85rem' }}>
+              <div className="departures-monospace">
+                <span className="fw-bold departures-time-bold">
                   <ArrivalCountdown
                     estimatedArrivalTime={estimatedArrivalTime}
                     scheduledArrivalTime={scheduledArrivalTime}

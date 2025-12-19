@@ -4,10 +4,11 @@ import Select from "react-select";
 import { Card, ListGroup } from "react-bootstrap";
 import { TrimetRoute } from "../../../../api/trimet/interfaces/types";
 import RouteIndicator from "../../../../component/route/RouteIndicator";
-import NearbySubNav from "../common/NearbySubNav";
+import NearbySubNav from "../common/navigation/NearbySubNav";
+// @ts-ignore
 import "./NearbyRoutes.scss";
-import { SearchRadiusSelection } from "../common/SearchRadiusSelection";
-import NearbySkeletonList from "../common/NearbySkeleton";
+import { SearchRadiusSelection } from "../common/search/SearchRadiusSelection";
+import NearbySkeletonList from "../common/skeletons/NearbySkeleton";
 
 function getRouteDirections(
   route: TrimetRoute,

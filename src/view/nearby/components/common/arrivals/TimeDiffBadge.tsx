@@ -1,7 +1,7 @@
 import moment from "moment";
 import React from "react";
 import { Badge } from "react-bootstrap";
-import { getTimeDifferenceInMinutes } from "../../util/timeUtils";
+import { getTimeDifferenceInMinutes } from "../../../util/timeUtils";
 import { ArrivalCountdown } from "./ArrivalCountdown";
 
 interface TimeDiffBadgeParams {

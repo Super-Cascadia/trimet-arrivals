@@ -2,10 +2,10 @@ import { map } from "lodash";
 import React, { useEffect, useState } from "react";
 import { Card, ListGroup } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
-import { RouteDirectionStop } from "../../../../api/trimet/interfaces/routes";
-import { ExpandCollapseListItem } from "./ExpandCollapseListItem";
+import { RouteDirectionStop } from "../../../../../api/trimet/interfaces/routes";
+import { ExpandCollapseListItem } from "../ui/ExpandCollapseListItem";
 import { StopOnRoute } from "./StopOnRoute";
-import { SelectAgainButton } from "./SelectAgainButton";
+import { SelectAgainButton } from "../ui/SelectAgainButton";
 import "./StopsOnRoute.scss";
 
 interface StopsOnRouteParams {

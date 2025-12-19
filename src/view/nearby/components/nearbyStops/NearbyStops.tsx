@@ -4,12 +4,12 @@ import Select from "react-select";
 import {
   StopData,
 } from "../../../../api/trimet/interfaces/types";
-import NearbySkeletonList from "../common/NearbySkeleton";
-import NearbySubNav from "../common/NearbySubNav";
-import { NearbyLocationList } from "../common/NearbyLocationList";
+import NearbySkeletonList from "../common/skeletons/NearbySkeleton";
+import NearbySubNav from "../common/navigation/NearbySubNav";
+import { NearbyLocationList } from "../common/stops/NearbyLocationList";
 // @ts-ignore
-import "../common/NearbyViewComponent.scss";
-import { SearchRadiusSelection } from "../common/SearchRadiusSelection";
+import "../common/styles/NearbyViewComponent.scss";
+import { SearchRadiusSelection } from "../common/search/SearchRadiusSelection";
 
 export interface NearbyStopsProps {
   nearbyStops: StopData;

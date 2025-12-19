@@ -1,5 +1,5 @@
 import React from "react";
-import { StopLocation } from "../../../../api/trimet/interfaces/types";
+import { StopLocation } from "../../../../../api/trimet/interfaces/types";
 import "./SimpleArrivalListItem.scss"; // Reusing existing styles for now, or create a new one if needed
 
 interface DistanceDisplayProps {

@@ -1,4 +1,4 @@
-@import '../../../../styles/arrival-time.scss';
+@import '../../../../../styles/arrival-time.scss';
 
 .arrival-time-container {
   font-size: 12px !important;
@@ -6,4 +6,8 @@
 
 .arrival-time-text {
   font-size: 12px !important;
+}
+
+.clickable {
+  cursor: pointer;
 }

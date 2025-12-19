@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import { useOutletContext } from "react-router";
 import { useSearchParams } from "react-router-dom";
-import { TopNavBar } from "../common/TopNavBar";
+import { TopNavBar } from "../common/navigation/TopNavBar";
 import DirectionsItinerarySelector from "./DirectionsItinerarySelector";
 import DirectionsStepsList from "./DirectionsStepsList";
 import DirectionsRouteInfo from "./DirectionsRouteInfo";

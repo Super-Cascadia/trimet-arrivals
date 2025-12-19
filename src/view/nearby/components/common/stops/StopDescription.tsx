@@ -1,5 +1,5 @@
 import React from "react";
-import { StopLocation } from "../../../../api/trimet/interfaces/types";
+import { StopLocation } from "../../../../../api/trimet/interfaces/types";
 
 interface StopDescriptionProps {
   stopLocation: StopLocation;
@@ -17,7 +17,7 @@ export function StopDescription({ stopLocation }: StopDescriptionProps) {
     <div>
       {stopLocation.desc}
       {stopLocation.dir && (
-        <span className="text-muted" style={{ marginLeft: '8px', fontSize: '0.9em' }}>
+        <span className="text-muted stop-direction-label">
           ({stopLocation.dir})
         </span>
       )}

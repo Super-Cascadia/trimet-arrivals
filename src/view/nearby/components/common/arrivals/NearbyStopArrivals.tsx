@@ -2,13 +2,14 @@ import { groupBy, map, sortBy } from "lodash";
 import moment from "moment";
 import React, { useState } from "react";
 import { Button, ButtonGroup, Card, ListGroup } from "react-bootstrap";
+import "./NearbyStopArrivals.scss";
 import FontAwesome from "react-fontawesome";
 import { useNavigate, useParams } from "react-router-dom";
-import { Arrival, ArrivalData } from "../../../../api/trimet/interfaces/arrivals";
-import { getFormattedTime } from "../../util/timeUtils";
+import { Arrival, ArrivalData } from "../../../../../api/trimet/interfaces/arrivals";
+import { getFormattedTime } from "../../../util/timeUtils";
 import ArrivalListItem from "./ArrivalListItem";
 import { ArrivalTimestamp } from "./ArrivalTimestamp";
-import { ExpandCollapseListItem } from "./ExpandCollapseListItem";
+import { ExpandCollapseListItem } from "../ui/ExpandCollapseListItem";
 
 function sortArrivalsByEstimated(arrivals: Arrival[]): Arrival[] {
   return sortBy(arrivals, arrival =>
@@ -143,7 +144,7 @@ export function ArrivalList({ data, arrivals, selectedIndex = 0, onSelectDepartu
                 </div>
               </div>
               
-              <div className="mt-1" style={{ fontSize: '0.75em' }}>
+              <div className="mt-1 arrival-group">
                 {routeArrivals.map((arrival, idx) => (
                   <div key={arrival.id} className={idx > 0 ? "text-muted" : ""}>
                     <ArrivalTimestamp 

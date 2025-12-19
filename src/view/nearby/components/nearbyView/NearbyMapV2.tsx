@@ -1,14 +1,9 @@
 import React, { useEffect } from "react";
+import "./NearbyMapV2.scss";
 
 export type LatLngCoords = number[];
 
-const style = {
-  height: "100%",
-  position: "absolute",
-  top: 0,
-  bottom: 0,
-  width: "100%"
-};
+// styles moved to NearbyMapV2.scss
 
 interface Props {
   zoom: number;
@@ -33,10 +28,10 @@ function NearbyMapV2({
   }, []);
 
   // @ts-ignore
-  const mapBoxMap = <div style={style} ref={mapContainerRef} />;
+  const mapBoxMap = <div className="nearby-map-box" ref={mapContainerRef} />;
 
   return (
-    <div style={{ flex: 1, position: "relative", minHeight: "300px" }}>
+    <div className="nearby-map-container">
       {mapBoxMap}
     </div>
   );

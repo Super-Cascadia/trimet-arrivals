@@ -3,8 +3,9 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Badge } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
-import { getArrivals } from "../../../../api/trimet/arrivals";
-import { StopData, TrimetRoute } from "../../../../api/trimet/interfaces/types";
+import { getArrivals } from "../../../../../api/trimet/arrivals";
+import { StopData, TrimetRoute } from "../../../../../api/trimet/interfaces/types";
+import "./RouteAtStop.scss";
 
 /**
  * Displays routes available at a transit stop.
@@ -53,10 +54,10 @@ export function RouteAtStop({ stopData }: { stopData: StopData }) {
 
   return (
     <div className="route-at-stop d-flex">
-      <div className="flex-shrink-0" style={{ marginRight: "4px" }}>
+      <div className="flex-shrink-0 bus-icon">
         <FontAwesome name="bus" />
       </div>
-      <div className="d-flex flex-wrap" style={{ gap: "2px" }}>
+      <div className="d-flex flex-wrap route-badges-container">
         {map(routes, (route: TrimetRoute) => {
           const isActive = activeRoutes.includes(route.route);
           return (

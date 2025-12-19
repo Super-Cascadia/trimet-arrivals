@@ -10,12 +10,13 @@ import {
   StopData,
   TrimetRoute
 } from "../../../../api/trimet/interfaces/types";
-import NearbySubNav from "../common/NearbySubNav";
-import SimpleArrivalListItem from "../common/SimpleArrivalListItem";
-import SimpleArrivalListItemSkeleton from "../common/SimpleArrivalListItemSkeleton";
-import NearbySkeletonList from "../common/NearbySkeleton";
+import NearbySubNav from "../common/navigation/NearbySubNav";
+import SimpleArrivalListItem from "../common/arrivals/SimpleArrivalListItem";
+import SimpleArrivalListItemSkeleton from "../common/arrivals/SimpleArrivalListItemSkeleton";
+import NearbySkeletonList from "../common/skeletons/NearbySkeleton";
 import "../nearbyRoutes/NearbyRoutes.scss";
-import { SearchRadiusSelection } from "../common/SearchRadiusSelection";
+import "./SimpleRoutes.scss";
+import { SearchRadiusSelection } from "../common/search/SearchRadiusSelection";
 import { getRouteArrivals, RouteStructure, enrichRouteStructure, sortRoutesByBookmarkAndDistance } from "../../util/routeArrivals";
 
 /**
@@ -284,7 +285,7 @@ export default function NearbySimpleRoutes({
       {!isLoading && filteredRoutesWithoutArrivals.length > 0 && (
         <>
           <div className="text-center my-3 pt-2 border-top">
-            <h6 className="text-muted text-uppercase fw-bold" style={{ letterSpacing: '1px' }}>Not in service</h6>
+            <h6 className="text-muted text-uppercase fw-bold not-in-service-title">Not in service</h6>
           </div>
           <ListGroup>
             {map(filteredRoutesWithoutArrivals, (route: RouteStructure, index: number) => {

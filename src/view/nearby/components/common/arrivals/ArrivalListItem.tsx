@@ -3,7 +3,7 @@ import React from "react";
 import { ListGroup } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { Arrival } from "../../../../api/trimet/interfaces/arrivals";
+import { Arrival } from "../../../../../api/trimet/interfaces/arrivals";
 import { ArrivalTimestamp } from "./ArrivalTimestamp";
 import "./ArrivalListItem.scss";
 
@@ -32,9 +32,8 @@ function ArrivalListItem({ id, arrival, isSelected, onSelect }: ArrivalListItemP
     <ListGroup.Item
       variant={isSelected ? "primary" : "light"}
       as="li"
-      className="d-flex justify-content-between align-items-start"
+      className="d-flex justify-content-between align-items-start clickable"
       onClick={handleClick}
-      style={{ cursor: "pointer" }}
     >
       <div className="d-flex align-items-center w-100">
         {onSelect && (
@@ -48,7 +47,8 @@ function ArrivalListItem({ id, arrival, isSelected, onSelect }: ArrivalListItemP
                 e.stopPropagation();
                 onSelect();
               }}
-              style={{ cursor: "pointer" }}
+              title="Select this departure"
+              aria-label="Select this departure"
             />
           </div>
         )}

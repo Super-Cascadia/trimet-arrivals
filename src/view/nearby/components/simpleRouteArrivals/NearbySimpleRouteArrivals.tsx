@@ -23,14 +23,14 @@ import {
   getDownstreamStopIds,
   getRouteStopInfo
 } from "../../util/nearby-route-utils";
-import { ArrivalList } from "../common/NearbyStopArrivals";
-import DeparturesCardSkeleton from "../common/DeparturesCardSkeleton";
-import { InfoCard } from "../common/InfoCard";
-import RouteStopInfo from "../common/RouteStopInfo";
-import RouteStopInfoSkeleton from "../common/RouteStopInfoSkeleton";
-import { StopsOnRoute } from "../common/StopsOnRoute";
-import StopsOnRouteSkeleton from "../common/StopsOnRouteSkeleton";
-import { TopNavBar } from "../common/TopNavBar";
+import { ArrivalList } from "../common/arrivals/NearbyStopArrivals";
+import DeparturesCardSkeleton from "../common/cards/DeparturesCardSkeleton";
+import { InfoCard } from "../common/cards/InfoCard";
+import RouteStopInfo from "../common/stops/RouteStopInfo";
+import RouteStopInfoSkeleton from "../common/stops/RouteStopInfoSkeleton";
+import { StopsOnRoute } from "../common/stops/StopsOnRoute";
+import StopsOnRouteSkeleton from "../common/stops/StopsOnRouteSkeleton";
+import { TopNavBar } from "../common/navigation/TopNavBar";
 
 /**
  * Component for displaying route arrivals and stops with destination selection.
@@ -70,20 +70,20 @@ export default function NearbySimpleRouteArrivals({
   const stop = searchParams.get("stop");
   const direction = searchParams.get("direction");
   const destinationParam = searchParams.get("destination");
-  const [arrivalData, setArrivalData] = useState<ArrivalData>(null);
-  const [filteredArrivalData, setFilteredArrivalData] = useState<Arrival[]>(
+  const [arrivalData, setArrivalData] = useState<ArrivalData | null>(null);
+  const [filteredArrivalData, setFilteredArrivalData] = useState<Arrival[] | null>(
     null
   );
-  const [routeStopsData, setRouteStopsData] = useState<RouteDataResultSet>(
+  const [routeStopsData, setRouteStopsData] = useState<RouteDataResultSet | null>(
     null
   );
   const [selectedDepartureIndex, setSelectedDepartureIndex] = useState<number>(0);
   const [selectedDestinationIndex, setSelectedDestinationIndex] = useState<number | null>(null);
-  const [downstreamArrivals, setDownstreamArrivals] = useState<ArrivalData>(null);
+  const [downstreamArrivals, setDownstreamArrivals] = useState<ArrivalData | null>(null);
   const [hasInitializedFromUrl, setHasInitializedFromUrl] = useState<boolean>(false);
 
   const fetchData = async () => {
-    if (stop) {
+    if (stop && id && direction) {
       console.log("Fetching data for stop: ", stop);
       const arrivals = await getArrivals(stop, 1000);
       setArrivalData(arrivals);
@@ -219,7 +219,7 @@ export default function NearbySimpleRouteArrivals({
             directionDesc={directionDesc}
             allStopsOnRoute={routeStopsInDirection}
             currentStopIndex={stopIndex}
-            onDepartureStopSelect={(stopId) => {
+            onDepartureStopSelect={(stopId: number) => {
               const newUrl = `/nearby/simple-routes/${id}?stop=${stopId}&direction=${direction}`;
               navigate(newUrl);
             }}

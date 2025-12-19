@@ -1,12 +1,12 @@
 import React from "react";
 import { ListGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { Arrival } from "../../../../api/trimet/interfaces/arrivals";
+import { Arrival } from "../../../../../api/trimet/interfaces/arrivals";
 import {
   Direction,
   StopLocation,
   TrimetRoute
-} from "../../../../api/trimet/interfaces/types";
+} from "../../../../../api/trimet/interfaces/types";
 import { ArrivalCountdown } from "./ArrivalCountdown";
 import { ArrivalTimestamp } from "./ArrivalTimestamp";
 import { DistanceDisplay } from "./DistanceDisplay";
@@ -113,15 +113,14 @@ function SimpleArrivalListItem({
           <div>
             at {stopName} ({stop.locid})
             {hasMultipleStops && (
-              <span className="text-muted" style={{ marginLeft: '8px', fontSize: '0.85em' }}>
+              <span className="text-muted stop-info-meta">
                 {currentStopIndex !== undefined && totalStops !== undefined && (
                   <>
                     (Stop {currentStopIndex + 1} of {totalStops})
                     {onCycleStop && (
-                      <span style={{ marginLeft: '6px' }}>
+                      <span className="stop-cycler">
                         <button
-                          className="btn btn-sm btn-link p-0"
-                          style={{ fontSize: '0.9em', textDecoration: 'none' }}
+                          className="btn btn-sm btn-link p-0 stop-cycle-btn"
                           onClick={(e) => {
                             e.stopPropagation();
                             onCycleStop('prev');
@@ -131,8 +130,7 @@ function SimpleArrivalListItem({
                           ◄
                         </button>
                         <button
-                          className="btn btn-sm btn-link p-0 ms-1"
-                          style={{ fontSize: '0.9em', textDecoration: 'none' }}
+                          className="btn btn-sm btn-link p-0 ms-1 stop-cycle-btn"
                           onClick={(e) => {
                             e.stopPropagation();
                             onCycleStop('next');
@@ -157,7 +155,7 @@ function SimpleArrivalListItem({
       </div>
 
       {arrival && estimatedArrivalTime && scheduledArrivalTime && (
-        <div className="mt-1" style={{ fontSize: '0.75em' }}>
+        <div className="mt-1 arrival-timestamps">
           <ArrivalTimestamp 
             estimatedArrivalTime={estimatedArrivalTime} 
             scheduledArrivalTime={scheduledArrivalTime} 

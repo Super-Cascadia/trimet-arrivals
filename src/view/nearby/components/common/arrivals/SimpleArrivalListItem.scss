@@ -57,7 +57,7 @@
   font-size: 0.7rem;
 }
 
-@import '../../../../styles/arrival-time.scss';
+@import '../../../../../styles/arrival-time.scss';
 
 .me-1 {
   margin-right: 0.025rem !important;
@@ -70,4 +70,22 @@
   line-height: 1;
   display: inline-flex;
   align-items: flex-end;
+}
+
+.stop-info-meta {
+  margin-left: 8px;
+  font-size: 0.85em;
+}
+
+.stop-cycler {
+  margin-left: 6px;
+}
+
+.stop-cycle-btn {
+  font-size: 0.9em;
+  text-decoration: none;
+}
+
+.arrival-timestamps {
+  font-size: 0.75em;
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { Card } from "react-bootstrap";
-import { StopLocation } from "../../../../api/trimet/interfaces/types";
+import { StopLocation } from "../../../../../api/trimet/interfaces/types";
 
 interface StopInfoParams {
   stopLocation: StopLocation;

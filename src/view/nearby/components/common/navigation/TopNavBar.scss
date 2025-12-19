@@ -4,7 +4,12 @@
   &.disabled {
     opacity: 0.6;
     pointer-events: none;
+    cursor: not-allowed;
   }
+}
+
+.nav-link.bookmarked {
+  color: #ffc107;
 }
 
 .navbar-title {

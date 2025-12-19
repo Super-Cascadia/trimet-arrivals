@@ -10,7 +10,7 @@ import {
 } from "../../../../api/trimet/interfaces/arrivals";
 import StopLocationIndicator from "../../../../component/stop/StopLocationIndicator";
 import { getNormalizedDistanceString } from "../../util/turfUtils";
-import { ArrivalList } from "../common/NearbyStopArrivals";
+import { ArrivalList } from "../common/arrivals/NearbyStopArrivals";
 
 interface Props {
   currentLocation: number[];
@@ -39,10 +39,11 @@ export function NearbyStopsDetail({
   handleStopOpened
 }: Props) {
   const { id } = useParams();
-  const [data, setData] = useState<ArrivalData>(null);
+  const [data, setData] = useState<ArrivalData | null>(null);
 
   useEffect(() => {
     async function fetchData() {
+      if (!id) return;
       const arrivals = await getArrivals(id, 90);
       const stopLocation = arrivals.location[0];
       handleStopOpened(stopLocation);

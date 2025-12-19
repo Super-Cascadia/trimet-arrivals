@@ -1,7 +1,7 @@
 import React from "react";
-import { StopLocation } from "../../../../api/trimet/interfaces/types";
-import StopLocationIndicator from "../../../../component/stop/StopLocationIndicator";
-import { DistanceDisplay } from "./DistanceDisplay";
+import { StopLocation } from "../../../../../api/trimet/interfaces/types";
+import StopLocationIndicator from "../../../../../component/stop/StopLocationIndicator";
+import { DistanceDisplay } from "../arrivals/DistanceDisplay";
 
 import { StopDescription } from "./StopDescription";
 

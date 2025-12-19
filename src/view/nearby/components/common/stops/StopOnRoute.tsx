@@ -2,10 +2,10 @@ import { map } from "lodash";
 import React, { useEffect, useState } from "react";
 import { Badge, ListGroupItem } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
-import { RouteDirectionStop } from "../../../../api/trimet/interfaces/routes";
-import { StopData, TrimetRoute } from "../../../../api/trimet/interfaces/types";
-import { getNearbyStops } from "../../../../api/trimet/stops";
-import StopLocationIndicator from "../../../../component/stop/StopLocationIndicator";
+import { RouteDirectionStop } from "../../../../../api/trimet/interfaces/routes";
+import { StopData, TrimetRoute } from "../../../../../api/trimet/interfaces/types";
+import { getNearbyStops } from "../../../../../api/trimet/stops";
+import StopLocationIndicator from "../../../../../component/stop/StopLocationIndicator";
 import { RouteAtStop } from "./RouteAtStop";
 import "./StopsOnRoute.scss";
 

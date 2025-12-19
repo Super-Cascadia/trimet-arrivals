@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { ListGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { getArrivals } from "../../../../api/trimet/arrivals";
-import { Arrival } from "../../../../api/trimet/interfaces/arrivals";
-import { TrimetRoute } from "../../../../api/trimet/interfaces/types";
-import { ArrivalTimestamp } from "./ArrivalTimestamp";
+import { getArrivals } from "../../../../../api/trimet/arrivals";
+import { Arrival } from "../../../../../api/trimet/interfaces/arrivals";
+import { TrimetRoute } from "../../../../../api/trimet/interfaces/types";
+import { ArrivalTimestamp } from "../arrivals/ArrivalTimestamp";
 
 /**
  * Props for the RouteArrivalCard component.

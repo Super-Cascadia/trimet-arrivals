@@ -1,6 +1,6 @@
 import React from "react";
 import { Card } from "react-bootstrap";
-import "./SimpleArrivalListItemSkeleton.scss";
+import "../arrivals/SimpleArrivalListItemSkeleton.scss";
 
 function RouteStopInfoSkeleton() {
   return (

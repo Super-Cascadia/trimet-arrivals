@@ -8,7 +8,7 @@ import {
   addRouteBookmark,
   removeBookmark,
   getBookmarkItemId
-} from "../../../../api/localstorage/bookmarkGroups.localstorage";
+} from "../../../../../api/localstorage/bookmarkGroups.localstorage";
 import "./TopNavBar.scss";
 
 const BookmarkTooltip = props => (
@@ -103,9 +103,8 @@ export function TopNavBar({ id, shortSign, handleRefresh, routeId, direction, st
               overlay={BookmarkTooltip}
             >
               <a 
-                className="nav-link" 
+                className={`nav-link ${isBookmarked ? 'bookmarked' : ''}`}
                 onClick={handleBookmarkToggle}
-                style={{ cursor: 'pointer', color: isBookmarked ? '#ffc107' : 'inherit' }}
               >
                 <FontAwesome name={isBookmarked ? 'bookmark' : 'bookmark-o'} />
               </a>
@@ -115,7 +114,6 @@ export function TopNavBar({ id, shortSign, handleRefresh, routeId, direction, st
             <a 
               className={`nav-link refresh-link ${isRefreshing ? 'disabled' : ''}`} 
               onClick={onRefreshClick}
-              style={{ cursor: isRefreshing ? 'not-allowed' : 'pointer' }}
             >
               <FontAwesome name="refresh" spin={isRefreshing} />
             </a>
