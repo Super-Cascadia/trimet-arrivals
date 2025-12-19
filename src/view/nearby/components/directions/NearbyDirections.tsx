@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import { useOutletContext } from "react-router";
 import { useSearchParams } from "react-router-dom";
-import { TopNavBar } from "./common/TopNavBar";
+import { TopNavBar } from "../common/TopNavBar";
 import DirectionsItinerarySelector from "./DirectionsItinerarySelector";
 import DirectionsStepsList from "./DirectionsStepsList";
-import { NearbyViewComponentOutletContextProps } from "../context/NearbyViewContext";
-import { planTrip } from "../../../api/trimet/tripplanner";
-import { ArrivalLocation } from "../../../api/trimet/interfaces/arrivals";
-import { getRouteByIdAndDirection as fetchRouteByIdAndDirection } from "../../../api/trimet/routeConfig";
-import { processRouteConfig } from "../utils/routeConfigUtils";
-import { extractAllItineraries, getLegsForItinerary } from "../utils/tripPlannerUtils";
+import DirectionsRouteInfo from "./DirectionsRouteInfo";
+import { NearbyViewComponentOutletContextProps } from "../../context/NearbyViewContext";
+import { planTrip } from "../../../../api/trimet/tripplanner";
+import { ArrivalLocation } from "../../../../api/trimet/interfaces/arrivals";
+import { getRouteByIdAndDirection as fetchRouteByIdAndDirection } from "../../../../api/trimet/routeConfig";
+import { processRouteConfig } from "../../utils/routeConfigUtils";
+import { extractAllItineraries, getLegsForItinerary } from "../../utils/tripPlannerUtils";
 
 export default function NearbyDirections() {
   const [searchParams] = useSearchParams();
@@ -94,17 +95,12 @@ export default function NearbyDirections() {
         <Card><Card.Body>Loading directions…</Card.Body></Card>
       ) : (
         <>
-          <Card>
-            <Card.Body>
-              <Card.Title>Route {route} — {dirDesc}</Card.Title>
-              {fromStop && toStop && (
-                <>
-                  <Card.Text>From: {fromStop.desc} (Stop {fromStop.id})</Card.Text>
-                  <Card.Text>To: {toStop.desc} (Stop {toStop.id})</Card.Text>
-                </>
-              )}
-            </Card.Body>
-          </Card>
+          <DirectionsRouteInfo
+            route={route!}
+            dirDesc={dirDesc}
+            fromStop={fromStop}
+            toStop={toStop}
+          />
 
           <DirectionsItinerarySelector
             allItineraries={allItineraries}

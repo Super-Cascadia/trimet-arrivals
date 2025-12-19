@@ -2,7 +2,7 @@ import React from "react";
 import { useOutletContext } from "react-router";
 import { size } from "lodash";
 import NearbyStops from "./NearbyStops";
-import { NearbyViewComponentOutletContextProps } from "../context/NearbyViewContext";
+import { NearbyViewComponentOutletContextProps } from "../../context/NearbyViewContext";
 
 export function NearbyStopsComponent() {
   const {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, ListGroup } from "react-bootstrap";
-import { getItineraryTimingInfo } from "../utils/tripPlannerUtils";
+import { getItineraryTimingInfo } from "../../utils/tripPlannerUtils";
 
 interface DirectionsItinerarySelectorProps {
   allItineraries: Array<any>;

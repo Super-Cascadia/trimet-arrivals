@@ -4,19 +4,19 @@ import Select from "react-select";
 import { ListGroup } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import moment from "moment";
-import { getArrivals } from "../../../api/trimet/arrivals";
-import { Arrival, ArrivalData } from "../../../api/trimet/interfaces/arrivals";
+import { getArrivals } from "../../../../api/trimet/arrivals";
+import { Arrival, ArrivalData } from "../../../../api/trimet/interfaces/arrivals";
 import {
   StopData,
   TrimetRoute
-} from "../../../api/trimet/interfaces/types";
-import NearbySubNav from "./common/NearbySubNav";
-import SimpleArrivalListItem from "./common/SimpleArrivalListItem";
-import SimpleArrivalListItemSkeleton from "./common/SimpleArrivalListItemSkeleton";
-import NearbySkeletonList from "./common/NearbySkeleton";
-import "./NearbyRoutes.scss";
-import { SearchRadiusSelection } from "./SearchRadiusSelection";
-import { getRouteArrivals, RouteStructure, enrichRouteStructure, sortRoutesByBookmarkAndDistance } from "../util/routeArrivals";
+} from "../../../../api/trimet/interfaces/types";
+import NearbySubNav from "../common/NearbySubNav";
+import SimpleArrivalListItem from "../common/SimpleArrivalListItem";
+import SimpleArrivalListItemSkeleton from "../common/SimpleArrivalListItemSkeleton";
+import NearbySkeletonList from "../common/NearbySkeleton";
+import "../nearbyRoutes/NearbyRoutes.scss";
+import { SearchRadiusSelection } from "../common/SearchRadiusSelection";
+import { getRouteArrivals, RouteStructure, enrichRouteStructure, sortRoutesByBookmarkAndDistance } from "../../util/routeArrivals";
 
 /**
  * Props for the NearbySimpleRoutes component

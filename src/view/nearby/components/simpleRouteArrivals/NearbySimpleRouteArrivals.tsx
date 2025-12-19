@@ -8,30 +8,29 @@ import { Button } from "react-bootstrap";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
-import { getArrivals } from "../../../api/trimet/arrivals";
+import { getArrivals } from "../../../../api/trimet/arrivals";
 import {
   Arrival,
   ArrivalData,
   ArrivalLocation
-} from "../../../api/trimet/interfaces/arrivals";
+} from "../../../../api/trimet/interfaces/arrivals";
 import {
   RouteDataResultSet
-} from "../../../api/trimet/interfaces/routes";
-import { getRouteByIdAndDirection } from "../../../api/trimet/routeConfig";
+} from "../../../../api/trimet/interfaces/routes";
+import { getRouteByIdAndDirection } from "../../../../api/trimet/routeConfig";
 import {
   filterArrivalsByRouteId,
   getDownstreamStopIds,
   getRouteStopInfo
-} from "../util/nearby-route-utils";
-import { ArrivalList } from "./NearbyStopArrivals";
-import DeparturesCardSkeleton from "./common/DeparturesCardSkeleton";
-import { InfoCard } from "./common/InfoCard";
-import RouteStopInfo from "./common/RouteStopInfo";
-import RouteStopInfoSkeleton from "./common/RouteStopInfoSkeleton";
-import { StopsOnRoute } from "./common/StopsOnRoute";
-import StopsOnRouteSkeleton from "./common/StopsOnRouteSkeleton";
-import { TopNavBar } from "./common/TopNavBar";
-import "./NearbyRoutes.scss";
+} from "../../util/nearby-route-utils";
+import { ArrivalList } from "../common/NearbyStopArrivals";
+import DeparturesCardSkeleton from "../common/DeparturesCardSkeleton";
+import { InfoCard } from "../common/InfoCard";
+import RouteStopInfo from "../common/RouteStopInfo";
+import RouteStopInfoSkeleton from "../common/RouteStopInfoSkeleton";
+import { StopsOnRoute } from "../common/StopsOnRoute";
+import StopsOnRouteSkeleton from "../common/StopsOnRouteSkeleton";
+import { TopNavBar } from "../common/TopNavBar";
 
 /**
  * Component for displaying route arrivals and stops with destination selection.

@@ -2,12 +2,12 @@ import { Dictionary, map } from "lodash";
 import React, { useState } from "react";
 import Select from "react-select";
 import { Card, ListGroup } from "react-bootstrap";
-import { TrimetRoute } from "../../../api/trimet/interfaces/types";
-import RouteIndicator from "../../../component/route/RouteIndicator";
-import NearbySubNav from "./common/NearbySubNav";
+import { TrimetRoute } from "../../../../api/trimet/interfaces/types";
+import RouteIndicator from "../../../../component/route/RouteIndicator";
+import NearbySubNav from "../common/NearbySubNav";
 import "./NearbyRoutes.scss";
-import { SearchRadiusSelection } from "./SearchRadiusSelection";
-import NearbySkeletonList from "./common/NearbySkeleton";
+import { SearchRadiusSelection } from "../common/SearchRadiusSelection";
+import NearbySkeletonList from "../common/NearbySkeleton";
 
 function getRouteDirections(
   route: TrimetRoute,

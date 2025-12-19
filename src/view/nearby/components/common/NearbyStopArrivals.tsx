@@ -4,11 +4,11 @@ import React, { useState } from "react";
 import { Button, ButtonGroup, Card, ListGroup } from "react-bootstrap";
 import FontAwesome from "react-fontawesome";
 import { useNavigate, useParams } from "react-router-dom";
-import { Arrival, ArrivalData } from "../../../api/trimet/interfaces/arrivals";
-import { getFormattedTime } from "../util/timeUtils";
-import ArrivalListItem from "./common/ArrivalListItem";
-import { ArrivalTimestamp } from "./common/ArrivalTimestamp";
-import { ExpandCollapseListItem } from "./common/ExpandCollapseListItem";
+import { Arrival, ArrivalData } from "../../../../api/trimet/interfaces/arrivals";
+import { getFormattedTime } from "../../util/timeUtils";
+import ArrivalListItem from "./ArrivalListItem";
+import { ArrivalTimestamp } from "./ArrivalTimestamp";
+import { ExpandCollapseListItem } from "./ExpandCollapseListItem";
 
 function sortArrivalsByEstimated(arrivals: Arrival[]): Arrival[] {
   return sortBy(arrivals, arrival =>

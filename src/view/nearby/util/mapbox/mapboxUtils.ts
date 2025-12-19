@@ -1,7 +1,7 @@
 // @ts-ignore
 // tslint:disable-next-line:no-implicit-dependencies
 import mapboxgl from "!mapbox-gl";
-import { LatLngCoords } from "../../components/NearbyMapV2";
+import { LatLngCoords } from "../../components/nearbyView/NearbyMapV2";
 
 export function mountMapCenteredOnLocation(
   mapContainer: HTMLDivElement,

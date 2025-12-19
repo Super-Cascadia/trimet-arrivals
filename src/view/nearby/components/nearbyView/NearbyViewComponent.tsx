@@ -2,8 +2,9 @@ import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Outlet } from "react-router";
 import NearbyMapV2 from "./NearbyMapV2";
-import "./NearbyViewComponent.scss";
-import { useNearbyMapLogic } from "../hooks/useNearbyMapLogic";
+// @ts-ignore
+import "../common/NearbyViewComponent.scss";
+import { useNearbyMapLogic } from "../../hooks/useNearbyMapLogic";
 import { LocationStatusAlert } from "./LocationStatusAlert";
 
 export default function NearbyViewComponent() {

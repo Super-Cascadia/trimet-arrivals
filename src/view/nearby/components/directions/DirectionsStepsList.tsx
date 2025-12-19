@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, ListGroup } from "react-bootstrap";
-import { ArrivalLocation } from "../../../api/trimet/interfaces/arrivals";
+import { ArrivalLocation } from "../../../../api/trimet/interfaces/arrivals";
 
 interface LegRenderData {
   mode: string;

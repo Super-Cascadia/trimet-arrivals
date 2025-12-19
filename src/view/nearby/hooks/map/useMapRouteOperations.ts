@@ -101,35 +101,46 @@ export function useMapRouteOperations(
     destinationStopLocation?: ArrivalLocation
   ) {
     console.log("route arrivals opened", routeId, direction);
-    const selectedRouteDictionary = {
-      [parseInt(routeId, 10)]: {
-        directions: [parseInt(direction, 10)]
+    
+    if (!mapRef.current) return;
+
+    const processRoute = async () => {
+      const selectedRouteDictionary = {
+        [parseInt(routeId, 10)]: {
+          directions: [parseInt(direction, 10)]
+        }
+      } as NearbyRoutesDictionary;
+      
+      const routeLayerId = `route-${routeId}_${direction}`;
+      if (!displayedRouteIds.includes(routeLayerId)) {
+        const routeIds = await setRoutesOnMap(
+          mapRef.current,
+          selectedRouteDictionary
+        );
+        setDisplayedRouteIds(routeIds);
       }
-    } as NearbyRoutesDictionary;
-    
-    const routeLayerId = `route-${routeId}_${direction}`;
-    if (!displayedRouteIds.includes(routeLayerId)) {
-      const routeIds = await setRoutesOnMap(
-        mapRef.current,
-        selectedRouteDictionary
-      );
-      setDisplayedRouteIds(routeIds);
-    }
-    
-    removeStopLocationLayers(mapRef.current);
-    drawRouteStopMarkers(mapRef.current, stopLocation, destinationStopLocation);
-    
-    if (destinationStopLocation) {
-      drawRouteSegment(mapRef.current, routeId, direction, stopLocation, destinationStopLocation);
-      fitRouteBounds(
-        stopLocation.lng,
-        stopLocation.lat,
-        destinationStopLocation.lng,
-        destinationStopLocation.lat
-      );
+      
+      removeStopLocationLayers(mapRef.current);
+      drawRouteStopMarkers(mapRef.current, stopLocation, destinationStopLocation);
+      
+      if (destinationStopLocation) {
+        drawRouteSegment(mapRef.current, routeId, direction, stopLocation, destinationStopLocation);
+        fitRouteBounds(
+          stopLocation.lng,
+          stopLocation.lat,
+          destinationStopLocation.lng,
+          destinationStopLocation.lat
+        );
+      } else {
+        removeRouteSegment(mapRef.current);
+        flyToCenter(stopLocation.lng, stopLocation.lat);
+      }
+    };
+
+    if (!mapRef.current.isStyleLoaded()) {
+      mapRef.current.once('styledata', processRoute);
     } else {
-      removeRouteSegment(mapRef.current);
-      flyToCenter(stopLocation.lng, stopLocation.lat);
+      await processRoute();
     }
   }
 

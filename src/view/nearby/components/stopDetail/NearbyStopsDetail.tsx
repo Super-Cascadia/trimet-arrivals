@@ -3,14 +3,14 @@ import React, { useEffect, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { useParams } from "react-router-dom";
-import { getArrivals } from "../../../api/trimet/arrivals";
+import { getArrivals } from "../../../../api/trimet/arrivals";
 import {
   ArrivalData,
   ArrivalLocation
-} from "../../../api/trimet/interfaces/arrivals";
-import StopLocationIndicator from "../../../component/stop/StopLocationIndicator";
-import { getNormalizedDistanceString } from "../util/turfUtils";
-import { ArrivalList } from "./NearbyStopArrivals";
+} from "../../../../api/trimet/interfaces/arrivals";
+import StopLocationIndicator from "../../../../component/stop/StopLocationIndicator";
+import { getNormalizedDistanceString } from "../../util/turfUtils";
+import { ArrivalList } from "../common/NearbyStopArrivals";
 
 interface Props {
   currentLocation: number[];
