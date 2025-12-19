@@ -1,6 +1,6 @@
 import { Map } from "mapbox-gl";
 import * as mapboxgl from "mapbox-gl";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { RootState } from "../../../store/reducers";
@@ -85,7 +85,8 @@ export function useNearbyMapLogic() {
     handleStopOpened,
     handleSimpleRoutesOpened,
     highlightStopMarker,
-    flyToCenter
+    flyToCenter,
+    clearAllMapLayers
   } = useMapRouteOperations(mapRef, nearbyRouteIds, stopLocations, handleStopMarkerClick);
 
   /**
@@ -201,7 +202,7 @@ export function useNearbyMapLogic() {
 
   // Initial Data Load Effect
   useEffect(() => {
-    if (activeLocation && !nearbyStops) {
+    if (activeLocation && activeLocation[0] !== undefined && activeLocation[1] !== undefined && !nearbyStops) {
       const loc = {
         coords: { latitude: lat, longitude: lng }
       } as Location;
@@ -306,7 +307,7 @@ export function useNearbyMapLogic() {
     setRadiusSize(e.target.value);
   }
 
-  const context: NearbyViewComponentOutletContextProps = {
+  const context: NearbyViewComponentOutletContextProps = useMemo(() => ({
     currentLocation: activeLocation,
     nearbyRoutes,
     nearbyStops,
@@ -319,8 +320,20 @@ export function useNearbyMapLogic() {
     handleRouteArrivalsOpened,
     handleStopOpened,
     handleSimpleRoutesOpened,
-    highlightStopMarker
-  };
+    highlightStopMarker,
+    clearAllMapLayers
+  }), [
+    activeLocation,
+    nearbyRoutes,
+    nearbyStops,
+    radiusSize,
+    minLoadingTime,
+    handleRouteArrivalsOpened,
+    handleStopOpened,
+    handleSimpleRoutesOpened,
+    highlightStopMarker,
+    clearAllMapLayers
+  ]);
 
   return {
     context,

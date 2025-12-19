@@ -22,4 +22,5 @@ export interface NearbyViewComponentOutletContextProps {
   handleStopOpened: (stopLocation: ArrivalLocation) => void;
   handleSimpleRoutesOpened: (labeledStops?: Array<{locid: number, label: string, lng: number, lat: number}>) => void;
   highlightStopMarker: (stopId: string | null) => void;
+  clearAllMapLayers: () => void;
 }

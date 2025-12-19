@@ -50,4 +50,5 @@ export interface LabeledStop {
   label: string;
   lng: number;
   lat: number;
+  active?: boolean;
 }

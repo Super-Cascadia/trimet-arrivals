@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Location } from "../../../../api/trimet/interfaces/types";
 import geoLocateCurrentPosition from "../../../../api/geolocation/geoLocateCurrentPosition";
@@ -14,15 +14,15 @@ export function useMapLocation() {
   const [droppedMarkerLocation, setDroppedMarkerLocation] = useState<{ lng: number; lat: number } | null>(null);
   const [isUsingDroppedMarker, setIsUsingDroppedMarker] = useState(false);
 
-  const currentLocation = [
+  const currentLocation = useMemo(() => [
     userLocation?.coords?.longitude,
     userLocation?.coords?.latitude
-  ];
+  ], [userLocation]);
 
   // Use dropped marker location if available, otherwise use geo location
-  const activeLocation = isUsingDroppedMarker && droppedMarkerLocation
+  const activeLocation = useMemo(() => isUsingDroppedMarker && droppedMarkerLocation
     ? [droppedMarkerLocation.lng, droppedMarkerLocation.lat]
-    : currentLocation;
+    : currentLocation, [isUsingDroppedMarker, droppedMarkerLocation, currentLocation]);
 
   const lng = activeLocation[0];
   const lat = activeLocation[1];

@@ -22,6 +22,7 @@ import {
  * @returns The updated Mapbox map instance
  */
 export function removeStopLocationLayers(mapBoxMap: Map) {
+  if (!mapBoxMap) return;
   let map = mapBoxMap;
   console.log("removing stop location layers");
   
@@ -298,7 +299,8 @@ export function setLabeledStops(
         },
         properties: {
           locid: stop.locid,
-          label: stop.label
+          label: stop.label,
+          active: stop.active
         },
         type: "Feature"
       };
@@ -338,7 +340,12 @@ export function setLabeledStops(
       mapBoxMap.addLayer({
         id: STOP_LOCATION_LAYER,
         paint: {
-          "circle-color": "#4264fb",
+          "circle-color": [
+            "case",
+            ["==", ["get", "active"], false],
+            "#aaaaaa",
+            "#4264fb"
+          ],
           "circle-radius": 16
         },
         source: STOP_LOCATIONS_SOURCE,

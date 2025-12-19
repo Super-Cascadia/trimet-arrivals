@@ -1,0 +1,20 @@
+meta {
+  name: Get Route by ID and Direction
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}/V1/routeConfig/json/true/route/100/dir/0/stops/true/appID/{{appID}}
+  body: none
+  auth: none
+}
+
+docs {
+  Fetch route configuration for a specific route and direction.
+  
+  Parameters:
+  - route: Route ID (e.g., 100 for Blue Line)
+  - dir: Direction (0 or 1, typically 0 = outbound, 1 = inbound)
+  - stops: Include stop information (true/false)
+}

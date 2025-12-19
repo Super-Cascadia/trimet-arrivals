@@ -1,5 +1,5 @@
 import { Dictionary, isEmpty, join, map } from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Select from "react-select";
 import { ListGroup } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
@@ -31,7 +31,7 @@ interface Props {
   /** Flag to enforce minimum loading time for better UX */
   minLoadingTime?: boolean;
   /** Callback when simple routes view is opened with labeled stops for map display */
-  handleSimpleRoutesOpened: (labeledStops?: Array<{locid: number, label: string, lng: number, lat: number}>) => void;
+  handleSimpleRoutesOpened: (labeledStops?: Array<{locid: number, label: string, lng: number, lat: number, active: boolean}>) => void;
   /** Callback when radius selection changes */
   handleRadiusSelectionChange: (e: any) => void;
   /** Optional callback to refresh data */
@@ -108,17 +108,17 @@ export default function NearbySimpleRoutes({
 
   const isLoading = !nearbyStops || !arrivalData || minLoadingTime;
 
-  const { closestNearbyRouteStructure } = isLoading
+  const { closestNearbyRouteStructure } = useMemo(() => isLoading
     ? { closestNearbyRouteStructure: [] }
-    : getRouteArrivals(arrivalData, nearbyStops, currentLocation);
+    : getRouteArrivals(arrivalData, nearbyStops, currentLocation), [isLoading, arrivalData, nearbyStops, currentLocation]);
 
   // Apply current stop indices to route structures
-  const routeStructureWithStopIndices = enrichRouteStructure(
+  const routeStructureWithStopIndices = useMemo(() => enrichRouteStructure(
     closestNearbyRouteStructure,
     arrivalData,
     stopIndexMap,
     currentLocation
-  );
+  ), [closestNearbyRouteStructure, arrivalData, stopIndexMap, currentLocation]);
 
   // Handler to cycle through stops for a route-direction
   const handleCycleStop = (routeId: number, dir: number, direction: 'prev' | 'next') => {
@@ -140,30 +140,30 @@ export default function NearbySimpleRoutes({
   };
 
   // Separate routes with and without arrivals
-  const routesWithArrivals = !isEmpty(routeStructureWithStopIndices)
+  const routesWithArrivals = useMemo(() => !isEmpty(routeStructureWithStopIndices)
     ? routeStructureWithStopIndices.filter(r => r.arrivals && r.arrivals.length > 0)
-    : [];
-  const routesWithoutArrivals = !isEmpty(routeStructureWithStopIndices)
+    : [], [routeStructureWithStopIndices]);
+  const routesWithoutArrivals = useMemo(() => !isEmpty(routeStructureWithStopIndices)
     ? routeStructureWithStopIndices.filter(r => !r.arrivals || r.arrivals.length === 0)
-    : [];
+    : [], [routeStructureWithStopIndices]);
 
   // Sort routes with arrivals - bookmarked first, then by distance
-  const sortedRoutesWithArrivals = sortRoutesByBookmarkAndDistance(routesWithArrivals);
+  const sortedRoutesWithArrivals = useMemo(() => sortRoutesByBookmarkAndDistance(routesWithArrivals), [routesWithArrivals]);
 
   // Sort routes without arrivals - bookmarked first, then by distance
-  const sortedRoutesWithoutArrivals = sortRoutesByBookmarkAndDistance(routesWithoutArrivals);
+  const sortedRoutesWithoutArrivals = useMemo(() => sortRoutesByBookmarkAndDistance(routesWithoutArrivals), [routesWithoutArrivals]);
 
   // Combine for backwards compatibility with filter/options
-  const sortedNearbyRouteStructure = [
+  const sortedNearbyRouteStructure = useMemo(() => [
     ...sortedRoutesWithArrivals,
     ...sortedRoutesWithoutArrivals
-  ];
+  ], [sortedRoutesWithArrivals, sortedRoutesWithoutArrivals]);
 
   // Assign stop ID as label to each route
-  const routesWithLabels = sortedNearbyRouteStructure.map((route) => ({
+  const routesWithLabels = useMemo(() => sortedNearbyRouteStructure.map((route) => ({
     ...route,
     stopLabel: route.stop.locid.toString() // Use stop ID as label
-  }));
+  })), [sortedNearbyRouteStructure]);
 
   // Update filtered lists with labels
   const labeledRoutesMap = new Map(routesWithLabels.map(r => [`${r.id}-${r.dir}-${r.stop.locid}`, r.stopLabel]));
@@ -174,12 +174,16 @@ export default function NearbySimpleRoutes({
     console.log('[NearbySimpleRoutes] useEffect triggered - isLoading:', isLoading, 'nearbyStops:', nearbyStops);
     
     if (!isLoading && nearbyStops?.location) {
+      // Calculate active stops
+      const activeStopIds = new Set(sortedRoutesWithArrivals.map(r => r.stop.locid));
+
       // Show ALL stops in the search area on the map with their stop IDs
       const labeledStops = nearbyStops.location.map(stop => ({
         locid: stop.locid,
         label: stop.locid.toString(),
         lng: stop.lng,
-        lat: stop.lat
+        lat: stop.lat,
+        active: activeStopIds.has(stop.locid)
       }));
       
       console.log('[NearbySimpleRoutes] Calling handleSimpleRoutesOpened with', labeledStops.length, 'labeled stops (all stops in search area):', labeledStops);
@@ -190,7 +194,7 @@ export default function NearbySimpleRoutes({
     
     // Cleanup: this component manages the simple routes view markers
     // When it unmounts (navigating to detail page), markers will be managed by that page
-  }, [isLoading, nearbyStops]);
+  }, [isLoading, nearbyStops, sortedRoutesWithArrivals]);
 
   // Build select options from the nearby route structure
   const routeOptions = isLoading

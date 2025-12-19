@@ -1,0 +1,21 @@
+meta {
+  name: Get Vehicles by Location IDs
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/V2/vehicles/json/true/locIDs/13125,13123/arrivals/4/showPosition/true/minutes/10/appID/{{appID}}
+  body: none
+  auth: none
+}
+
+docs {
+  Fetch vehicle information for one or more stop location IDs.
+  
+  Parameters:
+  - locIDs: Comma-separated stop location IDs (e.g., 13125,13123)
+  - arrivals: Number of arrivals to return per stop (default: 4)
+  - showPosition: Show vehicle positions (true/false)
+  - minutes: Number of minutes into the future to show arrivals (default: 60)
+}

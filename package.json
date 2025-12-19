@@ -61,6 +61,7 @@
     "redux-thunk": "^3.0.0",
     "reselect": "^4.0.0",
     "sass": "^1.94.0",
+    "fast-xml-parser": "^4.4.2",
     "superagent": "^10.1.1",
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",

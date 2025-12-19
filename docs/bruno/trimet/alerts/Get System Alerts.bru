@@ -1,0 +1,17 @@
+meta {
+  name: Get System Alerts
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v2/alerts/json/true/appID/{{appID}}
+  body: none
+  auth: none
+}
+
+docs {
+  Fetch all system-wide alerts for TriMet.
+  
+  Returns alerts affecting the entire transit system.
+}

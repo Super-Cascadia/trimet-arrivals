@@ -48,8 +48,32 @@ export default function RootAppRoutes() {
     document.documentElement.setAttribute("data-bs-theme", theme);
   }, [theme]);
 
+  // Compute a safe basename for the router.
+  // Use PUBLIC_URL (e.g., "/trimet-arrivals") only if the current path starts with it.
+  // Otherwise, omit basename so local dev paths like "/nearby/..." work.
+  let computedBasename: string | undefined = undefined;
+  const path = window.location.pathname || "";
+  let candidateBasename: string | undefined = undefined;
+
+  const publicUrl = process.env.PUBLIC_URL;
+  if (publicUrl) {
+    try {
+      candidateBasename = new URL(publicUrl, window.location.origin).pathname;
+    } catch {
+      candidateBasename = publicUrl; // already a path
+    }
+  } else {
+    candidateBasename = "/trimet-arrivals"; // default for gh-pages
+  }
+
+  if (candidateBasename && path.startsWith(candidateBasename)) {
+    computedBasename = candidateBasename;
+  } else {
+    computedBasename = undefined;
+  }
+
   return (
-    <Router basename={process.env.PUBLIC_URL}>
+    <Router basename={computedBasename}>
       <MainNavigationContainer />
       <main className="main-view">
         <Routes>

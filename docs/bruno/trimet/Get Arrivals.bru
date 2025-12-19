@@ -1,0 +1,21 @@
+meta {
+  name: Get Arrivals
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseUrl}}/V2/arrivals/json/true/locIDs/13125,13123/arrivals/4/showPosition/true/minutes/60/appID/{{appID}}
+  body: none
+  auth: none
+}
+
+docs {
+  Fetch real-time arrivals for one or more TriMet stop location IDs.
+
+  Parameters:
+  - locIDs: Comma-separated stop location IDs (e.g., 13125,13123)
+  - arrivals: Number of arrivals per stop to return (default: 4)
+  - showPosition: Include vehicle positions (true/false)
+  - minutes: Minutes into the future to include (e.g., 60)
+}

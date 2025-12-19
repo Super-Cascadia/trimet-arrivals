@@ -6,7 +6,7 @@ import { NearbyRoutesDictionary } from "../../../../store/reducers/view/nearbyRo
 import { setRoutes as setRoutesOnMap, removeRoutes } from "../../util/mapbox/routeLines";
 import { drawRouteStopMarkers, removeRouteStopMarkers } from "../../util/mapbox/routeStopMarkers";
 import { drawRouteSegment, removeRouteSegment } from "../../util/mapbox/routeSegments";
-import { removeStopLocationLayers, setLabeledStops, setNearbyStops, updateStopMarkerColor } from "../../util/mapbox/stopLocationMarker.util";
+import { removeStopLocationLayers, setLabeledStops, setNearbyStops, updateStopMarkerColor, removeCurrentLocationMarkers } from "../../util/mapbox/stopLocationMarker.util";
 
 /**
  * Hook to manage route and stop operations on the map.
@@ -141,6 +141,7 @@ export function useMapRouteOperations(
    */
   function handleStopOpened(stopLocation: ArrivalLocation) {
     console.log("stop opened", stopLocation);
+    if (!mapRef.current) return;
     removeStopLocationLayers(mapRef.current);
     drawRouteStopMarkers(mapRef.current, stopLocation);
     flyToCenter(stopLocation.lng, stopLocation.lat);
@@ -160,7 +161,9 @@ export function useMapRouteOperations(
       removeRouteSegment(mapRef.current);
       removeStopLocationLayers(mapRef.current);
       removeRoutes(mapRef.current, displayedRouteIds);
-      setDisplayedRouteIds([]);
+      if (displayedRouteIds.length > 0) {
+        setDisplayedRouteIds([]);
+      }
       
       if (labeledStops && labeledStops.length > 0) {
         setLabeledStops(mapRef.current, labeledStops, handleStopMarkerClick);
@@ -206,6 +209,17 @@ export function useMapRouteOperations(
     handleStopOpened,
     handleSimpleRoutesOpened,
     highlightStopMarker,
-    flyToCenter
+    flyToCenter,
+    clearAllMapLayers: () => {
+      if (!mapRef.current) return;
+      removeRouteStopMarkers(mapRef.current);
+      removeRouteSegment(mapRef.current);
+      removeStopLocationLayers(mapRef.current);
+      removeRoutes(mapRef.current, displayedRouteIds);
+      removeCurrentLocationMarkers(mapRef.current);
+      if (displayedRouteIds.length > 0) {
+        setDisplayedRouteIds([]);
+      }
+    }
   };
 }
