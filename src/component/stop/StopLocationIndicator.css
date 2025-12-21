@@ -4,20 +4,36 @@
 
 .stop-location-indicator {
     background: #4264fb;
-    width: 32px;
-    height: 32px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     color: #ffffff;
-    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     vertical-align: middle;
     border: 2px solid #4264fb;
     transition: all 0.2s ease;
     font-family: monospace;
+}
+
+/* Size variants */
+.stop-location-indicator.size-small {
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+}
+
+.stop-location-indicator.size-medium {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+}
+
+.stop-location-indicator.size-large {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
 }
 
 .stop-location-indicator.unselected {

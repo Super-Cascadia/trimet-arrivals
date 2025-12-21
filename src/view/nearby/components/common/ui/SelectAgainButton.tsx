@@ -16,7 +16,7 @@ export const SelectAgainButton: React.FC<SelectAgainButtonProps> = ({ onClick, c
       className={className}
     >
       <FontAwesome name="repeat" className="me-1" />
-      Select Again
+      Edit
     </Button>
   );
 };

@@ -7,6 +7,7 @@ interface Props {
   nearbyStops?: boolean;
   selected?: boolean;
   onClick?: (e: React.MouseEvent) => void;
+  size?: 'small' | 'medium' | 'large';
 }
 
 /**
@@ -23,13 +24,15 @@ export default function StopLocationIndicator({
   locationId,
   nearbyStops,
   selected,
-  onClick
+  onClick,
+  size = 'medium'
 }: Props) {
   const route = nearbyStops
     ? `/nearby/stops/${locationId}`
     : `/stop/${locationId}`;
 
   let className = "stop-location-indicator";
+  className += ` size-${size}`;
   if (selected === true) {
     className += " selected";
   } else if (selected === false) {

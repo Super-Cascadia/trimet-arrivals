@@ -1,5 +1,8 @@
 import React from "react";
-import { Card, ListGroup } from "react-bootstrap";
+import { Card, ListGroup, Form } from "react-bootstrap";
+import FontAwesome from "react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWalking } from "@fortawesome/free-solid-svg-icons";
 import { getItineraryTimingInfo } from "../../utils/tripPlannerUtils";
 
 interface DirectionsItinerarySelectorProps {
@@ -19,23 +22,38 @@ export default function DirectionsItinerarySelector({
 
   return (
     <Card>
-      <Card.Header>Choose a Route</Card.Header>
+      <Card.Header>Choose an Itinerary</Card.Header>
       <ListGroup>
         {allItineraries.map((itin, idx) => {
           const { startTime, endTime, duration, numberOfTransfers, walkingTime, transitTime } = getItineraryTimingInfo(itin);
           const label = `${startTime} - ${endTime} (${duration} min, ${numberOfTransfers} transfers)`;
 
+          const isSelected = selectedItineraryIdx === idx;
+
           return (
             <ListGroup.Item
               key={idx}
-              style={{
-                cursor: "pointer",
-                backgroundColor: selectedItineraryIdx === idx ? "#e7f3ff" : "transparent"
-              }}
+              variant={isSelected ? "primary" : undefined}
+              className="d-flex align-items-start gap-2"
+              style={{ cursor: "pointer" }}
               onClick={() => onSelectItinerary(idx)}
             >
-              <div><strong>{label}</strong></div>
-              <div>Walk: {walkingTime} min | Transit: {transitTime} min</div>
+              <Form.Check
+                type="radio"
+                name="directions-itinerary"
+                checked={isSelected}
+                onChange={() => onSelectItinerary(idx)}
+                onClick={(e) => e.stopPropagation()}
+              />
+              <div className="flex-grow-1">
+                <div><strong>{label}</strong></div>
+                <div className="d-flex align-items-center">
+                  <span className="me-2" aria-hidden="true"><FontAwesomeIcon icon={faWalking} /></span>
+                  <span>Walk: {walkingTime} min</span>
+                  <span className="ms-3 me-2" aria-hidden="true"><FontAwesome name="bus" /></span>
+                  <span>Transit: {transitTime} min</span>
+                </div>
+              </div>
             </ListGroup.Item>
           );
         })}

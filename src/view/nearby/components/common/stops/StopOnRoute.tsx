@@ -95,6 +95,7 @@ export function StopOnRoute({ routeDirectionStop, selectedArrival, currentStopSe
     <ListGroupItem 
       key={routeDirectionStop.locid} 
       className="d-flex justify-content-between align-items-center"
+      variant={isSelected ? 'primary' : undefined}
       style={{ cursor: onSelect ? 'pointer' : 'default' }}
       onClick={onSelect}
     >

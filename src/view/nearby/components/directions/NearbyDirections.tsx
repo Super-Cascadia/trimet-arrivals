@@ -8,13 +8,15 @@ import DirectionsStepsList from "./DirectionsStepsList";
 import DirectionsRouteInfo from "./DirectionsRouteInfo";
 import { NearbyViewComponentOutletContextProps } from "../../context/NearbyViewContext";
 import { planTrip } from "../../../../api/trimet/tripplanner";
+import { getArrivals } from "../../../../api/trimet/arrivals";
 import { ArrivalLocation } from "../../../../api/trimet/interfaces/arrivals";
+import { RouteDirectionStop } from "../../../../api/trimet/interfaces/routes";
 import { getRouteByIdAndDirection as fetchRouteByIdAndDirection } from "../../../../api/trimet/routeConfig";
 import { processRouteConfig } from "../../utils/routeConfigUtils";
 import { extractAllItineraries, getLegsForItinerary } from "../../utils/tripPlannerUtils";
 
 export default function NearbyDirections() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const context = useOutletContext<NearbyViewComponentOutletContextProps>();
 
   const route = searchParams.get("route");
@@ -25,6 +27,7 @@ export default function NearbyDirections() {
   const [dirDesc, setDirDesc] = useState<string>("");
   const [fromStop, setFromStop] = useState<ArrivalLocation | null>(null);
   const [toStop, setToStop] = useState<ArrivalLocation | null>(null);
+  const [allStopsOnRoute, setAllStopsOnRoute] = useState<RouteDirectionStop[]>([]);
   const [intermediateStops, setIntermediateStops] = useState<Array<{ locid: number; desc: string }>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [allItineraries, setAllItineraries] = useState<Array<any>>([]);
@@ -33,29 +36,50 @@ export default function NearbyDirections() {
 
   useEffect(() => {
     async function setupDirections() {
-      if (!route || !direction || !from || !to) return;
+      if (!from || !to) return;
       setIsLoading(true);
       context.clearAllMapLayers();
 
       try {
-        // Fetch and process route config
-        const data = await fetchRouteByIdAndDirection(parseInt(route, 10), parseInt(direction, 10));
-        const configData = processRouteConfig(data, parseInt(direction, 10), parseInt(from, 10), parseInt(to, 10));
-        
-        setDirDesc(configData.dirDesc);
-        setFromStop(configData.fromStop);
-        setToStop(configData.toStop);
-        setIntermediateStops(configData.intermediateStops);
+        if (route && direction) {
+          // Fetch and process route config
+          const data = await fetchRouteByIdAndDirection(parseInt(route, 10), parseInt(direction, 10));
+          const configData = processRouteConfig(data, parseInt(direction, 10), parseInt(from, 10), parseInt(to, 10));
+          
+          // Extract all stops on the route for the selector
+          const routeObj = data.route?.[0];
+          const matchingDir = routeObj?.dir?.find(d => d.dir === parseInt(direction, 10));
+          const stops = matchingDir?.stop || [];
+          setAllStopsOnRoute(stops);
+          
+          setDirDesc(configData.dirDesc);
+          setFromStop(configData.fromStop);
+          setToStop(configData.toStop);
+          setIntermediateStops(configData.intermediateStops);
 
-        // Draw the route segment on the map
-        if (configData.fromStop && configData.toStop) {
-          context.handleRouteArrivalsOpened(
-            route,
-            direction,
-            from,
-            configData.fromStop,
-            configData.toStop
-          );
+          // Draw the route segment on the map
+          if (configData.fromStop && configData.toStop) {
+            context.handleRouteArrivalsOpened(
+              route,
+              direction,
+              from,
+              configData.fromStop,
+              configData.toStop
+            );
+          }
+        } else {
+          // No route specified, fetch stop details for from/to
+          try {
+            const arrivalData = await getArrivals(`${from},${to}`, 1);
+            if (arrivalData && arrivalData.location) {
+              const fromLoc = arrivalData.location.find(l => l.id === parseInt(from, 10));
+              const toLoc = arrivalData.location.find(l => l.id === parseInt(to, 10));
+              if (fromLoc) setFromStop(fromLoc);
+              if (toLoc) setToStop(toLoc);
+            }
+          } catch (e) {
+            console.warn("Failed to fetch stop details", e);
+          }
         }
 
         // Fetch Trip Planner
@@ -88,6 +112,20 @@ export default function NearbyDirections() {
     }
   };
 
+  const handleFromStopChange = (stopId: number, stopIndex: number) => {
+    // Update URL params to trigger re-fetch with new from stop
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("from", stopId.toString());
+    setSearchParams(newParams);
+  };
+
+  const handleToStopChange = (stopId: number, stopIndex: number) => {
+    // Update URL params to trigger re-fetch with new to stop
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("to", stopId.toString());
+    setSearchParams(newParams);
+  };
+
   return (
     <div className="scrollarea">
       <TopNavBar id="Directions" />
@@ -96,11 +134,15 @@ export default function NearbyDirections() {
       ) : (
         <>
           <DirectionsRouteInfo
-            route={route!}
+            route={route || undefined}
             dirDesc={dirDesc}
             fromStop={fromStop}
             toStop={toStop}
+            allStopsOnRoute={allStopsOnRoute}
+            onFromStopChange={handleFromStopChange}
+            onToStopChange={handleToStopChange}
           />
+          <br/>
 
           <DirectionsItinerarySelector
             allItineraries={allItineraries}
@@ -108,15 +150,14 @@ export default function NearbyDirections() {
             onSelectItinerary={handleSelectItinerary}
           />
 
-          <Card>
-            <Card.Header>Steps</Card.Header>
-            <DirectionsStepsList
-              legs={tripLegs}
-              fromStop={fromStop}
-              toStop={toStop}
-              intermediateStops={intermediateStops}
-            />
-          </Card>
+          <br/>
+
+          <DirectionsStepsList
+            legs={tripLegs}
+            fromStop={fromStop}
+            toStop={toStop}
+            intermediateStops={intermediateStops}
+          />
         </>
       )}
     </div>

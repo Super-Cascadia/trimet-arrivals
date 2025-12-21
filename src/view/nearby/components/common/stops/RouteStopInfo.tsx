@@ -19,9 +19,8 @@ import {
   removeBookmark,
   getBookmarkItemId
 } from "../../../../../api/localstorage/bookmarkGroups.localstorage";
-import { ExpandCollapseListItem } from "../ui/ExpandCollapseListItem";
-import { StopOnRoute } from "./StopOnRoute";
-import { SelectAgainButton } from "../ui/SelectAgainButton";
+import { RouteStopSelector } from "./RouteStopSelector";
+import "./StopsOnRoute.scss";
 
 const BookmarkTooltip = props => (
   <Tooltip id="button-tooltip" {...props}>
@@ -77,9 +76,6 @@ interface StopInfoParams {
 function RouteStopInfo({ shortSign, stopLocation, routeId, direction, routeDesc, directionDesc, allStopsOnRoute, currentStopIndex, onDepartureStopSelect }: StopInfoParams) {
   const navigate = useNavigate();
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [isSelecting, setIsSelecting] = useState(false);
-  const [showEarlier, setShowEarlier] = useState(false);
-  const [showFuture, setShowFuture] = useState(false);
   
   useEffect(() => {
     if (routeId && stopLocation?.id && direction !== undefined) {
@@ -127,107 +123,58 @@ function RouteStopInfo({ shortSign, stopLocation, routeId, direction, routeDesc,
     }
   };
 
-  const handleSelectStop = (stopId: number) => {
+  const handleSelectStop = (stopId: number, stopIndex: number) => {
     if (onDepartureStopSelect) {
       onDepartureStopSelect(stopId);
     }
-    setIsSelecting(false);
-    setShowEarlier(false);
-    setShowFuture(false);
   };
 
-  const handleSelectAgain = () => {
-    setIsSelecting(true);
-    setShowEarlier(false);
-    setShowFuture(false);
-  };
+  // Convert StopLocation to RouteDirectionStop format for the selector
+  const currentStopAsRouteStop: RouteDirectionStop | null = stopLocation ? {
+    locid: stopLocation.id,
+    desc: stopLocation.desc,
+    lat: stopLocation.lat,
+    lng: stopLocation.lng,
+    dir: String(direction ?? 0),
+    seq: currentStopIndex ?? 0,
+    tp: false
+  } : null;
 
-  const handleShowEarlier = () => {
-    setShowEarlier(!showEarlier);
-    setShowFuture(false);
-  };
-
-  const handleShowFuture = () => {
-    setShowFuture(!showFuture);
-    setShowEarlier(false);
-  };
-
-  const previousStops = allStopsOnRoute && currentStopIndex !== undefined && currentStopIndex > 0
-    ? allStopsOnRoute.slice(0, currentStopIndex)
-    : [];
-    
-  const futureStops = allStopsOnRoute && currentStopIndex !== undefined && currentStopIndex < allStopsOnRoute.length - 1
-    ? allStopsOnRoute.slice(currentStopIndex + 1)
-    : [];
-
-  const hasEarlierStops = previousStops.length > 0;
-  const hasFutureStops = futureStops.length > 0;
   const canSelectStops = onDepartureStopSelect && allStopsOnRoute && currentStopIndex !== undefined;
 
-  let stopsToShow: RouteDirectionStop[];
-  if (!canSelectStops) {
-    stopsToShow = [];
-  } else if (isSelecting) {
-    stopsToShow = allStopsOnRoute;
-  } else if (showEarlier) {
-    stopsToShow = allStopsOnRoute.slice(0, currentStopIndex + 1);
-  } else if (showFuture) {
-    stopsToShow = allStopsOnRoute.slice(currentStopIndex);
-  } else {
-    stopsToShow = allStopsOnRoute && currentStopIndex !== undefined 
-      ? [allStopsOnRoute[currentStopIndex]] 
-      : [];
-  }
+  // Create the bookmark action button
+  const bookmarkButton = routeId !== undefined && direction !== undefined && (
+    <OverlayTrigger placement="left" overlay={BookmarkTooltip}>
+      <button
+        className="btn btn-sm btn-outline-secondary bookmark-button"
+        onClick={handleBookmarkToggle}
+        aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
+      >
+        <FontAwesome name={isBookmarked ? "bookmark" : "bookmark-o"} />
+      </button>
+    </OverlayTrigger>
+  );
 
-  return (
+  return canSelectStops && allStopsOnRoute.length > 0 && currentStopAsRouteStop ? (
+    <RouteStopSelector
+      headerTitle="From"
+      selectedStop={currentStopAsRouteStop}
+      allStopsOnRoute={allStopsOnRoute}
+      currentStopIndex={currentStopIndex}
+      onStopSelect={handleSelectStop}
+      headerActions={bookmarkButton}
+    />
+  ) : (
     <Card>
       <Card.Header className="d-flex justify-content-between align-items-center">
         <span>From</span>
-        {canSelectStops && !isSelecting && (hasEarlierStops || hasFutureStops) && (
-          <SelectAgainButton onClick={handleSelectAgain} />
-        )}
+        {bookmarkButton}
       </Card.Header>
-      
-      <ListGroup className="list-group-flush">
-        {canSelectStops && hasEarlierStops && !showEarlier && !isSelecting && (
-          <ExpandCollapseListItem onClick={handleShowEarlier} icon="chevron-up">
-            {previousStops.length} earlier stop{previousStops.length === 1 ? '' : 's'}
-          </ExpandCollapseListItem>
+      <Card.Body>
+        {stopLocation && (
+          <Card.Text>{stopLocation.desc} (Stop {stopLocation.id})</Card.Text>
         )}
-        
-        {stopsToShow.map((stop: RouteDirectionStop, index: number) => {
-          const actualIndex = allStopsOnRoute.indexOf(stop);
-          const isCurrentStop = actualIndex === currentStopIndex;
-          const canSelect = isSelecting || showEarlier || showFuture;
-          
-          return (
-            <StopOnRoute
-              key={stop.locid}
-              routeDirectionStop={stop}
-              isSelected={isCurrentStop}
-              onSelect={canSelect ? () => handleSelectStop(stop.locid) : undefined}
-            />
-          );
-        })}
-        
-        {canSelectStops && showEarlier && (
-          <ExpandCollapseListItem onClick={handleShowEarlier} icon="chevron-up">
-            show less
-          </ExpandCollapseListItem>
-        )}
-
-        {canSelectStops && hasFutureStops && !showFuture && !isSelecting && (
-          <ExpandCollapseListItem onClick={handleShowFuture} icon="chevron-down">
-            {futureStops.length} future stop{futureStops.length === 1 ? '' : 's'}
-          </ExpandCollapseListItem>
-        )}
-
-        {canSelectStops && showFuture && (
-          <ExpandCollapseListItem onClick={handleShowFuture} icon="chevron-down">
-            show less
-          </ExpandCollapseListItem>
-        )}
-      </ListGroup>
+      </Card.Body>
     </Card>
   );
 }
