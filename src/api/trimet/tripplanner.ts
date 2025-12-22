@@ -34,6 +34,7 @@ export interface StopLocation extends Location {
   stopId?: number;
   stopSequence?: number;
   "@_xsi:type"?: string;
+  "@_stopId"?: number | string;
 }
 
 export interface RouteInfo {
@@ -165,4 +166,20 @@ export async function planTrip(opts: TripPlannerOptions): Promise<TripPlannerRes
   const parsed = parser.parse(xml);
   console.log("Parsed Trip Planner response:", parsed);
   return parsed;
+}
+
+/**
+ * Extracts a numeric stopId from a Trip Planner `StopLocation`.
+ * Handles both standard `stopId` and XML attribute `@_stopId` forms.
+ */
+export function extractStopId(loc?: StopLocation | null): number | undefined {
+  if (!loc) return undefined;
+  const raw: unknown = (loc as any).stopId ?? (loc as any)["@_stopId"];
+  if (raw == null) return undefined;
+  if (typeof raw === "number") return raw;
+  if (typeof raw === "string") {
+    const n = parseInt(raw, 10);
+    return Number.isNaN(n) ? undefined : n;
+  }
+  return undefined;
 }

@@ -10,7 +10,7 @@ import StopLocationIndicator from "../../../../component/stop/StopLocationIndica
 import RouteIndicator from "../../../../component/route/RouteIndicator";
 import { StopOnRoute } from "../common/stops/StopOnRoute";
 import "./DirectionsStepItem.css";
-import { TripLeg } from "../../../../api/trimet/tripplanner";
+import { TripLeg, extractStopId } from "../../../../api/trimet/tripplanner";
 
 interface DirectionsStepItemProps {
   idx: number;
@@ -26,20 +26,22 @@ export function DirectionsStepItem({ idx, leg }: DirectionsStepItemProps) {
   const fromLocation = leg.from;
   const toLocation = leg.to;
 
+  // Use shared helper to safely extract numeric stopId from Trip Planner locations.
+
   let icon: React.ReactNode = null;
-  let displayLabel = idx === 0 ? "Start" : label;
   let routeNode: React.ReactNode = null;
+  
+  // Use from.description for the main label
+  const fromDirection = fromLocation?.description || "Origin";
+  const toDirection = toLocation?.description || "Destination";
 
   if (idx === 0) {
     icon = <FontAwesomeIcon icon={faMapMarkerAlt} size="lg" />;
   } else if (mode.toUpperCase() === "WALK" && order === "end") {
     icon = <FontAwesomeIcon icon={faMapMarkerAlt} size="lg" />;
-    displayLabel = "Arrive";
   } else {
     if (mode.toUpperCase() === "WALK") {
       icon = <FontAwesomeIcon icon={faWalking} size="lg" />;
-      // For walk legs, display "Walk to <location>"
-      displayLabel = `Walk to`;
     } else if (isTransit) {
       const isTrain = routeNumber && ROUTE_DISPLAY[parseInt(routeNumber)];
       icon = (
@@ -48,8 +50,6 @@ export function DirectionsStepItem({ idx, leg }: DirectionsStepItemProps) {
           size="lg"
         />
       );
-      // For transit legs, display "Board <ROUTE> to <LOCATION>"
-      displayLabel = `Board`;
       routeNode = <RouteIndicator routeId={parseInt(routeNumber)} />;
     }
   }
@@ -67,36 +67,35 @@ export function DirectionsStepItem({ idx, leg }: DirectionsStepItemProps) {
         </div>
         <div className="flex-grow-1">
           <div className="d-flex align-items-center gap-2" style={{ minWidth: 0 }}>
-            <div className="directions-step-label">
-              <strong>{displayLabel}</strong>
-            </div>
             {routeNode}
-            {idx === 0 && fromLocation && (
-              <div className="directions-step-content">
+            <div className="directions-step-content">
+              {extractStopId(fromLocation) !== undefined && (
                 <StopLocationIndicator
-                  locationId={fromLocation.stopId}
+                  locationId={extractStopId(fromLocation) as number}
                   nearbyStops={true}
-                  selected={false}
+                  selected={true}
                   size="small"
                 />
-                <div className="directions-step-content-inner">
-                  <span>{fromLocation.description}</span>
-                </div>
+              )}
+              <div className="directions-step-content-inner">
+                <span><strong>{fromDirection}</strong></span>
               </div>
-            )}
-            {idx > 0 && toLocation && (
-              <div className="directions-step-content">
+            </div>
+          </div>
+          <div className="d-flex align-items-center gap-2 mt-1" style={{ minWidth: 0 }}>
+            <div className="directions-step-content">
+              {extractStopId(toLocation) !== undefined && (
                 <StopLocationIndicator
-                  locationId={toLocation.stopId}
+                  locationId={extractStopId(toLocation) as number}
                   nearbyStops={true}
-                  selected={false}
+                  selected={true}
                   size="small"
                 />
-                <div className="directions-step-content-inner">
-                  <span>{toLocation.description}</span>
-                </div>
+              )}
+              <div className="directions-step-content-inner">
+                <span>{toDirection}</span>
               </div>
-            )}
+            </div>
           </div>
           {startTime && endTime && (
               <small className="text-muted">
