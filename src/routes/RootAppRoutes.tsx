@@ -12,6 +12,7 @@ import {
 import { RootState } from "../store/reducers";
 import BookmarksViewV2 from "../view/bookmarks/component/BookmarksViewV2";
 import Home from "../view/home/Home";
+import SearchHome from "../view/home/SearchHome";
 import LineDetailComponent from "../view/lineDetail/component/LineDetailComponent";
 import { AllLines } from "../view/lines/component/AllLines";
 import { BusLines } from "../view/lines/component/BusLines";
@@ -77,7 +78,7 @@ export default function RootAppRoutes() {
       <MainNavigationContainer />
       <main className="main-view">
         <Routes>
-          <Route path="/" element={<Navigate to="/nearby" replace />} />
+          <Route path="/" element={<SearchHome />} />
           <Route path="nearby" element={<NearbyView />}>
             <Route path="" element={<Navigate to="simple-routes" />} />
             <Route path="simple-routes" element={<NearbySimpleRoutesComp />} />

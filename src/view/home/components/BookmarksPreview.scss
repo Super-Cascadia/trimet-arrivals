@@ -1,0 +1,45 @@
+.bookmarks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75rem;
+}
+
+.bookmark-card {
+  border: 1px solid var(--bs-border-color);
+  border-radius: 12px;
+  padding: 0.75rem 0.85rem;
+  background-color: var(--bs-card-bg);
+  text-decoration: none;
+  color: var(--bs-body-color);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  transition: all 0.2s ease;
+}
+
+.bookmark-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.bookmark-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+.bookmark-id {
+  color: var(--bs-secondary-color);
+  font-size: 0.9rem;
+}
+
+.bookmark-desc {
+  font-size: 0.92rem;
+  color: var(--bs-body-color);
+}
+
+.section-link {
+  font-weight: 600;
+  color: var(--bs-link-color);
+}

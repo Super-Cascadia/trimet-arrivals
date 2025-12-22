@@ -38,12 +38,15 @@ export default function MainNavigationMenu({
   return (
     <Navbar className="bg-body-tertiary" sticky="top">
       <Container fluid={true}>
-        <Navbar.Brand href="#home">
+        <Navbar.Brand href="/">
           <span style={{ marginLeft: '8px' }}>{TRANSIT_EMOJIS[emojiIndex]} Go By Transit</span>
         </Navbar.Brand>
         <Nav className="me-auto">
           <LinkContainer to="/">
             <a className="nav-link">Home</a>
+          </LinkContainer>
+          <LinkContainer to="/nearby">
+            <a className="nav-link">Nearby</a>
           </LinkContainer>
           <LinkContainer to="/lines/all">
             <a className="nav-link">Lines</a>
