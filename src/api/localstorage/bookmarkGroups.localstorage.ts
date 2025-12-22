@@ -1,8 +1,5 @@
 import { fetchLocalStorageItemByKey, updateStoredItemByKey } from "./util";
-import { getStore } from "../../store/store";
-import { CREATE_STOP_BOOKMARK, REMOVE_STOP_BOOKMARK } from "../../store/constants";
 import { StopLocation } from "../trimet/interfaces/types";
-import { fetchStoredBookmarks, storeLocationBookmark, removeStoredBookmark } from "./bookmarks.localstorage";
 
 export const BOOKMARK_GROUPS = "BOOKMARK_GROUPS_V2";
 export const DEFAULT_GROUP_ID = "default";
@@ -20,6 +17,8 @@ export interface BookmarkItem {
   routeDesc?: string; // only for route bookmarks
   direction?: number; // only for route bookmarks
   directionDesc?: string; // only for route bookmarks
+  destinationStopId?: number; // only for route bookmarks with destination
+  destinationStopDesc?: string; // only for route bookmarks with destination
   timestamp: number;
 }
 
@@ -64,6 +63,9 @@ export function fetchBookmarkGroups(): BookmarkGroups {
 // Update groups in storage
 function updateBookmarkGroups(groups: BookmarkGroups) {
   updateStoredItemByKey(BOOKMARK_GROUPS, groups);
+  
+  // Dispatch custom event for same-tab updates
+  window.dispatchEvent(new Event('bookmarksUpdated'));
 }
 
 // Create a new group
@@ -155,18 +157,6 @@ export function addStopBookmark(
   
   groups[groupId].items.push(bookmark);
   updateBookmarkGroups(groups);
-  
-  // Update legacy stop bookmarks for compatibility
-  if (stopLocation) {
-    storeLocationBookmark(stopLocation);
-    const store = getStore();
-    if (store) {
-      store.dispatch({
-        type: CREATE_STOP_BOOKMARK,
-        payload: { stopLocation }
-      });
-    }
-  }
 }
 
 // Add a route bookmark
@@ -180,7 +170,9 @@ export function addRouteBookmark(
   stopLat?: number,
   stopLng?: number,
   groupId: string = DEFAULT_GROUP_ID,
-  stopLocation?: StopLocation
+  stopLocation?: StopLocation,
+  destinationStopId?: number,
+  destinationStopDesc?: string
 ) {
   const groups = fetchBookmarkGroups();
   const id = getBookmarkItemId("route", stopId, routeId, direction);
@@ -208,23 +200,13 @@ export function addRouteBookmark(
     routeDesc,
     direction,
     directionDesc,
+    destinationStopId,
+    destinationStopDesc,
     timestamp: Date.now()
   };
   
   groups[groupId].items.push(bookmark);
   updateBookmarkGroups(groups);
-  
-  // Update legacy stop bookmarks for compatibility
-  if (stopLocation) {
-    storeLocationBookmark(stopLocation);
-    const store = getStore();
-    if (store) {
-      store.dispatch({
-        type: CREATE_STOP_BOOKMARK,
-        payload: { stopLocation }
-      });
-    }
-  }
 }
 
 // Remove a bookmark
@@ -242,28 +224,6 @@ export function removeBookmark(bookmarkId: string) {
   }
   
   updateBookmarkGroups(groups);
-  
-  // If this was the last bookmark for this stop, remove from legacy stop bookmarks
-  if (bookmarkRemoved) {
-    const stopId = bookmarkRemoved.stopId;
-    const hasOtherBookmarksAtStop = Object.values(groups).some(group =>
-      group.items.some(item => item.stopId === stopId)
-    );
-    
-    if (!hasOtherBookmarksAtStop) {
-      const stopBookmarks = fetchStoredBookmarks();
-      if (stopBookmarks[stopId]) {
-        removeStoredBookmark(stopId);
-        const store = getStore();
-        if (store) {
-          store.dispatch({
-            type: REMOVE_STOP_BOOKMARK,
-            payload: { locationId: stopId }
-          });
-        }
-      }
-    }
-  }
 }
 
 // Move bookmark between groups

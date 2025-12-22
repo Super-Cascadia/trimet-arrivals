@@ -72,34 +72,40 @@ export function setCurrentLocationMarker(
 ): Map {
   console.log("setting current location marker");
   
-  const data = {
-    type: "Feature" as const,
-    properties: {},
-    geometry: {
-      type: "Point" as const,
-      coordinates: [lng, lat]
+  try {
+    const data = {
+      type: "Feature" as const,
+      properties: {},
+      geometry: {
+        type: "Point" as const,
+        coordinates: [lng, lat]
+      }
+    };
+    
+    if (!map.getSource(CURRENT_LOCATION_CIRCLE)) {
+      map.addSource(CURRENT_LOCATION_CIRCLE, {
+        type: "geojson",
+        data
+      });
+    } else {
+      // @ts-ignore
+      map.getSource(CURRENT_LOCATION_CIRCLE).setData(data);
     }
-  };
-  
-  if (!map.getSource(CURRENT_LOCATION_CIRCLE)) {
-    map.addSource(CURRENT_LOCATION_CIRCLE, {
-      type: "geojson",
-      data
-    });
-  } else {
-    // @ts-ignore
-    map.getSource(CURRENT_LOCATION_CIRCLE).setData(data);
-  }
 
-  if (!map.getLayer(CURRENT_LOCATION_CIRCLE_LAYER)) {
-    map.addLayer({
-      id: CURRENT_LOCATION_CIRCLE_LAYER,
-      type: "circle",
-      source: CURRENT_LOCATION_CIRCLE
-    });
-  }
+    if (!map.getLayer(CURRENT_LOCATION_CIRCLE_LAYER)) {
+      map.addLayer({
+        id: CURRENT_LOCATION_CIRCLE_LAYER,
+        type: "circle",
+        source: CURRENT_LOCATION_CIRCLE
+      });
+    }
 
-  return drawCircle(map, lng, lat, radiusSize);
+    return drawCircle(map, lng, lat, radiusSize);
+  } catch (error) {
+    console.error("Error setting current location marker:", error);
+    // Return the map even if there's an error, to prevent breaking the app
+    return map;
+  }
 }
 
 /**

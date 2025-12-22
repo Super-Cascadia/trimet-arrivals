@@ -176,6 +176,15 @@ export default function NearbySimpleRouteArrivals({
     selectedDepartureIndex
   );
   
+  // Get destination stop info
+  const destinationStop = selectedDestinationIndex !== null && remainingStopsOnRoute.length > 0
+    ? remainingStopsOnRoute[selectedDestinationIndex]
+    : null;
+  
+  const destinationLocation = destinationStop && downstreamArrivals?.location
+    ? downstreamArrivals.location.find(loc => loc.id === destinationStop.locid)
+    : null;
+  
   // Set destination index from URL param when data is loaded
   useEffect(() => {
     if (destinationParam && remainingStopsOnRoute.length > 0 && !hasInitializedFromUrl) {
@@ -205,6 +214,8 @@ export default function NearbySimpleRouteArrivals({
         directionDesc={directionDesc}
         stopLat={stopLocation?.lat}
         stopLng={stopLocation?.lng}
+        destinationStopId={destinationStop?.locid}
+        destinationStopDesc={destinationLocation?.desc}
       />
       <div className="scrollarea route-arrivals-scroll">
         {isLoading ? (
@@ -219,6 +230,8 @@ export default function NearbySimpleRouteArrivals({
             directionDesc={directionDesc}
             allStopsOnRoute={routeStopsInDirection}
             currentStopIndex={stopIndex}
+            destinationStopId={destinationStop?.locid}
+            destinationStopDesc={destinationLocation?.desc}
             onDepartureStopSelect={(stopId: number) => {
               const newUrl = `/nearby/simple-routes/${id}?stop=${stopId}&direction=${direction}`;
               navigate(newUrl);

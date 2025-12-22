@@ -56,6 +56,10 @@ interface StopInfoParams {
   currentStopIndex?: number;
   /** Callback function when a departure stop is selected (optional) */
   onDepartureStopSelect?: (stopId: number) => void;
+  /** Destination stop ID (optional) */
+  destinationStopId?: number;
+  /** Destination stop description (optional) */
+  destinationStopDesc?: string;
 }
 
 /**
@@ -73,7 +77,7 @@ interface StopInfoParams {
  * @param props.onDepartureStopSelect - Callback function when a departure stop is selected (optional)
  * @returns A Card component displaying route and stop information
  */
-function RouteStopInfo({ shortSign, stopLocation, routeId, direction, routeDesc, directionDesc, allStopsOnRoute, currentStopIndex, onDepartureStopSelect }: StopInfoParams) {
+function RouteStopInfo({ shortSign, stopLocation, routeId, direction, routeDesc, directionDesc, allStopsOnRoute, currentStopIndex, onDepartureStopSelect, destinationStopId, destinationStopDesc }: StopInfoParams) {
   const navigate = useNavigate();
   const [isBookmarked, setIsBookmarked] = useState(false);
   
@@ -109,7 +113,9 @@ function RouteStopInfo({ shortSign, stopLocation, routeId, direction, routeDesc,
         stopLocation?.lat,
         stopLocation?.lng,
         undefined,
-        stopLocation
+        stopLocation,
+        destinationStopId,
+        destinationStopDesc
       );
       setIsBookmarked(true);
       toast.success(`Bookmarked Route ${routeId}!`, {

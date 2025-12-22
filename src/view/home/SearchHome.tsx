@@ -11,8 +11,10 @@ import RecentDirectionsSection, {
 } from "./components/RecentDirectionsSection";
 import BookmarksPreview from "./components/BookmarksPreview";
 import NearbyQuickLinks from "./components/NearbyQuickLinks";
+import SystemAlerts, { SystemAlert } from "./components/SystemAlerts";
 import { bookmarkedStopLocationSelector } from "../../store/selectors/bookmarkSelectors";
 import { StopLocation } from "../../api/trimet/interfaces/types";
+import { getSytemAlerts } from "../../api/trimet/alerts";
 
 const RECENT_DIRECTIONS_KEY = "recent-directions";
 
@@ -39,9 +41,37 @@ function SearchHome() {
   const navigate = useNavigate();
   const bookmarks = useSelector(bookmarkedStopLocationSelector) as StopLocation[];
   const [recentDirections, setRecentDirections] = useState<RecentDirectionItem[]>([]);
+  const [systemAlerts, setSystemAlerts] = useState<SystemAlert[]>([]);
+  const [loadingAlerts, setLoadingAlerts] = useState(true);
 
   useEffect(() => {
     setRecentDirections(loadRecentDirections());
+  }, []);
+
+  useEffect(() => {
+    const fetchAlerts = async () => {
+      try {
+        setLoadingAlerts(true);
+        const data = await getSytemAlerts();
+        const converted: SystemAlert[] = (data.alert || [])
+          .filter((alert) => alert.system_wide_flag)
+          .map((alert) => ({
+            id: String(alert.id),
+            type: "warning" as const,
+            title: alert.header_text,
+            message: alert.desc,
+            timestamp: alert.begin * 1000,
+            dismissible: true,
+          }));
+        setSystemAlerts(converted);
+      } catch (error) {
+        console.error("Failed to fetch system alerts", error);
+      } finally {
+        setLoadingAlerts(false);
+      }
+    };
+
+    fetchAlerts();
   }, []);
 
   const recordRecent = (fromStop: StopOption, toStop: StopOption) => {
@@ -79,30 +109,22 @@ function SearchHome() {
       <Container className="search-home-content">
         <SearchSuggestions onSuggestionClick={handleSearch} />
         <Row className="home-sections">
-          <Col
-            xs={12}
-            sm={6}
-            lg={4}
-            >
+
+          <Col xs={12} sm={6} lg={4}>
             <RecentDirectionsSection
               items={recentDirections}
               onSelect={handleRecentSelection}
             />
           </Col>
-          <Col
-            xs={12}
-            sm={6}
-            lg={4}
-          >
+          <Col xs={12} sm={6} lg={4}>
             <BookmarksPreview bookmarks={bookmarks || []} />
           </Col>
-          <Col
-            xs={12}
-            sm={6}
-            lg={4}
-          >
+          <Col xs={12} sm={6} lg={4}>
             <NearbyQuickLinks />
           </Col>
+        <Col xs={12}>
+            <SystemAlerts alerts={systemAlerts} />
+        </Col>
         </Row>
       </Container>
     </div>

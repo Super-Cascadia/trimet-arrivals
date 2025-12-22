@@ -1,0 +1,45 @@
+.alerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.system-alert {
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  margin-bottom: 0;
+}
+
+.alert-content {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.alert-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.alert-text {
+  flex: 1;
+}
+
+.alert-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+
+.alert-message {
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.alert-timestamp {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-top: 0.3rem;
+}

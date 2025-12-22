@@ -41,40 +41,57 @@ export function useMapInitialization(
   handleZoomSearchUpdate: () => void
 ) {
   function initializeMapboxMap() {
-    console.log("initialize map", lng, lat, zoom);
-    mapRef.current = initializeMap(lng, lat, mapContainerRef, zoom, theme as "light" | "dark");
+    try {
+      console.log("initialize map", lng, lat, zoom);
+      mapRef.current = initializeMap(lng, lat, mapContainerRef, zoom, theme as "light" | "dark");
 
-    mapRef.current.on("load", () => {
-      console.info("effect: initialize map markers and routes");
-      
-      updateLocationMarkers(
-        mapRef.current,
-        isUsingDroppedMarker,
-        droppedMarkerLocation,
-        { lng, lat },
-        radiusSize,
-        handleDropMarker,
-        droppedMarkerRef
-      );
-    });
+      mapRef.current.on("load", () => {
+        console.info("effect: initialize map markers and routes");
+        
+        try {
+          updateLocationMarkers(
+            mapRef.current,
+            isUsingDroppedMarker,
+            droppedMarkerLocation,
+            { lng, lat },
+            radiusSize,
+            handleDropMarker,
+            droppedMarkerRef
+          );
+        } catch (err) {
+          console.error("Error updating location markers:", err);
+        }
+      });
 
-    mapRef.current.on("zoomend", () => {
-      const currentZoom = mapRef.current.getZoom();
-      setZoom(currentZoom);
-      
-      if (isRadiusChanging.current) {
-        console.log("Skipping zoom update - radius is changing");
-        return;
-      }
-      
-      if (zoomTimeoutRef.current) {
-        clearTimeout(zoomTimeoutRef.current);
-      }
-      
-      zoomTimeoutRef.current = setTimeout(() => {
-        handleZoomSearchUpdate();
-      }, 2000);
-    });
+      mapRef.current.on("zoomend", () => {
+        try {
+          const currentZoom = mapRef.current.getZoom();
+          setZoom(currentZoom);
+          
+          if (isRadiusChanging.current) {
+            console.log("Skipping zoom update - radius is changing");
+            return;
+          }
+          
+          if (zoomTimeoutRef.current) {
+            clearTimeout(zoomTimeoutRef.current);
+          }
+          
+          zoomTimeoutRef.current = setTimeout(() => {
+            handleZoomSearchUpdate();
+          }, 2000);
+        } catch (err) {
+          console.error("Error handling zoom event:", err);
+        }
+      });
+
+      // Add error handler for map
+      mapRef.current.on("error", (error: any) => {
+        console.error("Mapbox GL error:", error);
+      });
+    } catch (err) {
+      console.error("Error initializing mapbox map:", err);
+    }
   }
 
   return { initializeMapboxMap };

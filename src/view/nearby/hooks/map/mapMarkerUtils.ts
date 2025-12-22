@@ -24,21 +24,25 @@ export function updateLocationMarkers(
   handleDropMarker: (lng: number, lat: number) => void,
   droppedMarkerRef: MutableRefObject<any>
 ) {
-  if (isUsingDroppedMarker && droppedMarkerLocation) {
-    droppedMarkerRef.current = setDroppedMarkerOnMap(
-      map,
-      droppedMarkerLocation.lng,
-      droppedMarkerLocation.lat,
-      radiusSize,
-      handleDropMarker
-    );
-  } else if (userLocation) {
-    setCurrentLocationMarker(
-      map,
-      userLocation.lng,
-      userLocation.lat,
-      radiusSize
-    );
+  try {
+    if (isUsingDroppedMarker && droppedMarkerLocation) {
+      droppedMarkerRef.current = setDroppedMarkerOnMap(
+        map,
+        droppedMarkerLocation.lng,
+        droppedMarkerLocation.lat,
+        radiusSize,
+        handleDropMarker
+      );
+    } else if (userLocation) {
+      setCurrentLocationMarker(
+        map,
+        userLocation.lng,
+        userLocation.lat,
+        radiusSize
+      );
+    }
+  } catch (error) {
+    console.error("Error updating location markers:", error);
   }
 }
 

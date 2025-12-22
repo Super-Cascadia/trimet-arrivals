@@ -1,6 +1,8 @@
 import React from "react";
 import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMapPin } from "@fortawesome/free-solid-svg-icons";
 import "./NearbyQuickLinks.scss";
 
 function NearbyQuickLinks() {
@@ -9,7 +11,7 @@ function NearbyQuickLinks() {
       <Card.Body>
         <div className="home-section-header">
           <div>
-            <Card.Title>Nearby</Card.Title>
+            <Card.Title><FontAwesomeIcon icon={faMapPin} className="section-icon" /> Nearby</Card.Title>
             <Card.Text className="section-subtitle">
               Find stops and routes around you
             </Card.Text>

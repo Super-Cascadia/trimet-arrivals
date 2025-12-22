@@ -29,9 +29,11 @@ export interface TopNavBarParams {
   directionDesc?: string;
   stopLat?: number;
   stopLng?: number;
+  destinationStopId?: number;
+  destinationStopDesc?: string;
 }
 
-export function TopNavBar({ id, shortSign, handleRefresh, routeId, direction, stopId, routeDesc, stopDesc, directionDesc, stopLat, stopLng }: TopNavBarParams) {
+export function TopNavBar({ id, shortSign, handleRefresh, routeId, direction, stopId, routeDesc, stopDesc, directionDesc, stopLat, stopLng, destinationStopId, destinationStopDesc }: TopNavBarParams) {
   const title = shortSign ? `${id} to ${shortSign}` : id;
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -75,7 +77,9 @@ export function TopNavBar({ id, shortSign, handleRefresh, routeId, direction, st
         stopLat,
         stopLng,
         undefined,
-        { id: stopId, desc: stopDesc, lat: stopLat, lng: stopLng } as any
+        { id: stopId, desc: stopDesc, lat: stopLat, lng: stopLng } as any,
+        destinationStopId,
+        destinationStopDesc
       );
       setIsBookmarked(true);
       toast.success(`Bookmarked Route ${routeId}!`, {

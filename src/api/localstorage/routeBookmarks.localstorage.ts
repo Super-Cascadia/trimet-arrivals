@@ -4,7 +4,7 @@ import { storeLocationBookmark, removeStoredBookmark, fetchStoredBookmarks } fro
 import { getStore } from "../../store/store";
 import { CREATE_STOP_BOOKMARK, REMOVE_STOP_BOOKMARK } from "../../store/constants";
 
-export const ROUTE_BOOKMARKS = "ROUTE_BOOKMARKS";
+export const ROUTE_BOOKMARKS = "BOOKMARKS";
 
 export interface RouteBookmark {
   routeId: number;
@@ -25,6 +25,9 @@ export function fetchStoredRouteBookmarks(): StoredRouteBookmarks {
 
 function updateRouteBookmarks(bookmarks: StoredRouteBookmarks) {
   updateStoredItemByKey(ROUTE_BOOKMARKS, bookmarks);
+  
+  // Dispatch custom event for same-tab updates
+  window.dispatchEvent(new Event('bookmarksUpdated'));
 }
 
 export function getRouteBookmarkKey(routeId: number, stopId: number, direction: number): string {

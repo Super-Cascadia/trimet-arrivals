@@ -6,12 +6,12 @@
 
   .search-home-content {
     flex: 1;
-    padding: 4rem 0;
+    padding: 2rem 0;
     // No distinct background; inherit page background
   }
 
   .home-sections {
-    margin-top: 2rem;
+    margin-top: 1rem;
     row-gap: 1rem;
   }
 
@@ -28,6 +28,11 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 0.75rem;
+
+    .section-icon {
+      margin-right: 0.5rem;
+      color: #000;
+    }
 
     .section-subtitle {
       margin-bottom: 0;

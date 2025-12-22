@@ -1,5 +1,7 @@
 import React from "react";
 import { Card } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClock } from "@fortawesome/free-solid-svg-icons";
 import { StopOption } from "../hooks/useTrimetStops";
 import "./RecentDirectionsSection.scss";
 
@@ -36,7 +38,7 @@ function RecentDirectionsSection({ items, onSelect }: Props) {
       <Card.Body>
         <div className="home-section-header">
           <div>
-            <Card.Title>Recent directions</Card.Title>
+            <Card.Title><FontAwesomeIcon icon={faClock} className="section-icon" /> Recent directions</Card.Title>
             <Card.Text className="section-subtitle">
               Jump back to places you just searched
             </Card.Text>
