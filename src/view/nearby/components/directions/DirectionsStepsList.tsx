@@ -4,6 +4,7 @@ import { ArrivalLocation } from "../../../../api/trimet/interfaces/arrivals";
 import { RouteDirectionStop } from "../../../../api/trimet/interfaces/routes";
 import DirectionsStepItem from "./DirectionsStepItem";
 import DirectionsFallbackSteps from "./DirectionsFallbackSteps";
+import { TripLeg } from "../../../../api/trimet/tripplanner";
 
 interface LegRenderData {
   mode: string;
@@ -19,7 +20,7 @@ interface LegRenderData {
 }
 
 interface DirectionsStepsListProps {
-  legs: Array<any>;
+  legs: TripLeg[];
   fromStop: ArrivalLocation | null;
   toStop: ArrivalLocation | null;
   intermediateStops: Array<{ locid: number; desc: string }>;
@@ -28,18 +29,17 @@ interface DirectionsStepsListProps {
 
 export default function DirectionsStepsList({
   legs,
+  intermediateStops,
   fromStop,
   toStop,
-  intermediateStops
 }: DirectionsStepsListProps) {
   if (legs && legs.length > 0) {
     return (
       <Card>
         <Card.Header>Steps</Card.Header>
         <ListGroup>
-          
           {legs.map((leg, idx) => (
-            <DirectionsStepItem key={idx} idx={idx} leg={leg} fromStop={fromStop} toStop={toStop} />
+            <DirectionsStepItem key={idx} idx={idx} leg={leg} />
           ))}
         </ListGroup>
       </Card>

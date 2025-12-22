@@ -7,7 +7,7 @@ import DirectionsItinerarySelector from "./DirectionsItinerarySelector";
 import DirectionsStepsList from "./DirectionsStepsList";
 import DirectionsRouteInfo from "./DirectionsRouteInfo";
 import { NearbyViewComponentOutletContextProps } from "../../context/NearbyViewContext";
-import { planTrip } from "../../../../api/trimet/tripplanner";
+import { Itineraries, Itinerary, planTrip, TripLeg } from "../../../../api/trimet/tripplanner";
 import { getArrivals } from "../../../../api/trimet/arrivals";
 import { ArrivalLocation } from "../../../../api/trimet/interfaces/arrivals";
 import { RouteDirectionStop } from "../../../../api/trimet/interfaces/routes";
@@ -30,9 +30,9 @@ export default function NearbyDirections() {
   const [allStopsOnRoute, setAllStopsOnRoute] = useState<RouteDirectionStop[]>([]);
   const [intermediateStops, setIntermediateStops] = useState<Array<{ locid: number; desc: string }>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [allItineraries, setAllItineraries] = useState<Array<any>>([]);
+  const [allItineraries, setAllItineraries] = useState<Itinerary[]>([]);
   const [selectedItineraryIdx, setSelectedItineraryIdx] = useState<number>(0);
-  const [tripLegs, setTripLegs] = useState<Array<any>>([]);
+  const [tripLegs, setTripLegs] = useState<TripLeg[]>([]);
 
   useEffect(() => {
     async function setupDirections() {
@@ -153,10 +153,10 @@ export default function NearbyDirections() {
           <br/>
 
           <DirectionsStepsList
-            legs={tripLegs}
             fromStop={fromStop}
-            toStop={toStop}
+            legs={tripLegs}
             intermediateStops={intermediateStops}
+            toStop={toStop}
           />
         </>
       )}

@@ -7,30 +7,39 @@ import { ArrivalLocation } from "../../../../api/trimet/interfaces/arrivals";
 import { ROUTE_DISPLAY } from "../../../../api/trimet/constants";
 import { getLegRenderData } from "./legRender";
 import StopLocationIndicator from "../../../../component/stop/StopLocationIndicator";
+import RouteIndicator from "../../../../component/route/RouteIndicator";
 import { StopOnRoute } from "../common/stops/StopOnRoute";
+import "./DirectionsStepItem.css";
+import { TripLeg } from "../../../../api/trimet/tripplanner";
 
 interface DirectionsStepItemProps {
   idx: number;
-  leg: any;
-  fromStop: ArrivalLocation | null;
-  toStop: ArrivalLocation | null;
+  leg: TripLeg;
 }
 
-export function DirectionsStepItem({ idx, leg, fromStop, toStop }: DirectionsStepItemProps) {
-  const renderData = getLegRenderData(leg, fromStop, toStop);
+export function DirectionsStepItem({ idx, leg }: DirectionsStepItemProps) {
+  const renderData = getLegRenderData(leg, null, null);
   const { label, startTime, endTime, duration, distance, mode, isTransit, routeNumber } = renderData;
+  const order = leg["@_order"];
+  
+  // Extract from and to locations from the leg
+  const fromLocation = leg.from;
+  const toLocation = leg.to;
 
   let icon: React.ReactNode = null;
   let displayLabel = idx === 0 ? "Start" : label;
+  let routeNode: React.ReactNode = null;
 
   if (idx === 0) {
     icon = <FontAwesomeIcon icon={faMapMarkerAlt} size="lg" />;
+  } else if (mode.toUpperCase() === "WALK" && order === "end") {
+    icon = <FontAwesomeIcon icon={faMapMarkerAlt} size="lg" />;
+    displayLabel = "Arrive";
   } else {
     if (mode.toUpperCase() === "WALK") {
       icon = <FontAwesomeIcon icon={faWalking} size="lg" />;
       // For walk legs, display "Walk to <location>"
-      const toLocation = leg.to?.description || "destination";
-      displayLabel = `Walk to ${toLocation}`;
+      displayLabel = `Walk to`;
     } else if (isTransit) {
       const isTrain = routeNumber && ROUTE_DISPLAY[parseInt(routeNumber)];
       icon = (
@@ -40,8 +49,8 @@ export function DirectionsStepItem({ idx, leg, fromStop, toStop }: DirectionsSte
         />
       );
       // For transit legs, display "Board <ROUTE> to <LOCATION>"
-      const toLocation = leg.to?.description || "destination";
-      displayLabel = `Board ${label} to ${toLocation}`;
+      displayLabel = `Board`;
+      routeNode = <RouteIndicator routeId={parseInt(routeNumber)} />;
     }
   }
 
@@ -57,18 +66,34 @@ export function DirectionsStepItem({ idx, leg, fromStop, toStop }: DirectionsSte
           {icon}
         </div>
         <div className="flex-grow-1">
-          <div className="d-flex align-items-center gap-2">
-            <strong>{displayLabel}</strong>
-            {idx === 0 && fromStop && (
-              <div className="d-flex align-items-center gap-2">
+          <div className="d-flex align-items-center gap-2" style={{ minWidth: 0 }}>
+            <div className="directions-step-label">
+              <strong>{displayLabel}</strong>
+            </div>
+            {routeNode}
+            {idx === 0 && fromLocation && (
+              <div className="directions-step-content">
                 <StopLocationIndicator
-                  locationId={fromStop.id}
+                  locationId={fromLocation.stopId}
                   nearbyStops={true}
                   selected={false}
                   size="small"
                 />
-                <div>
-                  <span>{fromStop.desc}</span>
+                <div className="directions-step-content-inner">
+                  <span>{fromLocation.description}</span>
+                </div>
+              </div>
+            )}
+            {idx > 0 && toLocation && (
+              <div className="directions-step-content">
+                <StopLocationIndicator
+                  locationId={toLocation.stopId}
+                  nearbyStops={true}
+                  selected={false}
+                  size="small"
+                />
+                <div className="directions-step-content-inner">
+                  <span>{toLocation.description}</span>
                 </div>
               </div>
             )}

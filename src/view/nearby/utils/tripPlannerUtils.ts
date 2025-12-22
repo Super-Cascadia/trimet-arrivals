@@ -2,10 +2,12 @@
  * Utility functions for parsing and processing TriMet Trip Planner responses.
  */
 
+import { Itinerary, TripLeg, TripPlannerResponse } from "../../../api/trimet/tripplanner";
+
 /**
  * Normalizes a value into an array (handles single objects vs arrays).
  */
-function normalizeToArray(value: any): Array<any> {
+function normalizeToArray<T>(value: T | T[] | undefined | null): T[] {
   if (!value) return [];
   if (Array.isArray(value)) return value;
   return [value];
@@ -56,7 +58,7 @@ export function extractLegsFromTripPlan(plan: any): Array<any> {
  * @param plan - The parsed Trip Planner response (XML→JSON)
  * @returns Array of itinerary objects
  */
-export function extractAllItineraries(plan: any): Array<any> {
+export function extractAllItineraries(plan: TripPlannerResponse): Itinerary[] {
   if (!plan || typeof plan !== "object") return [];
   try {
     const response = plan.response;
@@ -79,9 +81,9 @@ export function extractAllItineraries(plan: any): Array<any> {
  * @param itinerary - An itinerary object from Trip Planner response
  * @returns Array of leg objects for the itinerary
  */
-export function getLegsForItinerary(itinerary: any): Array<any> {
+export function getLegsForItinerary(itinerary: Itinerary): TripLeg[] {
   if (!itinerary) return [];
-  return normalizeToArray(itinerary.leg);
+  return normalizeToArray<TripLeg>(itinerary.leg);
 }
 
 /**
@@ -90,7 +92,7 @@ export function getLegsForItinerary(itinerary: any): Array<any> {
  * @param itinerary - An itinerary object from Trip Planner response
  * @returns Object with timing, transfer, and distance info
  */
-export function getItineraryTimingInfo(itinerary: any) {
+export function getItineraryTimingInfo(itinerary: Itinerary) {
   const timeDistInfo = itinerary["time-distance"];
   return {
     startTime: timeDistInfo?.startTime || "?",

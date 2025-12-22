@@ -17,6 +17,113 @@ export interface TripPlannerOptions {
   maxIntineraries?: number; // default 3, max 6
 }
 
+// Trip Planner Response Interfaces
+export interface Position {
+  x: number;
+  y: number;
+  lat: number;
+  lon: number;
+}
+
+export interface Location {
+  pos: Position;
+  description: string;
+}
+
+export interface StopLocation extends Location {
+  stopId?: number;
+  stopSequence?: number;
+  "@_xsi:type"?: string;
+}
+
+export interface RouteInfo {
+  number: number | string;
+  internalNumber?: number | string;
+  name: string;
+  key?: string;
+  direction?: string;
+  block?: number;
+}
+
+export interface TimeDistance {
+  date?: string;
+  startTime?: string;
+  endTime?: string;
+  duration?: number;
+  distance?: number;
+  numberOfTransfers?: number;
+  numberOfTripLegs?: number;
+  walkingTime?: number;
+  transitTime?: number;
+  waitingTime?: number;
+}
+
+export interface FareItem {
+  "#text": number;
+  "@_id": string;
+}
+
+export interface Fare {
+  regular?: number;
+  special?: FareItem | FareItem[];
+}
+
+export interface TripLeg {
+  "time-distance": TimeDistance;
+  from: StopLocation;
+  to: StopLocation;
+  route?: RouteInfo;
+  direction?: string;
+  lineURL?: {
+    url: string;
+    "@_param": string;
+  };
+  "@_id": string;
+  "@_mode": "Walk" | "Bus" | "Rail" | "Transit";
+  "@_order": "start" | "end" | "transfer";
+  "@_xsi:type"?: string;
+  "@_xmlns:ns"?: string;
+  "@_xmlns:xsi"?: string;
+}
+
+export interface Itinerary {
+  "time-distance": TimeDistance;
+  fare?: Fare;
+  leg: TripLeg[];
+  "@_id": string;
+  "@_viaRoute"?: string;
+}
+
+export interface Itineraries {
+  itinerary: Itinerary | Itinerary[];
+  "@_count": string;
+}
+
+export interface TripPlannerRequest {
+  url: string;
+  param?: Array<{
+    "#text": string | number;
+    "@_name": string;
+  }>;
+}
+
+export interface TripPlannerResponse {
+  "?xml"?: {
+    "@_version": string;
+    "@_encoding": string;
+  };
+  response: {
+    date: string;
+    time: string;
+    request: TripPlannerRequest;
+    from: Location;
+    to: Location;
+    itineraries: Itineraries;
+    "@_success": "true" | "false";
+    "@_xmlns": string;
+  };
+}
+
 function encode(value: string): string {
   return encodeURIComponent(value);
 }
@@ -46,7 +153,7 @@ function buildQueryURL(opts: TripPlannerOptions): string {
 /**
  * Fetches Trip Planner XML and returns a parsed JSON object.
  */
-export async function planTrip(opts: TripPlannerOptions): Promise<any> {
+export async function planTrip(opts: TripPlannerOptions): Promise<TripPlannerResponse> {
   const request = buildQueryURL(opts);
   const res = await fetch(request);
   if (!res.ok) {
