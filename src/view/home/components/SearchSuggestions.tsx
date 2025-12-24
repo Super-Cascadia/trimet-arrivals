@@ -87,7 +87,6 @@ function SearchSuggestions({ onSuggestionClick }: SearchSuggestionsProps) {
 
   const renderStopIndicator = (stopId: string) => (
     <span
-      className="route-indicator"
       onClick={(e) => e.stopPropagation()}
       onKeyDown={(e) => e.stopPropagation()}
     >

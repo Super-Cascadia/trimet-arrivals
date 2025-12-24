@@ -10,7 +10,7 @@ import RecentDirectionsSection, {
   RecentDirectionItem,
 } from "./components/RecentDirectionsSection";
 import BookmarksPreview from "./components/BookmarksPreview";
-import NearbyQuickLinks from "./components/NearbyQuickLinks";
+import HomeLocationMap from "./components/HomeLocationMap";
 import SystemAlerts, { SystemAlert } from "./components/SystemAlerts";
 import { bookmarkedStopLocationSelector } from "../../store/selectors/bookmarkSelectors";
 import { StopLocation } from "../../api/trimet/interfaces/types";
@@ -120,7 +120,7 @@ function SearchHome() {
             <BookmarksPreview bookmarks={bookmarks || []} />
           </Col>
           <Col xs={12} sm={6} lg={4}>
-            <NearbyQuickLinks />
+            <HomeLocationMap />
           </Col>
         <Col xs={12}>
             <SystemAlerts alerts={systemAlerts} />

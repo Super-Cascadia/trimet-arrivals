@@ -10,7 +10,9 @@ import {
   removeBookmark,
   moveBookmarkToGroup,
   DEFAULT_GROUP_ID,
-  BookmarkItem
+  BookmarkItem,
+  setDefaultBookmark,
+  isBookmarkDefault
 } from "../../../api/localstorage/bookmarkGroups.localstorage";
 import "./BookmarkGroupCard.scss";
 
@@ -57,6 +59,11 @@ export default function BookmarkGroupCard({ group, allGroups, onUpdate }: Props)
     onUpdate();
   };
 
+  const handleSetAsDefault = (bookmarkId: string, type: "home" | "work") => {
+    setDefaultBookmark(type, bookmarkId);
+    onUpdate();
+  };
+
   const handleDragStart = (e: React.DragEvent, bookmarkId: string) => {
     setDraggedItem(bookmarkId);
     e.dataTransfer.effectAllowed = "move";
@@ -69,7 +76,11 @@ export default function BookmarkGroupCard({ group, allGroups, onUpdate }: Props)
 
   const handleRouteClick = (item: BookmarkItem) => {
     if (item.routeId && item.direction !== undefined) {
-      navigate(`/nearby/simple-routes/${item.routeId}?stop=${item.stopId}&direction=${item.direction}`);
+      let url = `/nearby/simple-routes/${item.routeId}?stop=${item.stopId}&direction=${item.direction}`;
+      if (item.destinationStopId) {
+        url += `&destination=${item.destinationStopId}`;
+      }
+      navigate(url);
     }
   };
 
@@ -91,71 +102,110 @@ export default function BookmarkGroupCard({ group, allGroups, onUpdate }: Props)
     setDraggedItem(null);
   };
 
-  const renderRouteBookmark = (item: BookmarkItem) => (
-    <ListGroup.Item
-      key={item.id}
-      className={`d-flex justify-content-between align-items-center bookmark-item ${draggedItem === item.id ? 'dragging' : ''}`}
-      draggable
-      onDragStart={(e) => handleDragStart(e, item.id)}
-      onDragEnd={handleDragEnd}
-    >
-      <div className="d-flex align-items-center flex-grow-1">
-        <FontAwesome name="grip-vertical" className="me-2 text-muted drag-handle" />
-        <div
-          className="flex-grow-1 cursor-pointer"
-          onClick={() => handleRouteClick(item)}
-          style={{ cursor: "pointer" }}
-        >
-          <div className="fw-bold">
-            <FontAwesome name="bus" className="me-2 text-primary" />
-            Route {item.routeId} - {item.routeDesc}
+  const renderRouteBookmark = (item: BookmarkItem) => {
+    const defaultType = isBookmarkDefault(item.id);
+    
+    return (
+      <ListGroup.Item
+        key={item.id}
+        className={`d-flex justify-content-between align-items-center bookmark-item ${draggedItem === item.id ? 'dragging' : ''}`}
+        draggable
+        onDragStart={(e) => handleDragStart(e, item.id)}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="d-flex align-items-center flex-grow-1">
+          <FontAwesome name="grip-vertical" className="me-2 text-muted drag-handle" />
+          <div
+            className="flex-grow-1 cursor-pointer"
+            onClick={() => handleRouteClick(item)}
+            style={{ cursor: "pointer" }}
+          >
+            <div className="fw-bold">
+              <FontAwesome name="bus" className="me-2 text-primary" />
+              Route {item.routeId} - {item.routeDesc}
+              {defaultType && (
+                <Badge bg={defaultType === "home" ? "primary" : "success"} className="ms-2">
+                  <FontAwesome name={defaultType === "home" ? "home" : "briefcase"} className="me-1" />
+                  {defaultType}
+                </Badge>
+              )}
+            </div>
+            <small className="text-muted">
+              {item.directionDesc && `${item.directionDesc} • `}
+              at {item.stopDesc} ({item.stopId})
+            </small>
           </div>
-          <small className="text-muted">
-            {item.directionDesc && `${item.directionDesc} • `}
-            at {item.stopDesc} ({item.stopId})
-          </small>
         </div>
-      </div>
-      <div className="d-flex align-items-center gap-1">
-        {otherGroups.length > 0 && (
+        <div className="d-flex align-items-center gap-1">
+          {/* Set as Default Dropdown */}
           <Dropdown onClick={(e) => e.stopPropagation()}>
             <Dropdown.Toggle
               variant="link"
               size="sm"
               className="p-1"
-              title="Move to group"
+              title="Set as default"
             >
-              <FontAwesome name="folder" />
+              <FontAwesome name="star-o" />
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Header>Move to...</Dropdown.Header>
-              {otherGroups.map(targetGroup => (
-                <Dropdown.Item
-                  key={targetGroup.id}
-                  onClick={() => handleMoveToGroup(item.id, targetGroup.id)}
-                >
-                  <FontAwesome name="folder-o" className="me-2" />
-                  {targetGroup.name}
-                </Dropdown.Item>
-              ))}
+              <Dropdown.Header>Set as default...</Dropdown.Header>
+              <Dropdown.Item
+                onClick={() => handleSetAsDefault(item.id, "home")}
+                disabled={defaultType === "home"}
+              >
+                <FontAwesome name="home" className="me-2" />
+                Home
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={() => handleSetAsDefault(item.id, "work")}
+                disabled={defaultType === "work"}
+              >
+                <FontAwesome name="briefcase" className="me-2" />
+                Work
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
-        )}
-        <Button
-          variant="link"
-          size="sm"
-          className="text-danger p-1"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleRemoveBookmark(item.id);
-          }}
-          title="Remove bookmark"
-        >
-          <FontAwesome name="times-circle" />
-        </Button>
-      </div>
-    </ListGroup.Item>
-  );
+
+          {otherGroups.length > 0 && (
+            <Dropdown onClick={(e) => e.stopPropagation()}>
+              <Dropdown.Toggle
+                variant="link"
+                size="sm"
+                className="p-1"
+                title="Move to group"
+              >
+                <FontAwesome name="folder" />
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Header>Move to...</Dropdown.Header>
+                {otherGroups.map(targetGroup => (
+                  <Dropdown.Item
+                    key={targetGroup.id}
+                    onClick={() => handleMoveToGroup(item.id, targetGroup.id)}
+                  >
+                    <FontAwesome name="folder-o" className="me-2" />
+                    {targetGroup.name}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          )}
+          <Button
+            variant="link"
+            size="sm"
+            className="text-danger p-1"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleRemoveBookmark(item.id);
+            }}
+            title="Remove bookmark"
+          >
+            <FontAwesome name="times-circle" />
+          </Button>
+        </div>
+      </ListGroup.Item>
+    );
+  };
 
   const renderStopBookmark = (item: BookmarkItem) => (
     <ListGroup.Item

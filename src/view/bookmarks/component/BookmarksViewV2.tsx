@@ -4,18 +4,23 @@ import FontAwesome from "react-fontawesome";
 import {
   fetchBookmarkGroups,
   createBookmarkGroup,
-  BookmarkGroups
+  BookmarkGroups,
+  getDefaultBookmark
 } from "../../../api/localstorage/bookmarkGroups.localstorage";
 import BookmarkGroupCard from "./BookmarkGroupCard";
+import DefaultBookmarkCard from "./DefaultBookmarkCard";
 import "./BookmarksViewV2.scss";
 
 export default function BookmarksViewV2() {
   const [groups, setGroups] = useState<BookmarkGroups>({});
   const [showAddGroupModal, setShowAddGroupModal] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
+  const [homeBookmark, setHomeBookmark] = useState<any>(null);
+  const [workBookmark, setWorkBookmark] = useState<any>(null);
 
   useEffect(() => {
     loadGroups();
+    loadDefaultBookmarks();
   }, []);
 
   const loadGroups = () => {
@@ -23,12 +28,22 @@ export default function BookmarksViewV2() {
     setGroups(loadedGroups);
   };
 
+  const loadDefaultBookmarks = () => {
+    setHomeBookmark(getDefaultBookmark("home"));
+    setWorkBookmark(getDefaultBookmark("work"));
+  };
+
+  const handleUpdate = () => {
+    loadGroups();
+    loadDefaultBookmarks();
+  };
+
   const handleAddGroup = () => {
     if (newGroupName.trim()) {
       createBookmarkGroup(newGroupName.trim());
       setNewGroupName("");
       setShowAddGroupModal(false);
-      loadGroups();
+      handleUpdate();
     }
   };
 
@@ -55,6 +70,42 @@ export default function BookmarksViewV2() {
         </Col>
       </Row>
 
+      {/* Default Bookmarks Section */}
+      <Row className="mb-4">
+        <Col>
+          <h5 className="text-muted mb-3">
+            <FontAwesome name="star" className="me-2" />
+            Quick Access
+          </h5>
+        </Col>
+      </Row>
+      <Row className="mb-4">
+        <Col md={6} className="mb-3 mb-md-0">
+          <DefaultBookmarkCard
+            type="home"
+            bookmark={homeBookmark}
+            onUpdate={handleUpdate}
+          />
+        </Col>
+        <Col md={6}>
+          <DefaultBookmarkCard
+            type="work"
+            bookmark={workBookmark}
+            onUpdate={handleUpdate}
+          />
+        </Col>
+      </Row>
+
+      {/* All Bookmarks Section */}
+      <Row className="mb-3">
+        <Col>
+          <h5 className="text-muted">
+            <FontAwesome name="folder" className="me-2" />
+            All Bookmarks
+          </h5>
+        </Col>
+      </Row>
+
       <Row>
         <Col>
           {sortedGroups.length === 0 ? (
@@ -68,7 +119,7 @@ export default function BookmarksViewV2() {
                 key={group.id}
                 group={group}
                 allGroups={groups}
-                onUpdate={loadGroups}
+                onUpdate={handleUpdate}
               />
             ))
           )}

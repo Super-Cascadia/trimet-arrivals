@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Container, Nav, Navbar, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Container, Nav, Navbar, Button, OverlayTrigger, Tooltip, Badge } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import { useNavigate } from "react-router-dom";
 import FontAwesome from "react-fontawesome";
 import { toast } from "react-toastify";
 import {
   isRouteBookmarkedInGroups,
   addRouteBookmark,
   removeBookmark,
-  getBookmarkItemId
+  getBookmarkItemId,
+  isBookmarkDefault
 } from "../../../../../api/localstorage/bookmarkGroups.localstorage";
 import "./TopNavBar.scss";
-
-const BookmarkTooltip = props => (
-  <Tooltip id="button-tooltip" {...props}>
-    Bookmark this route
-  </Tooltip>
-);
 
 export interface TopNavBarParams {
   id: string;
@@ -35,12 +31,22 @@ export interface TopNavBarParams {
 
 export function TopNavBar({ id, shortSign, handleRefresh, routeId, direction, stopId, routeDesc, stopDesc, directionDesc, stopLat, stopLng, destinationStopId, destinationStopDesc }: TopNavBarParams) {
   const title = shortSign ? `${id} to ${shortSign}` : id;
+  const navigate = useNavigate();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [defaultType, setDefaultType] = useState<"home" | "work" | null>(null);
   
   useEffect(() => {
     if (routeId && stopId && direction !== undefined) {
-      setIsBookmarked(isRouteBookmarkedInGroups(routeId, stopId, direction));
+      const bookmarked = isRouteBookmarkedInGroups(routeId, stopId, direction);
+      setIsBookmarked(bookmarked);
+      
+      if (bookmarked) {
+        const bookmarkId = getBookmarkItemId("route", stopId, routeId, direction);
+        setDefaultType(isBookmarkDefault(bookmarkId));
+      } else {
+        setDefaultType(null);
+      }
     }
   }, [routeId, stopId, direction]);
   
@@ -55,17 +61,8 @@ export function TopNavBar({ id, shortSign, handleRefresh, routeId, direction, st
     if (!routeId || !stopId || direction === undefined) return;
     
     if (isBookmarked) {
-      const bookmarkId = getBookmarkItemId("route", stopId, routeId, direction);
-      removeBookmark(bookmarkId);
-      setIsBookmarked(false);
-      toast.info(`Removed Route ${routeId} from bookmarks`, {
-        position: "bottom-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true
-      });
+      // Navigate to bookmarks page instead of removing
+      navigate('/bookmarks');
     } else {
       addRouteBookmark(
         routeId,
@@ -82,6 +79,7 @@ export function TopNavBar({ id, shortSign, handleRefresh, routeId, direction, st
         destinationStopDesc
       );
       setIsBookmarked(true);
+      setDefaultType(null);
       toast.success(`Bookmarked Route ${routeId}!`, {
         position: "bottom-right",
         autoClose: 3000,
@@ -91,6 +89,19 @@ export function TopNavBar({ id, shortSign, handleRefresh, routeId, direction, st
         draggable: true
       });
     }
+  };
+  
+  const getBookmarkTooltip = () => {
+    if (!isBookmarked) {
+      return "Bookmark this route";
+    }
+    if (defaultType === "home") {
+      return "Home route - Click to manage bookmarks";
+    }
+    if (defaultType === "work") {
+      return "Work route - Click to manage bookmarks";
+    }
+    return "Bookmarked - Click to manage bookmarks";
   };
   
   return (
@@ -104,13 +115,19 @@ export function TopNavBar({ id, shortSign, handleRefresh, routeId, direction, st
             <OverlayTrigger
               placement="bottom"
               delay={{ show: 250, hide: 400 }}
-              overlay={BookmarkTooltip}
+              overlay={<Tooltip id="button-tooltip">{getBookmarkTooltip()}</Tooltip>}
             >
               <a 
                 className={`nav-link ${isBookmarked ? 'bookmarked' : ''}`}
                 onClick={handleBookmarkToggle}
               >
-                <FontAwesome name={isBookmarked ? 'bookmark' : 'bookmark-o'} />
+                {defaultType ? (
+                  <Badge bg={defaultType === "home" ? "primary" : "success"} className="bookmark-badge">
+                    <FontAwesome name={defaultType === "home" ? "home" : "briefcase"} />
+                  </Badge>
+                ) : (
+                  <FontAwesome name={isBookmarked ? 'bookmark' : 'bookmark-o'} />
+                )}
               </a>
             </OverlayTrigger>
           )}

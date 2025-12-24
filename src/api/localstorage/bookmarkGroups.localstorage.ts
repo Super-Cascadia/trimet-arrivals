@@ -3,8 +3,10 @@ import { StopLocation } from "../trimet/interfaces/types";
 
 export const BOOKMARK_GROUPS = "BOOKMARK_GROUPS_V2";
 export const DEFAULT_GROUP_ID = "default";
+export const DEFAULT_BOOKMARKS = "DEFAULT_BOOKMARKS_V1";
 
 export type BookmarkType = "route" | "stop";
+export type DefaultBookmarkType = "home" | "work";
 
 export interface BookmarkItem {
   id: string; // unique identifier for this bookmark
@@ -282,4 +284,79 @@ export function getAllBookmarks(): BookmarkItem[] {
 // Get bookmarks by type
 export function getBookmarksByType(type: BookmarkType): BookmarkItem[] {
   return getAllBookmarks().filter(item => item.type === type);
+}
+
+// ==================== Default Bookmarks (Home/Work) ====================
+
+export interface DefaultBookmarks {
+  home?: string; // bookmark item ID
+  work?: string; // bookmark item ID
+}
+
+// Fetch default bookmarks
+export function fetchDefaultBookmarks(): DefaultBookmarks {
+  const defaults = fetchLocalStorageItemByKey(DEFAULT_BOOKMARKS);
+  return defaults || {};
+}
+
+// Update default bookmarks in storage
+function updateDefaultBookmarks(defaults: DefaultBookmarks) {
+  updateStoredItemByKey(DEFAULT_BOOKMARKS, defaults);
+  window.dispatchEvent(new Event('bookmarksUpdated'));
+}
+
+// Set a bookmark as default home or work
+export function setDefaultBookmark(type: DefaultBookmarkType, bookmarkId: string) {
+  const defaults = fetchDefaultBookmarks();
+  
+  // Verify the bookmark exists
+  const allBookmarks = getAllBookmarks();
+  const bookmark = allBookmarks.find(b => b.id === bookmarkId);
+  
+  if (!bookmark) {
+    console.error(`Bookmark ${bookmarkId} not found`);
+    return;
+  }
+  
+  // Only allow route bookmarks as defaults
+  if (bookmark.type !== "route") {
+    console.error('Only route bookmarks can be set as default home/work bookmarks');
+    return;
+  }
+  
+  defaults[type] = bookmarkId;
+  updateDefaultBookmarks(defaults);
+}
+
+// Clear a default bookmark
+export function clearDefaultBookmark(type: DefaultBookmarkType) {
+  const defaults = fetchDefaultBookmarks();
+  delete defaults[type];
+  updateDefaultBookmarks(defaults);
+}
+
+// Get a specific default bookmark item
+export function getDefaultBookmark(type: DefaultBookmarkType): BookmarkItem | null {
+  const defaults = fetchDefaultBookmarks();
+  const bookmarkId = defaults[type];
+  
+  if (!bookmarkId) {
+    return null;
+  }
+  
+  const allBookmarks = getAllBookmarks();
+  return allBookmarks.find(b => b.id === bookmarkId) || null;
+}
+
+// Check if a bookmark is set as a default
+export function isBookmarkDefault(bookmarkId: string): DefaultBookmarkType | null {
+  const defaults = fetchDefaultBookmarks();
+  
+  if (defaults.home === bookmarkId) {
+    return "home";
+  }
+  if (defaults.work === bookmarkId) {
+    return "work";
+  }
+  return null;
 }
