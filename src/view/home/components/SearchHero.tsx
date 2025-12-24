@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Form, Button, Spinner, Container, Row, Col, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarker, faArrowRight, faDice, faExchangeAlt } from "@fortawesome/free-solid-svg-icons";
-import Select from "react-select";
 import { useTrimetStops, StopOption } from "../hooks/useTrimetStops";
 import StopLocationIndicator from "../../../component/stop/StopLocationIndicator";
+import StopSelect from "./StopSelect";
 import "./SearchHero.scss";
 
 const HERO_IMAGES = [
@@ -166,29 +166,15 @@ function SearchHero({ onSearch }: SearchHeroProps) {
         
         <Form onSubmit={handleSearch} className="search-form">
           <Row className="justify-content-center mb-3">
-            <Col xs={12} md={5} lg={4}>
-              <Form.Group className="search-input-group">
-                <Form.Label className="search-label">From</Form.Label>
-                <Select
-                  options={stopOptions}
-                  value={fromLocation}
-                  onChange={(option) => setFromLocation(option)}
-                  isLoading={isLoading}
-                  isClearable
-                  isSearchable
-                  placeholder="Select a stop or location..."
-                  styles={customStyles}
-                  formatOptionLabel={(option: StopOption) => (
-                    <div className="stop-option-label">
-                      <StopLocationIndicator locationId={parseInt(option.value, 10)} size="small" />
-                      <span>{option.label}</span>
-                    </div>
-                  )}
-                  className="react-select"
-                  classNamePrefix="react-select"
-                  menuPortalTarget={document.body}
-                />
-              </Form.Group>
+            <Col xs={12} md={5} lg={3}>
+              <StopSelect
+                label="From"
+                value={fromLocation}
+                onChange={setFromLocation}
+                options={stopOptions}
+                isLoading={isLoading}
+                customStyles={customStyles}
+              />
             </Col>
             
             <Col xs={12} md="auto" lg="auto" className="d-flex justify-content-center swap-icon-col">
@@ -215,34 +201,20 @@ function SearchHero({ onSearch }: SearchHeroProps) {
               </OverlayTrigger>
             </Col>
             
-            <Col xs={12} md={5} lg={4}>
-              <Form.Group className="search-input-group">
-                <Form.Label className="search-label">To</Form.Label>
-                <Select
-                  options={stopOptions}
-                  value={toLocation}
-                  onChange={(option) => setToLocation(option)}
-                  isLoading={isLoading}
-                  isClearable
-                  isSearchable
-                  placeholder="Select a stop or location..."
-                  styles={customStyles}
-                  formatOptionLabel={(option: StopOption) => (
-                    <div className="stop-option-label">
-                      <StopLocationIndicator locationId={parseInt(option.value, 10)} size="small" />
-                      <span>{option.label}</span>
-                    </div>
-                  )}
-                  className="react-select"
-                  classNamePrefix="react-select"
-                  menuPortalTarget={document.body}
-                />
-              </Form.Group>
+            <Col xs={12} md={5} lg={3}>
+              <StopSelect
+                label="To"
+                value={toLocation}
+                onChange={setToLocation}
+                options={stopOptions}
+                isLoading={isLoading}
+                customStyles={customStyles}
+              />
             </Col>
           </Row>
           
           <Row className="justify-content-center g-2">
-            <Col xs={12} md={6} lg={3}>
+            <Col xs={12} md={6} lg={2}>
               <Button
                 variant="primary"
                 size="lg"
@@ -270,7 +242,7 @@ function SearchHero({ onSearch }: SearchHeroProps) {
                 )}
               </Button>
             </Col>
-            <Col xs={12} md={6} lg={3}>
+            <Col xs={12} md={6} lg={2}>
               <Button
                 variant="secondary"
                 size="lg"

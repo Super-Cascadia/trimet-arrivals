@@ -4,7 +4,7 @@
 
 .stop-location-indicator {
     background: #4264fb;
-    border-radius: 50%;
+    border-radius: 6px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -15,25 +15,26 @@
     border: 2px solid #4264fb;
     transition: all 0.2s ease;
     font-family: monospace;
+    padding: 0 6px;
 }
 
 /* Size variants */
 .stop-location-indicator.size-small {
-    width: 24px;
-    height: 24px;
+    height: 20px;
+    min-width: 24px;
     font-size: 11px;
 }
 
 .stop-location-indicator.size-medium {
-    width: 32px;
-    height: 32px;
-    font-size: 14px;
+    height: 28px;
+    min-width: 32px;
+    font-size: 13px;
 }
 
 .stop-location-indicator.size-large {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
+    height: 36px;
+    min-width: 40px;
+    font-size: 15px;
 }
 
 .stop-location-indicator.unselected {

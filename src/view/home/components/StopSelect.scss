@@ -1,0 +1,67 @@
+.search-input-group {
+  .stop-option-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+
+// Dark mode styles - these need to be at root level to override react-select inline styles
+[data-bs-theme="dark"] {
+  .react-select__option {
+    background-color: #212529 !important;
+    color: #e9ecef !important;
+
+    &--is-focused {
+      background-color: #495057 !important;
+      color: #e9ecef !important;
+    }
+
+    &--is-selected {
+      background-color: #667eea !important;
+      color: #ffffff !important;
+
+      &:hover {
+        background-color: #667eea !important;
+      }
+    }
+  }
+
+  .react-select__menu {
+    background-color: #212529 !important;
+  }
+
+  .react-select__menu-list {
+    background-color: #212529 !important;
+  }
+
+  .react-select__group-heading {
+    color: #8b9ef7 !important;
+    background-color: #212529 !important;
+  }
+
+  .react-select__control {
+    background-color: #212529 !important;
+    border-color: #495057 !important;
+  }
+
+  .react-select__input {
+    color: #e9ecef !important;
+  }
+
+  .react-select__single-value {
+    color: #e9ecef !important;
+  }
+
+  .react-select__placeholder {
+    color: #adb5bd !important;
+  }
+
+  .react-select__indicator-separator {
+    background-color: #495057 !important;
+  }
+
+  .react-select__indicator {
+    color: #8b9ef7 !important;
+  }
+}
