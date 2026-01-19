@@ -1,0 +1,91 @@
+.list-group-item {
+ &:hover {
+   cursor: pointer;
+ }
+}
+
+// Light mode hover
+[data-bs-theme="light"] .list-group-item {
+  &:hover {
+    background-color: #f5f5f5;
+  }
+}
+
+// Dark mode hover - darker background for better contrast with white text
+[data-bs-theme="dark"] .list-group-item {
+  &:hover {
+    background-color: #2c2c2c;
+  }
+}
+
+.list-item-compact {
+  gap: 0.5rem;
+}
+
+.list-item-compact > div:first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.list-item-compact > div:last-child {
+  flex: 0 0 auto;
+}
+
+.route-direction-desc {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0 0 0 5px;
+  padding: 0;
+}
+
+.stop-location-text {
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.direction-arrow {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.exact-time {
+  font-size: 0.7rem;
+}
+
+@import '../../../../../styles/arrival-time.scss';
+
+.me-1 {
+  margin-right: 0.025rem !important;
+}
+
+.fw-bold.h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  line-height: 1;
+  display: inline-flex;
+  align-items: flex-end;
+}
+
+.stop-info-meta {
+  margin-left: 8px;
+  font-size: 0.85em;
+}
+
+.stop-cycler {
+  margin-left: 6px;
+}
+
+.stop-cycle-btn {
+  font-size: 0.9em;
+  text-decoration: none;
+}
+
+.arrival-timestamps {
+  font-size: 0.75em;
+}

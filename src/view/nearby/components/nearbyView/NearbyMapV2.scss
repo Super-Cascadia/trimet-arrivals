@@ -1,0 +1,13 @@
+.nearby-map-container {
+  flex: 1;
+  position: relative;
+  min-height: 300px;
+}
+
+.nearby-map-box {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}

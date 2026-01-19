@@ -1,0 +1,45 @@
+.recent-directions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.recent-direction-row {
+  width: 100%;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  background-color: var(--bs-card-bg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.recent-direction-row:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.recent-direction-labels {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 600;
+  color: var(--bs-body-color);
+}
+
+.recent-direction-labels .chevron {
+  opacity: 0.7;
+}
+
+.recent-meta {
+  font-size: 0.82rem;
+  color: var(--bs-secondary-color);
+}
+
+.section-empty {
+  color: var(--bs-secondary-color);
+  font-size: 0.95rem;
+}

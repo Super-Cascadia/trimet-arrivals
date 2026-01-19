@@ -1,0 +1,23 @@
+meta {
+  name: Get Subsequent Route Stops
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{baseUrl}}/V1/routeConfig/json/true/route/100/dir/0/stops/true/startSeq/13125/appID/{{appID}}
+  body: none
+  auth: none
+}
+
+docs {
+  Fetch subsequent stops on a route starting from a specific stop location.
+  
+  Parameters:
+  - route: Route ID (e.g., 100 for Blue Line)
+  - dir: Direction (0 or 1)
+  - stops: Include stop information (true/false)
+  - startSeq: Stop location ID to start from (e.g., 13125)
+  
+  Useful for displaying remaining stops on a route from a current position.
+}

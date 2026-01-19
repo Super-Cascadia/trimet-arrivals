@@ -1,0 +1,54 @@
+.search-home {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+
+  .search-home-content {
+    flex: 1;
+    padding: 2rem 0;
+    // No distinct background; inherit page background
+  }
+
+  .home-sections {
+    margin-top: 1rem;
+    row-gap: 1rem;
+  }
+
+  .home-section-card {
+    height: 100%;
+    border: 1px solid var(--bs-border-color);
+    border-radius: 16px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+    background-color: var(--bs-card-bg);
+  }
+
+  .home-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+
+    .section-icon {
+      margin-right: 0.5rem;
+      color: #000;
+    }
+
+    .section-subtitle {
+      margin-bottom: 0;
+      color: var(--bs-secondary-color);
+      font-size: 0.92rem;
+    }
+
+    .section-link {
+      font-weight: 600;
+      text-decoration: none;
+      color: var(--bs-link-color);
+    }
+  }
+}
+
+// Dark mode support
+[data-bs-theme="dark"] .search-home {
+  background: linear-gradient(135deg, #1a1d29 0%, #2d3142 100%);
+}

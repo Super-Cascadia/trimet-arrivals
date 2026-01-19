@@ -44,3 +44,11 @@ export interface Trip {
   progress: number;
   route: number;
 }
+
+export interface LabeledStop {
+  locid: number;
+  label: string;
+  lng: number;
+  lat: number;
+  active?: boolean;
+}

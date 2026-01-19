@@ -1,0 +1,18 @@
+meta {
+  name: Get Alerts by Location ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v2/alerts/json/true/locIDs/13125/appID/{{appID}}
+  body: none
+  auth: none
+}
+
+docs {
+  Fetch alerts for a specific stop location.
+  
+  Parameters:
+  - locIDs: Stop location ID (e.g., 13125)
+}

@@ -11,12 +11,13 @@ function StopLocationArrivals({ arrivalData }: Props) {
   return (
     <Routes>
       <Route
-        path="/"
+        index
         element={<StopLocationArrivalsTable arrivalData={arrivalData} />}
       />
-      <Route path={`/route/:routeId`}>
-        <StopLocationArrivalsTable arrivalData={arrivalData} />
-      </Route>
+      <Route
+        path="route/:routeId"
+        element={<StopLocationArrivalsTable arrivalData={arrivalData} />}
+      />
     </Routes>
   );
 }

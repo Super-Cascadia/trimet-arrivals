@@ -1,0 +1,31 @@
+.home-location-map-card {
+  .nearby-routes-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    
+    .nearby-route-item {
+      text-decoration: none;
+      transition: transform 0.2s ease;
+      
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+  
+  .nearby-routes-loading {
+    color: var(--bs-secondary-color);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .home-map-container {
+    width: 100%;
+    height: 300px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--bs-gray-200);
+  }
+}

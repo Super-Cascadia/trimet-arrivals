@@ -2,6 +2,7 @@ import mapboxgl from "mapbox-gl";
 import React, { Component } from "react";
 import { setCurrentLocationMarker } from "../../view/nearby/util/currentLocationMarker.util";
 import { mountMapCenteredOnLocation } from "../../view/nearby/util/mapbox/mapboxUtils";
+import "./Map.scss";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiamFtZXNvbm55ZWhvbHQiLCJhIjoiY2p3NWoyamV0MTk1dDQ0cGNmdGZkenViMiJ9.TqDD3r62vlPzVgPnYjocsg";
@@ -26,13 +27,8 @@ class Map extends Component<Props> {
   }
 
   public render() {
-    const style = {
-      height: 400,
-      position: "relative",
-      width: "100%"
-    };
     // @ts-ignore
-    const map = <div style={style} ref={el => (this.mapContainer = el)} />;
+    const map = <div className="map-container" ref={el => (this.mapContainer = el)} />;
 
     return (
       <div>

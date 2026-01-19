@@ -1,0 +1,21 @@
+meta {
+  name: Get All Routes
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/V1/routeConfig/json/true/dir/true/stops/true/appID/{{appID}}
+  body: none
+  auth: none
+}
+
+docs {
+  Fetch configuration for all TriMet routes including directions and stops.
+  
+  Parameters:
+  - dir: Include direction information (true/false)
+  - stops: Include stop information (true/false)
+  
+  Note: This endpoint returns a large amount of data.
+}

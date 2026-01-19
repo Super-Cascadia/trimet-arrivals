@@ -1,5 +1,7 @@
 import React from "react";
 import { Provider } from "react-redux";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import RootAppRoutes from "./routes/RootAppRoutes";
 import appStore from "./store/store";
@@ -12,6 +14,7 @@ export default class App extends React.Component {
       <Provider store={store}>
         <div>
           <RootAppRoutes />
+          <ToastContainer />
         </div>
       </Provider>
     );

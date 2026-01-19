@@ -1,0 +1,25 @@
+meta {
+  name: Get Alerts by Route ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v2/alerts/json/true/route/100/appID/{{appID}}
+  body: none
+  auth: none
+}
+
+docs {
+  Fetch alerts for a specific route.
+  
+  Parameters:
+  - route: Route ID (e.g., 100 for Blue Line, 90 for Red Line)
+  
+  Common Route IDs:
+  - 90: Red Line
+  - 100: Blue Line
+  - 200: Green Line
+  - 190: Yellow Line
+  - 290: Orange Line
+}

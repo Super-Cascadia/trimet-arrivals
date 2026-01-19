@@ -1,0 +1,26 @@
+meta {
+  name: Plan Trip (Query)
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{baseUrl}}/V1/trips/tripplanner?fromPlace=pdx&toPlace=zoo&date=12-18-2025&time=2:00%20PM&arr=D&min=T&walk=0.50&mode=A&format=xml&appID={{appID}}
+  body: none
+  auth: none
+}
+
+docs {
+  TriMet Trip Planner using query parameters. Returns XML.
+
+  Example params:
+  - fromPlace=pdx
+  - toPlace=zoo
+  - date=12-18-2025
+  - time=2:00 PM
+  - arr=D (Depart by time)
+  - min=T (Quickest)
+  - walk=0.50 (miles)
+  - mode=A (All modes)
+  - format=xml (required)
+}

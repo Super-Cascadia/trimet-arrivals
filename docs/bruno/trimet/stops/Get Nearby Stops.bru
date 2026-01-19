@@ -1,0 +1,21 @@
+meta {
+  name: Get Nearby Stops
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/V1/stops/json/true/showRoutes/true/showRouteDirs/true/ll/45.5230,-122.6764/feet/1000/appID/{{appID}}
+  body: none
+  auth: none
+}
+
+docs {
+  Retrieve nearby TriMet stops within a specified radius of a given location.
+  
+  Parameters:
+  - ll: Latitude,Longitude (e.g., 45.5230,-122.6764)
+  - feet: Search radius in feet from the specified location
+  - showRoutes: Include route information (true/false)
+  - showRouteDirs: Include route directions (true/false)
+}

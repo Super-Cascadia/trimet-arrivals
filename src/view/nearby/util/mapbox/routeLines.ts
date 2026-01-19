@@ -38,8 +38,8 @@ function addMapboxLayer(
     paint: {
       "line-color": "#0080ff",
       "line-dasharray": [2, 4],
-      "line-opacity": 0.8,
-      "line-width": 2
+      "line-opacity": 1.0,
+      "line-width": 4
     },
     source: sourceId,
     type: "line"

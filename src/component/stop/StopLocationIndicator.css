@@ -1,16 +1,56 @@
+.stop-location-indicator-link {
+    text-decoration: none;
+}
+
 .stop-location-indicator {
-    background: darkgrey;
-    height: 21px;
-    min-width: 40px;
-    vertical-align: middle;
-    text-align: center;
-    color: black;
-    font-size: 16px;
-    line-height: 22px;
-    border-radius: 5px;
-    display: inline-block;
+    background: #4264fb;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-weight: 500;
     cursor: pointer;
-    padding-left: 4px;
-    padding-right: 4px;
-    margin-right: 10px;
+    vertical-align: middle;
+    border: 2px solid #4264fb;
+    transition: all 0.2s ease;
+    font-family: monospace;
+    padding: 0 6px;
+}
+
+/* Size variants */
+.stop-location-indicator.size-small {
+    height: 20px;
+    min-width: 24px;
+    font-size: 11px;
+}
+
+.stop-location-indicator.size-medium {
+    height: 28px;
+    min-width: 32px;
+    font-size: 13px;
+}
+
+.stop-location-indicator.size-large {
+    height: 36px;
+    min-width: 40px;
+    font-size: 15px;
+}
+
+.stop-location-indicator.unselected {
+    background: #ffffff;
+    color: #4264fb;
+    border-color: transparent;
+}
+
+.stop-location-indicator.selected {
+    background: #4264fb;
+    color: #ffffff;
+    transform: scale(1.1);
+}
+
+.stop-location-indicator.unselected:hover {
+    background: #8da4fc;
+    color: #ffffff;
+    transform: scale(1.05);
 }

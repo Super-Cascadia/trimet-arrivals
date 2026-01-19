@@ -1,0 +1,98 @@
+import { MutableRefObject } from "react";
+import { Map } from "mapbox-gl";
+import { initializeMap } from "../../util/mapbox/initializeMap";
+import { updateLocationMarkers } from "./mapMarkerUtils";
+
+/**
+ * Hook to handle map initialization.
+ * 
+ * @param mapRef - Reference to the Mapbox map instance.
+ * @param mapContainerRef - Reference to the map container element.
+ * @param lng - Initial longitude.
+ * @param lat - Initial latitude.
+ * @param zoom - Initial zoom level.
+ * @param theme - Current theme.
+ * @param isUsingDroppedMarker - Whether a dropped marker is active.
+ * @param droppedMarkerLocation - Location of the dropped marker.
+ * @param radiusSize - Current search radius.
+ * @param handleDropMarker - Callback for dropped marker placement.
+ * @param droppedMarkerRef - Reference to the dropped marker instance.
+ * @param setZoom - Setter for zoom level.
+ * @param isRadiusChanging - Ref indicating if radius is currently changing.
+ * @param zoomTimeoutRef - Ref for zoom debounce timeout.
+ * @param handleZoomSearchUpdate - Callback to update search after zoom.
+ * @returns Object containing the initializeMapboxMap function.
+ */
+export function useMapInitialization(
+  mapRef: MutableRefObject<Map>,
+  mapContainerRef: MutableRefObject<any>,
+  lng: number,
+  lat: number,
+  zoom: number,
+  theme: string,
+  isUsingDroppedMarker: boolean,
+  droppedMarkerLocation: { lng: number, lat: number } | null,
+  radiusSize: number,
+  handleDropMarker: (lng: number, lat: number) => void,
+  droppedMarkerRef: MutableRefObject<any>,
+  setZoom: (zoom: number) => void,
+  isRadiusChanging: MutableRefObject<boolean>,
+  zoomTimeoutRef: MutableRefObject<NodeJS.Timeout | null>,
+  handleZoomSearchUpdate: () => void
+) {
+  function initializeMapboxMap() {
+    try {
+      console.log("initialize map", lng, lat, zoom);
+      mapRef.current = initializeMap(lng, lat, mapContainerRef, zoom, theme as "light" | "dark");
+
+      mapRef.current.on("load", () => {
+        console.info("effect: initialize map markers and routes");
+        
+        try {
+          updateLocationMarkers(
+            mapRef.current,
+            isUsingDroppedMarker,
+            droppedMarkerLocation,
+            { lng, lat },
+            radiusSize,
+            handleDropMarker,
+            droppedMarkerRef
+          );
+        } catch (err) {
+          console.error("Error updating location markers:", err);
+        }
+      });
+
+      mapRef.current.on("zoomend", () => {
+        try {
+          const currentZoom = mapRef.current.getZoom();
+          setZoom(currentZoom);
+          
+          if (isRadiusChanging.current) {
+            console.log("Skipping zoom update - radius is changing");
+            return;
+          }
+          
+          if (zoomTimeoutRef.current) {
+            clearTimeout(zoomTimeoutRef.current);
+          }
+          
+          zoomTimeoutRef.current = setTimeout(() => {
+            handleZoomSearchUpdate();
+          }, 2000);
+        } catch (err) {
+          console.error("Error handling zoom event:", err);
+        }
+      });
+
+      // Add error handler for map
+      mapRef.current.on("error", (error: any) => {
+        console.error("Mapbox GL error:", error);
+      });
+    } catch (err) {
+      console.error("Error initializing mapbox map:", err);
+    }
+  }
+
+  return { initializeMapboxMap };
+}

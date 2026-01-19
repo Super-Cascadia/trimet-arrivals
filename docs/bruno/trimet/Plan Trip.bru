@@ -1,0 +1,32 @@
+meta {
+  name: Plan Trip
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{baseUrl}}/V1/trips/tripplanner/format/xml/fromPlace/pdx/toPlace/zoo/date/12-18-2025/time/2:00%20PM/arr/D/min/T/walk/0.50/mode/A/appID/{{appID}}
+  body: none
+  auth: none
+}
+
+docs {
+  TriMet Trip Planner: plan a trip between two places.
+
+  Notes:
+  - Trip Planner only returns XML (`format/xml`).
+  - Parameter names are case-insensitive.
+
+  Common Parameters:
+  - fromPlace: Origin place name (e.g., pdx)
+  - fromCoord: Origin coordinates "lon,lat" (e.g., -122.72,45.51)
+  - toPlace: Destination place name (e.g., zoo)
+  - toCoord: Destination coordinates "lon,lat" (e.g., -122.72,45.51)
+  - date: Date of planned trip (e.g., 12-18-2025)
+  - time: Time of planned trip (e.g., 2:00 PM)
+  - arr: D (Depart by time) or A (Arrive by time)
+  - min: T (Quickest) / X (Fewest Transfers) / W (Shortest Walk)
+  - walk: Max walk distance in miles (0.01 - 0.999)
+  - mode: A (All) / B (Bus only) / T (Train only)
+  - maxIntineraries: Number of itineraries to return (default 3, max 6)
+}

@@ -1,0 +1,241 @@
+.stop {
+    background: rgba(var(--bs-body-bg-rgb), 0.80);
+    border-radius: 5px;
+}
+
+.stop-wrapper {
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+}
+
+.stops-reload-button {
+    position: absolute;
+    right: 7px;
+    top: -2px;
+}
+
+.reload-button {
+    background: var(--bs-secondary-bg);
+    display: inline-block;
+    padding-top: 3px;
+    padding-bottom: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    cursor: pointer;
+}
+
+.reload-button span {
+    vertical-align: middle;
+    line-height: 25px;
+    text-align: center;
+}
+
+.count-down-label {
+    margin-left: 5px;
+    font-size: 16px;
+}
+
+.scrollarea {
+    overflow-y: auto;
+    height: 85vh;
+    max-height: 85vh;
+}
+
+.dropped-marker-alert {
+    font-size: 14px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    
+    strong {
+        font-weight: 600;
+    }
+    
+    .btn {
+        white-space: nowrap;
+    }
+}
+
+.location-mode-indicator {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+    background: rgba(var(--bs-body-bg-rgb), 0.9);
+    color: var(--bs-body-color);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.dropped-marker-pin {
+    transition: transform 0.2s ease;
+    
+    &:hover {
+        transform: rotate(-45deg) scale(1.1);
+    }
+    
+    &::after {
+        content: '';
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: white;
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+// Nearby Stops styling
+.stop-section {
+  margin-bottom: 0;
+}
+
+.stop-heading {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.stop-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stop-distance {
+  color: #666;
+  font-size: 0.75rem;
+  margin: 0;
+}
+
+.route-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.route-card {
+  margin-bottom: 0;
+}
+
+.route-card-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 14px;
+}
+
+.route-description {
+  flex: 1;
+}
+
+.route-number {
+  font-size: 1.5rem !important;
+}
+
+.nearby-filter-container {
+    margin-bottom: 20px;
+}
+
+@import '../../../../../styles/arrival-time.scss';
+
+.arrival-time-container {
+  ul {
+    font-size: 0.75em;
+  }
+
+  li {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .countdown {
+    display: inline-block;
+    width: 9ch;
+    text-align: right;
+  }
+}
+
+.exact-time {
+  font-size: 0.75em; // Make it consistent with the container if that's what is desired, or let it inherit. 
+  // But wait, if the container is 0.75em, and this is 0.75em, it will be 0.75 * 0.75 = 0.5625em!
+  // If I want it consistent, I should just let it inherit or set to 1em.
+  font-size: 1em; 
+}
+
+// React Select Dark Mode Styles
+[data-bs-theme="dark"] {
+  .stop-distance {
+    color: #aaa;
+  }
+  
+  .nearby-route-filter__control {
+    background-color: var(--bs-body-bg);
+    border-color: var(--bs-border-color);
+  }
+
+  .nearby-route-filter__menu {
+    background-color: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+  }
+
+  .nearby-route-filter__option {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+
+    &:hover,
+    &--is-focused {
+      background-color: var(--bs-secondary-bg);
+      cursor: pointer;
+    }
+
+    &--is-selected {
+      background-color: var(--bs-primary);
+      color: #fff;
+    }
+  }
+
+  .nearby-route-filter__multi-value {
+    background-color: var(--bs-secondary-bg);
+    
+    &__label {
+      color: var(--bs-body-color);
+    }
+
+    &__remove {
+      color: var(--bs-body-color);
+      &:hover {
+        background-color: var(--bs-danger);
+        color: #fff;
+      }
+    }
+  }
+
+  .nearby-route-filter__input-container, 
+  .nearby-route-filter__input {
+    color: var(--bs-body-color);
+  }
+  
+  .nearby-route-filter__single-value {
+    color: var(--bs-body-color);
+  }
+
+  .nearby-route-filter__placeholder {
+    color: var(--bs-secondary-color);
+  }
+}

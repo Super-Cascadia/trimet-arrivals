@@ -1,4 +1,4 @@
-import { LatLngCoords } from "../components/NearbyMapV2";
+import { LatLngCoords } from "../components/nearbyView/NearbyMapV2";
 
 function getPulsingDot(map: unknown) {
   const size = 200;
