@@ -15,6 +15,11 @@ import { NearbyRoutesDictionary } from "../../../store/reducers/view/nearbyRoute
  * @returns A dictionary mapping route numbers to arrays of TrimetRoute objects with unique route-direction combinations
  */
 export function processRoutes(stopData: StopData): Dictionary<TrimetRoute[]> {
+  // Guard against missing or invalid location data
+  if (!stopData || !stopData.location || stopData.location.length === 0) {
+    return {};
+  }
+  
   const routes = stopData.location.map((location: StopLocation) => {
     return location.route.map((route: TrimetRoute) => route);
   });
@@ -57,6 +62,10 @@ export function getNearbyRouteIds(
 export function getStopLocations(
   nearbyStops: StopData
 ): StopLocationsDictionary {
+  if (!nearbyStops || !nearbyStops.location || nearbyStops.location.length === 0) {
+    return {};
+  }
+  
   return mapKeys(nearbyStops.location, (location: StopLocation) => {
     return location.locid;
   });

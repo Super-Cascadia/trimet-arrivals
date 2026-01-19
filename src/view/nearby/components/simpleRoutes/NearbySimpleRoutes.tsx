@@ -1,9 +1,10 @@
 import { Dictionary, isEmpty, join, map } from "lodash";
 import React, { useEffect, useState, useMemo } from "react";
 import Select from "react-select";
-import { ListGroup } from "react-bootstrap";
+import { ListGroup, Alert, Button } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import moment from "moment";
+import FontAwesome from "react-fontawesome";
 import { getArrivals } from "../../../../api/trimet/arrivals";
 import { Arrival, ArrivalData } from "../../../../api/trimet/interfaces/arrivals";
 import {
@@ -18,6 +19,7 @@ import "../nearbyRoutes/NearbyRoutes.scss";
 import "./SimpleRoutes.scss";
 import { SearchRadiusSelection } from "../common/search/SearchRadiusSelection";
 import { getRouteArrivals, RouteStructure, enrichRouteStructure, sortRoutesByBookmarkAndDistance } from "../../util/routeArrivals";
+import { isWithinServiceArea, getDistanceToServiceArea } from "../../util/serviceAreaUtils";
 
 /**
  * Props for the NearbySimpleRoutes component
@@ -47,9 +49,13 @@ interface Props {
   currentLocation: number[];
   /** Optional callback to highlight a stop marker on the map */
   highlightStopMarker?: (stopId: string | null) => void;
+  /** Optional callback to enable marker placement mode on the map */
+  onEnableMarkerPlacement?: () => void;
+  /** Optional callback to place marker in TriMet service area */
+  onPlaceMarkerInServiceArea?: () => void;
+  /** Optional callback to fly map to current location */
+  onFlyToCurrentLocation?: () => void;
 }
-
-
 
 /**
  * NearbySimpleRoutes component displays a list of nearby transit routes with arrival times.
@@ -78,18 +84,37 @@ export default function NearbySimpleRoutes({
   routeCount,
   stopCount,
   currentLocation,
-  highlightStopMarker
+  highlightStopMarker,
+  onEnableMarkerPlacement,
+  onPlaceMarkerInServiceArea,
+  onFlyToCurrentLocation
 }: Props) {
   const location = useLocation();
   const [arrivalData, setArrivalData] = useState<ArrivalData>(null);
   const [routeFilter, setRouteFilter] = useState<string[]>([]);
   const [stopIndexMap, setStopIndexMap] = useState<Map<string, number>>(new Map());
 
+  // Check if current location is within service area
+  const isCurrentLocationOutsideServiceArea = useMemo(() => {
+    if (!currentLocation || currentLocation.length < 2) return false;
+    const [lng, lat] = currentLocation;
+    return lng !== undefined && lat !== undefined && !isWithinServiceArea(lat, lng);
+  }, [currentLocation]);
+
+  // Calculate distance to service area when outside
+  const distanceToServiceArea = useMemo(() => {
+    if (!isCurrentLocationOutsideServiceArea || !currentLocation || currentLocation.length < 2) {
+      return null;
+    }
+    const [lng, lat] = currentLocation;
+    return getDistanceToServiceArea(lat, lng);
+  }, [isCurrentLocationOutsideServiceArea, currentLocation]);
+
   useEffect(() => {
     async function fetchData() {
-      if (nearbyStops) {
+      if (nearbyStops?.location && nearbyStops.location.length > 0) {
         const locationIds = join(
-          map(nearbyStops?.location, loc => loc.locid),
+          map(nearbyStops.location, loc => loc.locid),
           ","
         );
 
@@ -230,86 +255,155 @@ export default function NearbySimpleRoutes({
 
   return (
     <div id="nearby-view-routes" className="scrollarea">
-      <SearchRadiusSelection
-        radiusSize={radiusSize}
-        handleRadiusSelectionChange={handleRadiusSelectionChange}
-        handleRefresh={handleRefresh}
-        handleFindNearMe={handleFindNearMe}
-      />
-      <br />
-      <NearbySubNav routeCount={routeCount} stopCount={stopCount} />
-      <br />
-      <Select
-        isMulti
-        options={routeOptions}
-        onChange={handleRouteFilterChange}
-        placeholder="Filter routes..."
-        classNamePrefix="nearby-route-filter"
-        value={routeOptions.filter(o => routeFilter.includes(o.value))}
-        isDisabled={isLoading}
-      />
-      <br />
-      <ListGroup>
-        {isLoading ? (
-          <>
-            {Array.from({ length: 5 }).map((_, index) => (
-              <SimpleArrivalListItemSkeleton key={`skeleton-${index}`} />
-            ))}
-          </>
-        ) : (
-          <>
-            {map(filteredRoutesWithArrivals, (route: RouteStructure, index: number) => {
-              const stop = route.stop;
-              const hasMultipleStops = route.allStopsForRoute && route.allStopsForRoute.length > 1;
-              return (
-                <SimpleArrivalListItem
-                  key={`with-arrival-${index}`}
-                  id={stop.locid}
-                  arrivals={route.arrivals}
-                  route={route.route}
-                  stop={stop}
-                  distanceString={route.distanceString}
-                  currentLocation={currentLocation}
-                  hasMultipleStops={hasMultipleStops}
-                  currentStopIndex={route.currentStopIndex || 0}
-                  totalStops={route.allStopsForRoute?.length || 1}
-                  onCycleStop={(direction) => handleCycleStop(route.id, route.dir, direction)}
-                  onHover={highlightStopMarker}
-                />
-              );
-            })}
-          </>
-        )}
-      </ListGroup>
-      
-      {!isLoading && filteredRoutesWithoutArrivals.length > 0 && (
-        <>
-          <div className="text-center my-3 pt-2 border-top">
-            <h6 className="text-muted text-uppercase fw-bold not-in-service-title">Not in service</h6>
+      {isCurrentLocationOutsideServiceArea && (
+        <Alert variant="warning" className="mb-3">
+          <FontAwesome name="exclamation-triangle" className="me-2" />
+          <strong>Outside Service Area</strong>
+          <p className="mb-2 mt-2 small">
+            Your current location is outside the TriMet service area. TriMet provides transit service in the Portland metro area.
+          </p>
+          {currentLocation && currentLocation.length === 2 && (
+            <div className="small mb-2">
+              <div className="mb-1">
+                <strong>Your location:</strong> {currentLocation[1]?.toFixed(4)}, {currentLocation[0]?.toFixed(4)}
+              </div>
+              {distanceToServiceArea && (
+                <div>
+                  <strong>Distance to service area:</strong> {distanceToServiceArea.toFixed(1)} miles
+                </div>
+              )}
+            </div>
+          )}
+          <p className="mb-2 small">
+            Please move to a location within the service area or use the map to place a marker within the coverage zone.
+          </p>
+          <div className="d-flex gap-2 flex-wrap">
+            {onPlaceMarkerInServiceArea && (
+              <Button
+                size="sm"
+                variant="warning"
+                onClick={onPlaceMarkerInServiceArea}
+              >
+                <FontAwesome name="map-marker" className="me-2" />
+                Drop Marker in Service Area
+              </Button>
+            )}
+            {onFlyToCurrentLocation && (
+              <Button
+                size="sm"
+                variant="outline-warning"
+                onClick={onFlyToCurrentLocation}
+              >
+                <FontAwesome name="location-arrow" className="me-2" />
+                Show My Location
+              </Button>
+            )}
           </div>
+        </Alert>
+      )}
+      {!isCurrentLocationOutsideServiceArea && (
+        <>
+          <SearchRadiusSelection
+            radiusSize={radiusSize}
+            handleRadiusSelectionChange={handleRadiusSelectionChange}
+            handleRefresh={handleRefresh}
+            handleFindNearMe={handleFindNearMe}
+            isOutsideServiceArea={isCurrentLocationOutsideServiceArea}
+          />
+          <br />
+        </>
+      )}
+      {!isCurrentLocationOutsideServiceArea && (
+        <>
+          <NearbySubNav routeCount={routeCount} stopCount={stopCount} />
+          <br />
+        </>
+      )}
+      {!isCurrentLocationOutsideServiceArea && (
+        <>
+          <Select
+            isMulti
+            options={routeOptions}
+            onChange={handleRouteFilterChange}
+            placeholder="Filter routes..."
+            classNamePrefix="nearby-route-filter"
+            value={routeOptions.filter(o => routeFilter.includes(o.value))}
+            isDisabled={isLoading}
+          />
+          <br />
           <ListGroup>
-            {map(filteredRoutesWithoutArrivals, (route: RouteStructure, index: number) => {
-              const nextFutureArrival = route.futureArrivals?.[0];
-              const stop = route.stop;
-              const hasMultipleStops = route.allStopsForRoute && route.allStopsForRoute.length > 1;
-              return (
-                <SimpleArrivalListItem
-                  key={`without-arrival-${index}`}
-                  id={stop.locid}
-                  arrivals={nextFutureArrival ? [nextFutureArrival] : []}
-                  route={route.route}
-                  stop={stop}
-                  distanceString={route.distanceString}
-                  currentLocation={currentLocation}
-                  hasMultipleStops={hasMultipleStops}
-                  currentStopIndex={route.currentStopIndex || 0}
-                  totalStops={route.allStopsForRoute?.length || 1}
-                  onCycleStop={(direction) => handleCycleStop(route.id, route.dir, direction)}
-                  onHover={highlightStopMarker}
-                />
-              );
-            })}
+            {isLoading ? (
+              <>
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <SimpleArrivalListItemSkeleton key={`skeleton-${index}`} />
+                ))}
+              </>
+            ) : !nearbyStops || !nearbyStops.location || nearbyStops.location.length === 0 ? (
+              <Alert variant="info" className="mb-0">
+                <FontAwesome name="info-circle" className="me-2" />
+                Enable location access to find nearby transit routes, or select a search radius to explore the TriMet service area.
+              </Alert>
+            ) : filteredRoutesWithArrivals.length === 0 && filteredRoutesWithoutArrivals.length === 0 ? (
+              <Alert variant="info" className="mb-0">
+                <FontAwesome name="search" className="me-2" />
+                No routes found in this area. Try expanding your search radius.
+              </Alert>
+            ) : (
+              <>
+                {map(filteredRoutesWithArrivals, (route: RouteStructure, index: number) => {
+                  const stop = route.stop;
+                  const hasMultipleStops = route.allStopsForRoute && route.allStopsForRoute.length > 1;
+                  return (
+                    <SimpleArrivalListItem
+                      key={`with-arrival-${index}`}
+                      id={stop.locid}
+                      arrivals={route.arrivals}
+                      route={route.route}
+                      stop={stop}
+                      distanceString={route.distanceString}
+                      currentLocation={currentLocation}
+                      hasMultipleStops={hasMultipleStops}
+                      currentStopIndex={route.currentStopIndex || 0}
+                      totalStops={route.allStopsForRoute?.length || 1}
+                      onCycleStop={(direction) => handleCycleStop(route.id, route.dir, direction)}
+                      onHover={highlightStopMarker}
+                    />
+                  );
+                })}
+              </>
+            )}
           </ListGroup>
+          
+          {!isLoading && filteredRoutesWithoutArrivals.length > 0 && (
+            <>
+              <div className="text-center my-3 pt-2 border-top">
+                <h6 className="text-muted text-uppercase fw-bold not-in-service-title">Not in service</h6>
+              </div>
+              <ListGroup>
+                {map(filteredRoutesWithoutArrivals, (route: RouteStructure, index: number) => {
+                  const nextFutureArrival = route.futureArrivals?.[0];
+                  const stop = route.stop;
+                  const hasMultipleStops = route.allStopsForRoute && route.allStopsForRoute.length > 1;
+                  return (
+                    <SimpleArrivalListItem
+                      key={`without-arrival-${index}`}
+                      id={stop.locid}
+                      arrivals={nextFutureArrival ? [nextFutureArrival] : []}
+                      route={route.route}
+                      stop={stop}
+                      distanceString={route.distanceString}
+                      currentLocation={currentLocation}
+                      hasMultipleStops={hasMultipleStops}
+                      currentStopIndex={route.currentStopIndex || 0}
+                      totalStops={route.allStopsForRoute?.length || 1}
+                      onCycleStop={(direction) => handleCycleStop(route.id, route.dir, direction)}
+                      onHover={highlightStopMarker}
+                    />
+                  );
+                })}
+              </ListGroup>
+            </>
+          )}
         </>
       )}
     </div>

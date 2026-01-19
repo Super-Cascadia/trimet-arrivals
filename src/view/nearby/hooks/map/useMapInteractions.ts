@@ -5,6 +5,7 @@ import { calculateRadiusFromMap } from "../../util/mapbox/mapCalculations";
 import { removeDroppedMarker } from "../../util/mapbox/droppedMarker";
 import { removeCurrentLocationMarkers } from "../../util/mapbox/stopLocationMarker.util";
 import { updateLocationMarkers } from "./mapMarkerUtils";
+import { TRIMET_CENTER_LAT, TRIMET_CENTER_LNG } from "../../../../view/nearby/constants/mapConstants";
 
 /**
  * Hook to handle user interactions with the map.
@@ -37,7 +38,8 @@ export function useMapInteractions(
     setRadiusSize: (size: number) => void,
     updateMapData: (loc: Location, radius: number, isUsingDropped: boolean, droppedLoc: any, droppedRef: any) => Promise<any>,
     setNearbyStopData: (data: any) => void,
-    setNearbyRoutesData: (data: any) => void
+    setNearbyRoutesData: (data: any) => void,
+    handleDropMarker: (lng: number, lat: number) => void
 ) {
 
     /**
@@ -137,6 +139,17 @@ export function useMapInteractions(
         handleResetToGeoLocation,
         handlePlaceMarker,
         handleRefresh,
-        handleFindNearMe
+        handleFindNearMe,
+        handlePlaceMarkerInServiceArea: () => {
+            if (!mapRef.current) return;
+            // Place marker at the center of TriMet service area
+            flyToCenter(TRIMET_CENTER_LNG, TRIMET_CENTER_LAT);
+            handleDropMarker(TRIMET_CENTER_LNG, TRIMET_CENTER_LAT);
+        },
+        handleFlyToCurrentLocation: () => {
+            if (!mapRef.current || !userLocation) return;
+            // Fly to the user's current location
+            flyToCenter(userLocation.coords.longitude, userLocation.coords.latitude);
+        }
     };
 }

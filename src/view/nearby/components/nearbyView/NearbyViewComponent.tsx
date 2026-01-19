@@ -5,8 +5,13 @@ import NearbyMapV2 from "./NearbyMapV2";
 // @ts-ignore
 import "../common/styles/NearbyViewComponent.scss";
 import { useNearbyMapLogic } from "../../hooks/useNearbyMapLogic";
-import { LocationStatusAlert } from "./LocationStatusAlert";
 
+/**
+ * Main view component for the nearby stops feature.
+ * Displays a map with nearby transit stops and provides location-based functionality.
+ * 
+ * @returns A container with a two-column layout: outlet for details (left) and map with location controls (right)
+ */
 export default function NearbyViewComponent() {
   const {
     context,
@@ -15,13 +20,7 @@ export default function NearbyViewComponent() {
     zoom,
     activeLocation,
     showMap,
-    isOnDetailPage,
-    isUsingDroppedMarker,
-    droppedMarkerLocation,
-    handleResetToGeoLocation,
-    handlePlaceMarker,
-    lng,
-    lat
+    isOnDetailPage
   } = useNearbyMapLogic();
 
   return (
@@ -31,17 +30,6 @@ export default function NearbyViewComponent() {
         <Col md={9} className="d-flex flex-column" style={{ height: "calc(100vh - 70px)" }}>
           {showMap && (
             <>
-              {!isOnDetailPage() && (
-                <LocationStatusAlert
-                  isUsingDroppedMarker={isUsingDroppedMarker}
-                  droppedMarkerLocation={droppedMarkerLocation}
-                  handleResetToGeoLocation={handleResetToGeoLocation}
-                  handlePlaceMarker={handlePlaceMarker}
-                  lng={lng}
-                  lat={lat}
-                  zoom={zoom}
-                />
-              )}
               <NearbyMapV2
                 initializeMap={context.initializeMap}
                 zoom={zoom}

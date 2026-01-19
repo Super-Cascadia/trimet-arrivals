@@ -41,7 +41,11 @@ export function useNearbyMapLogic() {
     activeLocation,
     lng,
     lat,
-    setSearchParams
+    setSearchParams,
+    hasLocationError,
+    triMetCenterLng,
+    triMetCenterLat,
+    triMetZoom
   } = useMapLocation();
 
   const {
@@ -64,7 +68,8 @@ export function useNearbyMapLogic() {
   // Derived data
   const nearbyRouteIds = nearbyRoutes && getNearbyRouteIds(nearbyRoutes);
   const stopLocations = nearbyStops && getStopLocations(nearbyStops);
-  const showMap = activeLocation && activeLocation[0] !== undefined && nearbyRouteIds && stopLocations;
+  // Show map as long as we have valid coordinates (either from user location or fallback to TriMet service area)
+  const showMap = lng !== undefined && lat !== undefined;
 
   /**
    * Handles click events on stop markers.
@@ -168,7 +173,9 @@ export function useNearbyMapLogic() {
     handleResetToGeoLocation,
     handlePlaceMarker,
     handleRefresh,
-    handleFindNearMe
+    handleFindNearMe,
+    handlePlaceMarkerInServiceArea,
+    handleFlyToCurrentLocation
   } = useMapInteractions(
     mapRef,
     userLocation,
@@ -182,8 +189,20 @@ export function useNearbyMapLogic() {
     setRadiusSize,
     updateMapData,
     setNearbyStopData,
-    setNearbyRoutesData
+    setNearbyRoutesData,
+    handleDropMarker
   );
+
+  // Adjust zoom based on whether we have user location
+  useEffect(() => {
+    if (activeLocation[0] === undefined || activeLocation[1] === undefined) {
+      // No location set - use wider zoom to show service area
+      setZoom(triMetZoom);
+    } else if (zoom < 12) {
+      // We have a location - use closer zoom
+      setZoom(16);
+    }
+  }, [activeLocation[0], activeLocation[1]]);
 
   // Minimum loading time effect
   useEffect(() => {
@@ -202,16 +221,13 @@ export function useNearbyMapLogic() {
 
   // Initial Data Load Effect
   useEffect(() => {
-    if (activeLocation && activeLocation[0] !== undefined && activeLocation[1] !== undefined && !nearbyStops) {
-      const loc = {
-        coords: { latitude: lat, longitude: lng }
-      } as Location;
-      
-      fetchInitialData(loc).catch((error) => {
+    // Only fetch data if we have a user location (not using fallback TriMet center coordinates)
+    if (userLocation && userLocation.coords && !nearbyStops) {
+      fetchInitialData(userLocation).catch((error) => {
         console.error("Error fetching initial data:", error);
       });
     }
-  }, [activeLocation]);
+  }, [userLocation, nearbyStops]);
 
   // Radius Size Change Effect
   useMapRadius(
@@ -321,7 +337,14 @@ export function useNearbyMapLogic() {
     handleStopOpened,
     handleSimpleRoutesOpened,
     highlightStopMarker,
-    clearAllMapLayers
+    clearAllMapLayers,
+    onEnableMarkerPlacement: () => handlePlaceMarker(handleDropMarker),
+    isUsingDroppedMarker,
+    droppedMarkerLocation,
+    handleResetToGeoLocation: () => handleResetToGeoLocation(radiusSize, handleDropMarker),
+    handlePlaceMarker: () => handlePlaceMarker(handleDropMarker),
+    handlePlaceMarkerInServiceArea,
+    handleFlyToCurrentLocation
   }), [
     activeLocation,
     nearbyRoutes,
@@ -332,7 +355,14 @@ export function useNearbyMapLogic() {
     handleStopOpened,
     handleSimpleRoutesOpened,
     highlightStopMarker,
-    clearAllMapLayers
+    clearAllMapLayers,
+    handlePlaceMarker,
+    handleDropMarker,
+    isUsingDroppedMarker,
+    droppedMarkerLocation,
+    handleResetToGeoLocation,
+    handlePlaceMarkerInServiceArea,
+    handleFlyToCurrentLocation
   ]);
 
   return {

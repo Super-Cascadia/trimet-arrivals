@@ -34,7 +34,7 @@ export function TopNavBar({ id, shortSign, handleRefresh, routeId, direction, st
   const navigate = useNavigate();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [defaultType, setDefaultType] = useState<"home" | "work" | null>(null);
+  const [defaultType, setDefaultType] = useState<"home_commute" | "work_commute" | "home_location" | "work_location" | null>(null);
   
   useEffect(() => {
     if (routeId && stopId && direction !== undefined) {
@@ -95,11 +95,17 @@ export function TopNavBar({ id, shortSign, handleRefresh, routeId, direction, st
     if (!isBookmarked) {
       return "Bookmark this route";
     }
-    if (defaultType === "home") {
-      return "Home route - Click to manage bookmarks";
+    if (defaultType === "home_commute") {
+      return "Home commute route - Click to manage bookmarks";
     }
-    if (defaultType === "work") {
-      return "Work route - Click to manage bookmarks";
+    if (defaultType === "work_commute") {
+      return "Work commute route - Click to manage bookmarks";
+    }
+    if (defaultType === "home_location") {
+      return "Home location - Click to manage bookmarks";
+    }
+    if (defaultType === "work_location") {
+      return "Work location - Click to manage bookmarks";
     }
     return "Bookmarked - Click to manage bookmarks";
   };
@@ -122,8 +128,20 @@ export function TopNavBar({ id, shortSign, handleRefresh, routeId, direction, st
                 onClick={handleBookmarkToggle}
               >
                 {defaultType ? (
-                  <Badge bg={defaultType === "home" ? "primary" : "success"} className="bookmark-badge">
-                    <FontAwesome name={defaultType === "home" ? "home" : "briefcase"} />
+                  <Badge 
+                    bg={
+                      defaultType === "home_commute" ? "primary" : 
+                      defaultType === "work_commute" ? "success" :
+                      defaultType === "home_location" ? "info" :
+                      "warning"
+                    } 
+                    className="bookmark-badge"
+                  >
+                    <FontAwesome 
+                      name={
+                        defaultType === "home_commute" || defaultType === "home_location" ? "home" : "briefcase"
+                      } 
+                    />
                   </Badge>
                 ) : (
                   <FontAwesome name={isBookmarked ? 'bookmark' : 'bookmark-o'} />

@@ -18,21 +18,21 @@ interface Props {
 
 function BookmarksPreview({ }: Props) {
   const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([]);
-  const [homeBookmark, setHomeBookmark] = useState<BookmarkItem | null>(null);
-  const [workBookmark, setWorkBookmark] = useState<BookmarkItem | null>(null);
+  const [homeCommuteBookmark, setHomeCommuteBookmark] = useState<BookmarkItem | null>(null);
+  const [workCommuteBookmark, setWorkCommuteBookmark] = useState<BookmarkItem | null>(null);
 
   const loadBookmarks = () => {
-    const home = getDefaultBookmark("home");
-    const work = getDefaultBookmark("work");
-    setHomeBookmark(home);
-    setWorkBookmark(work);
+    const homeCommute = getDefaultBookmark("home_commute");
+    const workCommute = getDefaultBookmark("work_commute");
+    setHomeCommuteBookmark(homeCommute);
+    setWorkCommuteBookmark(workCommute);
     
     const allBookmarks = getAllBookmarks();
     console.log('loaded bookmarks', allBookmarks);
     
-    // Filter out home and work bookmarks from the list
-    const homeWorkIds = new Set([home?.id, work?.id].filter(Boolean));
-    const filtered = allBookmarks.filter(b => !homeWorkIds.has(b.id));
+    // Filter out default bookmarks from the list
+    const defaultIds = new Set([homeCommute?.id, workCommute?.id].filter(Boolean));
+    const filtered = allBookmarks.filter(b => !defaultIds.has(b.id));
     
     // Sort and take remaining slots (up to 2 more)
     const sorted = filtered
@@ -106,10 +106,10 @@ function BookmarksPreview({ }: Props) {
     );
   };
 
-  const renderEmptyDefaultCard = (type: "home" | "work") => {
-    const icon = type === "home" ? faHome : faBriefcase;
-    const label = type === "home" ? "Home" : "Work";
-    const colorClass = type === "home" ? "bookmark-home" : "bookmark-work";
+  const renderEmptyDefaultCard = (type: "home_commute" | "work_commute") => {
+    const icon = type === "home_commute" ? faHome : faBriefcase;
+    const label = type === "home_commute" ? "Home Commute" : "Work Commute";
+    const colorClass = type === "home_commute" ? "bookmark-home" : "bookmark-work";
     
     return (
       <Link to="/bookmarks" className={`bookmark-card bookmark-card-empty ${colorClass}`} key={`empty-${type}`}>
@@ -119,7 +119,7 @@ function BookmarksPreview({ }: Props) {
         </div>
         <div className="bookmark-empty-content">
           <FontAwesomeIcon icon={icon} className="empty-icon" />
-          <div className="empty-text">Set {type} route</div>
+          <div className="empty-text">Set {label.toLowerCase()}</div>
         </div>
       </Link>
     );
@@ -137,15 +137,15 @@ function BookmarksPreview({ }: Props) {
           </div>
           <Link to="/bookmarks" className="section-link">View all</Link>
         </div>
-        {!homeBookmark && !workBookmark && bookmarks.length === 0 ? (
+        {!homeCommuteBookmark && !workCommuteBookmark && bookmarks.length === 0 ? (
           <div className="section-empty">No bookmarks yet.</div>
         ) : (
           <div className="bookmarks-grid">
-            {/* Home bookmark - show card or empty state */}
-            {homeBookmark ? renderBookmarkCard(homeBookmark, "Home", faHome, "bookmark-home") : renderEmptyDefaultCard("home")}
+            {/* Home commute bookmark - show card or empty state */}
+            {homeCommuteBookmark ? renderBookmarkCard(homeCommuteBookmark, "Home Commute", faHome, "bookmark-home") : renderEmptyDefaultCard("home_commute")}
             
-            {/* Work bookmark - show card or empty state */}
-            {workBookmark ? renderBookmarkCard(workBookmark, "Work", faBriefcase, "bookmark-work") : renderEmptyDefaultCard("work")}
+            {/* Work commute bookmark - show card or empty state */}
+            {workCommuteBookmark ? renderBookmarkCard(workCommuteBookmark, "Work Commute", faBriefcase, "bookmark-work") : renderEmptyDefaultCard("work_commute")}
             
             {/* Other recent bookmarks */}
             {bookmarks.map((bookmark) => renderBookmarkCard(bookmark))}

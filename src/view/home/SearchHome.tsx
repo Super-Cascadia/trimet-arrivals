@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import SearchHero from "./components/SearchHero";
 import "./SearchHome.scss";
@@ -15,6 +15,9 @@ import SystemAlerts, { SystemAlert } from "./components/SystemAlerts";
 import { bookmarkedStopLocationSelector } from "../../store/selectors/bookmarkSelectors";
 import { StopLocation } from "../../api/trimet/interfaces/types";
 import { getSytemAlerts } from "../../api/trimet/alerts";
+import geoLocateCurrentPosition from "../../api/geolocation/geoLocateCurrentPosition";
+import { logger } from "../../api/util/logger";
+import { isCurrentLocationValue, findNearestStopFromCurrentLocation } from "./utils/locationUtils";
 
 const RECENT_DIRECTIONS_KEY = "recent-directions";
 
@@ -39,6 +42,7 @@ function persistRecentDirections(items: RecentDirectionItem[]) {
 
 function SearchHome() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const bookmarks = useSelector(bookmarkedStopLocationSelector) as StopLocation[];
   const [recentDirections, setRecentDirections] = useState<RecentDirectionItem[]>([]);
   const [systemAlerts, setSystemAlerts] = useState<SystemAlert[]>([]);
@@ -46,6 +50,34 @@ function SearchHome() {
 
   useEffect(() => {
     setRecentDirections(loadRecentDirections());
+  }, []);
+
+  // Perform geolocation on load and set URL params
+  useEffect(() => {
+    const latParam = searchParams.get("lat");
+    const lngParam = searchParams.get("lng");
+
+    // Only attempt geolocation if URL params don't already exist
+    if (!latParam || !lngParam) {
+      logger.debug('[SearchHome] Attempting geolocation on load');
+      geoLocateCurrentPosition()
+        .then((location) => {
+          if (location?.coords?.latitude && location?.coords?.longitude) {
+            logger.info('[SearchHome] Successfully obtained geolocation', {
+              lat: location.coords.latitude,
+              lng: location.coords.longitude
+            });
+            setSearchParams({
+              lat: location.coords.latitude.toString(),
+              lng: location.coords.longitude.toString()
+            });
+          }
+        })
+        .catch((error) => {
+          logger.debug('[SearchHome] Geolocation failed on home page', error);
+          // Silently fail - user can still search without geolocation
+        });
+    }
   }, []);
 
   useEffect(() => {
@@ -93,10 +125,40 @@ function SearchHome() {
     });
   };
 
-  const handleSearch = (fromStop: StopOption, toStop: StopOption) => {
+  const handleSearch = async (fromStop: StopOption, toStop: StopOption) => {
     recordRecent(fromStop, toStop);
-    // Navigate to directions view with from and to stop IDs
-    navigate(`/nearby/directions?from=${fromStop.value}&to=${toStop.value}`);
+    
+    // Resolve current location values to actual stop IDs
+    let fromStopId = fromStop.value;
+    let toStopId = toStop.value;
+    
+    // Handle "current location" values by finding nearest stops
+    if (isCurrentLocationValue(fromStopId)) {
+      logger.info('[SearchHome] Resolving "from" current location to nearest stop');
+      const nearestStopId = await findNearestStopFromCurrentLocation(fromStopId);
+      if (nearestStopId) {
+        fromStopId = nearestStopId.toString();
+      } else {
+        logger.error('[SearchHome] Could not find nearest stop for "from" location');
+        // TODO: Show error to user
+        return;
+      }
+    }
+    
+    if (isCurrentLocationValue(toStopId)) {
+      logger.info('[SearchHome] Resolving "to" current location to nearest stop');
+      const nearestStopId = await findNearestStopFromCurrentLocation(toStopId);
+      if (nearestStopId) {
+        toStopId = nearestStopId.toString();
+      } else {
+        logger.error('[SearchHome] Could not find nearest stop for "to" location');
+        // TODO: Show error to user
+        return;
+      }
+    }
+    
+    // Navigate to directions view with resolved stop IDs
+    navigate(`/nearby/directions?from=${fromStopId}&to=${toStopId}`);
   };
 
   const handleRecentSelection = (fromStop: StopOption, toStop: StopOption) => {

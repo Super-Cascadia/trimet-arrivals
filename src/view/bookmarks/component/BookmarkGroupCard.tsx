@@ -12,7 +12,8 @@ import {
   DEFAULT_GROUP_ID,
   BookmarkItem,
   setDefaultBookmark,
-  isBookmarkDefault
+  isBookmarkDefault,
+  DefaultBookmarkType
 } from "../../../api/localstorage/bookmarkGroups.localstorage";
 import "./BookmarkGroupCard.scss";
 
@@ -59,7 +60,7 @@ export default function BookmarkGroupCard({ group, allGroups, onUpdate }: Props)
     onUpdate();
   };
 
-  const handleSetAsDefault = (bookmarkId: string, type: "home" | "work") => {
+  const handleSetAsDefault = (bookmarkId: string, type: DefaultBookmarkType) => {
     setDefaultBookmark(type, bookmarkId);
     onUpdate();
   };
@@ -124,9 +125,25 @@ export default function BookmarkGroupCard({ group, allGroups, onUpdate }: Props)
               <FontAwesome name="bus" className="me-2 text-primary" />
               Route {item.routeId} - {item.routeDesc}
               {defaultType && (
-                <Badge bg={defaultType === "home" ? "primary" : "success"} className="ms-2">
-                  <FontAwesome name={defaultType === "home" ? "home" : "briefcase"} className="me-1" />
-                  {defaultType}
+                <Badge 
+                  bg={
+                    defaultType === "home_commute" ? "primary" : 
+                    defaultType === "work_commute" ? "success" :
+                    defaultType === "home_location" ? "info" :
+                    "warning"
+                  } 
+                  className="ms-2"
+                >
+                  <FontAwesome 
+                    name={
+                      defaultType === "home_commute" || defaultType === "home_location" ? "home" : "briefcase"
+                    } 
+                    className="me-1" 
+                  />
+                  {defaultType === "home_commute" ? "Home Commute" :
+                   defaultType === "work_commute" ? "Work Commute" :
+                   defaultType === "home_location" ? "Home Location" :
+                   "Work Location"}
                 </Badge>
               )}
             </div>
@@ -149,20 +166,42 @@ export default function BookmarkGroupCard({ group, allGroups, onUpdate }: Props)
             </Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.Header>Set as default...</Dropdown.Header>
-              <Dropdown.Item
-                onClick={() => handleSetAsDefault(item.id, "home")}
-                disabled={defaultType === "home"}
-              >
-                <FontAwesome name="home" className="me-2" />
-                Home
-              </Dropdown.Item>
-              <Dropdown.Item
-                onClick={() => handleSetAsDefault(item.id, "work")}
-                disabled={defaultType === "work"}
-              >
-                <FontAwesome name="briefcase" className="me-2" />
-                Work
-              </Dropdown.Item>
+              {item.type === "route" && (
+                <>
+                  <Dropdown.Item
+                    onClick={() => handleSetAsDefault(item.id, "home_commute")}
+                    disabled={defaultType === "home_commute"}
+                  >
+                    <FontAwesome name="home" className="me-2" />
+                    Home Commute
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => handleSetAsDefault(item.id, "work_commute")}
+                    disabled={defaultType === "work_commute"}
+                  >
+                    <FontAwesome name="briefcase" className="me-2" />
+                    Work Commute
+                  </Dropdown.Item>
+                </>
+              )}
+              {item.type === "stop" && (
+                <>
+                  <Dropdown.Item
+                    onClick={() => handleSetAsDefault(item.id, "home_location")}
+                    disabled={defaultType === "home_location"}
+                  >
+                    <FontAwesome name="home" className="me-2" />
+                    Home Location
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    onClick={() => handleSetAsDefault(item.id, "work_location")}
+                    disabled={defaultType === "work_location"}
+                  >
+                    <FontAwesome name="briefcase" className="me-2" />
+                    Work Location
+                  </Dropdown.Item>
+                </>
+              )}
             </Dropdown.Menu>
           </Dropdown>
 

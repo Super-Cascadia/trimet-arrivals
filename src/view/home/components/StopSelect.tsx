@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import Select from "react-select";
 import { StopOption } from "../hooks/useTrimetStops";
 import StopLocationIndicator from "../../../component/stop/StopLocationIndicator";
+import { getDefaultBookmark } from "../../../api/localstorage/bookmarkGroups.localstorage";
+import geoLocateCurrentPosition from "../../../api/geolocation/geoLocateCurrentPosition";
+import { Location } from "../../../api/trimet/interfaces/types";
 import "./StopSelect.scss";
 
 interface StopSelectProps {
@@ -28,6 +31,87 @@ function StopSelect({
 }: StopSelectProps) {
   // Detect dark mode
   const isDarkMode = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+  
+  // Track current location
+  const [currentLocation, setCurrentLocation] = useState<Location | null>(null);
+
+  // Get current location on mount
+  useEffect(() => {
+    geoLocateCurrentPosition()
+      .then((location: Location) => {
+        setCurrentLocation(location);
+      })
+      .catch((error) => {
+        console.error("Error getting current location:", error);
+      });
+  }, []);
+
+  // Get home and work location bookmarks and add them to the top of the list
+  const optionsWithBookmarks = useMemo(() => {
+    const homeBookmark = getDefaultBookmark("home_location");
+    const workBookmark = getDefaultBookmark("work_location");
+    
+    const bookmarkOptions: StopOption[] = [];
+    
+    // Add current location if available
+    if (currentLocation?.coords) {
+      bookmarkOptions.push({
+        label: `📍 Current Location`,
+        value: `current-${currentLocation.coords.latitude}-${currentLocation.coords.longitude}`,
+        stopData: {
+          id: 0,
+          locid: 0,
+          desc: "Current Location",
+          dir: '',
+          lat: currentLocation.coords.latitude,
+          lng: currentLocation.coords.longitude,
+        } as any,
+      });
+    }
+    
+    if (homeBookmark) {
+      bookmarkOptions.push({
+        label: `🏠 ${homeBookmark.stopDesc} (${homeBookmark.stopId})`,
+        value: homeBookmark.stopId.toString(),
+        stopData: {
+          id: homeBookmark.stopId,
+          locid: homeBookmark.stopId,
+          desc: homeBookmark.stopDesc || `Stop ${homeBookmark.stopId}`,
+          dir: '',
+          lat: homeBookmark.stopLat || 0,
+          lng: homeBookmark.stopLng || 0,
+        } as any,
+      });
+    }
+    
+    if (workBookmark) {
+      bookmarkOptions.push({
+        label: `💼 ${workBookmark.stopDesc} (${workBookmark.stopId})`,
+        value: workBookmark.stopId.toString(),
+        stopData: {
+          id: workBookmark.stopId,
+          locid: workBookmark.stopId,
+          desc: workBookmark.stopDesc || `Stop ${workBookmark.stopId}`,
+          dir: '',
+          lat: workBookmark.stopLat || 0,
+          lng: workBookmark.stopLng || 0,
+        } as any,
+      });
+    }
+    
+    if (bookmarkOptions.length === 0) {
+      return options;
+    }
+    
+    // Create a "Quick Access" group with bookmarks at the top
+    return [
+      {
+        label: "Quick Access",
+        options: bookmarkOptions,
+      },
+      ...options,
+    ];
+  }, [options, currentLocation]);
 
   // Define theme based on dark mode
   const selectTheme = (baseTheme: any) => ({
@@ -116,7 +200,7 @@ function StopSelect({
     <Form.Group className="search-input-group">
       <Form.Label className="search-label">{label}</Form.Label>
       <Select
-        options={options}
+        options={optionsWithBookmarks}
         value={value}
         onChange={(option) => onChange(option)}
         isLoading={isLoading}
@@ -129,12 +213,16 @@ function StopSelect({
           // Extract just the description part, removing the "(ID)" suffix
           const description = option.label.replace(/\s*\(\d+\)$/, '');
           const isDarkMode = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+          const isCurrentLocation = option.value.startsWith('current-');
+          
           return (
             <div className="stop-option-label" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <StopLocationIndicator
-                locationId={parseInt(option.value, 10)}
-                size="small"
-              />
+              {!isCurrentLocation && (
+                <StopLocationIndicator
+                  locationId={parseInt(option.value, 10)}
+                  size="small"
+                />
+              )}
               <span style={{ color: 'inherit' }}>{description}</span>
             </div>
           );

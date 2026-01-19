@@ -23,4 +23,11 @@ export interface NearbyViewComponentOutletContextProps {
   handleSimpleRoutesOpened: (labeledStops?: Array<{locid: number, label: string, lng: number, lat: number}>) => void;
   highlightStopMarker: (stopId: string | null) => void;
   clearAllMapLayers: () => void;
+  onEnableMarkerPlacement?: () => void;
+  isUsingDroppedMarker?: boolean;
+  droppedMarkerLocation?: { lat: number; lng: number } | null;
+  handleResetToGeoLocation?: () => void;
+  handlePlaceMarker?: () => void;
+  handlePlaceMarkerInServiceArea?: () => void;
+  handleFlyToCurrentLocation?: () => void;
 }

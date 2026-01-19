@@ -15,8 +15,10 @@ export default function BookmarksViewV2() {
   const [groups, setGroups] = useState<BookmarkGroups>({});
   const [showAddGroupModal, setShowAddGroupModal] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
-  const [homeBookmark, setHomeBookmark] = useState<any>(null);
-  const [workBookmark, setWorkBookmark] = useState<any>(null);
+  const [homeCommuteBookmark, setHomeCommuteBookmark] = useState<any>(null);
+  const [workCommuteBookmark, setWorkCommuteBookmark] = useState<any>(null);
+  const [homeLocationBookmark, setHomeLocationBookmark] = useState<any>(null);
+  const [workLocationBookmark, setWorkLocationBookmark] = useState<any>(null);
 
   useEffect(() => {
     loadGroups();
@@ -29,8 +31,10 @@ export default function BookmarksViewV2() {
   };
 
   const loadDefaultBookmarks = () => {
-    setHomeBookmark(getDefaultBookmark("home"));
-    setWorkBookmark(getDefaultBookmark("work"));
+    setHomeCommuteBookmark(getDefaultBookmark("home_commute"));
+    setWorkCommuteBookmark(getDefaultBookmark("work_commute"));
+    setHomeLocationBookmark(getDefaultBookmark("home_location"));
+    setWorkLocationBookmark(getDefaultBookmark("work_location"));
   };
 
   const handleUpdate = () => {
@@ -82,15 +86,31 @@ export default function BookmarksViewV2() {
       <Row className="mb-4">
         <Col md={6} className="mb-3 mb-md-0">
           <DefaultBookmarkCard
-            type="home"
-            bookmark={homeBookmark}
+            type="home_commute"
+            bookmark={homeCommuteBookmark}
             onUpdate={handleUpdate}
           />
         </Col>
         <Col md={6}>
           <DefaultBookmarkCard
-            type="work"
-            bookmark={workBookmark}
+            type="work_commute"
+            bookmark={workCommuteBookmark}
+            onUpdate={handleUpdate}
+          />
+        </Col>
+      </Row>
+      <Row className="mb-4">
+        <Col md={6} className="mb-3 mb-md-0">
+          <DefaultBookmarkCard
+            type="home_location"
+            bookmark={homeLocationBookmark}
+            onUpdate={handleUpdate}
+          />
+        </Col>
+        <Col md={6}>
+          <DefaultBookmarkCard
+            type="work_location"
+            bookmark={workLocationBookmark}
             onUpdate={handleUpdate}
           />
         </Col>

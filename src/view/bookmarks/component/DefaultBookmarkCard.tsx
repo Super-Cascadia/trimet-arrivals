@@ -18,22 +18,44 @@ interface Props {
 export default function DefaultBookmarkCard({ type, bookmark, onUpdate }: Props) {
   const navigate = useNavigate();
   
-  const icon = type === "home" ? "home" : "briefcase";
-  const title = type === "home" ? "Home" : "Work";
-  const color = type === "home" ? "primary" : "success";
+  // Determine display properties based on type
+  const getTypeConfig = () => {
+    switch(type) {
+      case "home_commute":
+        return { icon: "home", title: "Home Commute", color: "primary" };
+      case "work_commute":
+        return { icon: "briefcase", title: "Work Commute", color: "success" };
+      case "home_location":
+        return { icon: "home", title: "Home Location", color: "info" };
+      case "work_location":
+        return { icon: "briefcase", title: "Work Location", color: "warning" };
+      default:
+        return { icon: "bookmark", title: type, color: "secondary" };
+    }
+  };
+  
+  const { icon, title, color } = getTypeConfig();
+  const isCommute = type === "home_commute" || type === "work_commute";
+  const isLocation = type === "home_location" || type === "work_location";
 
   const handleClear = () => {
     clearDefaultBookmark(type);
     onUpdate();
   };
 
-  const handleRouteClick = () => {
-    if (bookmark && bookmark.routeId && bookmark.direction !== undefined) {
+  const handleClick = () => {
+    if (!bookmark) return;
+    
+    if (isCommute && bookmark.routeId && bookmark.direction !== undefined) {
+      // Navigate to route view
       let url = `/nearby/simple-routes/${bookmark.routeId}?stop=${bookmark.stopId}&direction=${bookmark.direction}`;
       if (bookmark.destinationStopId) {
         url += `&destination=${bookmark.destinationStopId}`;
       }
       navigate(url);
+    } else if (isLocation) {
+      // Navigate to stop view
+      navigate(`/stop/${bookmark.stopId}`);
     }
   };
 
@@ -60,31 +82,45 @@ export default function DefaultBookmarkCard({ type, bookmark, onUpdate }: Props)
         {bookmark ? (
           <div
             className="default-bookmark-content"
-            onClick={handleRouteClick}
+            onClick={handleClick}
             style={{ cursor: "pointer" }}
           >
-            <div className="fw-bold mb-2">
-              <FontAwesome name="bus" className="me-2 text-primary" />
-              Route {bookmark.routeId} - {bookmark.routeDesc}
-            </div>
-            <div className="text-muted small">
-              {bookmark.directionDesc && (
-                <>
-                  <FontAwesome name="arrow-right" className="me-1" />
-                  {bookmark.directionDesc}
-                  <br />
-                </>
-              )}
-              <FontAwesome name="map-marker" className="me-1" />
-              at {bookmark.stopDesc} ({bookmark.stopId})
-            </div>
+            {isCommute ? (
+              <>
+                <div className="fw-bold mb-2">
+                  <FontAwesome name="bus" className="me-2 text-primary" />
+                  Route {bookmark.routeId} - {bookmark.routeDesc}
+                </div>
+                <div className="text-muted small">
+                  {bookmark.directionDesc && (
+                    <>
+                      <FontAwesome name="arrow-right" className="me-1" />
+                      {bookmark.directionDesc}
+                      <br />
+                    </>
+                  )}
+                  <FontAwesome name="map-marker" className="me-1" />
+                  at {bookmark.stopDesc} ({bookmark.stopId})
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="fw-bold mb-2">
+                  <FontAwesome name="map-marker" className="me-2 text-primary" />
+                  {bookmark.stopDesc}
+                </div>
+                <div className="text-muted small">
+                  Stop ID: {bookmark.stopId}
+                </div>
+              </>
+            )}
           </div>
         ) : (
           <div className="text-center text-muted py-3 default-bookmark-empty">
             <FontAwesome name={`${icon}`} size="2x" className="mb-2 opacity-50" />
-            <p className="mb-0">No {type} route set</p>
+            <p className="mb-0">No {title.toLowerCase()} set</p>
             <small className="text-muted">
-              Use the bookmark menu to set a route as your {type} default
+              Use the bookmark menu to set a {isCommute ? "route" : "stop"} as your {title.toLowerCase()}
             </small>
           </div>
         )}

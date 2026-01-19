@@ -17,11 +17,26 @@ export function useMapData() {
   const [nearbyRoutes, setNearbyRoutesData] = useState<Dictionary<TrimetRoute[]>>(undefined);
 
   function fetchInitialData(location: Location) {
-    return getNearbyStops(location, radiusSize).then((stopData: StopData) => {
-      const routes = processRoutes(stopData);
-      setNearbyStopData(stopData);
-      setNearbyRoutesData(routes);
-    });
+    return getNearbyStops(location, radiusSize)
+      .then((stopData: StopData) => {
+        if (!stopData || !stopData.location) {
+          // Clear data if no stops found
+          setNearbyStopData(undefined);
+          setNearbyRoutesData(undefined);
+          return;
+        }
+        
+        const routes = processRoutes(stopData);
+        setNearbyStopData(stopData);
+        setNearbyRoutesData(routes);
+      })
+      .catch((error) => {
+        console.error("Error in fetchInitialData:", error);
+        // Clear data on error
+        setNearbyStopData(undefined);
+        setNearbyRoutesData(undefined);
+        throw error;
+      });
   }
 
   return {

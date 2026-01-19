@@ -1,16 +1,12 @@
 import { Location } from "../trimet/interfaces/types";
 
-const useDefault = true;
-
+/**
+ * Retrieves the user's current geographic position using the browser's Geolocation API.
+ * 
+ * @returns A Promise that resolves with the user's current Location, or rejects with an Error
+ * if the geolocation request fails (e.g., user denies permission, timeout, or unavailable).
+ */
 export default function geoLocateCurrentPosition(): Promise<Location> {
-  if (useDefault) {
-    return Promise.resolve({
-      coords: {
-        latitude: 45.482635757750785,
-        longitude: -122.71025403662343
-      }
-    });
-  }
 
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(

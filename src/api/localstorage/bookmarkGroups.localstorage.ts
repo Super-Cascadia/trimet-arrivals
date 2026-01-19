@@ -6,7 +6,7 @@ export const DEFAULT_GROUP_ID = "default";
 export const DEFAULT_BOOKMARKS = "DEFAULT_BOOKMARKS_V1";
 
 export type BookmarkType = "route" | "stop";
-export type DefaultBookmarkType = "home" | "work";
+export type DefaultBookmarkType = "home_commute" | "work_commute" | "home_location" | "work_location";
 
 export interface BookmarkItem {
   id: string; // unique identifier for this bookmark
@@ -289,8 +289,10 @@ export function getBookmarksByType(type: BookmarkType): BookmarkItem[] {
 // ==================== Default Bookmarks (Home/Work) ====================
 
 export interface DefaultBookmarks {
-  home?: string; // bookmark item ID
-  work?: string; // bookmark item ID
+  home_commute?: string; // bookmark item ID for home route
+  work_commute?: string; // bookmark item ID for work route
+  home_location?: string; // bookmark item ID for home stop
+  work_location?: string; // bookmark item ID for work stop
 }
 
 // Fetch default bookmarks
@@ -318,9 +320,14 @@ export function setDefaultBookmark(type: DefaultBookmarkType, bookmarkId: string
     return;
   }
   
-  // Only allow route bookmarks as defaults
-  if (bookmark.type !== "route") {
-    console.error('Only route bookmarks can be set as default home/work bookmarks');
+  // Validate bookmark type matches the default type
+  if ((type === "home_commute" || type === "work_commute") && bookmark.type !== "route") {
+    console.error('Only route bookmarks can be set as commute defaults');
+    return;
+  }
+  
+  if ((type === "home_location" || type === "work_location") && bookmark.type !== "stop") {
+    console.error('Only stop bookmarks can be set as location defaults');
     return;
   }
   
@@ -352,11 +359,17 @@ export function getDefaultBookmark(type: DefaultBookmarkType): BookmarkItem | nu
 export function isBookmarkDefault(bookmarkId: string): DefaultBookmarkType | null {
   const defaults = fetchDefaultBookmarks();
   
-  if (defaults.home === bookmarkId) {
-    return "home";
+  if (defaults.home_commute === bookmarkId) {
+    return "home_commute";
   }
-  if (defaults.work === bookmarkId) {
-    return "work";
+  if (defaults.work_commute === bookmarkId) {
+    return "work_commute";
+  }
+  if (defaults.home_location === bookmarkId) {
+    return "home_location";
+  }
+  if (defaults.work_location === bookmarkId) {
+    return "work_location";
   }
   return null;
 }

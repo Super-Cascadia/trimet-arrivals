@@ -25,30 +25,60 @@ export default function DirectionsRouteInfo({
   onFromStopChange,
   onToStopChange
 }: DirectionsRouteInfoProps) {
-  // Fetch all available stops
-  const { stopOptions: allAvailableStops, isLoading } = useTrimetStops();
-
-  // Flatten grouped stop options to create a complete list
-  const flattenedStops: StopOption[] = [];
-  allAvailableStops.forEach((group: any) => {
-    if (group.options) {
-      flattenedStops.push(...group.options);
-    }
-  });
+  // Fetch all available stops (already grouped by quadrant)
+  const { stopOptions: groupedStops, isLoading } = useTrimetStops();
 
   // Find the current indices of from and to stops in the allStopsOnRoute array
   const fromStopIndex = allStopsOnRoute.findIndex(s => s.locid === fromStop?.id) ?? -1;
   const toStopIndex = allStopsOnRoute.findIndex(s => s.locid === toStop?.id) ?? -1;
 
-  // Convert RouteDirectionStop objects to StopOption format for StopSelect
-  const stopOptions: StopOption[] = allStopsOnRoute.map((stop) => ({
-    value: stop.locid?.toString() || "",
-    label: `${stop.desc} (${stop.locid || 'Unknown ID'})`,
-    stopData: stop as any,
-  }));
+  // Convert RouteDirectionStop objects to StopOption format and group by quadrant
+  const routeStopsByQuadrant: { [key: string]: StopOption[] } = {
+    NE: [],
+    NW: [],
+    SE: [],
+    SW: []
+  };
 
-  // Use flattened stops if route-specific stops aren't available
-  const selectOptions = stopOptions.length > 0 ? stopOptions : flattenedStops;
+  const DEFAULT_CENTER_LAT = 45.5152;
+  const DEFAULT_CENTER_LNG = -122.6784;
+
+  const getQuadrant = (lat: number, lng: number): string => {
+    const isNorth = lat >= DEFAULT_CENTER_LAT;
+    const isEast = lng >= DEFAULT_CENTER_LNG;
+    
+    if (isNorth && isEast) return "NE";
+    if (isNorth && !isEast) return "NW";
+    if (!isNorth && isEast) return "SE";
+    return "SW";
+  };
+
+  allStopsOnRoute.forEach((stop) => {
+    // Validate coordinates exist
+    if (typeof stop.lat !== 'number' || typeof stop.lng !== 'number') {
+      console.warn('Invalid coordinates for stop:', stop);
+      return;
+    }
+    
+    const quadrant = getQuadrant(stop.lat, stop.lng);
+    routeStopsByQuadrant[quadrant].push({
+      value: stop.locid?.toString() || "",
+      label: `${stop.desc} (${stop.locid || 'Unknown ID'})`,
+      stopData: stop as any,
+    });
+  });
+
+  // Convert to grouped format with explicit ordering
+  const quadrantOrder = ['NE', 'NW', 'SE', 'SW'];
+  const routeStopsGrouped = quadrantOrder
+    .filter(key => routeStopsByQuadrant[key].length > 0)
+    .map(key => ({
+      label: key,
+      options: routeStopsByQuadrant[key]
+    }));
+
+  // Use route-specific grouped stops if available, otherwise use all grouped stops
+  const selectOptions = routeStopsGrouped.length > 0 ? routeStopsGrouped : groupedStops;
 
   // Convert current from/to stops to StopOption format
   const fromStopOption: StopOption | null = fromStop
