@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/trimet-arrivals/pr-933/static/css/main.c5b40a5a.css",
-    "main.js": "/trimet-arrivals/pr-933/static/js/main.385dd41c.js",
+    "main.css": "/trimet-arrivals/pr-933/static/css/main.f5dcb8f7.css",
+    "main.js": "/trimet-arrivals/pr-933/static/js/main.7c84939b.js",
     "static/js/7696.987ffc63.chunk.js": "/trimet-arrivals/pr-933/static/js/7696.987ffc63.chunk.js",
     "static/js/339.c8a1002d.chunk.js": "/trimet-arrivals/pr-933/static/js/339.c8a1002d.chunk.js",
     "static/js/3724.48e21b84.chunk.js": "/trimet-arrivals/pr-933/static/js/3724.48e21b84.chunk.js",
@@ -221,7 +221,7 @@
     "index.html": "/trimet-arrivals/pr-933/index.html"
   },
   "entrypoints": [
-    "static/css/main.c5b40a5a.css",
-    "static/js/main.385dd41c.js"
+    "static/css/main.f5dcb8f7.css",
+    "static/js/main.7c84939b.js"
   ]
 }
