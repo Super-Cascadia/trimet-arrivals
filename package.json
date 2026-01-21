@@ -41,7 +41,7 @@
     "font-awesome": "^4.7.0",
     "geolib": "^3.0.3",
     "jest-enzyme": "^4.2.0",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "mapbox-gl": "^3.8.0",
     "moment": "^2.29.2",
     "postcss": "^8.5.6",
