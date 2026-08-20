@@ -24,12 +24,7 @@ async function getRouteGeometry(routeId: string, directionId: number) {
   }
 }
 
-function addMapboxLayer(
-  map: Map,
-  routeIdentifier: string,
-  promise,
-  sourceId: string
-): Map {
+function addMapboxLayer(map: Map, promise, sourceId: string): Map {
   map.addSource(sourceId, {
     data: {
       geometry: promise.geometry,
@@ -39,7 +34,7 @@ function addMapboxLayer(
     type: "geojson"
   });
 
-  const layer = map.addLayer({
+  return map.addLayer({
     id: sourceId,
     layout: {
       "line-cap": "round",
@@ -54,16 +49,6 @@ function addMapboxLayer(
     source: sourceId,
     type: "line"
   });
-
-  layer.on("mouseover", e => {
-    return e;
-  });
-
-  layer.on("click", e => {
-    return e;
-  });
-
-  return layer;
 }
 
 function addRouteLayers(mapBoxMap: Map, returnedPromises: any[]): string[] {
@@ -80,12 +65,7 @@ function addRouteLayers(mapBoxMap: Map, returnedPromises: any[]): string[] {
 
       if (isUndefined(sources[sourceId])) {
         sources[sourceId] = {};
-        const mapboxMap = addMapboxLayer(
-          mapBoxMap,
-          routeIdentifier,
-          promise,
-          sourceId
-        );
+        const mapboxMap = addMapboxLayer(mapBoxMap, promise, sourceId);
         routeLayers.push(mapboxMap);
       }
     }
