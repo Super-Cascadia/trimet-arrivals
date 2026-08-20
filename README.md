@@ -4,5 +4,5 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 # Usage
 
-- yarn install
-- yarn start
+- npm ci
+- npm run watch

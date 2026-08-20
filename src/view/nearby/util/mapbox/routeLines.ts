@@ -2,12 +2,26 @@ import { each, forEach, isUndefined, uniq } from "lodash";
 import { Map } from "mapbox-gl";
 import { NearbyRoutesDictionary } from "../../../../store/reducers/view/nearbyRoutesViewReducer";
 
-function getRouteGeometry(routeId: string, directionId: number) {
-  return import(
-    `../../../../data/trimet/geoJSON/${routeId}/${routeId}_${directionId}.json`
-  ).catch(e => {
-    return e;
-  });
+async function getRouteGeometry(routeId: string, directionId: number) {
+  const routePath = `${routeId}/${routeId}_${directionId}.json`;
+
+  try {
+    const response = await fetch(
+      `${process.env.PUBLIC_URL}/data/trimet/geoJSON/${routePath}`
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Unable to load route geometry ${routePath}: ${response.status} ${response.statusText}`
+      );
+    }
+
+    return await response.json();
+  } catch (error) {
+    // tslint:disable-next-line:no-console
+    console.error(error);
+    return undefined;
+  }
 }
 
 function addMapboxLayer(
@@ -16,10 +30,6 @@ function addMapboxLayer(
   promise,
   sourceId: string
 ): Map {
-  const isLoaded = map.loaded();
-  console.log("is map loaded", isLoaded);
-  console.log("adding mapbox layer", sourceId, routeIdentifier);
-
   map.addSource(sourceId, {
     data: {
       geometry: promise.geometry,
@@ -46,11 +56,11 @@ function addMapboxLayer(
   });
 
   layer.on("mouseover", e => {
-    console.log("hover route", e);
+    return e;
   });
 
   layer.on("click", e => {
-    console.log("click route", e);
+    return e;
   });
 
   return layer;
@@ -62,7 +72,7 @@ function addRouteLayers(mapBoxMap: Map, returnedPromises: any[]): string[] {
   const routeLayers = [];
 
   each(returnedPromises, promise => {
-    if (!promise.code) {
+    if (promise) {
       const { route_number, direction } = promise.properties;
       const routeIdentifier = `${route_number}_${direction}`;
       const sourceId = `route-${routeIdentifier}`;
@@ -108,7 +118,6 @@ export async function setRoutes(
 }
 
 export function removeRoutes(map: Map, routeLayers: any[]): Map {
-  console.log("removing route layers", routeLayers);
   forEach(uniq(routeLayers), layerId => {
     if (map.getLayer(layerId)) {
       map.removeLayer(layerId);

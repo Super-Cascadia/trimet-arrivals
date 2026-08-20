@@ -19,15 +19,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'yarn'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: npm ci
 
       - name: Build for PR preview
         env:
           PUBLIC_URL: /${{ github.event.repository.name }}/pr-${{ github.event.pull_request.number }}
-        run: yarn build
+        run: npm run build
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3

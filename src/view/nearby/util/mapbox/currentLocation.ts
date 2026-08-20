@@ -1,4 +1,4 @@
-import * as turf from "@turf/turf";
+import circle from "@turf/circle";
 import { Map } from "mapbox-gl";
 import {
   CURRENT_LOCATION_CIRCLE,
@@ -13,25 +13,25 @@ export function drawCircle(
   lat: number,
   radiusSize: number
 ): Map {
-  const center = [lng, lat];
-  const radius = radiusSize;
-  const options = { steps: 26, units: "feet", properties: { foo: "bar" } };
-  // @ts-ignore
-  const circle = turf.circle(center, radius, options);
+  const radiusCircle = circle([lng, lat], radiusSize, {
+    properties: { foo: "bar" },
+    steps: 26,
+    units: "feet"
+  });
 
   map.addSource(CURRENT_LOCATION_RADIUS, {
-    type: "geojson",
-    data: circle
+    data: radiusCircle,
+    type: "geojson"
   });
 
   const updatedMap = map.addLayer({
     id: CURRENT_LOCATION_RADIUS_LAYER,
-    type: "fill",
-    source: CURRENT_LOCATION_RADIUS,
     paint: {
       "fill-color": "#888888",
       "fill-opacity": 0.4
-    }
+    },
+    source: CURRENT_LOCATION_RADIUS,
+    type: "fill"
   });
 
   return updatedMap;
@@ -43,23 +43,22 @@ export function setCurrentLocationMarker(
   lat: number,
   radiusSize: number
 ): Map {
-  console.log("setting current location marker");
   map.addSource(CURRENT_LOCATION_CIRCLE, {
-    type: "geojson",
     data: {
-      type: "Feature",
-      properties: {},
       geometry: {
-        type: "Point",
-        coordinates: [lng, lat]
-      }
-    }
+        coordinates: [lng, lat],
+        type: "Point"
+      },
+      properties: {},
+      type: "Feature"
+    },
+    type: "geojson"
   });
 
   map.addLayer({
     id: CURRENT_LOCATION_CIRCLE_LAYER,
-    type: "circle",
-    source: CURRENT_LOCATION_CIRCLE
+    source: CURRENT_LOCATION_CIRCLE,
+    type: "circle"
   });
 
   return drawCircle(map, lng, lat, radiusSize);
@@ -73,7 +72,6 @@ export function initializeCurrentLocationMarker(
 ) {
   let updatedMap = map;
   map.on("load", () => {
-    console.log("initializing current location marker");
     updatedMap = setCurrentLocationMarker(map, lng, lat, radiusSize);
   });
 

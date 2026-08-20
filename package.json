@@ -5,7 +5,7 @@
   "author": "Jameson Nyeholt <jameson.nyeholt@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": ">=14.7.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "@commitlint/cli": "^20.1.0",
@@ -14,7 +14,8 @@
     "@fortawesome/free-solid-svg-icons": "^5.12.0",
     "@fortawesome/react-fontawesome": "^0.1.8",
     "@mapbox/togeojson": "^0.16.0",
-    "@turf/turf": "^7.1.0",
+    "@turf/circle": "^7.1.0",
+    "@turf/distance": "^7.1.0",
     "@types/classnames": "2.2.9",
     "@types/enzyme": "^3.1.18",
     "@types/geolib": "^2.0.23",
@@ -68,7 +69,7 @@
     "typescript": "^4.9.5"
   },
   "scripts": {
-    "watch": "react-scripts start",
+    "watch": "vite",
     "build": "CI='' react-scripts build",
     "test": "react-scripts test",
     "test:coverage": "react-scripts test --coverage",
@@ -111,11 +112,13 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.7.0",
     "husky": "^4.0.6",
     "lint-staged": "^16.2.6",
     "nvm": "^0.0.4",
     "prettier": "1.19.1",
     "react-scripts": "^5.0.1",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "vite": "^5.4.19"
   }
 }
