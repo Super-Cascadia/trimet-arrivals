@@ -1,0 +1,23 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Install dependencies",
+      "type": "shell",
+      "command": "npm ci --registry=https://packagefeedproxy.microsoft.io/npm/",
+      "inAgents": true,
+      "runOptions": {
+        "runOn": "worktreeCreated"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start dev server",
+      "type": "shell",
+      "command": "npm run watch",
+      "inAgents": true,
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}

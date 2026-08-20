@@ -1,4 +1,4 @@
-import * as turf from "@turf/turf";
+import distance from "@turf/distance";
 import { round } from "lodash";
 
 const MILE_IN_FEET = 5280;
@@ -7,9 +7,7 @@ export function getDistance(
   currentLocation: number[],
   arrivalLocation: number[]
 ): number {
-  const from = turf.point([currentLocation[0], currentLocation[1]]);
-  const to = turf.point([arrivalLocation[0], arrivalLocation[1]]);
-  return turf.distance(from, to, { units: "miles" });
+  return distance(currentLocation, arrivalLocation, { units: "miles" });
 }
 
 export function getNormalizedDistanceString(
